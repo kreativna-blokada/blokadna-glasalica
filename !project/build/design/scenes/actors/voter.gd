@@ -7,6 +7,20 @@ var is_waiting: bool = false
 var finished_all_stops: bool = false
 var current_dir_animation: String = "idle"
 
+@onready var sfx_player: AudioStreamPlayer = $AudioStreamPlayer
+
+var stop_sounds: Dictionary = {
+	0: "",
+	1: "res://!project/assets/audio/round-one.mp3",
+	2: "res://!project/assets/audio/round-two.mp3",
+	3: "res://!project/assets/audio/round-three.mp3",
+	4: "res://!project/assets/audio/round-four.mp3",
+	5: "res://!project/assets/audio/round-five.mp3",
+	6: "res://!project/assets/audio/choose-your-destiny.mp3",
+	7: "",
+	8: ""
+}
+
 var playground: Playground:
 	get:
 		return get_parent() as Playground
@@ -59,7 +73,7 @@ func handle_animations() -> void:
 
 func move_to_sequential_stop() -> void:
 	var sprite_height = character_sprite.get_rect().size.y * character_sprite.scale.y
-	var feet_position = global_position + Vector2(0, sprite_height / 2)
+	var feet_position = global_position + Vector2(0, sprite_height / 2.0)
 	
 	var target_pos = current_target_stop.global_position
 	var dist = feet_position.distance_to(target_pos)
@@ -74,11 +88,21 @@ func reach_stop() -> void:
 	velocity = Vector2.ZERO
 	is_waiting = true
 	
+	play_stop_sound()
+	
 	await get_tree().create_timer(1.0).timeout
 	
 	current_stop_index += 1
 	is_waiting = false
 	update_target_stop()
+
+func play_stop_sound() -> void:
+	if stop_sounds.has(current_stop_index):
+		var sound_path = stop_sounds[current_stop_index]
+		if FileAccess.file_exists(sound_path):
+			var stream = load(sound_path)
+			sfx_player.stream = stream
+			sfx_player.play()
 
 func set_heading() -> void:
 	pass

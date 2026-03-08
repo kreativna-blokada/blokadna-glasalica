@@ -108,3 +108,5 @@ vframes = 4
 
 [node name="AnimationPlayer" parent="." index="3" unique_id=830087118]
 libraries/ = SubResource("AnimationLibrary_7wrt8")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="4" unique_id=1711024557]
