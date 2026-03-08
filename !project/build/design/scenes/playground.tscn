@@ -1,15 +1,48 @@
 [gd_scene format=3 uid="uid://fqi4sbecij1g"]
 
+[ext_resource type="Script" uid="uid://bbqbi7b7sbxcg" path="res://!project/build/design/scenes/playground.gd" id="1_0lvdn"]
 [ext_resource type="Texture2D" uid="uid://dtq2mbiupcaix" path="res://!project/assets/art/room.png" id="1_t50mg"]
-[ext_resource type="PackedScene" uid="uid://bil0ummc75wh8" path="res://!project/build/design/scenes/actors/player.tscn" id="2_t50mg"]
+[ext_resource type="PackedScene" uid="uid://dr4n6i0f64c0h" path="res://!project/build/design/scenes/actors/voter.tscn" id="2_15nu1"]
+[ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/actors/voting_stop.tscn" id="4_0lvdn"]
 
 [node name="Playground" type="Node2D" unique_id=1489686815]
+script = ExtResource("1_0lvdn")
 
 [node name="Room" type="Sprite2D" parent="." unique_id=1647902958]
 position = Vector2(960, 540)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("1_t50mg")
 
-[node name="Player" parent="." unique_id=1417136144 instance=ExtResource("2_t50mg")]
-position = Vector2(950, 651)
-scale = Vector2(1.5, 1.5)
+[node name="VotingStops" type="Node2D" parent="." unique_id=1004715077]
+
+[node name="Entry" parent="VotingStops" unique_id=330516695 instance=ExtResource("4_0lvdn")]
+position = Vector2(726, 1055)
+
+[node name="Check" parent="VotingStops" unique_id=154735745 instance=ExtResource("4_0lvdn")]
+position = Vector2(1092, 898)
+
+[node name="Spray" parent="VotingStops" unique_id=2039787629 instance=ExtResource("4_0lvdn")]
+position = Vector2(1249, 832)
+
+[node name="ID" parent="VotingStops" unique_id=21093571 instance=ExtResource("4_0lvdn")]
+position = Vector2(1401, 745)
+
+[node name="Ballot" parent="VotingStops" unique_id=561221041 instance=ExtResource("4_0lvdn")]
+position = Vector2(1187, 649)
+
+[node name="Booth" parent="VotingStops" unique_id=816603679 instance=ExtResource("4_0lvdn")]
+position = Vector2(983, 561)
+
+[node name="Box" parent="VotingStops" unique_id=25472905 instance=ExtResource("4_0lvdn")]
+position = Vector2(748, 660)
+
+[node name="Exit" parent="VotingStops" unique_id=1412793287 instance=ExtResource("4_0lvdn")]
+position = Vector2(475, 743)
+
+[node name="Out" parent="VotingStops" unique_id=118482608 instance=ExtResource("4_0lvdn")]
+position = Vector2(-102, 421)
+
+[node name="Voter" parent="." unique_id=1417136144 instance=ExtResource("2_15nu1")]
+position = Vector2(185, 727)
+scale = Vector2(0.99999994, 0.99999994)
+speed = 200.0

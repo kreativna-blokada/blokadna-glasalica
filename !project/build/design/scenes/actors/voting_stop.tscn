@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dn4isvcgxdmwk"]
+
+[ext_resource type="Script" uid="uid://cae1qnef7dxoe" path="res://!project/build/design/scenes/actors/voting_stop.gd" id="1_6qwqr"]
+[ext_resource type="Texture2D" uid="uid://dx4ykehfm6ucs" path="res://!project/assets/art/abstractTile_28_cut.png" id="2_ttppt"]
+
+[node name="VotingStop" type="Node2D" unique_id=330516695]
+script = ExtResource("1_6qwqr")
+
+[node name="VisualMark" type="Sprite2D" parent="." unique_id=1503522988]
+scale = Vector2(1.2, 1)
+texture = ExtResource("2_ttppt")
