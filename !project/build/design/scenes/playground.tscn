@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://fqi4sbecij1g"]
 
 [ext_resource type="Texture2D" uid="uid://dtq2mbiupcaix" path="res://!project/assets/art/room.png" id="1_t50mg"]
+[ext_resource type="PackedScene" uid="uid://bil0ummc75wh8" path="res://!project/build/design/scenes/actors/player.tscn" id="2_t50mg"]
 
 [node name="Playground" type="Node2D" unique_id=1489686815]
 
@@ -8,3 +9,7 @@
 position = Vector2(960, 540)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("1_t50mg")
+
+[node name="Player" parent="." unique_id=1417136144 instance=ExtResource("2_t50mg")]
+position = Vector2(950, 651)
+scale = Vector2(1.5, 1.5)
