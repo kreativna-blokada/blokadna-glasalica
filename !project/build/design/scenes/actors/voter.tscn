@@ -100,13 +100,25 @@ _data = {
 script = ExtResource("2_5suuu")
 speed = 100.0
 
-[node name="CharacterSprite" parent="." index="1" unique_id=3088008]
+[node name="Label" parent="." index="0" unique_id=867489016]
+offset_left = -163.0
+offset_top = -241.0
+offset_right = 1.0
+offset_bottom = -218.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "GLASAJ, DEBILU !!!!!!!!"
+
+[node name="HUD" parent="." index="1" unique_id=1951438455]
+position = Vector2(0, -166)
+
+[node name="CharacterSprite" parent="." index="3" unique_id=3088008]
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("3_3da2g")
 hframes = 39
 vframes = 4
 
-[node name="AnimationPlayer" parent="." index="3" unique_id=830087118]
-libraries/ = SubResource("AnimationLibrary_7wrt8")
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="4" unique_id=1711024557]
+
+[node name="AnimationPlayer" parent="." index="6" unique_id=830087118]
+libraries/ = SubResource("AnimationLibrary_7wrt8")

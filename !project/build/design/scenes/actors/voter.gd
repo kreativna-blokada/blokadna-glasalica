@@ -8,6 +8,8 @@ var finished_all_stops: bool = false
 var current_dir_animation: String = "idle"
 
 @onready var sfx_player: AudioStreamPlayer = $AudioStreamPlayer
+@onready var hud_sprites: Array = $HUD.get_children()
+@onready var status_label: Label = $Label
 
 var stop_sounds: Dictionary = {
 	0: "",
@@ -46,8 +48,10 @@ func update_target_stop() -> void:
 		current_target_stop = playground.get_stop_at_index(current_stop_index)
 		if current_target_stop == null:
 			finished_all_stops = true
+			status_label.text = "GOTOVO!"
 		else:
 			update_animation_name()
+			update_label_text() # Update text as soon as we start moving to the next stop
 
 func update_animation_name() -> void:
 	match current_stop_index:
@@ -89,6 +93,7 @@ func reach_stop() -> void:
 	is_waiting = true
 	
 	play_stop_sound()
+	update_hud_frames()
 	
 	await get_tree().create_timer(1.0).timeout
 	
@@ -99,10 +104,37 @@ func reach_stop() -> void:
 func play_stop_sound() -> void:
 	if stop_sounds.has(current_stop_index):
 		var sound_path = stop_sounds[current_stop_index]
-		if FileAccess.file_exists(sound_path):
+		if not sound_path.is_empty() and FileAccess.file_exists(sound_path):
+			sfx_player.volume_db = 0.0
+			if current_stop_index == 6:
+				sfx_player.volume_db = 10.0
+				
 			var stream = load(sound_path)
 			sfx_player.stream = stream
 			sfx_player.play()
+
+func update_hud_frames() -> void:
+	if hud_sprites.size() < 6:
+		return
+		
+	match current_stop_index:
+		1: hud_sprites[0].frame = 35
+		2: hud_sprites[1].frame = 35
+		3: hud_sprites[2].frame = 35
+		4: hud_sprites[3].frame = 35
+		5: hud_sprites[4].frame = 35
+		6: hud_sprites[5].frame = 35
+
+func update_label_text() -> void:
+	match current_stop_index:
+		0: status_label.text = "GLASAJ, DEBILU !!!!" 
+		1: status_label.text = "SKENIRAJ PRSTIC"
+		2: status_label.text = "POPRSKAJ PRSTIC"
+		3: status_label.text = "LICNA KARtA"
+		4: status_label.text = "PAPIRIC BOMBONCE ?"
+		5: status_label.text = "ZAOKRUZI STUDENTE !!"
+		6: status_label.text = "CHOOSE YOUR DESTINY !"
+		_: status_label.text = "BJAZI, BJAAZI, BJAAAZI"
 
 func set_heading() -> void:
 	pass

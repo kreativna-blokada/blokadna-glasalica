@@ -1,11 +1,65 @@
 [gd_scene format=3 uid="uid://d2ah82i7p56vk"]
 
 [ext_resource type="Script" uid="uid://r52riejfxhoe" path="res://!project/build/design/scenes/actors/character.gd" id="1_b5jgq"]
+[ext_resource type="Texture2D" uid="uid://daitxkwj0uc85" path="res://!project/assets/art/Sprout Lands - UI Pack - Basic.png" id="2_b5jgq"]
 
 [node name="Character" type="CharacterBody2D" unique_id=1417136144]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_b5jgq")
+
+[node name="Label" type="Label" parent="." unique_id=867489016]
+offset_left = -300.0
+offset_top = -100.0
+offset_right = -136.0
+offset_bottom = -77.0
+scale = Vector2(4, 4)
+text = "ZAOKRUZI STUDENTE"
+
+[node name="HUD" type="Node2D" parent="." unique_id=1951438455]
+scale = Vector2(1.6, 1.6)
+
+[node name="Check" type="Sprite2D" parent="HUD" unique_id=22711907]
+position = Vector2(-72.75, -0.24999973)
+texture = ExtResource("2_b5jgq")
+hframes = 5
+vframes = 19
+frame = 36
+
+[node name="Spray" type="Sprite2D" parent="HUD" unique_id=970090629]
+position = Vector2(-43.75, -0.24999973)
+texture = ExtResource("2_b5jgq")
+hframes = 5
+vframes = 19
+frame = 36
+
+[node name="ID" type="Sprite2D" parent="HUD" unique_id=879326635]
+position = Vector2(-14.749998, -0.24999973)
+texture = ExtResource("2_b5jgq")
+hframes = 5
+vframes = 19
+frame = 36
+
+[node name="Ballot" type="Sprite2D" parent="HUD" unique_id=681672490]
+position = Vector2(14.750002, -0.24999973)
+texture = ExtResource("2_b5jgq")
+hframes = 5
+vframes = 19
+frame = 36
+
+[node name="Booth" type="Sprite2D" parent="HUD" unique_id=762571512]
+position = Vector2(43.75, -0.24999973)
+texture = ExtResource("2_b5jgq")
+hframes = 5
+vframes = 19
+frame = 36
+
+[node name="Box" type="Sprite2D" parent="HUD" unique_id=1069367732]
+position = Vector2(72.37499, 0.3750002)
+texture = ExtResource("2_b5jgq")
+hframes = 5
+vframes = 19
+frame = 36
 
 [node name="ShadowSprite" type="Sprite2D" parent="." unique_id=1735587067]
 centered = false

@@ -40,9 +40,8 @@ position = Vector2(748, 660)
 position = Vector2(475, 743)
 
 [node name="Out" parent="VotingStops" unique_id=118482608 instance=ExtResource("4_0lvdn")]
-position = Vector2(-102, 421)
+position = Vector2(-228, 354)
 
 [node name="Voter" parent="." unique_id=1417136144 instance=ExtResource("2_15nu1")]
 position = Vector2(185, 727)
 scale = Vector2(0.99999994, 0.99999994)
-speed = 200.0
