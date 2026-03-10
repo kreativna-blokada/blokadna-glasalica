@@ -6,10 +6,12 @@ var current_target_stop: Node2D = null
 var is_waiting: bool = false
 var finished_all_stops: bool = false
 var current_dir_animation: String = "idle"
+var current_wait_animation: String = "bottom-right"
 
 @onready var sfx_player: AudioStreamPlayer = $AudioStreamPlayer
 @onready var hud_sprites: Array = $HUD.get_children()
-@onready var status_label: Label = $Label
+@onready var status_label: Label = $Dialog/Label
+@onready var dialog_sprite: Sprite2D = $Dialog
 
 var stop_sounds: Dictionary = {
 	0: "",
@@ -32,10 +34,11 @@ func _ready() -> void:
 	update_target_stop()
 
 func _process(delta: float) -> void:
-	if not finished_all_stops and not is_waiting and current_target_stop != null:
-		move_to_sequential_stop()
-	else:
+	# If finished or waiting, force velocity to zero to prevent any sliding/returning
+	if finished_all_stops or is_waiting or current_target_stop == null:
 		velocity = Vector2.ZERO
+	else:
+		move_to_sequential_stop()
 	
 	handle_input()
 	handle_movement()
@@ -45,37 +48,44 @@ func _process(delta: float) -> void:
 
 func update_target_stop() -> void:
 	if playground:
-		current_target_stop = playground.get_stop_at_index(current_stop_index)
-		if current_target_stop == null:
+		var next_stop = playground.get_stop_at_index(current_stop_index)
+		
+		# Handle the Playground Instructions visibility
+		playground.status_label.visible = (current_stop_index == 3)
+		
+		if next_stop == null:
 			finished_all_stops = true
-			status_label.text = "GOTOVO!"
+			current_target_stop = null # Explicitly clear the target
+			velocity = Vector2.ZERO
 		else:
+			current_target_stop = next_stop
 			update_animation_name()
-			update_label_text() # Update text as soon as we start moving to the next stop
+			update_dialog() 
 
 func update_animation_name() -> void:
 	match current_stop_index:
-		0:
-			current_dir_animation = "bottom-right"
-		1, 2, 3:
-			current_dir_animation = "top-right"
-		4, 5:
-			current_dir_animation = "top-left"
-		6, 7:
-			current_dir_animation = "bottom-left"
-		8:
-			current_dir_animation = "top-left"
-		_:
-			current_dir_animation = "idle"
+		0: current_dir_animation = "bottom-right"
+		1, 2, 3: current_dir_animation = "top-right"
+		4: current_dir_animation = "top-right"
+		5: current_dir_animation = "top-left"
+		6, 7: current_dir_animation = "bottom-left"
+		8: current_dir_animation = "top-left"
+		_: current_dir_animation = "idle"
 
 func handle_animations() -> void:
-	if state == State.WALK:
+	if finished_all_stops:
+		animation_player.play("idle")
+	elif is_waiting:
+		animation_player.play(current_wait_animation)
+	elif state == State.WALK:
 		if animation_player.current_animation != current_dir_animation:
 			animation_player.play(current_dir_animation)
 	else:
 		animation_player.play("idle")
 
 func move_to_sequential_stop() -> void:
+	if current_target_stop == null: return
+	
 	var sprite_height = character_sprite.get_rect().size.y * character_sprite.scale.y
 	var feet_position = global_position + Vector2(0, sprite_height / 2.0)
 	
@@ -97,6 +107,7 @@ func reach_stop() -> void:
 	
 	await get_tree().create_timer(1.0).timeout
 	
+	# Only proceed if we aren't at the very last possible index
 	current_stop_index += 1
 	is_waiting = false
 	update_target_stop()
@@ -116,7 +127,6 @@ func play_stop_sound() -> void:
 func update_hud_frames() -> void:
 	if hud_sprites.size() < 6:
 		return
-		
 	match current_stop_index:
 		1: hud_sprites[0].frame = 35
 		2: hud_sprites[1].frame = 35
@@ -125,16 +135,25 @@ func update_hud_frames() -> void:
 		5: hud_sprites[4].frame = 35
 		6: hud_sprites[5].frame = 35
 
-func update_label_text() -> void:
+func update_dialog() -> void:
 	match current_stop_index:
-		0: status_label.text = "GLASAJ, DEBILU !!!!" 
-		1: status_label.text = "SKENIRAJ PRSTIC"
-		2: status_label.text = "POPRSKAJ PRSTIC"
-		3: status_label.text = "LICNA KARtA"
-		4: status_label.text = "PAPIRIC BOMBONCE ?"
-		5: status_label.text = "ZAOKRUZI STUDENTE !!"
-		6: status_label.text = "CHOOSE YOUR DESTINY !"
-		_: status_label.text = "BJAZI, BJAAZI, BJAAAZI"
+		0: setup_dialog("MISLIM DAKLE\nNISAM izBOSNE", "res://!project/assets/art/balloon-dream.png", true, Vector2(-205, -95), "bottom-right")
+		1: setup_dialog("SKENIRAM\nPRSTIC", "res://!project/assets/art/balloon-dream.png", false, Vector2(-300, -95), "bottom-right")
+		2: setup_dialog("POPRSKAM\nPRSTIC", "res://!project/assets/art/balloon-dream.png", false, Vector2(-300, -95), "bottom-right")
+		3: setup_dialog("NE ZNAM\nSTA SAD?", "res://!project/assets/art/balloon-dream.png", false, Vector2(-300, -95), "bottom-right")
+		4: setup_dialog("PAPIRIC\nBOMBONCE ?", "res://!project/assets/art/balloon-dream.png", true, Vector2(-205, -95), "idle")
+		5: setup_dialog("BABA je REKLA\n..ZA STUDENTE !", "res://!project/assets/art/balloon-dream.png", true, Vector2(-205, -95), "top-right")
+		6: setup_dialog("CHOOSE YOUR\nDESTINY !", "res://!project/assets/art/balloon-dream.png", false, Vector2(-300, -95), "top-left")
+		_: setup_dialog("NECU RUZU\nHOCU SLOBODU\n#nohomo", "res://!project/assets/art/balloon-talk.png", false, Vector2(-300, -150), "idle")
+
+func setup_dialog(txt: String, img_path: String, should_flip: bool, label_pos: Vector2, wait_anim: String) -> void:
+	status_label.text = txt
+	status_label.position = label_pos 
+	dialog_sprite.flip_h = should_flip
+	current_wait_animation = wait_anim
+	
+	if FileAccess.file_exists(img_path):
+		dialog_sprite.texture = load(img_path)
 
 func set_heading() -> void:
 	pass

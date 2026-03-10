@@ -53,6 +53,9 @@ tracks/0/keys = {
 "values": [78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115]
 }
 
+[sub_resource type="Animation" id="Animation_pur32"]
+resource_name = "talk"
+
 [sub_resource type="Animation" id="Animation_w7v2a"]
 resource_name = "top-left"
 length = 1.3
@@ -92,25 +95,28 @@ _data = {
 &"RESET": SubResource("Animation_014nc"),
 &"bottom-left": SubResource("Animation_5suuu"),
 &"bottom-right": SubResource("Animation_lc2ub"),
+&"talk": SubResource("Animation_pur32"),
 &"top-left": SubResource("Animation_w7v2a"),
 &"top-right": SubResource("Animation_3da2g")
 }
 
 [node name="Voter" unique_id=1417136144 instance=ExtResource("1_5suuu")]
 script = ExtResource("2_5suuu")
-speed = 100.0
+speed = 80.0
 
-[node name="Label" parent="." index="0" unique_id=867489016]
-offset_left = -163.0
-offset_top = -241.0
-offset_right = 1.0
-offset_bottom = -218.0
-scale = Vector2(2, 2)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "GLASAJ, DEBILU !!!!!!!!"
+[node name="Dialog" parent="." index="0" unique_id=957263075]
+position = Vector2(0, -260)
+scale = Vector2(0.42, 0.42)
+
+[node name="Label" parent="Dialog" index="0" unique_id=867489016]
+offset_left = -277.5
+offset_top = -115.0
+offset_right = -197.5
+offset_bottom = -45.0
 
 [node name="HUD" parent="." index="1" unique_id=1951438455]
-position = Vector2(0, -166)
+position = Vector2(0, -360)
+scale = Vector2(2, 2)
 
 [node name="CharacterSprite" parent="." index="3" unique_id=3088008]
 scale = Vector2(1.5, 1.5)

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://d2ah82i7p56vk"]
 
 [ext_resource type="Script" uid="uid://r52riejfxhoe" path="res://!project/build/design/scenes/actors/character.gd" id="1_b5jgq"]
+[ext_resource type="Texture2D" uid="uid://de54xjknr5p38" path="res://!project/assets/art/balloon-dream.png" id="2_85jrd"]
 [ext_resource type="Texture2D" uid="uid://daitxkwj0uc85" path="res://!project/assets/art/Sprout Lands - UI Pack - Basic.png" id="2_b5jgq"]
 
 [node name="Character" type="CharacterBody2D" unique_id=1417136144]
@@ -8,16 +9,24 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_b5jgq")
 
-[node name="Label" type="Label" parent="." unique_id=867489016]
-offset_left = -300.0
-offset_top = -100.0
-offset_right = -136.0
-offset_bottom = -77.0
+[node name="Dialog" type="Sprite2D" parent="." unique_id=957263075]
+texture = ExtResource("2_85jrd")
+
+[node name="Label" type="Label" parent="Dialog" unique_id=867489016]
+offset_left = -230.0
+offset_top = -83.0
+offset_right = -135.5
+offset_bottom = -11.5
 scale = Vector2(4, 4)
-text = "ZAOKRUZI STUDENTE"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.15294118, 0.15294118, 0.15294118, 0.43137255)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HUD" type="Node2D" parent="." unique_id=1951438455]
-scale = Vector2(1.6, 1.6)
+position = Vector2(0, -240)
+scale = Vector2(4, 4)
 
 [node name="Check" type="Sprite2D" parent="HUD" unique_id=22711907]
 position = Vector2(-72.75, -0.24999973)
