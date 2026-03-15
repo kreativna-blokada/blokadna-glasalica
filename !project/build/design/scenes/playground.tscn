@@ -44,10 +44,6 @@ position = Vector2(470, 763)
 [node name="Out" parent="VotingStops" unique_id=118482608 instance=ExtResource("4_0lvdn")]
 position = Vector2(-228, 354)
 
-[node name="Voter" parent="." unique_id=1417136144 instance=ExtResource("2_15nu1")]
-position = Vector2(185, 727)
-scale = Vector2(0.99999994, 0.99999994)
-
 [node name="Instructions" type="Sprite2D" parent="." unique_id=1006797804]
 visible = false
 position = Vector2(1377, 603)
@@ -71,3 +67,9 @@ vertical_alignment = 1
 position = Vector2(604, 804)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_4snjr")
+
+[node name="Voter" parent="." unique_id=1417136144 instance=ExtResource("2_15nu1")]
+position = Vector2(383, 768)
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="VotersLine" type="Node2D" parent="." unique_id=1160409060]

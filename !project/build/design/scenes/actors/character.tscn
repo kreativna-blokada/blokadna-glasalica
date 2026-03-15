@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://r52riejfxhoe" path="res://!project/build/design/scenes/actors/character.gd" id="1_b5jgq"]
 [ext_resource type="Texture2D" uid="uid://de54xjknr5p38" path="res://!project/assets/art/balloon-dream.png" id="2_85jrd"]
-[ext_resource type="Texture2D" uid="uid://daitxkwj0uc85" path="res://!project/assets/art/Sprout Lands - UI Pack - Basic.png" id="2_b5jgq"]
+[ext_resource type="Texture2D" path="res://!project/assets/art/UI/Sprout Lands - UI Pack - Basic.png" id="2_b5jgq"]
 
 [node name="Character" type="CharacterBody2D" unique_id=1417136144]
 collision_layer = 0

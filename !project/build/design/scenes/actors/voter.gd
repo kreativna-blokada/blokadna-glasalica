@@ -74,14 +74,14 @@ func update_animation_name() -> void:
 
 func handle_animations() -> void:
 	if finished_all_stops:
-		animation_player.play("idle")
+		animation_player.play("bottom-right")
 	elif is_waiting:
 		animation_player.play(current_wait_animation)
 	elif state == State.WALK:
 		if animation_player.current_animation != current_dir_animation:
 			animation_player.play(current_dir_animation)
 	else:
-		animation_player.play("idle")
+		animation_player.play("bottom-right")
 
 func move_to_sequential_stop() -> void:
 	if current_target_stop == null: return

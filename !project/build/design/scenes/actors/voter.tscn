@@ -105,16 +105,19 @@ script = ExtResource("2_5suuu")
 speed = 80.0
 
 [node name="Dialog" parent="." index="0" unique_id=957263075]
+visible = false
 position = Vector2(0, -260)
 scale = Vector2(0.42, 0.42)
 
 [node name="Label" parent="Dialog" index="0" unique_id=867489016]
+visible = false
 offset_left = -277.5
 offset_top = -115.0
 offset_right = -197.5
 offset_bottom = -45.0
 
 [node name="HUD" parent="." index="1" unique_id=1951438455]
+visible = false
 position = Vector2(0, -360)
 scale = Vector2(2, 2)
 

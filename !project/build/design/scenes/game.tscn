@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://cugarisbw1qyg"]
+
+[ext_resource type="Texture2D" uid="uid://bthltmn3c7i18" path="res://!project/assets/art/room-delete.png" id="1_tiaab"]
+[ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/actors/voting_stop.tscn" id="2_ywe5c"]
+[ext_resource type="Texture2D" uid="uid://dv8afp8brclto" path="res://!project/assets/art/door.png" id="3_nrnfg"]
+[ext_resource type="PackedScene" uid="uid://dr4n6i0f64c0h" path="res://!project/build/design/scenes/actors/voter.tscn" id="4_egxfs"]
+[ext_resource type="Texture2D" uid="uid://00wujx75ulq6" path="res://!project/assets/art/UI/Button Valid - unpressed.png" id="5_4hrqh"]
+[ext_resource type="Texture2D" uid="uid://dhqs4h0fesiqk" path="res://!project/assets/art/UI/Button Valid - pressed.png" id="6_whd4d"]
+[ext_resource type="Texture2D" uid="uid://uvicn7wuevaf" path="res://!project/assets/art/UI/Button Invalid - unpressed.png" id="7_bmiuw"]
+[ext_resource type="Texture2D" uid="uid://v3maajdna7uk" path="res://!project/assets/art/UI/Button Invalid - pressed.png" id="8_exxqc"]
+[ext_resource type="Texture2D" uid="uid://bs141kaeb6c7c" path="res://!project/assets/art/UI/Button Next - unpressed.png" id="9_cuco4"]
+[ext_resource type="Texture2D" uid="uid://cb1rum0ata6bo" path="res://!project/assets/art/UI/Button Next - pressed.png" id="10_y28sd"]
+[ext_resource type="Texture2D" uid="uid://dyhl12nrgjb2t" path="res://!project/assets/art/UI/Button Enter - unpressed.png" id="11_0bby2"]
+[ext_resource type="Texture2D" uid="uid://b80vbxadnb1ov" path="res://!project/assets/art/UI/Button Enter - pressed.png" id="12_dk2sw"]
+
+[node name="Game" type="Node" unique_id=1771661075]
+
+[node name="Stage" type="Node2D" parent="." unique_id=1877766357]
+
+[node name="Room" type="Sprite2D" parent="Stage" unique_id=1687017649]
+position = Vector2(960, 540)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_tiaab")
+
+[node name="VotingStops" type="Node2D" parent="Stage" unique_id=679928385]
+
+[node name="Entry" parent="Stage/VotingStops" unique_id=330516695 instance=ExtResource("2_ywe5c")]
+position = Vector2(520, 966)
+
+[node name="Check" parent="Stage/VotingStops" unique_id=404702376 instance=ExtResource("2_ywe5c")]
+position = Vector2(804, 861)
+
+[node name="Spray" parent="Stage/VotingStops" unique_id=1524147758 instance=ExtResource("2_ywe5c")]
+position = Vector2(903, 822)
+
+[node name="ID" parent="Stage/VotingStops" unique_id=63821945 instance=ExtResource("2_ywe5c")]
+position = Vector2(1105, 734)
+
+[node name="Ballot" parent="Stage/VotingStops" unique_id=1356300169 instance=ExtResource("2_ywe5c")]
+position = Vector2(1405, 687)
+
+[node name="Booth" parent="Stage/VotingStops" unique_id=1891743510 instance=ExtResource("2_ywe5c")]
+position = Vector2(1058, 546)
+
+[node name="Box" parent="Stage/VotingStops" unique_id=128197760 instance=ExtResource("2_ywe5c")]
+position = Vector2(726, 640)
+
+[node name="Exit" parent="Stage/VotingStops" unique_id=787411571 instance=ExtResource("2_ywe5c")]
+position = Vector2(470, 763)
+
+[node name="Out" parent="Stage/VotingStops" unique_id=212483479 instance=ExtResource("2_ywe5c")]
+position = Vector2(-228, 354)
+
+[node name="Door" type="Sprite2D" parent="Stage" unique_id=1601410947]
+position = Vector2(604, 804)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("3_nrnfg")
+
+[node name="Voter" parent="Stage" unique_id=1417136144 instance=ExtResource("4_egxfs")]
+position = Vector2(383, 768)
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="Controls" type="CanvasLayer" parent="." unique_id=1625188970]
+
+[node name="Validation" type="Node" parent="Controls" unique_id=83363107]
+
+[node name="Correct" type="TouchScreenButton" parent="Controls/Validation" unique_id=855768092]
+position = Vector2(1750, 750)
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("5_4hrqh")
+texture_pressed = ExtResource("6_whd4d")
+action = "right"
+
+[node name="Incorrect" type="TouchScreenButton" parent="Controls/Validation" unique_id=1413388362]
+position = Vector2(1600, 900)
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("7_bmiuw")
+texture_pressed = ExtResource("8_exxqc")
+action = "wrong"
+
+[node name="Selection" type="Node" parent="Controls" unique_id=1592897367]
+
+[node name="Select" type="TouchScreenButton" parent="Controls/Selection" unique_id=1799409219]
+position = Vector2(10, 750)
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("9_cuco4")
+texture_pressed = ExtResource("10_y28sd")
+action = "select"
+
+[node name="Initiate" type="TouchScreenButton" parent="Controls/Selection" unique_id=642427193]
+position = Vector2(170, 900)
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("11_0bby2")
+texture_pressed = ExtResource("12_dk2sw")
+action = "next"
