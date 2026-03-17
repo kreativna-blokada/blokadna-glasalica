@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://d2ah82i7p56vk" path="res://!project/build/design/scenes/actors/character.tscn" id="1_5suuu"]
 [ext_resource type="Script" uid="uid://8cjtw14xitbg" path="res://!project/build/design/scenes/actors/voter.gd" id="2_5suuu"]
-[ext_resource type="Texture2D" uid="uid://cvswnihbitxee" path="res://!project/assets/art/player.png" id="3_3da2g"]
+[ext_resource type="Texture2D" uid="uid://cct3uwf0t5cpk" path="res://!project/assets/art/player.png" id="3_3da2g"]
 
 [sub_resource type="Animation" id="Animation_014nc"]
 length = 0.001
@@ -53,9 +53,6 @@ tracks/0/keys = {
 "values": [78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115]
 }
 
-[sub_resource type="Animation" id="Animation_pur32"]
-resource_name = "talk"
-
 [sub_resource type="Animation" id="Animation_w7v2a"]
 resource_name = "top-left"
 length = 1.3
@@ -95,7 +92,6 @@ _data = {
 &"RESET": SubResource("Animation_014nc"),
 &"bottom-left": SubResource("Animation_5suuu"),
 &"bottom-right": SubResource("Animation_lc2ub"),
-&"talk": SubResource("Animation_pur32"),
 &"top-left": SubResource("Animation_w7v2a"),
 &"top-right": SubResource("Animation_3da2g")
 }
@@ -120,6 +116,24 @@ offset_bottom = -45.0
 visible = false
 position = Vector2(0, -360)
 scale = Vector2(2, 2)
+
+[node name="Check" parent="HUD" index="0" unique_id=22711907]
+texture = null
+
+[node name="Spray" parent="HUD" index="1" unique_id=970090629]
+texture = null
+
+[node name="ID" parent="HUD" index="2" unique_id=879326635]
+texture = null
+
+[node name="Ballot" parent="HUD" index="3" unique_id=681672490]
+texture = null
+
+[node name="Booth" parent="HUD" index="4" unique_id=762571512]
+texture = null
+
+[node name="Box" parent="HUD" index="5" unique_id=1069367732]
+texture = null
 
 [node name="CharacterSprite" parent="." index="3" unique_id=3088008]
 scale = Vector2(1.5, 1.5)

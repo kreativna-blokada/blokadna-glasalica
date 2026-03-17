@@ -50,12 +50,11 @@ func update_target_stop() -> void:
 	if playground:
 		var next_stop = playground.get_stop_at_index(current_stop_index)
 		
-		# Handle the Playground Instructions visibility
 		playground.status_label.visible = (current_stop_index == 3)
 		
 		if next_stop == null:
 			finished_all_stops = true
-			current_target_stop = null # Explicitly clear the target
+			current_target_stop = null
 			velocity = Vector2.ZERO
 		else:
 			current_target_stop = next_stop

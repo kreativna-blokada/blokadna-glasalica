@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://r52riejfxhoe" path="res://!project/build/design/scenes/actors/character.gd" id="1_b5jgq"]
 [ext_resource type="Texture2D" uid="uid://de54xjknr5p38" path="res://!project/assets/art/balloon-dream.png" id="2_85jrd"]
-[ext_resource type="Texture2D" path="res://!project/assets/art/UI/Sprout Lands - UI Pack - Basic.png" id="2_b5jgq"]
 
 [node name="Character" type="CharacterBody2D" unique_id=1417136144]
 collision_layer = 0
@@ -30,42 +29,36 @@ scale = Vector2(4, 4)
 
 [node name="Check" type="Sprite2D" parent="HUD" unique_id=22711907]
 position = Vector2(-72.75, -0.24999973)
-texture = ExtResource("2_b5jgq")
 hframes = 5
 vframes = 19
 frame = 36
 
 [node name="Spray" type="Sprite2D" parent="HUD" unique_id=970090629]
 position = Vector2(-43.75, -0.24999973)
-texture = ExtResource("2_b5jgq")
 hframes = 5
 vframes = 19
 frame = 36
 
 [node name="ID" type="Sprite2D" parent="HUD" unique_id=879326635]
 position = Vector2(-14.749998, -0.24999973)
-texture = ExtResource("2_b5jgq")
 hframes = 5
 vframes = 19
 frame = 36
 
 [node name="Ballot" type="Sprite2D" parent="HUD" unique_id=681672490]
 position = Vector2(14.750002, -0.24999973)
-texture = ExtResource("2_b5jgq")
 hframes = 5
 vframes = 19
 frame = 36
 
 [node name="Booth" type="Sprite2D" parent="HUD" unique_id=762571512]
 position = Vector2(43.75, -0.24999973)
-texture = ExtResource("2_b5jgq")
 hframes = 5
 vframes = 19
 frame = 36
 
 [node name="Box" type="Sprite2D" parent="HUD" unique_id=1069367732]
 position = Vector2(72.37499, 0.3750002)
-texture = ExtResource("2_b5jgq")
 hframes = 5
 vframes = 19
 frame = 36
