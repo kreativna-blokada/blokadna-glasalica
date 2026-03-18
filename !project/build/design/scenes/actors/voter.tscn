@@ -117,24 +117,6 @@ visible = false
 position = Vector2(0, -360)
 scale = Vector2(2, 2)
 
-[node name="Check" parent="HUD" index="0" unique_id=22711907]
-texture = null
-
-[node name="Spray" parent="HUD" index="1" unique_id=970090629]
-texture = null
-
-[node name="ID" parent="HUD" index="2" unique_id=879326635]
-texture = null
-
-[node name="Ballot" parent="HUD" index="3" unique_id=681672490]
-texture = null
-
-[node name="Booth" parent="HUD" index="4" unique_id=762571512]
-texture = null
-
-[node name="Box" parent="HUD" index="5" unique_id=1069367732]
-texture = null
-
 [node name="CharacterSprite" parent="." index="3" unique_id=3088008]
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("3_3da2g")
