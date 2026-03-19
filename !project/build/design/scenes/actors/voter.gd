@@ -22,9 +22,7 @@ var _wait_animation_name: String = "bottom-right"
 var voter_stops_sound: Dictionary = Globals.VoterStopsSound
 
 #broadcast variables
-var stage: Stage:
-	get:
-		return get_parent().get_parent() as Stage
+var stage: Stage = null
 
 #onready vars
 @onready var sfx_player: AudioStreamPlayer = $AudioStreamPlayer
@@ -41,7 +39,7 @@ var stage: Stage:
 # ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
 func _ready() -> void:
-	await get_tree().process_frame
+	#await get_tree().process_frame
 	
 	update_target_stop()
 

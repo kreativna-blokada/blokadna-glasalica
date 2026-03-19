@@ -9,7 +9,6 @@
 class_name Stage
 extends Node2D
 
-#private vars
 #data containers
 var _voters: Node = null
 #var _voter_factory: PackedScene = preload("res://!project/build/design/scenes/actors/voters.tscn")
@@ -90,10 +89,12 @@ func _get_voter(_index: int) -> Node:
 	if _voters and _voters.has_method("load_voter"):
 		#var voter = _voters.select_voter(index)
 		var voter = _voters.load_voter(_index)
+		#dependency injection
+		voter.stage = self
 
 		var x = _rand.randf_range(600,3000)
 		voter.position = Vector2(voter_stop.global_position.x, voter_stop.global_position.y)
-
+		
 		voter_slots.add_child(voter)
 		
 		print("[STAGE] Successfully fetched voter of index: ", _index)
