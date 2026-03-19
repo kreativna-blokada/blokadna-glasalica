@@ -1,6 +1,15 @@
+##
+# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+##
+#description     : Voter actor controller
+#author          : Zeljko Vulovic
+#date            : 20260210
+#version         : 1.0
+#===============================================================================
 class_name Voter
 extends Character
 
+#private vars
 var current_stop_index: int = 0
 var current_target_stop: Node2D = null
 var is_waiting: bool = false
@@ -8,27 +17,27 @@ var finished_all_stops: bool = false
 var current_dir_animation: String = "idle"
 var current_wait_animation: String = "bottom-right"
 
+#data containers
+var vote_stop_sounds: Dictionary = Globals.VoterStopSounds
+
+#broadcast variables
+var stage: Stage:
+	get:
+		return get_parent().get_parent() as Stage
+
+#onready vars
 @onready var sfx_player: AudioStreamPlayer = $AudioStreamPlayer
 @onready var hud_sprites: Array = $HUD.get_children()
 @onready var status_label: Label = $Dialog/Label
 @onready var dialog_sprite: Sprite2D = $Dialog
 
-var stop_sounds: Dictionary = {
-	0: "",
-	1: "",
-	2: "res://!project/assets/audio/round-one.mp3",
-	3: "res://!project/assets/audio/round-two.mp3",
-	4: "res://!project/assets/audio/round-three.mp3",
-	5: "res://!project/assets/audio/round-four.mp3",
-	6: "res://!project/assets/audio/choose-five.mp3",
-	7: "res://!project/assets/audio/choose-your-destiny.mp3",
-	8: "",
-	9: ""
-}
-
-var stage: Stage:
-	get:
-		return get_parent().get_parent() as Stage
+#CALLBACKS
+# ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
+#██╔════╝██╔══██╗██║     ██║     ██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝
+#██║     ███████║██║     ██║     ██████╔╝███████║██║     █████╔╝ ███████╗
+#██║     ██╔══██║██║     ██║     ██╔══██╗██╔══██║██║     ██╔═██╗ ╚════██║
+#╚██████╗██║  ██║███████╗███████╗██████╔╝██║  ██║╚██████╗██║  ██╗███████║
+# ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
 func _ready() -> void:
 	await get_tree().process_frame
@@ -40,12 +49,20 @@ func _process(_delta: float) -> void:
 		velocity = Vector2.ZERO
 	else:
 		move_to_sequential_stop()
-	
+
 	handle_input()
 	handle_movement()
 	handle_animations()
 	set_heading()
 	move_and_slide()
+
+#FUNCTIONS
+#███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
+#██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
+#█████╗  ██║   ██║██╔██╗ ██║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
+#██╔══╝  ██║   ██║██║╚██╗██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
+#██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
+#╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
 func update_target_stop() -> void:
 	if stage:
@@ -60,16 +77,19 @@ func update_target_stop() -> void:
 		else:
 			current_target_stop = next_stop
 			update_animation_name()
-			update_dialog() 
 
 func update_animation_name() -> void:
 	match current_stop_index:
 		0, 1: current_dir_animation = "bottom-right"
-		2, 3, 4: current_dir_animation = "top-right"
-		5: current_dir_animation = "top-right"
-		6: current_dir_animation = "top-left"
-		7, 8: current_dir_animation = "bottom-left"
-		9: current_dir_animation = "top-left"
+		2: current_dir_animation = "top-right"
+		3: current_dir_animation = "top-left"
+		4, 5: current_dir_animation = "top-right"
+		6, 7: current_dir_animation = "bottom-right"
+		8, 9: current_dir_animation = "bottom-left"
+		10: current_dir_animation = "top-left"
+		11: current_dir_animation = "top-right"
+		12: current_dir_animation = "bottom-left"
+		13: current_dir_animation = "bottom-right"
 		_: current_dir_animation = "idle"
 
 func handle_animations() -> void:
@@ -113,8 +133,8 @@ func reach_stop() -> void:
 	update_target_stop()
 
 func play_stop_sound() -> void:
-	if stop_sounds.has(current_stop_index):
-		var sound_path = stop_sounds[current_stop_index]
+	if vote_stop_sounds.has(current_stop_index):
+		var sound_path = vote_stop_sounds[current_stop_index]
 		if not sound_path.is_empty() and FileAccess.file_exists(sound_path):
 			sfx_player.volume_db = 0.0
 			if current_stop_index == 7:
@@ -125,7 +145,7 @@ func play_stop_sound() -> void:
 			sfx_player.play()
 
 func update_hud_frames() -> void:
-	if hud_sprites.size() < 7:
+	if hud_sprites.size() < 6:
 		return
 	match current_stop_index:
 		1: hud_sprites[0].frame = 35
@@ -134,21 +154,6 @@ func update_hud_frames() -> void:
 		4: hud_sprites[3].frame = 35
 		5: hud_sprites[4].frame = 35
 		6: hud_sprites[5].frame = 35
-		7: hud_sprites[5].frame = 35
-
-func update_dialog() -> void:
-	print("[VOTER] ++++++++++++++++++++>> ", current_stop_index)
-	
-	match current_stop_index:
-		0: setup_dialog("#", "#", true, Vector2(-205, -95), "bottom-right")
-		1: setup_dialog("#", "#", true, Vector2(-205, -95), "bottom-right")
-		2: setup_dialog("#", "#", false, Vector2(-300, -95), "bottom-right")
-		3: setup_dialog("#", "#", false, Vector2(-300, -95), "bottom-right")
-		4: setup_dialog("#", "#", false, Vector2(-300, -95), "bottom-right")
-		5: setup_dialog("#", "#", true, Vector2(-205, -95), "idle")
-		6: setup_dialog("#", "#", true, Vector2(-205, -95), "top-right")
-		7: setup_dialog("#", "#", false, Vector2(-300, -95), "top-left")
-		_: setup_dialog("#", "#", false, Vector2(-300, -150), "idle")
 
 func setup_dialog(txt: String, img_path: String, should_flip: bool, label_pos: Vector2, wait_anim: String) -> void:
 	status_label.text = txt

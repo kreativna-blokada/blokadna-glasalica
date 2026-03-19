@@ -125,10 +125,6 @@ enum Voter {
 	Cobalt
 }
 
-enum Boss {
-	Kritchak
-}
-
 var VoterFactory = {
 	Voter.Player: {
 		"Texture2D": "res://!project/assets/art/player.png",
@@ -157,4 +153,13 @@ var VoterFactory = {
 	Voter.Cobalt: {
 		"Texture2D": "res://!project/assets/art/player-cobalt.png",
 	},
+}
+
+var VoterStopSounds: Dictionary = {
+	3: "res://!project/assets/audio/round-one.mp3",
+	4: "res://!project/assets/audio/round-two.mp3",
+	5: "res://!project/assets/audio/round-three.mp3",
+	6: "res://!project/assets/audio/round-four.mp3",
+	8: "res://!project/assets/audio/choose-five.mp3",
+	11: "res://!project/assets/audio/choose-your-destiny.mp3",
 }
