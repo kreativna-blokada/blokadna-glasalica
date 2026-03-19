@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://fqi4sbecij1g"]
 
 [ext_resource type="Script" uid="uid://bbqbi7b7sbxcg" path="res://!project/build/design/scenes/playground.gd" id="1_0lvdn"]
-[ext_resource type="Texture2D" uid="uid://bthltmn3c7i18" path="res://!project/assets/art/room-delete.png" id="2_0lvdn"]
 [ext_resource type="PackedScene" uid="uid://dr4n6i0f64c0h" path="res://!project/build/design/scenes/actors/voter.tscn" id="2_15nu1"]
+[ext_resource type="Texture2D" uid="uid://bk2xp1ewy46qv" path="res://!project/assets/art/room3.png" id="2_kd7wv"]
 [ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/actors/voting_stop.tscn" id="4_0lvdn"]
 [ext_resource type="Texture2D" uid="uid://dv8afp8brclto" path="res://!project/assets/art/door.png" id="4_4snjr"]
 [ext_resource type="Texture2D" uid="uid://dhadrc42q4pyk" path="res://!project/assets/art/balloon-state.png" id="6_kd7wv"]
@@ -12,8 +12,8 @@ script = ExtResource("1_0lvdn")
 
 [node name="Room" type="Sprite2D" parent="." unique_id=1647902958]
 position = Vector2(960, 540)
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_0lvdn")
+scale = Vector2(1.55, 1.55)
+texture = ExtResource("2_kd7wv")
 
 [node name="VotingStops" type="Node2D" parent="." unique_id=1004715077]
 
