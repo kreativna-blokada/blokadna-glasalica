@@ -11,8 +11,8 @@ extends Node
 
 
 #private vars
-var _struct: PackedScene = preload("res://!project/build/design/scenes/actors/voter.tscn")
-var _group: String = Globals.EntityProperties[Globals.Entity.Voter]["group"]
+var _voter_scene: PackedScene = preload("res://!project/build/design/scenes/actors/voter.tscn")
+var _voter_group: String = Globals.EntityProperties[Globals.Entity.Voter]["group"]
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -34,12 +34,12 @@ func _init() -> void:
 #██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
 #╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
-#instanciates loaded scene and updates by listed resources
+#instanciates loaded scene updated by listed resources
 func load_voter(_index: int) -> Node:
 	#instantiate the template scene
-	var voter = _struct.instantiate()
+	var voter = _voter_scene.instantiate()
 
-	voter.add_to_group(_group)
+	voter.add_to_group(_voter_group)
 
 	#set texture
 	var texture = _get_texture(_index)

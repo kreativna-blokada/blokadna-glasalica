@@ -10,15 +10,16 @@ class_name Voter
 extends Character
 
 #private vars
-var current_stop_index: int = 0
+var vote_stop_index: int = 0
 var current_target_stop: Node2D = null
 var is_waiting: bool = false
 var finished_all_stops: bool = false
-var current_dir_animation: String = "idle"
-var current_wait_animation: String = "bottom-right"
+
+var _walk_animation_name: String = "idle"
+var _wait_animation_name: String = "bottom-right"
 
 #data containers
-var vote_stop_sounds: Dictionary = Globals.VoterStopSounds
+var voter_stops_sound: Dictionary = Globals.VoterStopsSound
 
 #broadcast variables
 var stage: Stage:
@@ -41,6 +42,7 @@ var stage: Stage:
 
 func _ready() -> void:
 	await get_tree().process_frame
+	
 	update_target_stop()
 
 func _process(_delta: float) -> void:
@@ -66,40 +68,43 @@ func _process(_delta: float) -> void:
 
 func update_target_stop() -> void:
 	if stage:
-		var next_stop = stage.get_stop_at_index(current_stop_index)
+		var next_stop = stage.get_stop_at_index(vote_stop_index)
 		
-		###stage.status_label.visible = (current_stop_index == 3)
+		###stage.status_label.visible = (vote_stop_index == 3)
 		
 		if next_stop == null:
 			finished_all_stops = true
 			current_target_stop = null
 			velocity = Vector2.ZERO
+			
+			queue_free()
 		else:
 			current_target_stop = next_stop
-			update_animation_name()
+			
+			_get_walk_animation_name()
 
-func update_animation_name() -> void:
-	match current_stop_index:
-		0, 1: current_dir_animation = "bottom-right"
-		2: current_dir_animation = "top-right"
-		3: current_dir_animation = "top-left"
-		4, 5: current_dir_animation = "top-right"
-		6, 7: current_dir_animation = "bottom-right"
-		8, 9: current_dir_animation = "bottom-left"
-		10: current_dir_animation = "top-left"
-		11: current_dir_animation = "top-right"
-		12: current_dir_animation = "bottom-left"
-		13: current_dir_animation = "bottom-right"
-		_: current_dir_animation = "idle"
+func _get_walk_animation_name() -> void:
+	match vote_stop_index:
+		0, 1: _walk_animation_name = "bottom-right"
+		2: _walk_animation_name = "top-right"
+		3: _walk_animation_name = "top-left"
+		4, 5: _walk_animation_name = "top-right"
+		6, 7: _walk_animation_name = "bottom-right"
+		8, 9: _walk_animation_name = "bottom-left"
+		10: _walk_animation_name = "top-left"
+		11: _walk_animation_name = "top-right"
+		12: _walk_animation_name = "bottom-left"
+		13: _walk_animation_name = "bottom-right"
+		_: _walk_animation_name = "idle"
 
 func handle_animations() -> void:
 	if finished_all_stops:
 		animation_player.play("bottom-right")
 	elif is_waiting:
-		animation_player.play(current_wait_animation)
+		animation_player.play(_wait_animation_name)
 	elif state == State.WALK:
-		if animation_player.current_animation != current_dir_animation:
-			animation_player.play(current_dir_animation)
+		if animation_player.current_animation != _walk_animation_name:
+			animation_player.play(_walk_animation_name)
 	else:
 		animation_player.play("bottom-right")
 
@@ -128,16 +133,16 @@ func reach_stop() -> void:
 	await get_tree().create_timer(1.0).timeout
 	
 	# Only proceed if we aren't at the very last possible index
-	current_stop_index += 1
+	vote_stop_index += 1
 	is_waiting = false
 	update_target_stop()
 
 func play_stop_sound() -> void:
-	if vote_stop_sounds.has(current_stop_index):
-		var sound_path = vote_stop_sounds[current_stop_index]
+	if voter_stops_sound.has(vote_stop_index):
+		var sound_path = voter_stops_sound[vote_stop_index]
 		if not sound_path.is_empty() and FileAccess.file_exists(sound_path):
 			sfx_player.volume_db = 0.0
-			if current_stop_index == 7:
+			if vote_stop_index == 11:
 				sfx_player.volume_db = 10.0
 				
 			var stream = load(sound_path)
@@ -147,7 +152,7 @@ func play_stop_sound() -> void:
 func update_hud_frames() -> void:
 	if hud_sprites.size() < 6:
 		return
-	match current_stop_index:
+	match vote_stop_index:
 		1: hud_sprites[0].frame = 35
 		2: hud_sprites[1].frame = 35
 		3: hud_sprites[2].frame = 35
@@ -159,7 +164,7 @@ func setup_dialog(txt: String, img_path: String, should_flip: bool, label_pos: V
 	status_label.text = txt
 	status_label.position = label_pos 
 	dialog_sprite.flip_h = should_flip
-	current_wait_animation = wait_anim
+	_wait_animation_name = wait_anim
 	
 	if FileAccess.file_exists(img_path):
 		dialog_sprite.texture = load(img_path)
