@@ -10,22 +10,24 @@ class_name Voter
 extends Character
 
 #private vars
-var vote_stop_index: int = 0
-var current_target_stop: Node2D = null
-var is_waiting: bool = false
-var finished_all_stops: bool = false
+var _vote_stop_index: int = 0
 
+var _is_walk_done: bool = false
 var _walk_animation_name: String = "idle"
 var _wait_animation_name: String = "bottom-right"
+
+var is_waiting: bool = false
 
 #data containers
 var voter_stops_sound: Dictionary = Globals.VoterStopsSound
 
 #broadcast variables
-var stage: Stage = null
+var stage_injection: Stage = null
+var vote_stop_target: Node2D = null
 
 #onready vars
-@onready var sfx_player: AudioStreamPlayer = $AudioStreamPlayer
+@onready var vote_stop_sound: AudioStreamPlayer = $AudioStreamPlayer
+
 @onready var hud_sprites: Array = $HUD.get_children()
 @onready var status_label: Label = $Dialog/Label
 @onready var dialog_sprite: Sprite2D = $Dialog
@@ -41,11 +43,11 @@ var stage: Stage = null
 func _ready() -> void:
 	#await get_tree().process_frame
 	
-	update_target_stop()
+	set_vote_stop_target()
 
 func _process(_delta: float) -> void:
 	# If finished or waiting, force velocity to zero to prevent any sliding/returning
-	if finished_all_stops or is_waiting or current_target_stop == null:
+	if _is_walk_done or is_waiting or vote_stop_target == null:
 		velocity = Vector2.ZERO
 	else:
 		move_to_sequential_stop()
@@ -64,25 +66,25 @@ func _process(_delta: float) -> void:
 #██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
 #╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
-func update_target_stop() -> void:
-	if stage:
-		var next_stop: Node2D = stage.get_stop_at_index(vote_stop_index)
+func set_vote_stop_target() -> void:
+	if stage_injection:
+		var next_stop: Node2D = stage_injection.get_vote_stop(_vote_stop_index)
 		
-		###stage.status_label.visible = (vote_stop_index == 3)
+		###stage.status_label.visible = (_vote_stop_index == 3)
 		
 		if next_stop == null:
-			finished_all_stops = true
-			current_target_stop = null
-			velocity = Vector2.ZERO
+			_is_walk_done = true
+			vote_stop_target = null
 			
+			velocity = Vector2.ZERO
 			queue_free()
 		else:
-			current_target_stop = next_stop
+			vote_stop_target = next_stop
 			
-			_get_walk_animation_name()
+			_find_walk_animation_name()
 
-func _get_walk_animation_name() -> void:
-	match vote_stop_index:
+func _find_walk_animation_name() -> void:
+	match _vote_stop_index:
 		0, 1: _walk_animation_name = "bottom-right"
 		2: _walk_animation_name = "top-right"
 		3: _walk_animation_name = "top-left"
@@ -96,7 +98,7 @@ func _get_walk_animation_name() -> void:
 		_: _walk_animation_name = "idle"
 
 func handle_animations() -> void:
-	if finished_all_stops:
+	if _is_walk_done:
 		animation_player.play("bottom-right")
 	elif is_waiting:
 		animation_player.play(_wait_animation_name)
@@ -107,12 +109,12 @@ func handle_animations() -> void:
 		animation_player.play("bottom-right")
 
 func move_to_sequential_stop() -> void:
-	if current_target_stop == null: return
+	if vote_stop_target == null: return
 	
 	var sprite_height: float = character_sprite.get_rect().size.y * character_sprite.scale.y
 	var feet_position: Vector2 = global_position + Vector2(0, sprite_height / 2.0)
 	
-	var target_pos: Vector2 = current_target_stop.global_position
+	var target_pos: Vector2 = vote_stop_target.global_position
 	var dist: float = feet_position.distance_to(target_pos)
 	
 	if dist < 5.0:
@@ -131,26 +133,27 @@ func reach_stop() -> void:
 	await get_tree().create_timer(1.0).timeout
 	
 	# Only proceed if we aren't at the very last possible index
-	vote_stop_index += 1
+	_vote_stop_index += 1
 	is_waiting = false
-	update_target_stop()
+	set_vote_stop_target()
 
 func play_stop_sound() -> void:
-	if voter_stops_sound.has(vote_stop_index):
-		var sound_path = voter_stops_sound[vote_stop_index]
+	if voter_stops_sound.has(_vote_stop_index):
+		var sound_path = voter_stops_sound[_vote_stop_index]
+		
 		if not sound_path.is_empty() and FileAccess.file_exists(sound_path):
-			sfx_player.volume_db = 0.0
-			if vote_stop_index == 11:
-				sfx_player.volume_db = 10.0
+			vote_stop_sound.volume_db = 0.0
+			if _vote_stop_index == 11:
+				vote_stop_sound.volume_db = 10.0
 				
 			var stream = load(sound_path)
-			sfx_player.stream = stream
-			sfx_player.play()
+			vote_stop_sound.stream = stream
+			vote_stop_sound.play()
 
 func update_hud_frames() -> void:
 	if hud_sprites.size() < 6:
 		return
-	match vote_stop_index:
+	match _vote_stop_index:
 		1: hud_sprites[0].frame = 35
 		2: hud_sprites[1].frame = 35
 		3: hud_sprites[2].frame = 35

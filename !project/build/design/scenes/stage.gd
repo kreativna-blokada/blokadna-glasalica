@@ -10,11 +10,10 @@ class_name Stage
 extends Node2D
 
 #data containers
-var _voters: Node = null
-#var _voter_factory: PackedScene = preload("res://!project/build/design/scenes/actors/voters.tscn")
+var _voters_factory: Node = null
 
 #broadcast variables
-var _voter_diversity: int = 0
+var _voters_diversity: int = 0
 var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
 
 #onready vars
@@ -58,8 +57,8 @@ func _process(_delta: float) -> void:
 func _init_vars() -> void:
 	_rand.randomize()
 
-	_voters = voter_slots
-	_voter_diversity = Globals.VoterFactory.size()#+1
+	_voters_factory = voter_slots
+	_voters_diversity = Globals.VoterFactory.size()#+1
 	#_timer.start()			# if autostart isn't selected, will start the timer
 	#spawn_voters(_spawn_rate)# do this or else it will take X secs before spawn
 	
@@ -80,17 +79,16 @@ func _init_game() -> void:
 
 #handles the process of broadcasting entities
 func _spawn_voters() -> void:
-	var index: int = _rand.randi() % _voter_diversity
+	var index: int = _rand.randi() % _voters_diversity
 	
 	_get_voter(index)
 
 #handles the process of broadcasting entities
 func _get_voter(_index: int) -> Node:
-	if _voters and _voters.has_method("load_voter"):
+	if _voters_factory and _voters_factory.has_method("load_voter"):
 		#var voter = _voters.select_voter(index)
-		var voter = _voters.load_voter(_index)
-		#dependency injection
-		voter.stage = self
+		var voter = _voters_factory.load_voter(_index)
+		voter.stage_injection = self
 
 		var x: float = _rand.randf_range(600,3000)
 		voter.position = Vector2(voter_stop.global_position.x, voter_stop.global_position.y)
@@ -104,7 +102,7 @@ func _get_voter(_index: int) -> Node:
 		push_error("Critical: _voters instance is null or missing script!")
 		return null
 
-func get_stop_at_index(index: int) -> Node2D:
+func get_vote_stop(index: int) -> Node2D:
 	if index >= 0 and index < voting_stops.size():
 		return voting_stops[index]
 	return null
@@ -134,6 +132,19 @@ func free_slot(voter: Character) -> void:
 	if target_slots.size() == 1:
 		target_slots[0].free_up()
 
+func _has_free_vote_spot() -> bool:
+	for spot in voter_spots:
+		if spot.is_free():
+			return true
+	return false
+
+func _find_free_vote_spot() -> Node2D:
+	for spot in voter_spots:
+		if spot.is_free():
+			return spot
+	return null
+
+
 #SIGNALS
 #███████╗██╗ ██████╗ ███╗   ██╗ █████╗ ██╗     ███████╗
 #██╔════╝██║██╔════╝ ████╗  ██║██╔══██╗██║     ██╔════╝
@@ -144,6 +155,8 @@ func free_slot(voter: Character) -> void:
 
 func _on_timer_timeout() -> void:
 	#_increase_spawn_rate()
-	_spawn_voters()
+	if _has_free_vote_spot():
+		_spawn_voters()
+		
 	_timer.start()       # Restart the X second timer
 #Note: spawns enemies after initial time out expires

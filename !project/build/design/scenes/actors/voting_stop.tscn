@@ -7,6 +7,6 @@
 script = ExtResource("1_6qwqr")
 
 [node name="VisualMark" type="Sprite2D" parent="." unique_id=1503522988]
-visible = false
-scale = Vector2(1.2, 1)
+rotation = 0.010471975
+scale = Vector2(0.902, 0.752)
 texture = ExtResource("2_ttppt")
