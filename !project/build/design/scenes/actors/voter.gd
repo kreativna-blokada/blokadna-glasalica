@@ -66,7 +66,7 @@ func _process(_delta: float) -> void:
 
 func update_target_stop() -> void:
 	if stage:
-		var next_stop = stage.get_stop_at_index(vote_stop_index)
+		var next_stop: Node2D = stage.get_stop_at_index(vote_stop_index)
 		
 		###stage.status_label.visible = (vote_stop_index == 3)
 		
@@ -109,16 +109,16 @@ func handle_animations() -> void:
 func move_to_sequential_stop() -> void:
 	if current_target_stop == null: return
 	
-	var sprite_height = character_sprite.get_rect().size.y * character_sprite.scale.y
-	var feet_position = global_position + Vector2(0, sprite_height / 2.0)
+	var sprite_height: float = character_sprite.get_rect().size.y * character_sprite.scale.y
+	var feet_position: Vector2 = global_position + Vector2(0, sprite_height / 2.0)
 	
-	var target_pos = current_target_stop.global_position
-	var dist = feet_position.distance_to(target_pos)
+	var target_pos: Vector2 = current_target_stop.global_position
+	var dist: float = feet_position.distance_to(target_pos)
 	
 	if dist < 5.0:
 		reach_stop()
 	else:
-		var direction = (target_pos - feet_position).normalized()
+		var direction: Vector2 = (target_pos - feet_position).normalized()
 		velocity = direction * speed
 
 func reach_stop() -> void:

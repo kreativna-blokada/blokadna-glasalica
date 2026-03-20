@@ -4,8 +4,8 @@ extends CharacterBody2D
 @export_group("Movement")
 @export var speed : float
 
-const _SPEED = 300.0
-const JUMP_VELOCITY = -400.0
+const _SPEED: float = 300.0
+const JUMP_VELOCITY: float = -400.0
 
 @onready var animation_player := $AnimationPlayer
 @onready var character_sprite := $CharacterSprite

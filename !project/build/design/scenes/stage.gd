@@ -80,7 +80,7 @@ func _init_game() -> void:
 
 #handles the process of broadcasting entities
 func _spawn_voters() -> void:
-	var index = _rand.randi() % _voter_diversity
+	var index: int = _rand.randi() % _voter_diversity
 	
 	_get_voter(index)
 
@@ -92,7 +92,7 @@ func _get_voter(_index: int) -> Node:
 		#dependency injection
 		voter.stage = self
 
-		var x = _rand.randf_range(600,3000)
+		var x: float = _rand.randf_range(600,3000)
 		voter.position = Vector2(voter_stop.global_position.x, voter_stop.global_position.y)
 		
 		voter_slots.add_child(voter)

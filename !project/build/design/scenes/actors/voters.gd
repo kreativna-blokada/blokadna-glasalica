@@ -37,12 +37,12 @@ func _init() -> void:
 #instanciates loaded scene updated by listed resources
 func load_voter(_index: int) -> Node:
 	#instantiate the template scene
-	var voter = _voter_scene.instantiate()
+	var voter: Node = _voter_scene.instantiate()
 
 	voter.add_to_group(_voter_group)
 
 	#set texture
-	var texture = _get_texture(_index)
+	var texture: Resource = _get_texture(_index)
 	voter.get_node("CharacterSprite").set_texture(texture)
 	#var sprite = get_child(_index).duplicate()
 
