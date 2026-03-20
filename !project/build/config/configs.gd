@@ -25,14 +25,14 @@ enum Quirks {
 	Spawn
 }
 
-var TraitsProperties = {
+var TraitsProperties: Dictionary[Variant, Variant] = {
 	Quirks.Spawn: {
 		"time": { "min": 1, "max": 4 },
 		"step": { "min": 0.1,"max":0.8 }
 	}
 }
 
-var TraitsRelation = {
+var TraitsRelation: Dictionary[Variant, Variant] = {
 	Perks.Score: {
 		# Score -> Spawn
 		Quirks.Spawn:	{ "step": { "min": 1,"max": 4} }
@@ -51,9 +51,9 @@ enum Entity {
 	Voter
 }
 
-var EntityProperties = {
+var EntityProperties: Dictionary[Variant, Variant] = {
 	Entity.Voter: {
-		"speed":	 200,
+		"speed": 200,
 		"lives": 2
 	}
 }

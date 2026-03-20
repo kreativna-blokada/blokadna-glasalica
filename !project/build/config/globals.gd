@@ -9,7 +9,7 @@
 extends Node
 
 
-const PATH = "res://!project/build/config/globals.gd"
+const PATH: String = "res://!project/build/config/globals.gd"
 
 enum Scene {
 	Menu,
@@ -25,7 +25,7 @@ enum Level {
 	Caciland
 }
 
-var Scenes = {
+var Scenes: Dictionary[Variant, Variant] = {
 	Scene.Menu: {
 		"path": "res://!project/design/scenes/UI/menu.tscn"
 	},
@@ -67,7 +67,7 @@ enum Quirks {
 	Spawn
 }
 
-var TraitsProperties = {
+var TraitsProperties: Dictionary[Variant, Variant] = {
 	Quirks.Spawn: {
 		"time": { "min": Configs.TraitsProperties[Configs.Quirks.Spawn]["time"]["min"], 
 				  "max": Configs.TraitsProperties[Configs.Quirks.Spawn]["time"]["max"]},
@@ -76,7 +76,7 @@ var TraitsProperties = {
 	}
 }
 
-var TraitsRelation = {
+var TraitsRelation: Dictionary[Variant, Variant] = {
 	Perks.Score: {
 		# Score -> Spawn
 		Quirks.Spawn:	{
@@ -98,7 +98,7 @@ enum Entity {
 	Voter
 }
 
-var EntityProperties = {
+var EntityProperties: Dictionary[Variant, Variant] = {
 	Entity.Voter: {
 		"scene":	Scenes[Scene.Voter]["path"],
 		"group":	"voter",
@@ -125,7 +125,7 @@ enum Voter {
 	Cobalt
 }
 
-var VoterFactory = {
+var VoterFactory: Dictionary[Variant, Variant] = {
 	Voter.Player: {
 		"Texture2D": "res://!project/assets/art/player.png",
 	},
