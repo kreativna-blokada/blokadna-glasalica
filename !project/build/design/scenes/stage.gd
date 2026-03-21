@@ -46,6 +46,11 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 
+#built-in callback, called authomatically, no signal connection needed
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("start") and _voters_entering.size() > 0:
+		_release_first_voter()
+
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
 #██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
@@ -115,7 +120,6 @@ func get_voting_course(voter: Voter) -> Array:
 
 	return walking_course
 
-
 func get_vote_stop(index: int) -> Node2D:
 	if index >= 0 and index < voting_course.size():
 		return voting_course[index]
@@ -169,9 +173,6 @@ func _find_last_free_spot() -> Node2D:
 
 func _on_voters_entering(voter: Voter) -> void:
 	_voters_entering.append(voter)
-
-	if _voters_entering.size() >= _max_voter_queue:
-		_release_first_voter()
 
 func _release_first_voter() -> void:
 	var first: Voter = _voters_entering.pop_front()
