@@ -12,36 +12,14 @@ extends Node
 const PATH: String = "res://!project/build/config/globals.gd"
 
 enum Scene {
-	Menu,
 	Game,
-	Level,
-	Player,
-	Enemy,
 	Voter,
 	Playround
 }
 
-enum Level {
-	Caciland
-}
-
 var Scenes: Dictionary[Variant, Variant] = {
-	Scene.Menu: {
-		"path": "res://!project/design/scenes/UI/menu.tscn"
-	},
 	Scene.Game: {
 		"path": "res://!project/build/design/scenes/game.tscn"
-	},
-	Scene.Level: {
-		Level.Caciland: {
-			"path": "res://!project/design/scenes/levels/01_caciland.tscn"
-		},
-	},	
-	Scene.Player: {
-		"path": "res://characters/player/player.tscn"
-	},
-	Scene.Enemy: {
-		"path": "res://characters/enemies/enemy.tscn"
 	},
 	Scene.Voter: {
 		"path": "res://!project/build/design/scenes/actors/voter.tscn"
@@ -64,33 +42,6 @@ enum Direction {
 	TopRight,
 	BottomLeft,
 	BottomRight,                                                                                                                                                                                                                                  	
-}  
-
-enum Perks {
-	Score
-}
-
-enum Quirks {
-	Spawn
-}
-
-var TraitsProperties: Dictionary[Variant, Variant] = {
-	Quirks.Spawn: {
-		"time": { "min": Configs.TraitsProperties[Configs.Quirks.Spawn]["time"]["min"], 
-				  "max": Configs.TraitsProperties[Configs.Quirks.Spawn]["time"]["max"]},
-		"step": { "min": Configs.TraitsProperties[Configs.Quirks.Spawn]["step"]["min"], 
-				  "max": Configs.TraitsProperties[Configs.Quirks.Spawn]["step"]["max"]}
-	}
-}
-
-var TraitsRelation: Dictionary[Variant, Variant] = {
-	Perks.Score: {
-		# Score -> Spawn
-		Quirks.Spawn:	{
-			"step": { "min": Configs.TraitsRelation[Configs.Perks.Score][Configs.Quirks.Spawn]["step"]["min"], 
-					  "max": Configs.TraitsRelation[Configs.Perks.Score][Configs.Quirks.Spawn]["step"]["max"]}
-		}
-	}
 }
 
 #ENTITY
@@ -108,7 +59,7 @@ enum Entity {
 var EntityProperties: Dictionary[Variant, Variant] = {
 	Entity.Voter: {
 		"scene":	Scenes[Scene.Voter]["path"],
-		"group":	"voter",
+		"group":	"actor",
 	},
 }
 
