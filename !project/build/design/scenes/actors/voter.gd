@@ -232,7 +232,7 @@ func _restore_walk_texture() -> void:
 	if _original_texture:
 		character_sprite.texture = _original_texture
 		character_sprite.hframes = 39
-		character_sprite.vframes = 4
+		character_sprite.vframes = 5
 #todo: cleanup
 
 #plays voting stop sound
