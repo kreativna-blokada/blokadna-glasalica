@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://d2ah82i7p56vk"]
 
 [ext_resource type="Script" uid="uid://r52riejfxhoe" path="res://!project/build/design/scenes/actors/character.gd" id="1_b5jgq"]
-[ext_resource type="Texture2D" uid="uid://de54xjknr5p38" path="res://!project/assets/art/balloon-dream.png" id="2_85jrd"]
+[ext_resource type="Texture2D" uid="uid://de54xjknr5p38" path="res://!project/art/balloon-dream.png" id="2_85jrd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b5jgq"]
 
 [node name="Character" type="CharacterBody2D" unique_id=1417136144]
 collision_layer = 0
@@ -72,3 +74,6 @@ offset = Vector2(-29, 0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=312657875]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=830087118]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=117126962]
+material = SubResource("ShaderMaterial_b5jgq")

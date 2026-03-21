@@ -91,45 +91,45 @@ enum Voter {
 
 var VoterFactory: Dictionary[Variant, Variant] = {
 	Voter.Player: {
-		"Texture2D": "res://!project/assets/art/player.png",
+		"Texture2D": "res://!project/art/player.png",
 	},
 	Voter.Blue: {
-		"Texture2D": "res://!project/assets/art/player-blue.png",
+		"Texture2D": "res://!project/art/player-blue.png",
 	},
 	Voter.Brown: {
-		"Texture2D": "res://!project/assets/art/player-brown.png",
+		"Texture2D": "res://!project/art/player-brown.png",
 	},
 	Voter.Green: {
-		"Texture2D": "res://!project/assets/art/player-green.png",
+		"Texture2D": "res://!project/art/player-green.png",
 	},
 	Voter.Red: {
-		"Texture2D": "res://!project/assets/art/player-red.png",
+		"Texture2D": "res://!project/art/player-red.png",
 	},
 	Voter.Teal: {
-		"Texture2D": "res://!project/assets/art/player-teal.png",
+		"Texture2D": "res://!project/art/player-teal.png",
 	},
 	Voter.Lapis: {
-		"Texture2D": "res://!project/assets/art/player-lapis.png",
+		"Texture2D": "res://!project/art/player-lapis.png",
 	},
 	Voter.Azure: {
-		"Texture2D": "res://!project/assets/art/player-azure.png",
+		"Texture2D": "res://!project/art/player-azure.png",
 	},
 	Voter.Cobalt: {
-		"Texture2D": "res://!project/assets/art/player-cobalt.png",
+		"Texture2D": "res://!project/art/player-cobalt.png",
 	},
 }
 
 var VoterStopsSound: Dictionary = {
-	4: "res://!project/assets/audio/round-one.mp3",
-	5: "res://!project/assets/audio/round-two.mp3",
-	6: "res://!project/assets/audio/round-three.mp3",
-	7: "res://!project/assets/audio/round-four.mp3",
-	9: "res://!project/assets/audio/round-five.mp3",
-	12: "res://!project/assets/audio/choose-your-destiny.mp3",
+	4: "res://!project/audio/round-one.mp3",
+	5: "res://!project/audio/round-two.mp3",
+	6: "res://!project/audio/round-three.mp3",
+	7: "res://!project/audio/round-four.mp3",
+	9: "res://!project/audio/round-five.mp3",
+	12: "res://!project/audio/choose-your-destiny.mp3",
 }
 
 var VoterIdleAnimations: Dictionary = {
-	"Texture2D": "res://!project/assets/art/player2.png",
+	"Texture2D": "res://!project/art/player.png",
 	"Animation": {
 		Direction.TopLeft:     { "Name": "top-left",     "Frame Coord": {"x": 0, "y": 4} },
 		Direction.TopRight:    { "Name": "top-right",    "Frame Coord": {"x": 1, "y": 4} },

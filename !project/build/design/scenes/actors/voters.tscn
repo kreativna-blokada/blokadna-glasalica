@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://l36qbvcwr0t3"]
 
-[ext_resource type="Texture2D" uid="uid://cct3uwf0t5cpk" path="res://!project/assets/art/player.png" id="1_8dbqw"]
-[ext_resource type="Texture2D" uid="uid://d0hq7kqjrqynq" path="res://!project/assets/art/player-blue.png" id="2_tye60"]
-[ext_resource type="Texture2D" uid="uid://cmbo8xc0adei3" path="res://!project/assets/art/player-brown.png" id="3_ura76"]
-[ext_resource type="Texture2D" uid="uid://1qmibcqkntq0" path="res://!project/assets/art/player-green.png" id="4_65gjf"]
-[ext_resource type="Texture2D" uid="uid://csvtqh5axdfw8" path="res://!project/assets/art/player-red.png" id="5_mipfj"]
-[ext_resource type="Texture2D" uid="uid://mb1r5br6qn7l" path="res://!project/assets/art/player-teal.png" id="6_eslrs"]
-[ext_resource type="Texture2D" uid="uid://ciatxgtdafkjp" path="res://!project/assets/art/player-lapis.png" id="7_ax7bo"]
-[ext_resource type="Texture2D" uid="uid://dfyeqnk15la0k" path="res://!project/assets/art/player-azure.png" id="8_gn7ng"]
-[ext_resource type="Texture2D" uid="uid://cn2b8eq2e1l2u" path="res://!project/assets/art/player-cobalt.png" id="9_im5pl"]
+[ext_resource type="Texture2D" uid="uid://cct3uwf0t5cpk" path="res://!project/art/player.png" id="1_8dbqw"]
+[ext_resource type="Texture2D" uid="uid://d0hq7kqjrqynq" path="res://!project/art/player-blue.png" id="2_tye60"]
+[ext_resource type="Texture2D" uid="uid://cmbo8xc0adei3" path="res://!project/art/player-brown.png" id="3_ura76"]
+[ext_resource type="Texture2D" uid="uid://1qmibcqkntq0" path="res://!project/art/player-green.png" id="4_65gjf"]
+[ext_resource type="Texture2D" uid="uid://csvtqh5axdfw8" path="res://!project/art/player-red.png" id="5_mipfj"]
+[ext_resource type="Texture2D" uid="uid://mb1r5br6qn7l" path="res://!project/art/player-teal.png" id="6_eslrs"]
+[ext_resource type="Texture2D" uid="uid://ciatxgtdafkjp" path="res://!project/art/player-lapis.png" id="7_ax7bo"]
+[ext_resource type="Texture2D" uid="uid://dfyeqnk15la0k" path="res://!project/art/player-azure.png" id="8_gn7ng"]
+[ext_resource type="Texture2D" uid="uid://cn2b8eq2e1l2u" path="res://!project/art/player-cobalt.png" id="9_im5pl"]
 
 [node name="Factory" type="Node" unique_id=1415317399]
 
