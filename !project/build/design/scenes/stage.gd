@@ -11,6 +11,7 @@ extends Node2D
 
 #data containers
 var _voters_factory: Node = null
+var _voter_queue: Array = []
 
 #broadcast variables
 var _voters_diversity: int = 0
@@ -90,8 +91,9 @@ func _get_voter(_index: int) -> Node:
 		voter_slots_container.add_child(voter)
 
 		voter.position = Vector2(voter_loading_spot.global_position.x, voter_loading_spot.global_position.y)
-		var voter_walking_route: Array = get_walking_route()
+		var voter_walking_route: Array = get_walking_route(voter)
 		voter.set_voting_stops(voter_walking_route)
+		voter.arrived_at_queue.connect(_on_voter_queued.bind(voter))
 
 		print("[STAGE] Successfully fetched voter of index: ", _index)
 
@@ -101,13 +103,14 @@ func _get_voter(_index: int) -> Node:
 		return null
 
 #defines the route voters will take
-func get_walking_route() -> Array:
+func get_walking_route(voter: Voter) -> Array:
 	var walking_route: Array = [voter_loading_spot]
 	var waiting_spot: Node2D = _find_free_vote_spot()
 	if waiting_spot:
+		waiting_spot.occupy(voter)
 		walking_route.append(waiting_spot)
 	walking_route.append_array(voter_stops.slice(1))
-	
+
 	return walking_route
 
 
@@ -160,6 +163,18 @@ func _find_last_free_spot() -> Node2D:
 			last_free = spot
 	return last_free
 
+
+func _on_voter_queued(voter: Voter) -> void:
+	_voter_queue.append(voter)
+	if _voter_queue.size() >= 4:
+		_release_first_voter()
+
+func _release_first_voter() -> void:
+	var first: Voter = _voter_queue.pop_front()
+	var queue_spot: Node2D = first.voting_stops[1]
+	if queue_spot.has_method("free_up"):
+		queue_spot.free_up()
+	first.release_from_queue()
 
 #SIGNALS
 #███████╗██╗ ██████╗ ███╗   ██╗ █████╗ ██╗     ███████╗

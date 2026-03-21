@@ -18,6 +18,9 @@ var _wait_frame_coord: Dictionary = {}
 var _original_texture: Texture2D = null
 
 var is_waiting: bool = false
+var is_queued: bool = false
+
+signal arrived_at_queue
 
 #data containers
 var voter_stops_sound: Dictionary = Globals.VoterStopsSound
@@ -47,7 +50,7 @@ func _ready() -> void:
 	pass
 
 func _process(_delta: float) -> void:
-	if _is_walk_done or is_waiting or vote_stop_target == null:
+	if _is_walk_done or is_waiting or is_queued or vote_stop_target == null:
 		velocity = Vector2.ZERO
 	else:
 		move_to_vote_stop()
@@ -122,7 +125,7 @@ func _find_wait_animation_frame_coord() -> Dictionary:
 func handle_animations() -> void:
 	if _is_walk_done:
 		animation_player.play("bottom-right")
-	elif is_waiting:
+	elif is_waiting or is_queued:
 		pass
 	elif state == State.WALK:
 		if animation_player.current_animation != _walk_animation_name:
@@ -148,6 +151,12 @@ func move_to_vote_stop() -> void:
 func reach_stop() -> void:
 	velocity = Vector2.ZERO
 
+	if _vote_stop_index == 1:
+		is_queued = true
+		_apply_wait_texture_for_direction("bottom-right")
+		arrived_at_queue.emit()
+		return
+
 	_wait_frame_coord = _find_wait_animation_frame_coord()
 	if not _wait_frame_coord.is_empty():
 		is_waiting = true
@@ -160,6 +169,25 @@ func reach_stop() -> void:
 
 	_vote_stop_index += 1
 	set_vote_stop_target()
+
+func release_from_queue() -> void:
+	_restore_walk_texture()
+	is_queued = false
+	_vote_stop_index += 1
+	set_vote_stop_target()
+
+func _apply_wait_texture_for_direction(direction_name: String) -> void:
+	animation_player.stop()
+	_original_texture = character_sprite.texture
+	var idle_texture_path: String = Globals.VoterIdleAnimations["Texture2D"]
+	character_sprite.texture = load(idle_texture_path)
+	character_sprite.hframes = 39
+	character_sprite.vframes = 5
+	var animation_setup: Dictionary = Globals.VoterIdleAnimations["Animation"]
+	for animation_view in animation_setup:
+		if animation_setup[animation_view]["Name"] == direction_name:
+			character_sprite.frame_coords = Vector2i(animation_setup[animation_view]["Frame Coord"]["x"], animation_setup[animation_view]["Frame Coord"]["y"])
+			return
 
 func _apply_wait_texture() -> void:
 	animation_player.stop()
