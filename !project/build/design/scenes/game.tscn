@@ -31,43 +31,35 @@ script = ExtResource("3_whd4d")
 [node name="VoterSpots" type="Node2D" parent="Stage" unique_id=1293714126]
 
 [node name="0" parent="Stage/VoterSpots" unique_id=330516695 instance=ExtResource("2_ywe5c")]
-position = Vector2(542.99994, 897.99994)
+position = Vector2(531.00006, 894)
 rotation = -0.06981317
 
 [node name="1" parent="Stage/VoterSpots" unique_id=48913757 instance=ExtResource("2_ywe5c")]
-position = Vector2(491, 876.00006)
+position = Vector2(466, 865)
 rotation = -0.06981317
 
 [node name="2" parent="Stage/VoterSpots" unique_id=1082095802 instance=ExtResource("2_ywe5c")]
-position = Vector2(439, 854.00006)
+position = Vector2(401, 837.00006)
 rotation = -0.06981317
 
 [node name="3" parent="Stage/VoterSpots" unique_id=192122254 instance=ExtResource("2_ywe5c")]
-position = Vector2(387.00003, 832)
+position = Vector2(337, 810)
 rotation = -0.06981317
 
 [node name="4" parent="Stage/VoterSpots" unique_id=1516610223 instance=ExtResource("2_ywe5c")]
-position = Vector2(335, 809.99994)
+position = Vector2(273, 783)
 rotation = -0.06981317
 
 [node name="5" parent="Stage/VoterSpots" unique_id=1484809777 instance=ExtResource("2_ywe5c")]
-position = Vector2(283.00003, 788.00006)
+position = Vector2(210, 756)
 rotation = -0.06981317
 
 [node name="6" parent="Stage/VoterSpots" unique_id=256734726 instance=ExtResource("2_ywe5c")]
-position = Vector2(230.00002, 765.99994)
+position = Vector2(146.99998, 729)
 rotation = -0.06981317
 
 [node name="7" parent="Stage/VoterSpots" unique_id=72973459 instance=ExtResource("2_ywe5c")]
-position = Vector2(177.99998, 743.9999)
-rotation = -0.06981317
-
-[node name="8" parent="Stage/VoterSpots" unique_id=39262596 instance=ExtResource("2_ywe5c")]
-position = Vector2(126.000015, 722)
-rotation = -0.06981317
-
-[node name="9" parent="Stage/VoterSpots" unique_id=419442649 instance=ExtResource("2_ywe5c")]
-position = Vector2(74.000015, 699.99994)
+position = Vector2(83, 703.00006)
 rotation = -0.06981317
 
 [node name="VoterStops" type="Node2D" parent="Stage" unique_id=679928385]
@@ -77,6 +69,7 @@ position = Vector2(-100, 700)
 
 [node name="Entry" parent="Stage/VoterStops" unique_id=1915174047 instance=ExtResource("2_ywe5c")]
 position = Vector2(600, 935)
+rotation = -0.0418879
 
 [node name="Enter" parent="Stage/VoterStops" unique_id=1340102554 instance=ExtResource("2_ywe5c")]
 position = Vector2(751, 851)

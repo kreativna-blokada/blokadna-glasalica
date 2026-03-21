@@ -45,7 +45,8 @@ func load_voter(_index: int) -> Node:
 
 	#set texture
 	var texture: Resource = _get_texture(_index)
-	voter.get_node(_voter_scene_struct["sprite"]).set_texture(texture)
+	var _voter_scene_sprite = _voter_scene_struct["sprite"]
+	voter.get_node(_voter_scene_sprite).set_texture(texture)
 
 	return voter
 
