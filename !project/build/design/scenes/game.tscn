@@ -115,18 +115,17 @@ position = Vector2(864, 880)
 position = Vector2(1600, 1200)
 
 [node name="Entry" type="Sprite2D" parent="Stage" unique_id=1601410947]
-position = Vector2(670, 792.00006)
+position = Vector2(661, 800.00006)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("3_nrnfg")
 
 [node name="Exit" type="Sprite2D" parent="Stage" unique_id=414813872]
-visible = false
-position = Vector2(1109, 897.00006)
+position = Vector2(1127, 890.00006)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("6_exxqc")
 
 [node name="Timer" type="Timer" parent="Stage" unique_id=126925033]
-wait_time = 5.0
+wait_time = 7.5
 one_shot = true
 
 [node name="Controls" type="CanvasLayer" parent="." unique_id=1625188970]

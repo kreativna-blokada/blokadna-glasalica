@@ -22,7 +22,13 @@ var Scenes: Dictionary[Variant, Variant] = {
 		"path": "res://!project/build/design/scenes/game.tscn"
 	},
 	Scene.Voter: {
-		"path": "res://!project/build/design/scenes/actors/voter.tscn"
+		"path": "res://!project/build/design/scenes/actors/voter.tscn",
+		"structure": {
+			"sprite": "CharacterSprite",
+			"shape": "CollisionShape2D",
+			"animation": "AnimationPlayer",
+			"audio": "AudioStreamPlayer",
+		}
 	},
 	Scene.Playround: {
 		"path": "res://!project/build/design/scenes/playground.tscn"

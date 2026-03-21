@@ -14,6 +14,8 @@ extends Node
 var _voter_scene: PackedScene = preload("res://!project/build/design/scenes/actors/voter.tscn")
 var _voter_group: String = Globals.EntityProperties[Globals.Entity.Voter]["group"]
 
+var _voter_scene_struct: Dictionary = Globals.Scenes[Globals.Scene.Voter]["structure"]
+
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
 #██╔════╝██╔══██╗██║     ██║     ██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝
@@ -43,8 +45,7 @@ func load_voter(_index: int) -> Node:
 
 	#set texture
 	var texture: Resource = _get_texture(_index)
-	voter.get_node("CharacterSprite").set_texture(texture)
-	#var sprite = get_child(_index).duplicate()
+	voter.get_node(_voter_scene_struct["sprite"]).set_texture(texture)
 
 	return voter
 
