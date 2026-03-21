@@ -210,7 +210,7 @@ func _shuffle_queue() -> void:
 
 func _on_timer_timeout() -> void:
 	#_increase_spawn_rate()
-	if _has_free_vote_spot():
+	if _has_free_vote_spot() and _voters_entering.size() < _max_voter_queue:
 		_spawn_voters()
 		
 	_timer.start()       # Restart the X second timer
