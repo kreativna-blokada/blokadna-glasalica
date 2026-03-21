@@ -12,39 +12,23 @@ extends Node
 const PATH: String = "res://!project/build/config/globals.gd"
 
 enum Scene {
-	Menu,
 	Game,
-	Level,
-	Player,
-	Enemy,
 	Voter,
 	Playround
 }
 
-enum Level {
-	Caciland
-}
-
 var Scenes: Dictionary[Variant, Variant] = {
-	Scene.Menu: {
-		"path": "res://!project/design/scenes/UI/menu.tscn"
-	},
 	Scene.Game: {
 		"path": "res://!project/build/design/scenes/game.tscn"
 	},
-	Scene.Level: {
-		Level.Caciland: {
-			"path": "res://!project/design/scenes/levels/01_caciland.tscn"
-		},
-	},	
-	Scene.Player: {
-		"path": "res://characters/player/player.tscn"
-	},
-	Scene.Enemy: {
-		"path": "res://characters/enemies/enemy.tscn"
-	},
 	Scene.Voter: {
-		"path": "res://!project/build/design/scenes/actors/voter.tscn"
+		"path": "res://!project/build/design/scenes/actors/voter.tscn",
+		"structure": {
+			"sprite": "CharacterSprite",
+			"shape": "CollisionShape2D",
+			"animation": "AnimationPlayer",
+			"audio": "AudioStreamPlayer",
+		}
 	},
 	Scene.Playround: {
 		"path": "res://!project/build/design/scenes/playground.tscn"
@@ -59,31 +43,11 @@ var Scenes: Dictionary[Variant, Variant] = {
 #╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██║     ███████╗██║  ██║   ██║   
 # ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   
 
-enum Perks {
-	Score
-}
-
-enum Quirks {
-	Spawn
-}
-
-var TraitsProperties: Dictionary[Variant, Variant] = {
-	Quirks.Spawn: {
-		"time": { "min": Configs.TraitsProperties[Configs.Quirks.Spawn]["time"]["min"], 
-				  "max": Configs.TraitsProperties[Configs.Quirks.Spawn]["time"]["max"]},
-		"step": { "min": Configs.TraitsProperties[Configs.Quirks.Spawn]["step"]["min"], 
-				  "max": Configs.TraitsProperties[Configs.Quirks.Spawn]["step"]["max"]}
-	}
-}
-
-var TraitsRelation: Dictionary[Variant, Variant] = {
-	Perks.Score: {
-		# Score -> Spawn
-		Quirks.Spawn:	{
-			"step": { "min": Configs.TraitsRelation[Configs.Perks.Score][Configs.Quirks.Spawn]["step"]["min"], 
-					  "max": Configs.TraitsRelation[Configs.Perks.Score][Configs.Quirks.Spawn]["step"]["max"]}
-		}
-	}
+enum Direction {
+	TopLeft,
+	TopRight,
+	BottomLeft,
+	BottomRight,                                                                                                                                                                                                                                  	
 }
 
 #ENTITY
@@ -101,7 +65,7 @@ enum Entity {
 var EntityProperties: Dictionary[Variant, Variant] = {
 	Entity.Voter: {
 		"scene":	Scenes[Scene.Voter]["path"],
-		"group":	"voter",
+		"group":	"actor",
 	},
 }
 
@@ -156,10 +120,20 @@ var VoterFactory: Dictionary[Variant, Variant] = {
 }
 
 var VoterStopsSound: Dictionary = {
-	3: "res://!project/assets/audio/round-one.mp3",
-	4: "res://!project/assets/audio/round-two.mp3",
-	5: "res://!project/assets/audio/round-three.mp3",
-	6: "res://!project/assets/audio/round-four.mp3",
-	8: "res://!project/assets/audio/round-five.mp3",
-	11: "res://!project/assets/audio/choose-your-destiny.mp3",
+	4: "res://!project/assets/audio/round-one.mp3",
+	5: "res://!project/assets/audio/round-two.mp3",
+	6: "res://!project/assets/audio/round-three.mp3",
+	7: "res://!project/assets/audio/round-four.mp3",
+	9: "res://!project/assets/audio/round-five.mp3",
+	12: "res://!project/assets/audio/choose-your-destiny.mp3",
+}
+
+var VoterIdleAnimations: Dictionary = {
+	"Texture2D": "res://!project/assets/art/player2.png",
+	"Animation": {
+		Direction.TopLeft:     { "Name": "top-left",     "Frame Coord": {"x": 0, "y": 4} },
+		Direction.TopRight:    { "Name": "top-right",    "Frame Coord": {"x": 1, "y": 4} },
+		Direction.BottomLeft:  { "Name": "bottom-left",  "Frame Coord": {"x": 3, "y": 4} },
+		Direction.BottomRight: { "Name": "bottom-right", "Frame Coord": {"x": 2, "y": 4} },
+	},
 }

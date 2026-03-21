@@ -15,29 +15,7 @@ extends Node
 #██║  ███╗███████║██╔████╔██║█████╗  ██████╔╝██║     ███████║ ╚████╔╝ 
 #██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ██╔═══╝ ██║     ██╔══██║  ╚██╔╝  
 #╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██║     ███████╗██║  ██║   ██║   
-# ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   
-
-enum Perks {
-	Score
-}
-
-enum Quirks {
-	Spawn
-}
-
-var TraitsProperties: Dictionary[Variant, Variant] = {
-	Quirks.Spawn: {
-		"time": { "min": 1, "max": 4 },
-		"step": { "min": 0.1,"max":0.8 }
-	}
-}
-
-var TraitsRelation: Dictionary[Variant, Variant] = {
-	Perks.Score: {
-		# Score -> Spawn
-		Quirks.Spawn:	{ "step": { "min": 1,"max": 4} }
-	}
-}
+# ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝
 
 #ENTITY
 #███████╗███╗   ██╗████████╗██╗████████╗██╗   ██╗
@@ -54,7 +32,7 @@ enum Entity {
 var EntityProperties: Dictionary[Variant, Variant] = {
 	Entity.Voter: {
 		"speed": 200,
-		"lives": 2
+		"lives": 0
 	}
 }
 

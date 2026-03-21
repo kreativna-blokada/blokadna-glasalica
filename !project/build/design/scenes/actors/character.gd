@@ -51,6 +51,7 @@ func _process(delta: float) -> void:
 	
 	animation_player.play(anim_map[State.IDLE])
 
+#handle player interaction
 func handle_input() -> void:
 	pass
 
