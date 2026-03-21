@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cugarisbw1qyg"]
 
 [ext_resource type="Script" uid="uid://egc5bohaewmh" path="res://!project/build/design/scenes/stage.gd" id="1_whd4d"]
-[ext_resource type="Texture2D" uid="uid://bk2xp1ewy46qv" path="res://!project/assets/art/room3.png" id="2_bmiuw"]
+[ext_resource type="Texture2D" uid="uid://dtq2mbiupcaix" path="res://!project/assets/art/room.png" id="2_bmiuw"]
 [ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/actors/voting_stop.tscn" id="2_ywe5c"]
 [ext_resource type="Texture2D" uid="uid://dv8afp8brclto" path="res://!project/assets/art/door.png" id="3_nrnfg"]
 [ext_resource type="Script" uid="uid://dv4vi1n10xo74" path="res://!project/build/design/scenes/actors/voters.gd" id="3_whd4d"]

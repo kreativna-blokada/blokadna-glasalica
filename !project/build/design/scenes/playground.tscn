@@ -2,15 +2,25 @@
 
 [ext_resource type="Script" uid="uid://bbqbi7b7sbxcg" path="res://!project/build/design/scenes/playground.gd" id="1_0lvdn"]
 [ext_resource type="PackedScene" uid="uid://dr4n6i0f64c0h" path="res://!project/build/design/scenes/actors/voter.tscn" id="2_15nu1"]
-[ext_resource type="Texture2D" uid="uid://bk2xp1ewy46qv" path="res://!project/assets/art/room3.png" id="2_kd7wv"]
+[ext_resource type="Texture2D" uid="uid://dtq2mbiupcaix" path="res://!project/assets/art/room.png" id="2_kd7wv"]
 [ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/actors/voting_stop.tscn" id="4_0lvdn"]
 [ext_resource type="Texture2D" uid="uid://dv8afp8brclto" path="res://!project/assets/art/door.png" id="4_4snjr"]
 [ext_resource type="Texture2D" uid="uid://dhadrc42q4pyk" path="res://!project/assets/art/balloon-state.png" id="6_kd7wv"]
+[ext_resource type="Texture2D" uid="uid://bnbwm40jaltgt" path="res://!project/assets/art/plant.png" id="7_lx4dv"]
+[ext_resource type="Texture2D" uid="uid://cf55eeua2caey" path="res://!project/assets/art/voting_table.png" id="8_ub0ki"]
+[ext_resource type="Texture2D" uid="uid://1t3vagxag6xt" path="res://!project/assets/art/voting_box.png" id="9_6x5q6"]
+[ext_resource type="Texture2D" uid="uid://bbx61xsoc0hs0" path="res://!project/assets/art/table1.png" id="10_s6iq8"]
+[ext_resource type="Texture2D" uid="uid://bh0tina8uva5e" path="res://!project/assets/art/table2.png" id="11_5hnyl"]
+[ext_resource type="Texture2D" uid="uid://byrpwvnbcylq0" path="res://!project/assets/art/table3.png" id="12_lcs7d"]
+[ext_resource type="Texture2D" uid="uid://cp8miiu5dqrfd" path="res://!project/assets/art/table4.png" id="13_5hnyl"]
+[ext_resource type="Texture2D" uid="uid://cqpi048ceudyq" path="res://!project/assets/art/table5.png" id="14_5hnyl"]
 
 [node name="Playground" type="Node2D" unique_id=1489686815]
 script = ExtResource("1_0lvdn")
 
 [node name="Room" type="Sprite2D" parent="." unique_id=1647902958]
+modulate = Color(1.0116422, 1.0116422, 1.0116422, 1)
+z_index = -2
 position = Vector2(960, 540)
 scale = Vector2(1.55, 1.55)
 texture = ExtResource("2_kd7wv")
@@ -64,12 +74,77 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Door" type="Sprite2D" parent="." unique_id=923288625]
-position = Vector2(604, 804)
+z_index = 1
+position = Vector2(735, 842)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_4snjr")
 
 [node name="Voter" parent="." unique_id=1417136144 instance=ExtResource("2_15nu1")]
+z_index = 1
 position = Vector2(383, 768)
 scale = Vector2(0.99999994, 0.99999994)
 
 [node name="VotersLine" type="Node2D" parent="." unique_id=1160409060]
+
+[node name="objects" type="Node2D" parent="." unique_id=222655132]
+
+[node name="plant" type="Sprite2D" parent="objects" unique_id=1344769426]
+z_index = -1
+position = Vector2(1760, 661)
+scale = Vector2(1.55, 1.55)
+texture = ExtResource("7_lx4dv")
+
+[node name="plant2" type="Sprite2D" parent="objects" unique_id=1009201447]
+z_index = -1
+position = Vector2(168, 633)
+scale = Vector2(1.55, 1.55)
+texture = ExtResource("7_lx4dv")
+
+[node name="voting_table" type="Sprite2D" parent="objects" unique_id=417632446]
+z_index = 1
+position = Vector2(1212.0001, 791.00006)
+scale = Vector2(1.5499998, 1.5499998)
+texture = ExtResource("8_ub0ki")
+
+[node name="voting_box" type="Sprite2D" parent="objects" unique_id=342128188]
+z_index = -1
+position = Vector2(941, 637)
+scale = Vector2(1.5499998, 1.5499998)
+texture = ExtResource("9_6x5q6")
+
+[node name="table1" type="Sprite2D" parent="objects" unique_id=842545533]
+position = Vector2(460.00006, 529)
+scale = Vector2(1.7, 1.7)
+texture = ExtResource("10_s6iq8")
+
+[node name="table2" type="Sprite2D" parent="objects" unique_id=1052630500]
+z_index = -1
+position = Vector2(646, 447.99997)
+scale = Vector2(1.7, 1.7)
+texture = ExtResource("11_5hnyl")
+
+[node name="table3" type="Sprite2D" parent="objects" unique_id=792932391]
+z_index = -2
+position = Vector2(854.99994, 392.99997)
+scale = Vector2(1.7, 1.7)
+texture = ExtResource("12_lcs7d")
+
+[node name="table4" type="Sprite2D" parent="objects" unique_id=1334123612]
+z_index = -2
+position = Vector2(1248, 493)
+scale = Vector2(1.55, 1.55)
+texture = ExtResource("13_5hnyl")
+
+[node name="table5" type="Sprite2D" parent="objects" unique_id=694085877]
+z_index = -2
+position = Vector2(1439, 583.00006)
+scale = Vector2(1.55, 1.55)
+texture = ExtResource("14_5hnyl")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=704657051]
+z_index = -3
+offset_left = 2.0
+offset_top = -2.0
+offset_right = 1917.0
+offset_bottom = 1086.0
+color = Color(0.5764706, 0.654902, 0.6784314, 1)

@@ -182,10 +182,11 @@ position = Vector2(0, -360)
 scale = Vector2(2, 2)
 
 [node name="CharacterSprite" parent="." index="3" unique_id=3088008]
+modulate = Color(0.89, 0.89, 0.89, 1)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("3_3da2g")
 hframes = 39
-vframes = 4
+vframes = 5
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="4" unique_id=1711024557]
 
