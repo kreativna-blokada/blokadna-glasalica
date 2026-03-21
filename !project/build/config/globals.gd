@@ -59,6 +59,13 @@ var Scenes: Dictionary[Variant, Variant] = {
 #╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██║     ███████╗██║  ██║   ██║   
 # ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   
 
+enum Direction {
+	TopLeft,
+	TopRight,
+	BottomLeft,
+	BottomRight,                                                                                                                                                                                                                                  	
+}  
+
 enum Perks {
 	Score
 }
@@ -156,10 +163,20 @@ var VoterFactory: Dictionary[Variant, Variant] = {
 }
 
 var VoterStopsSound: Dictionary = {
-	3: "res://!project/assets/audio/round-one.mp3",
-	4: "res://!project/assets/audio/round-two.mp3",
-	5: "res://!project/assets/audio/round-three.mp3",
-	6: "res://!project/assets/audio/round-four.mp3",
-	8: "res://!project/assets/audio/round-five.mp3",
-	11: "res://!project/assets/audio/choose-your-destiny.mp3",
+	4: "res://!project/assets/audio/round-one.mp3",
+	5: "res://!project/assets/audio/round-two.mp3",
+	6: "res://!project/assets/audio/round-three.mp3",
+	7: "res://!project/assets/audio/round-four.mp3",
+	9: "res://!project/assets/audio/round-five.mp3",
+	12: "res://!project/assets/audio/choose-your-destiny.mp3",
+}
+
+var VoterIdleAnimations: Dictionary = {
+	"Texture2D": "res://!project/assets/art/player2.png",
+	"Animation": {
+		Direction.TopLeft:     { "Name": "top-left",     "Frame Coord": {"x": 0, "y": 4} },
+		Direction.TopRight:    { "Name": "top-right",    "Frame Coord": {"x": 1, "y": 4} },
+		Direction.BottomLeft:  { "Name": "bottom-left",  "Frame Coord": {"x": 3, "y": 4} },
+		Direction.BottomRight: { "Name": "bottom-right", "Frame Coord": {"x": 2, "y": 4} },
+	},
 }

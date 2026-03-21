@@ -112,7 +112,7 @@ position = Vector2(976, 754)
 position = Vector2(864, 880)
 
 [node name="Out" parent="Stage/VoterStops" unique_id=212483479 instance=ExtResource("2_ywe5c")]
-position = Vector2(1500, 1180)
+position = Vector2(1600, 1200)
 
 [node name="Entry" type="Sprite2D" parent="Stage" unique_id=1601410947]
 position = Vector2(670, 792.00006)

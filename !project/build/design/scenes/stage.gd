@@ -17,10 +17,10 @@ var _voters_diversity: int = 0
 var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
 
 #onready vars
-@onready var voter_slots: Node2D = $VoterSlots
+@onready var voter_slots_container: Node2D = $VoterSlots
 @onready var voter_spots: Array = $VoterSpots.get_children()
 @onready var voter_stops: Array = $VoterStops.get_children()
-@onready var voter_stop: Node2D = $VoterStops/Load
+@onready var voter_loading_spot: Node2D = $VoterStops/Load
 
 @onready var _timer: Timer = $Timer
 
@@ -57,7 +57,7 @@ func _process(_delta: float) -> void:
 func _init_vars() -> void:
 	_rand.randomize()
 
-	_voters_factory = voter_slots
+	_voters_factory = voter_slots_container
 	_voters_diversity = Globals.VoterFactory.size()#+1
 	#_timer.start()			# if autostart isn't selected, will start the timer
 	#spawn_voters(_spawn_rate)# do this or else it will take X secs before spawn
@@ -86,21 +86,30 @@ func _spawn_voters() -> void:
 #handles the process of broadcasting entities
 func _get_voter(_index: int) -> Node:
 	if _voters_factory and _voters_factory.has_method("load_voter"):
-		#var voter = _voters.select_voter(index)
 		var voter = _voters_factory.load_voter(_index)
-		voter.stage_injection = self
+		voter_slots_container.add_child(voter)
 
-		var x: float = _rand.randf_range(600,3000)
-		voter.position = Vector2(voter_stop.global_position.x, voter_stop.global_position.y)
-		
-		voter_slots.add_child(voter)
-		
+		voter.position = Vector2(voter_loading_spot.global_position.x, voter_loading_spot.global_position.y)
+		var voter_walking_route: Array = get_walking_route()
+		voter.set_voting_stops(voter_walking_route)
+
 		print("[STAGE] Successfully fetched voter of index: ", _index)
-		
+
 		return voter
 	else:
-		push_error("Critical: _voters instance is null or missing script!")
+		push_error("[STAGE] critical: instance is null or missing voter.gd script!")
 		return null
+
+#defines the route voters will take
+func get_walking_route() -> Array:
+	var walking_route: Array = [voter_loading_spot]
+	var waiting_spot: Node2D = _find_free_vote_spot()
+	if waiting_spot:
+		walking_route.append(waiting_spot)
+	walking_route.append_array(voter_stops.slice(1))
+	
+	return walking_route
+
 
 func get_vote_stop(index: int) -> Node2D:
 	if index >= 0 and index < voting_stops.size():
@@ -143,6 +152,13 @@ func _find_free_vote_spot() -> Node2D:
 		if spot.is_free():
 			return spot
 	return null
+	
+func _find_last_free_spot() -> Node2D:
+	var last_free: Node2D = null
+	for spot in voter_spots:
+		if spot.is_free():
+			last_free = spot
+	return last_free
 
 
 #SIGNALS
