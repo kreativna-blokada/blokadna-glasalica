@@ -1,16 +1,24 @@
 [gd_scene format=3 uid="uid://cugarisbw1qyg"]
 
 [ext_resource type="Script" uid="uid://egc5bohaewmh" path="res://!project/build/design/scenes/stage.gd" id="1_whd4d"]
+[ext_resource type="Texture2D" uid="uid://bnbwm40jaltgt" path="res://!project/art/plant.png" id="2_3xm1w"]
 [ext_resource type="Texture2D" uid="uid://dtq2mbiupcaix" path="res://!project/art/room.png" id="2_bmiuw"]
 [ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/actors/voting_stop.tscn" id="2_ywe5c"]
+[ext_resource type="Texture2D" uid="uid://bbx61xsoc0hs0" path="res://!project/art/table1.png" id="3_0bby2"]
+[ext_resource type="Texture2D" uid="uid://cf55eeua2caey" path="res://!project/art/voting_table.png" id="3_icv6h"]
 [ext_resource type="Texture2D" uid="uid://dv8afp8brclto" path="res://!project/art/door.png" id="3_nrnfg"]
 [ext_resource type="Script" uid="uid://dv4vi1n10xo74" path="res://!project/build/design/scenes/actors/voters.gd" id="3_whd4d"]
+[ext_resource type="Texture2D" uid="uid://bh0tina8uva5e" path="res://!project/art/table2.png" id="4_dk2sw"]
+[ext_resource type="Texture2D" uid="uid://1t3vagxag6xt" path="res://!project/art/voting_box.png" id="4_uudsr"]
 [ext_resource type="Texture2D" uid="uid://ca7s4ygey62sb" path="res://!project/art/UI/Button Right - unpressed.png" id="5_4hrqh"]
+[ext_resource type="Texture2D" uid="uid://byrpwvnbcylq0" path="res://!project/art/table3.png" id="5_oeyod"]
 [ext_resource type="Texture2D" uid="uid://d2qginyfevwft" path="res://!project/art/door-right.png" id="6_exxqc"]
 [ext_resource type="Texture2D" uid="uid://ckqvc7clnlxsb" path="res://!project/art/UI/Button Right - pressed.png" id="6_whd4d"]
 [ext_resource type="Texture2D" uid="uid://de1ikyebnqckx" path="res://!project/art/UI/Button Wrong - unpressed.png" id="7_bmiuw"]
 [ext_resource type="Texture2D" uid="uid://bnvx7c6rfa3nd" path="res://!project/art/UI/Button Wrong - pressed.png" id="8_exxqc"]
 [ext_resource type="Texture2D" uid="uid://cdcsfwp181ndh" path="res://!project/art/UI/Button Select - unpressed.png" id="9_cuco4"]
+[ext_resource type="Texture2D" uid="uid://cp8miiu5dqrfd" path="res://!project/art/table4.png" id="9_k2xon"]
+[ext_resource type="Texture2D" uid="uid://cqpi048ceudyq" path="res://!project/art/table5.png" id="10_h4f4w"]
 [ext_resource type="Texture2D" uid="uid://caxdq11kb2wrv" path="res://!project/art/UI/Button Select - pressed.png" id="10_y28sd"]
 [ext_resource type="Texture2D" uid="uid://d2dk3gr6vypyj" path="res://!project/art/UI/Button Initiate - unpressed.png" id="11_0bby2"]
 [ext_resource type="Texture2D" uid="uid://dj51chytcfrml" path="res://!project/art/UI/Button Initiate - pressed.png" id="12_dk2sw"]
@@ -20,10 +28,85 @@
 [node name="Stage" type="Node2D" parent="." unique_id=1877766357]
 script = ExtResource("1_whd4d")
 
-[node name="Room" type="Sprite2D" parent="Stage" unique_id=1687017649]
+[node name="Scenery" type="Node2D" parent="Stage" unique_id=1698726657]
+
+[node name="Room" type="Sprite2D" parent="Stage/Scenery" unique_id=2091664243]
+modulate = Color(1.0116422, 1.0116422, 1.0116422, 1)
+z_index = -3
 position = Vector2(960, 540)
-scale = Vector2(1.5, 1.5)
+scale = Vector2(1.55, 1.55)
 texture = ExtResource("2_bmiuw")
+
+[node name="Decor" type="Sprite2D" parent="Stage/Scenery" unique_id=464968748]
+z_index = -1
+position = Vector2(168, 633)
+scale = Vector2(1.55, 1.55)
+texture = ExtResource("2_3xm1w")
+
+[node name="Plant" type="Sprite2D" parent="Stage/Scenery" unique_id=1087283380]
+z_index = -1
+position = Vector2(1760, 661)
+scale = Vector2(1.55, 1.55)
+texture = ExtResource("2_3xm1w")
+
+[node name="Booth" type="Sprite2D" parent="Stage/Scenery" unique_id=1067923526]
+z_index = -3
+position = Vector2(1212.0001, 791.00006)
+scale = Vector2(1.5499998, 1.5499998)
+texture = ExtResource("3_icv6h")
+
+[node name="Box" type="Sprite2D" parent="Stage/Scenery" unique_id=117731173]
+z_index = -1
+position = Vector2(941, 637)
+scale = Vector2(1.5499998, 1.5499998)
+texture = ExtResource("4_uudsr")
+
+[node name="Check" type="Sprite2D" parent="Stage/Scenery" unique_id=2025575775]
+position = Vector2(460.00006, 529)
+scale = Vector2(1.7, 1.7)
+texture = ExtResource("3_0bby2")
+
+[node name="Spray" type="Sprite2D" parent="Stage/Scenery" unique_id=223021994]
+z_index = -1
+position = Vector2(646, 447.99997)
+scale = Vector2(1.7, 1.7)
+texture = ExtResource("4_dk2sw")
+
+[node name="ID" type="Sprite2D" parent="Stage/Scenery" unique_id=1886505568]
+z_index = -2
+position = Vector2(854.99994, 392.99997)
+scale = Vector2(1.7, 1.7)
+texture = ExtResource("5_oeyod")
+
+[node name="Ballot" type="Sprite2D" parent="Stage/Scenery" unique_id=1309437222]
+z_index = -2
+position = Vector2(1248, 493)
+scale = Vector2(1.55, 1.55)
+texture = ExtResource("9_k2xon")
+
+[node name="Voting" type="Sprite2D" parent="Stage/Scenery" unique_id=410925280]
+z_index = -2
+position = Vector2(1439, 583.00006)
+scale = Vector2(1.55, 1.55)
+texture = ExtResource("10_h4f4w")
+
+[node name="Entry" type="Sprite2D" parent="Stage/Scenery" unique_id=1601410947]
+z_index = -3
+position = Vector2(645, 820)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("3_nrnfg")
+
+[node name="Exit" type="Sprite2D" parent="Stage/Scenery" unique_id=414813872]
+z_index = -3
+position = Vector2(1141, 904)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("6_exxqc")
+
+[node name="ColorRect" type="ColorRect" parent="Stage/Scenery" unique_id=1298174958]
+z_index = -4
+offset_right = 1915.0
+offset_bottom = 1088.0
+color = Color(0.5764706, 0.654902, 0.6784314, 1)
 
 [node name="VoterSlots" type="Node2D" parent="Stage" unique_id=328396471]
 script = ExtResource("3_whd4d")
@@ -106,16 +189,6 @@ position = Vector2(864, 880)
 
 [node name="Out" parent="Stage/VoterStops" unique_id=212483479 instance=ExtResource("2_ywe5c")]
 position = Vector2(1600, 1200)
-
-[node name="Entry" type="Sprite2D" parent="Stage" unique_id=1601410947]
-position = Vector2(661, 800.00006)
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("3_nrnfg")
-
-[node name="Exit" type="Sprite2D" parent="Stage" unique_id=414813872]
-position = Vector2(1121, 885)
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("6_exxqc")
 
 [node name="Timer" type="Timer" parent="Stage" unique_id=126925033]
 wait_time = 7.5
