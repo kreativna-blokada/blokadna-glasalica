@@ -52,7 +52,9 @@ var voter_factory_index: int = -1
 func _ready() -> void:
 	#await get_tree().process_frame	
 	##set_vote_stop_target()
-	pass
+
+	#separate the materials to control outlines independently
+	character_sprite.material = character_sprite.material.duplicate()
 
 func _process(_delta: float) -> void:
 	if _is_course_finished or is_waiting or is_queued or vote_stop_target == null:
@@ -65,6 +67,8 @@ func _process(_delta: float) -> void:
 	handle_animations()
 	set_heading()
 	move_and_slide()
+
+	########character_sprite.material.set_shader_parameter("enabled", velocity.length() > 0)
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗

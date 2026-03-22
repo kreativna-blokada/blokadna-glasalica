@@ -14,6 +14,7 @@ var _voters_factory: Node = null
 
 var _voters_entering: Array = []
 var _max_voter_queue: int = 4
+var _selected_voter_index: int = -1
 
 #broadcast variables
 var _voters_diversity: int = 0
@@ -50,6 +51,8 @@ func _process(_delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("start") and _voters_entering.size() > 0:
 		_release_first_voter()
+	if event.is_action_pressed("select"):
+		_select_next_voter()
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -170,6 +173,15 @@ func _find_last_free_spot() -> Node2D:
 		if spot.is_free():
 			free_spot = spot
 	return free_spot
+
+func _select_next_voter() -> void:
+	var voters: Array = get_tree().get_nodes_in_group("actor")
+	if voters.is_empty():
+		return
+	if _selected_voter_index >= 0 and _selected_voter_index < voters.size():
+		voters[_selected_voter_index].character_sprite.material.set_shader_parameter("enabled", false)
+	_selected_voter_index = (_selected_voter_index + 1) % voters.size()
+	voters[_selected_voter_index].character_sprite.material.set_shader_parameter("enabled", true)
 
 func _on_voters_entering(voter: Voter) -> void:
 	_voters_entering.append(voter)
