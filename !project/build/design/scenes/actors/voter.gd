@@ -32,6 +32,7 @@ var voter_stops_sounds: Dictionary = Globals.VoterStopsSound
 #broadcast variables
 var voting_stops: Array = []
 var vote_stop_target: Node2D = null
+var voter_factory_index: int = -1
 
 #onready vars
 @onready var vote_stop_sound: AudioStreamPlayer = $AudioStreamPlayer
@@ -207,7 +208,7 @@ func move_to_queue_spot(new_spot: Node2D) -> void:
 func _apply_wait_texture_for_direction(direction_name: String) -> void:
 	animation_player.stop()
 	_original_texture = character_sprite.texture
-	var idle_texture_path: String = Globals.VoterIdleAnimations["Texture2D"]
+	var idle_texture_path: String = Globals.VoterFactory[voter_factory_index]["Texture2D"]
 	character_sprite.texture = load(idle_texture_path)
 	character_sprite.hframes = 39
 	character_sprite.vframes = 5
@@ -221,7 +222,7 @@ func _apply_wait_texture_for_direction(direction_name: String) -> void:
 func _apply_wait_texture() -> void:
 	animation_player.stop()
 	_original_texture = character_sprite.texture
-	var idle_texture_path: String = Globals.VoterIdleAnimations["Texture2D"]
+	var idle_texture_path: String = Globals.VoterFactory[voter_factory_index]["Texture2D"]
 	character_sprite.texture = load(idle_texture_path)
 	character_sprite.hframes = 39
 	character_sprite.vframes = 5

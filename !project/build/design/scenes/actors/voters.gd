@@ -41,6 +41,7 @@ func load_voter(_index: int) -> Node:
 	#instantiate the template scene
 	var voter: Node = _voter_scene.instantiate()
 
+	voter.voter_factory_index = _index
 	voter.add_to_group(_voter_group)
 
 	#set texture
