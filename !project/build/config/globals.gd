@@ -79,43 +79,43 @@ var EntityProperties: Dictionary[Variant, Variant] = {
 
 enum Voter {
 	Player,
+	Black,
 	Blue,
-	Brown,
 	Green,
+	Indigo,
+	Magenta,
 	Red,
-	Teal,
-	Lapis,
-	Azure,
-	Cobalt
+	Violet,
+	Yellow
 }
 
 var VoterFactory: Dictionary[Variant, Variant] = {
 	Voter.Player: {
 		"Texture2D": "res://!project/art/player.png",
 	},
+	Voter.Black: {
+		"Texture2D": "res://!project/art/player-black.png",
+	},
 	Voter.Blue: {
 		"Texture2D": "res://!project/art/player-blue.png",
-	},
-	Voter.Brown: {
-		"Texture2D": "res://!project/art/player-brown.png",
 	},
 	Voter.Green: {
 		"Texture2D": "res://!project/art/player-green.png",
 	},
+	Voter.Indigo: {
+		"Texture2D": "res://!project/art/player-indigo.png",
+	},
+	Voter.Magenta: {
+		"Texture2D": "res://!project/art/player-magenta.png",
+	},
 	Voter.Red: {
 		"Texture2D": "res://!project/art/player-red.png",
 	},
-	Voter.Teal: {
-		"Texture2D": "res://!project/art/player-teal.png",
+	Voter.Violet: {
+		"Texture2D": "res://!project/art/player-violet.png",
 	},
-	Voter.Lapis: {
-		"Texture2D": "res://!project/art/player-lapis.png",
-	},
-	Voter.Azure: {
-		"Texture2D": "res://!project/art/player-azure.png",
-	},
-	Voter.Cobalt: {
-		"Texture2D": "res://!project/art/player-cobalt.png",
+	Voter.Yellow: {
+		"Texture2D": "res://!project/art/player-yellow.png",
 	},
 }
 
