@@ -8,7 +8,8 @@ const _SPEED: float = 300.0
 const JUMP_VELOCITY: float = -400.0
 
 @onready var animation_player := $AnimationPlayer
-@onready var character_sprite := $CharacterSprite
+@onready var character_texture := $CharacterSprite
+
 var state := State.IDLE
 var heading := Vector2.RIGHT
 
@@ -48,7 +49,7 @@ func _process(delta: float) -> void:
 	handle_animations()
 	set_heading()
 	move_and_slide()
-	
+
 	animation_player.play(anim_map[State.IDLE])
 
 #handle player interaction
@@ -71,7 +72,7 @@ func set_heading() -> void:
 
 func flip_sprites() -> void:
 	if heading == Vector2.RIGHT:
-		character_sprite.flip_h = false
+		character_texture.flip_h = false
 
 func can_move() -> bool:
 	return state == State.IDLE or state == State.WALK

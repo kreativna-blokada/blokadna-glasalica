@@ -13,25 +13,23 @@ extends Character
 signal queue_place_taken
 
 #private vars
-var _original_texture: Texture2D = null
+var _initial_texture: Texture2D = null
 var _walk_animation_name: String = "idle"
-
 var _voting_course_pointer: int = 0
+var _is_stopping: bool = false
+var _is_queueing: bool = false
+var _is_shuffling: bool = false
 var _is_course_finished: bool = false
 
 var _wait_frame_coord: Dictionary = {}
-
-var is_waiting: bool = false
-var is_queued: bool = false
-var is_shuffling: bool = false
-var queue_spot: Node2D = null
 
 #data containers
 var voter_stops_sounds: Dictionary = Globals.VoterStopsSound
 
 #broadcast variables
-var voting_stops: Array = []
-var vote_stop_target: Node2D = null
+var starting_spot: Node2D = null
+var voting_course: Array = []
+var course_target: Node2D = null
 var voter_factory_index: int = -1
 
 #onready vars
@@ -50,14 +48,14 @@ var voter_factory_index: int = -1
 # ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
 func _ready() -> void:
-	#await get_tree().process_frame	
+	#await get_tree().process_frame
 	##set_vote_stop_target()
 
 	#separate the materials to control outlines independently
-	character_sprite.material = character_sprite.material.duplicate()
+	character_texture.material = character_texture.material.duplicate()
 
 func _process(_delta: float) -> void:
-	if _is_course_finished or is_waiting or is_queued or vote_stop_target == null:
+	if _is_course_finished or _is_stopping or _is_queueing or course_target == null:
 		velocity = Vector2.ZERO
 	else:
 		voting_course_movement()
@@ -68,7 +66,7 @@ func _process(_delta: float) -> void:
 	set_heading()
 	move_and_slide()
 
-	########character_sprite.material.set_shader_parameter("enabled", velocity.length() > 0)
+	########character_texture.material.set_shader_parameter("enabled", velocity.length() > 0)
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -83,27 +81,27 @@ func handle_input() -> void:
 	pass
 
 func set_walking_course(stops: Array) -> void:
-	voting_stops = stops
-	
+	voting_course = stops
+
 	set_vote_stop_target()
 
 func set_vote_stop_target() -> void:
-	if _voting_course_pointer < voting_stops.size():
-		var next_stop: Node2D = voting_stops[_voting_course_pointer]
-		
+	if _voting_course_pointer < voting_course.size():
+		var next_stop: Node2D = voting_course[_voting_course_pointer]
+
 		if next_stop == null:
 			_is_course_finished = true
-			vote_stop_target = null
-			
+			course_target = null
+
 			velocity = Vector2.ZERO
 			queue_free()
 		else:
-			vote_stop_target = next_stop
+			course_target = next_stop
 			_find_walk_animation_name()
 	else:
 		_is_course_finished = true
-		vote_stop_target = null
-		
+		course_target = null
+
 		velocity = Vector2.ZERO
 		queue_free()
 
@@ -138,7 +136,7 @@ func _find_wait_animation_frame_coord() -> Dictionary:
 func handle_animations() -> void:
 	if _is_course_finished:
 		animation_player.play("bottom-right")
-	elif is_waiting or is_queued:
+	elif _is_stopping or _is_queueing:
 		pass
 	elif state == State.WALK:
 		if animation_player.current_animation != _walk_animation_name:
@@ -147,12 +145,12 @@ func handle_animations() -> void:
 		animation_player.play("bottom-right")
 
 func voting_course_movement() -> void:
-	if vote_stop_target == null: return
+	if course_target == null: return
 
 	#todo: clean this tentative workaround for sprite height affecting distance calculation
-	var sprite_height: float = character_sprite.get_rect().size.y * character_sprite.scale.y
+	var sprite_height: float = character_texture.get_rect().size.y * character_texture.scale.y
 	var find_feet_position: Vector2 = global_position + Vector2(0, sprite_height / 2.0)
-	var target_position: Vector2 = vote_stop_target.global_position
+	var target_position: Vector2 = course_target.global_position
 	var distance: float = find_feet_position.distance_to(target_position)
 	if distance < 5.0:
 		reach_stop()
@@ -165,14 +163,14 @@ func reach_stop() -> void:
 	velocity = Vector2.ZERO
 
 	if _voting_course_pointer == 1:
-		if is_shuffling:
-			is_shuffling = false
-			is_queued = true
+		if _is_shuffling:
+			_is_shuffling = false
+			_is_queueing = true
 			velocity = Vector2.ZERO
 			_apply_wait_texture_for_direction("bottom-right")
 			return
-		is_queued = true
-		queue_spot = voting_stops[1]
+		_is_queueing = true
+		starting_spot = voting_course[1]
 		_apply_wait_texture_for_direction("bottom-right")
 
 		queue_place_taken.emit()
@@ -180,13 +178,13 @@ func reach_stop() -> void:
 
 	_wait_frame_coord = _find_wait_animation_frame_coord()
 	if not _wait_frame_coord.is_empty():
-		is_waiting = true
+		_is_stopping = true
 		_apply_wait_texture()
 		play_stop_sound()
 		update_hud_frames()
 		await get_tree().create_timer(1.0).timeout
 		_restore_walk_texture()
-		is_waiting = false
+		_is_stopping = false
 
 	_voting_course_pointer += 1
 	set_vote_stop_target()
@@ -194,50 +192,51 @@ func reach_stop() -> void:
 
 func release_from_queue() -> void:
 	_restore_walk_texture()
-	is_queued = false
-	queue_spot = null
+	_is_queueing = false
+	starting_spot = null
 	_voting_course_pointer += 1
 	set_vote_stop_target()
 #todo: cleanup
 
-func move_to_queue_spot(new_spot: Node2D) -> void:
-	queue_spot = new_spot
-	vote_stop_target = new_spot
-	voting_stops[1] = new_spot
-	is_queued = false
-	is_shuffling = true
+func move_to_queue_spot(target_spot: Node2D) -> void:
+	starting_spot = target_spot
+	course_target = target_spot
+	voting_course[1] = target_spot
+
+	_is_queueing = false
+	_is_shuffling = true
 	_restore_walk_texture()
 #todo: cleanup
 
 func _apply_wait_texture_for_direction(direction_name: String) -> void:
 	animation_player.stop()
-	_original_texture = character_sprite.texture
+	_initial_texture = character_texture.texture
 	var idle_texture_path: String = Globals.VoterFactory[voter_factory_index]["Texture2D"]
-	character_sprite.texture = load(idle_texture_path)
-	character_sprite.hframes = 39
-	character_sprite.vframes = 5
+	character_texture.texture = load(idle_texture_path)
+	character_texture.hframes = 39
+	character_texture.vframes = 5
 	var animation_setup: Dictionary = Globals.VoterIdleAnimations["Animation"]
 	for animation_view in animation_setup:
 		if animation_setup[animation_view]["Name"] == direction_name:
-			character_sprite.frame_coords = Vector2i(animation_setup[animation_view]["Frame Coord"]["x"], animation_setup[animation_view]["Frame Coord"]["y"])
+			character_texture.frame_coords = Vector2i(animation_setup[animation_view]["Frame Coord"]["x"], animation_setup[animation_view]["Frame Coord"]["y"])
 			return
 #todo: cleanup
 
 func _apply_wait_texture() -> void:
 	animation_player.stop()
-	_original_texture = character_sprite.texture
+	_initial_texture = character_texture.texture
 	var idle_texture_path: String = Globals.VoterFactory[voter_factory_index]["Texture2D"]
-	character_sprite.texture = load(idle_texture_path)
-	character_sprite.hframes = 39
-	character_sprite.vframes = 5
-	character_sprite.frame_coords = Vector2i(_wait_frame_coord["x"], _wait_frame_coord["y"])
+	character_texture.texture = load(idle_texture_path)
+	character_texture.hframes = 39
+	character_texture.vframes = 5
+	character_texture.frame_coords = Vector2i(_wait_frame_coord["x"], _wait_frame_coord["y"])
 #todo: cleanup
 
 func _restore_walk_texture() -> void:
-	if _original_texture:
-		character_sprite.texture = _original_texture
-		character_sprite.hframes = 39
-		character_sprite.vframes = 5
+	if _initial_texture:
+		character_texture.texture = _initial_texture
+		character_texture.hframes = 39
+		character_texture.vframes = 5
 #todo: cleanup
 
 #plays voting stop sound
