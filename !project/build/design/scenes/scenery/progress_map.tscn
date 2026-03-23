@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://d0oly2y4yepkm"]
+
+[ext_resource type="Script" uid="uid://cyijcbwitwsdg" path="res://!project/build/design/scenes/scenery/progress_map.gd" id="1_xjkrk"]
+[ext_resource type="Texture2D" uid="uid://g30wexxkkund" path="res://!project/art/UI/HUD/Box - green.png" id="2_aspq7"]
+
+[node name="Progress Map" type="CanvasLayer" unique_id=598334440]
+script = ExtResource("1_xjkrk")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=2044216521]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 156.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer" unique_id=1188387519]
+layout_mode = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=1797415257]
+custom_minimum_size = Vector2(186, 195)
+layout_mode = 2
+texture = ExtResource("2_aspq7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=1467498483]
+custom_minimum_size = Vector2(186, 195)
+layout_mode = 2
+texture = ExtResource("2_aspq7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=28190968]
+custom_minimum_size = Vector2(186, 195)
+layout_mode = 2
+texture = ExtResource("2_aspq7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=2032902666]
+custom_minimum_size = Vector2(186, 195)
+layout_mode = 2
+texture = ExtResource("2_aspq7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect5" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=155692759]
+custom_minimum_size = Vector2(186, 195)
+layout_mode = 2
+texture = ExtResource("2_aspq7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect6" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=980889916]
+custom_minimum_size = Vector2(186, 195)
+layout_mode = 2
+texture = ExtResource("2_aspq7")
+expand_mode = 1
+stretch_mode = 5

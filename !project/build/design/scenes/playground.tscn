@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bbqbi7b7sbxcg" path="res://!project/build/design/scenes/playground.gd" id="1_0lvdn"]
 [ext_resource type="PackedScene" uid="uid://dr4n6i0f64c0h" path="res://!project/build/design/scenes/actors/voter.tscn" id="2_15nu1"]
 [ext_resource type="Texture2D" uid="uid://dtq2mbiupcaix" path="res://!project/art/room.png" id="2_kd7wv"]
-[ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/actors/voting_stop.tscn" id="4_0lvdn"]
+[ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/scenery/voting_stop.tscn" id="4_0lvdn"]
 [ext_resource type="Texture2D" uid="uid://dv8afp8brclto" path="res://!project/art/door.png" id="4_4snjr"]
 [ext_resource type="Texture2D" uid="uid://bnbwm40jaltgt" path="res://!project/art/plant.png" id="7_lx4dv"]
 [ext_resource type="Texture2D" uid="uid://cf55eeua2caey" path="res://!project/art/voting_table.png" id="8_ub0ki"]

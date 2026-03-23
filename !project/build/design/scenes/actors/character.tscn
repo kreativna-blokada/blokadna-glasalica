@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://d2ah82i7p56vk"]
 
 [ext_resource type="Script" uid="uid://r52riejfxhoe" path="res://!project/build/design/scenes/actors/character.gd" id="1_b5jgq"]
-[ext_resource type="Texture2D" uid="uid://de54xjknr5p38" path="res://!project/art/balloon-dream.png" id="2_85jrd"]
+[ext_resource type="Texture2D" uid="uid://de54xjknr5p38" path="res://!project/art/UI/balloon-dream.png" id="2_85jrd"]
 [ext_resource type="Shader" uid="uid://boii51q6tykpk" path="res://!project/art/shaders/outline.gdshader" id="3_85jrd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b5jgq"]
 shader = ExtResource("3_85jrd")
 shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/outline_width = 1.0
+shader_parameter/outline_width = 4.0
 shader_parameter/enabled = false
 
 [node name="Character" type="CharacterBody2D" unique_id=1417136144]
