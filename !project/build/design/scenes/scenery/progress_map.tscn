@@ -2,6 +2,12 @@
 
 [ext_resource type="Script" uid="uid://cyijcbwitwsdg" path="res://!project/build/design/scenes/scenery/progress_map.gd" id="1_xjkrk"]
 [ext_resource type="Texture2D" uid="uid://g30wexxkkund" path="res://!project/art/UI/HUD/Box - green.png" id="2_aspq7"]
+[ext_resource type="Texture2D" uid="uid://d1pwpxdn30sss" path="res://!project/art/UI/HUD/UV - green.png" id="2_xyb80"]
+[ext_resource type="Texture2D" uid="uid://cqreqi4rufwui" path="res://!project/art/UI/HUD/ID - green.png" id="3_0kh1j"]
+[ext_resource type="Texture2D" uid="uid://m778ufjkqqum" path="res://!project/art/UI/HUD/Check - green.png" id="4_ppdag"]
+[ext_resource type="Texture2D" uid="uid://bug7lpduwatq6" path="res://!project/art/UI/HUD/Spray - green.png" id="5_pgfnu"]
+[ext_resource type="Texture2D" uid="uid://b3ycss40g0t61" path="res://!project/art/UI/HUD/Ballot - green.png" id="6_kb65b"]
+[ext_resource type="Texture2D" uid="uid://smufpcnq1qei" path="res://!project/art/UI/HUD/Vote - green.png" id="7_gp85s"]
 
 [node name="Progress Map" type="CanvasLayer" unique_id=598334440]
 script = ExtResource("1_xjkrk")
@@ -12,48 +18,98 @@ anchor_right = 1.0
 offset_bottom = 156.0
 grow_horizontal = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer" unique_id=1188387519]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=384318643]
 layout_mode = 2
+
+[node name="HBoxSymbols" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1188387519]
+layout_mode = 2
+theme_override_constants/separation = 80
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=1797415257]
+[node name="Scan" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=1797415257]
+custom_minimum_size = Vector2(150, 156)
+layout_mode = 2
+texture = ExtResource("2_xyb80")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ID" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=1467498483]
+custom_minimum_size = Vector2(150, 156)
+layout_mode = 2
+texture = ExtResource("3_0kh1j")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Check" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=28190968]
+custom_minimum_size = Vector2(150, 156)
+layout_mode = 2
+texture = ExtResource("4_ppdag")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Spray" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=2032902666]
+custom_minimum_size = Vector2(150, 156)
+layout_mode = 2
+texture = ExtResource("5_pgfnu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Ballot" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=666927488]
+custom_minimum_size = Vector2(150, 156)
+layout_mode = 2
+texture = ExtResource("6_kb65b")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Vote" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=155692759]
+custom_minimum_size = Vector2(150, 156)
+layout_mode = 2
+texture = ExtResource("7_gp85s")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HSplitContainer" type="HSplitContainer" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=1792122822]
+layout_mode = 2
+
+[node name="Box" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=980889916]
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
 texture = ExtResource("2_aspq7")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect2" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=1467498483]
-custom_minimum_size = Vector2(186, 195)
+[node name="HBoxProgress" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1271738727]
 layout_mode = 2
-texture = ExtResource("2_aspq7")
-expand_mode = 1
-stretch_mode = 5
+theme_override_constants/separation = 80
+alignment = 1
 
-[node name="TextureRect3" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=28190968]
-custom_minimum_size = Vector2(186, 195)
+[node name="Scan" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxProgress" unique_id=762028939]
+custom_minimum_size = Vector2(150, 156)
 layout_mode = 2
-texture = ExtResource("2_aspq7")
-expand_mode = 1
-stretch_mode = 5
 
-[node name="TextureRect4" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=2032902666]
-custom_minimum_size = Vector2(186, 195)
+[node name="ID" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxProgress" unique_id=1019554423]
+custom_minimum_size = Vector2(150, 156)
 layout_mode = 2
-texture = ExtResource("2_aspq7")
-expand_mode = 1
-stretch_mode = 5
 
-[node name="TextureRect5" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=155692759]
-custom_minimum_size = Vector2(186, 195)
+[node name="Check" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxProgress" unique_id=693312464]
+custom_minimum_size = Vector2(150, 156)
 layout_mode = 2
-texture = ExtResource("2_aspq7")
-expand_mode = 1
-stretch_mode = 5
 
-[node name="TextureRect6" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=980889916]
+[node name="Spray" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxProgress" unique_id=1892669978]
+custom_minimum_size = Vector2(150, 156)
+layout_mode = 2
+
+[node name="Ballot" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxProgress" unique_id=1925287177]
+custom_minimum_size = Vector2(150, 156)
+layout_mode = 2
+
+[node name="Vote" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxProgress" unique_id=80656289]
+custom_minimum_size = Vector2(150, 156)
+layout_mode = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="CenterContainer/VBoxContainer/HBoxProgress" unique_id=222907486]
+layout_mode = 2
+
+[node name="Box" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxProgress" unique_id=1217979024]
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
-texture = ExtResource("2_aspq7")
-expand_mode = 1
-stretch_mode = 5
