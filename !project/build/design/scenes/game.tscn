@@ -26,7 +26,7 @@
 
 [node name="Game" type="Node" unique_id=1771661075]
 
-[node name="Progress" parent="." unique_id=598334440 instance=ExtResource("1_icv6h")]
+[node name="Progress Map" parent="." unique_id=598334440 instance=ExtResource("1_icv6h")]
 
 [node name="Stage" type="Node2D" parent="." unique_id=1877766357]
 script = ExtResource("1_whd4d")
@@ -160,14 +160,17 @@ rotation = -0.0418879
 [node name="Enter" parent="Stage/VoterStops" unique_id=1340102554 instance=ExtResource("2_ywe5c")]
 position = Vector2(751, 851)
 
-[node name="Check" parent="Stage/VoterStops" unique_id=404702376 instance=ExtResource("2_ywe5c")]
+[node name="Lamp" parent="Stage/VoterStops" unique_id=404702376 instance=ExtResource("2_ywe5c")]
 position = Vector2(525, 650)
 
-[node name="Spray" parent="Stage/VoterStops" unique_id=1524147758 instance=ExtResource("2_ywe5c")]
-position = Vector2(733, 565)
+[node name="ID" parent="Stage/VoterStops" unique_id=1524147758 instance=ExtResource("2_ywe5c")]
+position = Vector2(670, 590)
 
-[node name="ID" parent="Stage/VoterStops" unique_id=63821945 instance=ExtResource("2_ywe5c")]
-position = Vector2(904, 494)
+[node name="List" parent="Stage/VoterStops" unique_id=63821945 instance=ExtResource("2_ywe5c")]
+position = Vector2(767, 545)
+
+[node name="Spray" parent="Stage/VoterStops" unique_id=1255542503 instance=ExtResource("2_ywe5c")]
+position = Vector2(905, 494)
 
 [node name="Ballot" parent="Stage/VoterStops" unique_id=1356300169 instance=ExtResource("2_ywe5c")]
 position = Vector2(1137, 566)
@@ -232,3 +235,5 @@ texture_pressed = ExtResource("12_dk2sw")
 action = "start"
 
 [connection signal="timeout" from="Stage/Timer" to="Stage" method="_on_timer_timeout"]
+
+[editable path="Progress Map"]

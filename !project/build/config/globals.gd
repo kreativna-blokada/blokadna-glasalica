@@ -122,10 +122,11 @@ var VoterFactory: Dictionary[Variant, Variant] = {
 var VoterStopsSound: Dictionary = {
 	4: "res://!project/audio/round-one.mp3",
 	5: "res://!project/audio/round-two.mp3",
-	6: "res://!project/audio/round-three.mp3",
-	7: "res://!project/audio/round-four.mp3",
-	9: "res://!project/audio/round-five.mp3",
-	12: "res://!project/audio/choose-your-destiny.mp3",
+	6: "res://!project/audio/round-two.mp3",
+	7: "res://!project/audio/round-three.mp3",
+	8: "res://!project/audio/round-four.mp3",
+	10: "res://!project/audio/round-five.mp3",
+	13: "res://!project/audio/choose-your-destiny.mp3",
 }
 
 var VoterIdleAnimations: Dictionary = {

@@ -110,22 +110,22 @@ func _find_walk_animation_name() -> void:
 		0, 1, 2: _walk_animation_name = "bottom-right"
 		3: _walk_animation_name = "top-right"
 		4: _walk_animation_name = "top-left"
-		5, 6: _walk_animation_name = "top-right"
-		7, 8: _walk_animation_name = "bottom-right"
-		9, 10: _walk_animation_name = "bottom-left"
-		11: _walk_animation_name = "top-left"
-		12: _walk_animation_name = "top-right"
-		13: _walk_animation_name = "bottom-left"
-		14: _walk_animation_name = "bottom-right"
+		5, 6, 7: _walk_animation_name = "top-right"
+		8, 9: _walk_animation_name = "bottom-right"
+		10, 11: _walk_animation_name = "bottom-left"
+		12: _walk_animation_name = "top-left"
+		13: _walk_animation_name = "top-right"
+		14: _walk_animation_name = "bottom-left"
+		15: _walk_animation_name = "bottom-right"
 		_: _walk_animation_name = "idle"
 
 func _find_wait_animation_frame_coord() -> Dictionary:
 	var animation_name: String
 	match _voting_course_pointer:
 		0: animation_name = "bottom-right"
-		4, 5, 6: animation_name = "top-left"
-		7: animation_name = "top-right"
-		9, 12: animation_name = "top-left"
+		4, 5, 6, 7: animation_name = "top-left"
+		8: animation_name = "top-right"
+		10, 13: animation_name = "top-left"
 		_: return {}
 	var animation_setup: Dictionary = Globals.VoterIdleAnimations["Animation"]
 	for animation_view in animation_setup:
