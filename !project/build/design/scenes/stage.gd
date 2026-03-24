@@ -48,9 +48,12 @@ func _process(_delta: float) -> void:
 #built-in callback, called authomatically, no signal connection needed
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("start"):
-		_continue_course()
-		if _active_voters.size() > 0:
-			_release_first_voter()
+		var selected: Voter = _get_selected_voter()
+		if selected:
+			if selected._is_waiting:
+				selected.continue_course()
+			elif selected._is_queueing and _active_voters.has(selected):
+				_release_selected_voter(selected)
 	if event.is_action_pressed("select"):
 		_select_next_voter()
 
@@ -184,19 +187,21 @@ func _select_next_voter() -> void:
 func _on_voters_entering(voter: Voter) -> void:
 	_active_voters.append(voter)
 
-func _continue_course() -> void:
+func _get_selected_voter() -> Voter:
 	var voters: Array = get_tree().get_nodes_in_group("actor")
-	for voter in voters:
+	if _selected_voter_index >= 0 and _selected_voter_index < voters.size():
+		var voter = voters[_selected_voter_index]
 		if voter is Voter:
-			voter.continue_course()
+			return voter
+	return null
 
-func _release_first_voter() -> void:
-	var first: Voter = _active_voters.pop_front()
-
-	var freed_spot: Node2D = first.starting_spot
+func _release_selected_voter(voter: Voter) -> void:
+	var freed_spot: Node2D = voter.starting_spot
+	if not voter.release_from_queue():
+		return
+	_active_voters.erase(voter)
 	if freed_spot and freed_spot.has_method("free_up"):
 		freed_spot.free_up()
-	first.release_from_queue()
 	await get_tree().create_timer(0.5).timeout
 	_update_voters_queue()
 #todo: cleanup

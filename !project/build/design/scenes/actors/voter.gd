@@ -186,6 +186,8 @@ func reach_stop() -> void:
 		set_vote_stop_target()
 		return
 
+	_occupy_current_stop()
+
 	_wait_frame_coord = _find_wait_animation_frame_coord()
 	if not _wait_frame_coord.is_empty():
 		_apply_wait_texture()
@@ -195,25 +197,81 @@ func reach_stop() -> void:
 	if _voting_course_pointer in [4, 5, 6, 7, 8, 10, 13]:
 		_is_waiting = true
 	else:
+		_free_current_stop()
 		_voting_course_pointer += 1
 		set_vote_stop_target()
 #todo: cleanup
 
-func release_from_queue() -> void:
+func release_from_queue() -> bool:
+	if not _is_waiting_stop_free(4):
+		return false
+	var stop: Node2D = voting_course[4]
+	if stop and stop.has_method("occupy"):
+		stop.occupy(self)
 	_restore_walk_texture()
 	_is_queueing = false
 	starting_spot = null
 	_voting_course_pointer += 1
 	set_vote_stop_target()
+	return true
 #todo: cleanup
 
-func continue_course() -> void:
+func continue_course() -> bool:
 	if not _is_waiting:
-		return
+		return false
+	var next_waiting: int = _find_next_waiting_stop()
+	if next_waiting != -1 and not _is_waiting_stop_free(next_waiting):
+		return false
+	if next_waiting != -1:
+		var stop: Node2D = voting_course[next_waiting]
+		if stop and stop.has_method("occupy"):
+			stop.occupy(self)
+	_free_current_stop()
 	_is_waiting = false
 	_restore_walk_texture()
 	_voting_course_pointer += 1
 	set_vote_stop_target()
+	return true
+#todo: cleanup
+
+func _find_next_waiting_stop() -> int:
+	var waiting_stops: Array = [4, 5, 6, 7, 8, 10, 13]
+	for index in waiting_stops:
+		if index > _voting_course_pointer:
+			return index
+	return -1
+#todo: cleanup
+
+func _is_waiting_stop_free(index: int) -> bool:
+	if index >= voting_course.size():
+		return true
+	var stop: Node2D = voting_course[index]
+	if stop == null:
+		return true
+	if stop.has_method("is_free"):
+		return stop.is_free()
+	return true
+
+func _is_next_stop_free() -> bool:
+	var next_index: int = _voting_course_pointer + 1
+	if next_index >= voting_course.size():
+		return true
+	var next_stop: Node2D = voting_course[next_index]
+	if next_stop == null:
+		return true
+	if next_stop.has_method("is_free"):
+		return next_stop.is_free()
+	return true
+
+func _occupy_current_stop() -> void:
+	var stop: Node2D = voting_course[_voting_course_pointer]
+	if stop and stop.has_method("occupy"):
+		stop.occupy(self)
+
+func _free_current_stop() -> void:
+	var stop: Node2D = voting_course[_voting_course_pointer]
+	if stop and stop.has_method("free_up"):
+		stop.free_up()
 #todo: cleanup
 
 func move_to_queue_spot(target_spot: Node2D) -> void:
