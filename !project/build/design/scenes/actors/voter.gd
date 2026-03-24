@@ -19,6 +19,7 @@ var _voting_course_pointer: int = 0
 var _is_stopping: bool = false
 var _is_queueing: bool = false
 var _is_shuffling: bool = false
+var _is_waiting: bool = false
 var _is_course_finished: bool = false
 
 var _wait_frame_coord: Dictionary = {}
@@ -55,7 +56,7 @@ func _ready() -> void:
 	character_texture.material = character_texture.material.duplicate()
 
 func _process(_delta: float) -> void:
-	if _is_course_finished or _is_stopping or _is_queueing or course_target == null:
+	if _is_course_finished or _is_stopping or _is_queueing or _is_waiting or course_target == null:
 		velocity = Vector2.ZERO
 	else:
 		voting_course_movement()
@@ -104,6 +105,7 @@ func set_vote_stop_target() -> void:
 
 		velocity = Vector2.ZERO
 		queue_free()
+#todo: cleanup
 
 func _find_walk_animation_name() -> void:
 	match _voting_course_pointer:
@@ -118,6 +120,7 @@ func _find_walk_animation_name() -> void:
 		14: _walk_animation_name = "bottom-left"
 		15: _walk_animation_name = "bottom-right"
 		_: _walk_animation_name = "idle"
+#todo: cleanup
 
 func _find_wait_animation_frame_coord() -> Dictionary:
 	var animation_name: String
@@ -132,17 +135,19 @@ func _find_wait_animation_frame_coord() -> Dictionary:
 		if animation_setup[animation_view]["Name"] == animation_name:
 			return animation_setup[animation_view]["Frame Coord"]
 	return {}
+#todo: cleanup
 
 func handle_animations() -> void:
 	if _is_course_finished:
 		animation_player.play("bottom-right")
-	elif _is_stopping or _is_queueing:
+	elif _is_stopping or _is_queueing or _is_waiting:
 		pass
 	elif state == State.WALK:
 		if animation_player.current_animation != _walk_animation_name:
 			animation_player.play(_walk_animation_name)
 	else:
 		animation_player.play("bottom-right")
+#todo: cleanup
 
 func voting_course_movement() -> void:
 	if course_target == null: return
@@ -176,24 +181,37 @@ func reach_stop() -> void:
 		queue_place_taken.emit()
 		return
 
+	if _voting_course_pointer == 0:
+		_voting_course_pointer += 1
+		set_vote_stop_target()
+		return
+
 	_wait_frame_coord = _find_wait_animation_frame_coord()
 	if not _wait_frame_coord.is_empty():
-		_is_stopping = true
 		_apply_wait_texture()
-		play_stop_sound()
-		update_hud_frames()
-		await get_tree().create_timer(1.0).timeout
-		_restore_walk_texture()
-		_is_stopping = false
+	play_stop_sound()
+	update_hud_frames()
 
-	_voting_course_pointer += 1
-	set_vote_stop_target()
+	if _voting_course_pointer in [4, 5, 6, 7, 8, 10, 13]:
+		_is_waiting = true
+	else:
+		_voting_course_pointer += 1
+		set_vote_stop_target()
 #todo: cleanup
 
 func release_from_queue() -> void:
 	_restore_walk_texture()
 	_is_queueing = false
 	starting_spot = null
+	_voting_course_pointer += 1
+	set_vote_stop_target()
+#todo: cleanup
+
+func continue_course() -> void:
+	if not _is_waiting:
+		return
+	_is_waiting = false
+	_restore_walk_texture()
 	_voting_course_pointer += 1
 	set_vote_stop_target()
 #todo: cleanup

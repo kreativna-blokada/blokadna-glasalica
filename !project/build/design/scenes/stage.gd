@@ -47,8 +47,10 @@ func _process(_delta: float) -> void:
 
 #built-in callback, called authomatically, no signal connection needed
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("start") and _active_voters.size() > 0:
-		_release_first_voter()
+	if event.is_action_pressed("start"):
+		_continue_course()
+		if _active_voters.size() > 0:
+			_release_first_voter()
 	if event.is_action_pressed("select"):
 		_select_next_voter()
 
@@ -181,6 +183,12 @@ func _select_next_voter() -> void:
 
 func _on_voters_entering(voter: Voter) -> void:
 	_active_voters.append(voter)
+
+func _continue_course() -> void:
+	var voters: Array = get_tree().get_nodes_in_group("actor")
+	for voter in voters:
+		if voter is Voter:
+			voter.continue_course()
 
 func _release_first_voter() -> void:
 	var first: Voter = _active_voters.pop_front()
