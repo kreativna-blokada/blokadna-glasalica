@@ -12,7 +12,7 @@ extends Node2D
 #data containers
 var _active_voters: Array = []
 var _max_voter_queue: int = 4
-var _selected_voter_index: int = -1
+var _selected_voter: Voter = null
 
 #broadcast variables
 var _voters_diversity: int = 0
@@ -175,24 +175,40 @@ func get_voting_course(voter: Voter) -> Array:
 
 	return walking_course
 
-func _select_next_voter() -> void:
+func _get_selectable_voters() -> Array:
 	var voters: Array = get_tree().get_nodes_in_group("actor")
-	if voters.is_empty():
+	var selectable: Array = []
+	for voter in voters:
+		if voter is Voter and (voter._is_waiting or voter._is_queueing):
+			selectable.append(voter)
+	selectable.sort_custom(func(a: Voter, b: Voter):
+		if a._is_queueing and b._is_queueing:
+			return queue_spots.find(a.starting_spot) < queue_spots.find(b.starting_spot)
+		if a._is_queueing:
+			return false
+		if b._is_queueing:
+			return true
+		return a._voting_course_pointer > b._voting_course_pointer
+	)
+	return selectable
+
+func _select_next_voter() -> void:
+	var selectable: Array = _get_selectable_voters()
+	if selectable.is_empty():
 		return
-	if _selected_voter_index >= 0 and _selected_voter_index < voters.size():
-		voters[_selected_voter_index].character_texture.material.set_shader_parameter("enabled", false)
-	_selected_voter_index = (_selected_voter_index + 1) % voters.size()
-	voters[_selected_voter_index].character_texture.material.set_shader_parameter("enabled", true)
+	if _selected_voter and is_instance_valid(_selected_voter):
+		_selected_voter.character_texture.material.set_shader_parameter("enabled", false)
+	var current_index: int = selectable.find(_selected_voter)
+	var next_index: int = (current_index + 1) % selectable.size()
+	_selected_voter = selectable[next_index]
+	_selected_voter.character_texture.material.set_shader_parameter("enabled", true)
 
 func _on_voters_entering(voter: Voter) -> void:
 	_active_voters.append(voter)
 
 func _get_selected_voter() -> Voter:
-	var voters: Array = get_tree().get_nodes_in_group("actor")
-	if _selected_voter_index >= 0 and _selected_voter_index < voters.size():
-		var voter = voters[_selected_voter_index]
-		if voter is Voter:
-			return voter
+	if _selected_voter and is_instance_valid(_selected_voter):
+		return _selected_voter
 	return null
 
 func _release_selected_voter(voter: Voter) -> void:
