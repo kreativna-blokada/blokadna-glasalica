@@ -20,9 +20,9 @@ var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
 
 #onready vars
 @onready var voters_factory_container: Node2D = $VoterSlots
-@onready var queue_spots: Array = $VoterSpots.get_children()
-@onready var voting_course: Array = $VoterStops.get_children()
-@onready var voter_loading_position: Node2D = $VoterStops/Load
+@onready var queue_spots: Array = $Scenery/VoterSpots.get_children()
+@onready var voting_course: Array = $Scenery/VoterStops.get_children()
+@onready var voter_loading_position: Node2D = $Scenery/VoterStops/Load
 
 @onready var _timer: Timer = $Timer
 

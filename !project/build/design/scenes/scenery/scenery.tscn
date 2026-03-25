@@ -11,83 +11,168 @@
 [ext_resource type="Texture2D" uid="uid://byrpwvnbcylq0" path="res://!project/art/table3.png" id="9_t3"]
 [ext_resource type="Texture2D" uid="uid://cp8miiu5dqrfd" path="res://!project/art/table4.png" id="10_t4"]
 [ext_resource type="Texture2D" uid="uid://cqpi048ceudyq" path="res://!project/art/table5.png" id="11_t5"]
+[ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/scenery/voting_stop.tscn" id="12_ugfii"]
 
 [node name="Scenery" type="Node2D" unique_id=2093316346]
 
-[node name="Room" type="Sprite2D" parent="." unique_id=1710121923]
+[node name="Setup" type="Node2D" parent="." unique_id=799665588]
+
+[node name="Room" type="Sprite2D" parent="Setup" unique_id=1710121923]
 modulate = Color(1.0116422, 1.0116422, 1.0116422, 1)
 z_index = -3
 position = Vector2(960, 540)
 scale = Vector2(1.55, 1.55)
 texture = ExtResource("1_room")
 
-[node name="Decor" type="Sprite2D" parent="." unique_id=424787779]
+[node name="Decor" type="Sprite2D" parent="Setup" unique_id=424787779]
 z_index = -1
 position = Vector2(168, 633)
 scale = Vector2(1.55, 1.55)
 texture = ExtResource("2_plant")
 
-[node name="Plant" type="Sprite2D" parent="." unique_id=822328692]
+[node name="Plant" type="Sprite2D" parent="Setup" unique_id=822328692]
 z_index = -1
 position = Vector2(1760, 661)
 scale = Vector2(1.55, 1.55)
 texture = ExtResource("2_plant")
 
-[node name="Booth" type="Sprite2D" parent="." unique_id=582621679]
+[node name="Booth" type="Sprite2D" parent="Setup" unique_id=582621679]
 z_index = -3
 position = Vector2(1212.0001, 791.00006)
 scale = Vector2(1.5499998, 1.5499998)
 texture = ExtResource("3_vtable")
 
-[node name="Box" type="Sprite2D" parent="." unique_id=1522117948]
+[node name="Box" type="Sprite2D" parent="Setup" unique_id=1522117948]
 z_index = -1
 position = Vector2(941, 637)
 scale = Vector2(1.5499998, 1.5499998)
 texture = ExtResource("6_vbox")
 
-[node name="Check" type="Sprite2D" parent="." unique_id=1593053047]
+[node name="Check" type="Sprite2D" parent="Setup" unique_id=1593053047]
 position = Vector2(460.00006, 529)
 scale = Vector2(1.7, 1.7)
 texture = ExtResource("7_t1")
 
-[node name="Spray" type="Sprite2D" parent="." unique_id=1216171539]
+[node name="Spray" type="Sprite2D" parent="Setup" unique_id=1216171539]
 z_index = -1
 position = Vector2(646, 447.99997)
 scale = Vector2(1.7, 1.7)
 texture = ExtResource("8_t2")
 
-[node name="ID" type="Sprite2D" parent="." unique_id=2106236266]
+[node name="ID" type="Sprite2D" parent="Setup" unique_id=2106236266]
 z_index = -2
 position = Vector2(854.99994, 392.99997)
 scale = Vector2(1.7, 1.7)
 texture = ExtResource("9_t3")
 
-[node name="Ballot" type="Sprite2D" parent="." unique_id=831766924]
+[node name="Ballot" type="Sprite2D" parent="Setup" unique_id=831766924]
 z_index = -2
 position = Vector2(1248, 493)
 scale = Vector2(1.55, 1.55)
 texture = ExtResource("10_t4")
 
-[node name="Voting" type="Sprite2D" parent="." unique_id=163396145]
+[node name="Voting" type="Sprite2D" parent="Setup" unique_id=163396145]
 z_index = -2
 position = Vector2(1439, 583.00006)
 scale = Vector2(1.55, 1.55)
 texture = ExtResource("11_t5")
 
-[node name="Entry" type="Sprite2D" parent="." unique_id=546491139]
+[node name="Entry" type="Sprite2D" parent="Setup" unique_id=546491139]
 z_index = -3
 position = Vector2(645, 820)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_door")
 
-[node name="Exit" type="Sprite2D" parent="." unique_id=885589455]
+[node name="Exit" type="Sprite2D" parent="Setup" unique_id=885589455]
 z_index = -3
 position = Vector2(1141, 904)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("5_doorr")
 
-[node name="Background" type="ColorRect" parent="." unique_id=1940963652]
+[node name="Background" type="ColorRect" parent="Setup" unique_id=1940963652]
 z_index = -4
 offset_right = 1915.0
 offset_bottom = 1088.0
 color = Color(0.5764706, 0.654902, 0.6784314, 1)
+
+[node name="VoterSpots" type="Node2D" parent="." unique_id=1048574528]
+
+[node name="0" parent="VoterSpots" unique_id=244476538 instance=ExtResource("12_ugfii")]
+position = Vector2(531.00006, 894)
+rotation = -0.06981317
+
+[node name="1" parent="VoterSpots" unique_id=1510888160 instance=ExtResource("12_ugfii")]
+position = Vector2(466, 865)
+rotation = -0.06981317
+
+[node name="2" parent="VoterSpots" unique_id=1720027597 instance=ExtResource("12_ugfii")]
+position = Vector2(401, 837.00006)
+rotation = -0.06981317
+
+[node name="3" parent="VoterSpots" unique_id=1346262140 instance=ExtResource("12_ugfii")]
+position = Vector2(337, 810)
+rotation = -0.06981317
+
+[node name="4" parent="VoterSpots" unique_id=1934680512 instance=ExtResource("12_ugfii")]
+position = Vector2(273, 783)
+rotation = -0.06981317
+
+[node name="5" parent="VoterSpots" unique_id=1604228881 instance=ExtResource("12_ugfii")]
+position = Vector2(210, 756)
+rotation = -0.06981317
+
+[node name="6" parent="VoterSpots" unique_id=1839089870 instance=ExtResource("12_ugfii")]
+position = Vector2(146.99998, 729)
+rotation = -0.06981317
+
+[node name="7" parent="VoterSpots" unique_id=271406167 instance=ExtResource("12_ugfii")]
+position = Vector2(83, 703.00006)
+rotation = -0.06981317
+
+[node name="VoterStops" type="Node2D" parent="." unique_id=1040820995]
+
+[node name="Load" parent="VoterStops" unique_id=330516695 instance=ExtResource("12_ugfii")]
+position = Vector2(-100, 700)
+
+[node name="Entry" parent="VoterStops" unique_id=176420187 instance=ExtResource("12_ugfii")]
+position = Vector2(600, 935)
+rotation = -0.0418879
+
+[node name="Enter" parent="VoterStops" unique_id=627238140 instance=ExtResource("12_ugfii")]
+position = Vector2(751, 851)
+
+[node name="Lamp" parent="VoterStops" unique_id=293210780 instance=ExtResource("12_ugfii")]
+position = Vector2(525, 650)
+
+[node name="ID" parent="VoterStops" unique_id=1486878023 instance=ExtResource("12_ugfii")]
+position = Vector2(670, 590)
+
+[node name="List" parent="VoterStops" unique_id=1004387658 instance=ExtResource("12_ugfii")]
+position = Vector2(767, 545)
+
+[node name="Spray" parent="VoterStops" unique_id=1854902337 instance=ExtResource("12_ugfii")]
+position = Vector2(905, 494)
+
+[node name="Ballot" parent="VoterStops" unique_id=1258328132 instance=ExtResource("12_ugfii")]
+position = Vector2(1137, 566)
+
+[node name="Voting" parent="VoterStops" unique_id=71325222 instance=ExtResource("12_ugfii")]
+position = Vector2(1458, 751)
+
+[node name="Booth" parent="VoterStops" unique_id=1315984266 instance=ExtResource("12_ugfii")]
+position = Vector2(1266, 860)
+
+[node name="Ende" parent="VoterStops" unique_id=1577443113 instance=ExtResource("12_ugfii")]
+position = Vector2(1100, 931)
+
+[node name="Vote" parent="VoterStops" unique_id=93119268 instance=ExtResource("12_ugfii")]
+position = Vector2(982, 880)
+
+[node name="Box" parent="VoterStops" unique_id=123985902 instance=ExtResource("12_ugfii")]
+position = Vector2(976, 754)
+
+[node name="Exit" parent="VoterStops" unique_id=2047232221 instance=ExtResource("12_ugfii")]
+position = Vector2(864, 880)
+
+[node name="Out" parent="VoterStops" unique_id=830837166 instance=ExtResource("12_ugfii")]
+position = Vector2(1600, 1200)

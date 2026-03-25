@@ -18,7 +18,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_stage = get_parent().get_node("Stage")
 	if _stage:
-		_voting_course = _stage.get_node("VoterStops").get_children()
+		_voting_course = _stage.get_node("Scenery/VoterStops").get_children()
 
 	var symbol_children: Array = _hbox_symbols.get_children()
 	for i in _symbol_names.size():

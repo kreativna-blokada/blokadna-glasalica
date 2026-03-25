@@ -2,8 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://d0oly2y4yepkm" path="res://!project/build/design/scenes/scenery/progress_map.tscn" id="1_icv6h"]
 [ext_resource type="Script" uid="uid://egc5bohaewmh" path="res://!project/build/design/scenes/stage.gd" id="1_whd4d"]
-[ext_resource type="PackedScene" path="res://!project/build/design/scenes/scenery/scenery.tscn" id="2_scnry"]
-[ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/scenery/voting_stop.tscn" id="2_ywe5c"]
+[ext_resource type="PackedScene" uid="uid://b0hekwx8gev5y" path="res://!project/build/design/scenes/scenery/scenery.tscn" id="2_scnry"]
 [ext_resource type="Script" uid="uid://dv4vi1n10xo74" path="res://!project/build/design/scenes/actors/voters.gd" id="3_whd4d"]
 [ext_resource type="Texture2D" uid="uid://ca7s4ygey62sb" path="res://!project/art/UI/Buttons/Button Right - unpressed.png" id="5_4hrqh"]
 [ext_resource type="Texture2D" uid="uid://ckqvc7clnlxsb" path="res://!project/art/UI/Buttons/Button Right - pressed.png" id="6_whd4d"]
@@ -25,88 +24,6 @@ script = ExtResource("1_whd4d")
 
 [node name="VoterSlots" type="Node2D" parent="Stage" unique_id=328396471]
 script = ExtResource("3_whd4d")
-
-[node name="VoterSpots" type="Node2D" parent="Stage" unique_id=1293714126]
-
-[node name="0" parent="Stage/VoterSpots" unique_id=330516695 instance=ExtResource("2_ywe5c")]
-position = Vector2(531.00006, 894)
-rotation = -0.06981317
-
-[node name="1" parent="Stage/VoterSpots" unique_id=48913757 instance=ExtResource("2_ywe5c")]
-position = Vector2(466, 865)
-rotation = -0.06981317
-
-[node name="2" parent="Stage/VoterSpots" unique_id=1082095802 instance=ExtResource("2_ywe5c")]
-position = Vector2(401, 837.00006)
-rotation = -0.06981317
-
-[node name="3" parent="Stage/VoterSpots" unique_id=192122254 instance=ExtResource("2_ywe5c")]
-position = Vector2(337, 810)
-rotation = -0.06981317
-
-[node name="4" parent="Stage/VoterSpots" unique_id=1516610223 instance=ExtResource("2_ywe5c")]
-position = Vector2(273, 783)
-rotation = -0.06981317
-
-[node name="5" parent="Stage/VoterSpots" unique_id=1484809777 instance=ExtResource("2_ywe5c")]
-position = Vector2(210, 756)
-rotation = -0.06981317
-
-[node name="6" parent="Stage/VoterSpots" unique_id=256734726 instance=ExtResource("2_ywe5c")]
-position = Vector2(146.99998, 729)
-rotation = -0.06981317
-
-[node name="7" parent="Stage/VoterSpots" unique_id=72973459 instance=ExtResource("2_ywe5c")]
-position = Vector2(83, 703.00006)
-rotation = -0.06981317
-
-[node name="VoterStops" type="Node2D" parent="Stage" unique_id=679928385]
-
-[node name="Load" parent="Stage/VoterStops" unique_id=209056790 instance=ExtResource("2_ywe5c")]
-position = Vector2(-100, 700)
-
-[node name="Entry" parent="Stage/VoterStops" unique_id=1915174047 instance=ExtResource("2_ywe5c")]
-position = Vector2(600, 935)
-rotation = -0.0418879
-
-[node name="Enter" parent="Stage/VoterStops" unique_id=1340102554 instance=ExtResource("2_ywe5c")]
-position = Vector2(751, 851)
-
-[node name="Lamp" parent="Stage/VoterStops" unique_id=404702376 instance=ExtResource("2_ywe5c")]
-position = Vector2(525, 650)
-
-[node name="ID" parent="Stage/VoterStops" unique_id=1524147758 instance=ExtResource("2_ywe5c")]
-position = Vector2(670, 590)
-
-[node name="List" parent="Stage/VoterStops" unique_id=63821945 instance=ExtResource("2_ywe5c")]
-position = Vector2(767, 545)
-
-[node name="Spray" parent="Stage/VoterStops" unique_id=1255542503 instance=ExtResource("2_ywe5c")]
-position = Vector2(905, 494)
-
-[node name="Ballot" parent="Stage/VoterStops" unique_id=1356300169 instance=ExtResource("2_ywe5c")]
-position = Vector2(1137, 566)
-
-[node name="Voting" parent="Stage/VoterStops" unique_id=1250483517 instance=ExtResource("2_ywe5c")]
-position = Vector2(1458, 751)
-
-[node name="Booth" parent="Stage/VoterStops" unique_id=1891743510 instance=ExtResource("2_ywe5c")]
-position = Vector2(1266, 860)
-
-[node name="Ende" parent="Stage/VoterStops" unique_id=322329714 instance=ExtResource("2_ywe5c")]
-position = Vector2(1100, 931)
-
-[node name="Vote" parent="Stage/VoterStops" unique_id=74734141 instance=ExtResource("2_ywe5c")]
-position = Vector2(982, 880)
-
-[node name="Box" parent="Stage/VoterStops" unique_id=128197760 instance=ExtResource("2_ywe5c")]
-position = Vector2(976, 754)
-
-[node name="Exit" parent="Stage/VoterStops" unique_id=787411571 instance=ExtResource("2_ywe5c")]
-position = Vector2(864, 880)
-
-[node name="Out" parent="Stage/VoterStops" unique_id=212483479 instance=ExtResource("2_ywe5c")]
-position = Vector2(1600, 1200)
 
 [node name="Timer" type="Timer" parent="Stage" unique_id=126925033]
 wait_time = 7.5
