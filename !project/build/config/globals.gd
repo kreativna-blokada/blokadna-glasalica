@@ -119,14 +119,20 @@ var VoterFactory: Dictionary[Variant, Variant] = {
 	},
 }
 
-var VoterStopsSound: Dictionary = {
-	4: "res://!project/audio/round-one.mp3",
-	5: "res://!project/audio/round-two.mp3",
-	6: "res://!project/audio/round-two.mp3",
-	7: "res://!project/audio/round-three.mp3",
-	8: "res://!project/audio/round-four.mp3",
-	10: "res://!project/audio/round-five.mp3",
-	13: "res://!project/audio/choose-your-destiny.mp3",
+var VoterStops: Dictionary = {
+	"stops":		[3, 4, 5, 6, 7, 9, 12],
+	"queue":		1,
+	"group":		"voting_course"
+}
+var VotingCourse: Array = VoterStops["stops"].map(func(index): return index + VoterStops["queue"])
+var VoterStopsSounds: Dictionary = { # sounds values = stops index + one voter queue
+	VoterStops["stops"][0] + VoterStops["queue"]: "res://!project/audio/round-one.mp3",
+	VoterStops["stops"][1] + VoterStops["queue"]: "res://!project/audio/round-two.mp3",
+	VoterStops["stops"][2] + VoterStops["queue"]: "res://!project/audio/round-two.mp3",
+	VoterStops["stops"][3] + VoterStops["queue"]: "res://!project/audio/round-three.mp3",
+	VoterStops["stops"][4] + VoterStops["queue"]: "res://!project/audio/round-four.mp3",
+	VoterStops["stops"][5] + VoterStops["queue"]: "res://!project/audio/round-five.mp3",
+	VoterStops["stops"][6] + VoterStops["queue"]: "res://!project/audio/choose-your-destiny.mp3",
 }
 
 var VoterIdleAnimations: Dictionary = {

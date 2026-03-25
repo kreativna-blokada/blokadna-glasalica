@@ -25,7 +25,7 @@ var _is_course_finished: bool = false
 var _wait_frame_coord: Dictionary = {}
 
 #data containers
-var voter_stops_sounds: Dictionary = Globals.VoterStopsSound
+var voter_stops_sounds: Dictionary = Globals.VoterStopsSounds
 
 #broadcast variables
 var starting_spot: Node2D = null
@@ -194,7 +194,7 @@ func reach_stop() -> void:
 	play_stop_sound()
 	update_hud_frames()
 
-	if _voting_course_pointer in [4, 5, 6, 7, 8, 10, 13]:
+	if _voting_course_pointer in Globals.VotingCourse:
 		_is_waiting = true
 	else:
 		_free_current_stop()
@@ -235,7 +235,7 @@ func continue_course() -> bool:
 #todo: cleanup
 
 func _find_next_waiting_stop() -> int:
-	var waiting_stops: Array = [4, 5, 6, 7, 8, 10, 13]
+	var waiting_stops: Array = Globals.VotingCourse
 	for index in waiting_stops:
 		if index > _voting_course_pointer:
 			return index
@@ -319,13 +319,13 @@ func _restore_walk_texture() -> void:
 func play_stop_sound() -> void:
 	if voter_stops_sounds.has(_voting_course_pointer):
 		var sound_path = voter_stops_sounds[_voting_course_pointer]
-		
+
 		if not sound_path.is_empty() and FileAccess.file_exists(sound_path):
 			vote_stop_sound.volume_db = 0.0
 			#todo: delete sound volume adjustment
 			if _voting_course_pointer == 11:
 				vote_stop_sound.volume_db = 10.0
-				
+
 			var sound_stream = load(sound_path)
 			vote_stop_sound.stream = sound_stream
 			vote_stop_sound.play()
@@ -343,7 +343,7 @@ func update_hud_frames() -> void:
 
 func setup_dialog(txt: String, img_path: String, should_flip: bool, label_pos: Vector2, wait_anim: String) -> void:
 	status_label.text = txt
-	status_label.position = label_pos 
+	status_label.position = label_pos
 	dialog_sprite.flip_h = should_flip
 
 	if FileAccess.file_exists(img_path):

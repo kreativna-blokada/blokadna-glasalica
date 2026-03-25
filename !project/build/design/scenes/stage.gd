@@ -176,7 +176,7 @@ func get_voting_course(voter: Voter) -> Array:
 	return walking_course
 
 func _get_selectable_voters() -> Array:
-	var voters: Array = get_tree().get_nodes_in_group("actor")
+	var voters: Array = get_tree().get_nodes_in_group(Globals.EntityProperties[Globals.Entity.Voter]["group"])
 	var selectable: Array = []
 	for voter in voters:
 		if voter is Voter and (voter._is_waiting or voter._is_queueing):

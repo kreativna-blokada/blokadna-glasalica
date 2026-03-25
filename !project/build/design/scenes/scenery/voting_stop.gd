@@ -10,9 +10,8 @@ class_name VotingStop
 extends Node2D
 
 #private vars
-var _voting_course_group: String = "voting_course"
-var _voting_course_stops: Array = [4, 5, 6, 7, 8, 10, 13]
-var _voting_course_infiltrators: int = 1
+var _voting_course_group: String = Globals.VoterStops["group"]
+var _voting_course_stops: Array = Globals.VotingCourse
 
 #broadcast variables
 var occupant : Character = null
@@ -27,7 +26,7 @@ var occupant : Character = null
 
 func _ready() -> void:
 	var index: int = get_index()
-	if (index + _voting_course_infiltrators) in _voting_course_stops:
+	if index in _voting_course_stops:
 		add_to_group(_voting_course_group)
 
 #FUNCTIONS
