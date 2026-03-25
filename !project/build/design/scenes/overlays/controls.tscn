@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://ca7s4ygey62sb" path="res://!project/art/UI/Buttons/Button Right - unpressed.png" id="1_right"]
+[ext_resource type="Texture2D" uid="uid://ckqvc7clnlxsb" path="res://!project/art/UI/Buttons/Button Right - pressed.png" id="2_rightp"]
+[ext_resource type="Texture2D" uid="uid://de1ikyebnqckx" path="res://!project/art/UI/Buttons/Button Wrong - unpressed.png" id="3_wrong"]
+[ext_resource type="Texture2D" uid="uid://bnvx7c6rfa3nd" path="res://!project/art/UI/Buttons/Button Wrong - pressed.png" id="4_wrongp"]
+[ext_resource type="Texture2D" uid="uid://cdcsfwp181ndh" path="res://!project/art/UI/Buttons/Button Select - unpressed.png" id="5_sel"]
+[ext_resource type="Texture2D" uid="uid://caxdq11kb2wrv" path="res://!project/art/UI/Buttons/Button Select - pressed.png" id="6_selp"]
+[ext_resource type="Texture2D" uid="uid://d2dk3gr6vypyj" path="res://!project/art/UI/Buttons/Button Initiate - unpressed.png" id="7_init"]
+[ext_resource type="Texture2D" uid="uid://dj51chytcfrml" path="res://!project/art/UI/Buttons/Button Initiate - pressed.png" id="8_initp"]
+
+[node name="Controls" type="CanvasLayer"]
+
+[node name="Validation" type="Node" parent="."]
+
+[node name="Correct" type="TouchScreenButton" parent="Validation"]
+position = Vector2(1750, 750)
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("1_right")
+texture_pressed = ExtResource("2_rightp")
+action = "right"
+
+[node name="Incorrect" type="TouchScreenButton" parent="Validation"]
+position = Vector2(1600, 900)
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("3_wrong")
+texture_pressed = ExtResource("4_wrongp")
+action = "wrong"
+
+[node name="Selection" type="Node" parent="."]
+
+[node name="Select" type="TouchScreenButton" parent="Selection"]
+position = Vector2(10, 750)
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("5_sel")
+texture_pressed = ExtResource("6_selp")
+action = "select"
+
+[node name="Initiate" type="TouchScreenButton" parent="Selection"]
+position = Vector2(170, 900)
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("7_init")
+texture_pressed = ExtResource("8_initp")
+action = "start"
