@@ -50,9 +50,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("start"):
 		var selected: Voter = _get_selected_voter()
 		if selected:
-			if selected._is_waiting:
+			if selected.is_stopping:
 				selected.continue_course()
-			elif selected._is_queueing and _active_voters.has(selected):
+			elif selected.is_queueing and _active_voters.has(selected):
 				_release_selected_voter(selected)
 	if event.is_action_pressed("select"):
 		_select_next_voter()
@@ -86,11 +86,6 @@ func _init_nodes() -> void:
 #initiallizes gameplay
 func _init_game() -> void:
 	pass
-
-func get_vote_stop(index: int) -> Node2D:
-	if index >= 0 and index < voting_course.size():
-		return voting_course[index]
-	return null
 
 func get_total_stops() -> int:
 	return voting_course.size()
@@ -153,7 +148,7 @@ func _get_voter(_index: int) -> Node:
 		voter.position = voter_loading_position.global_position
 		var walking_course: Array = get_voting_course(voter)
 		voter.set_walking_course(walking_course)
-		voter.queue_place_taken.connect(_on_voters_entering.bind(voter))
+		voter.voter_queued.connect(func(): _active_voters.append(voter))
 
 		print("[STAGE] Successfully fetched voter of index: ", _index)
 
@@ -179,16 +174,16 @@ func _get_selectable_voters() -> Array:
 	var voters: Array = get_tree().get_nodes_in_group(Globals.EntityProperties[Globals.Entity.Voter]["group"])
 	var selectable: Array = []
 	for voter in voters:
-		if voter is Voter and (voter._is_waiting or voter._is_queueing):
+		if voter is Voter and (voter.is_stopping or voter.is_queueing):
 			selectable.append(voter)
-	selectable.sort_custom(func(a: Voter, b: Voter):
-		if a._is_queueing and b._is_queueing:
-			return queue_spots.find(a.starting_spot) < queue_spots.find(b.starting_spot)
-		if a._is_queueing:
+	selectable.sort_custom(func(ahead: Voter, behind: Voter):
+		if ahead.is_queueing and behind.is_queueing:
+			return queue_spots.find(ahead.starting_spot) < queue_spots.find(behind.starting_spot)
+		if ahead.is_queueing:
 			return false
-		if b._is_queueing:
+		if behind.is_queueing:
 			return true
-		return a._voting_course_pointer > b._voting_course_pointer
+		return ahead._voting_course_pointer > behind._voting_course_pointer
 	)
 	return selectable
 
@@ -202,9 +197,6 @@ func _select_next_voter() -> void:
 	var next_index: int = (current_index + 1) % selectable.size()
 	_selected_voter = selectable[next_index]
 	_selected_voter.character_texture.material.set_shader_parameter("enabled", true)
-
-func _on_voters_entering(voter: Voter) -> void:
-	_active_voters.append(voter)
 
 func _get_selected_voter() -> Voter:
 	if _selected_voter and is_instance_valid(_selected_voter):
@@ -250,6 +242,6 @@ func _on_timer_timeout() -> void:
 	#_increase_spawn_rate()
 	if _has_free_vote_spot() and _active_voters.size() < _max_voter_queue:
 		_spawn_voters()
-		
+
 	_timer.start()       # Restart the X second timer
 #Note: spawns enemies after initial time out expires

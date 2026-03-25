@@ -124,7 +124,6 @@ var VoterStops: Dictionary = {
 	"queue":		1,
 	"group":		"voting_course"
 }
-var VotingCourse: Array = VoterStops["stops"].map(func(index): return index + VoterStops["queue"])
 var VoterStopsSounds: Dictionary = { # sounds values = stops index + one voter queue
 	VoterStops["stops"][0] + VoterStops["queue"]: "res://!project/audio/round-one.mp3",
 	VoterStops["stops"][1] + VoterStops["queue"]: "res://!project/audio/round-two.mp3",
@@ -134,6 +133,7 @@ var VoterStopsSounds: Dictionary = { # sounds values = stops index + one voter q
 	VoterStops["stops"][5] + VoterStops["queue"]: "res://!project/audio/round-five.mp3",
 	VoterStops["stops"][6] + VoterStops["queue"]: "res://!project/audio/choose-your-destiny.mp3",
 }
+var VotingCourse: Array = VoterStops["stops"].map(func(index): return index + VoterStops["queue"])
 
 var VoterIdleAnimations: Dictionary = {
 	"Texture2D": "res://!project/art/player.png",
