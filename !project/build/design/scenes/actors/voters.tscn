@@ -2,13 +2,13 @@
 
 [ext_resource type="Texture2D" uid="uid://cct3uwf0t5cpk" path="res://!project/art/player.png" id="1_8dbqw"]
 [ext_resource type="Texture2D" uid="uid://d0hq7kqjrqynq" path="res://!project/art/player-blue.png" id="2_tye60"]
-[ext_resource type="Texture2D" uid="uid://cmbo8xc0adei3" path="res://!project/art/player-brown.png" id="3_ura76"]
+[ext_resource type="Texture2D" uid="uid://ch3huuf5pcug6" path="res://!project/art/player-black.png" id="2_ura76"]
 [ext_resource type="Texture2D" uid="uid://1qmibcqkntq0" path="res://!project/art/player-green.png" id="4_65gjf"]
+[ext_resource type="Texture2D" uid="uid://owht2x8da4qi" path="res://!project/art/player-indigo.png" id="5_65gjf"]
 [ext_resource type="Texture2D" uid="uid://csvtqh5axdfw8" path="res://!project/art/player-red.png" id="5_mipfj"]
-[ext_resource type="Texture2D" uid="uid://mb1r5br6qn7l" path="res://!project/art/player-teal.png" id="6_eslrs"]
-[ext_resource type="Texture2D" uid="uid://ciatxgtdafkjp" path="res://!project/art/player-lapis.png" id="7_ax7bo"]
-[ext_resource type="Texture2D" uid="uid://dfyeqnk15la0k" path="res://!project/art/player-azure.png" id="8_gn7ng"]
-[ext_resource type="Texture2D" uid="uid://cn2b8eq2e1l2u" path="res://!project/art/player-cobalt.png" id="9_im5pl"]
+[ext_resource type="Texture2D" uid="uid://bgd50qhpugqvf" path="res://!project/art/player-magenta.png" id="6_mipfj"]
+[ext_resource type="Texture2D" uid="uid://b4ie7n2fckj2f" path="res://!project/art/player-violet.png" id="8_eslrs"]
+[ext_resource type="Texture2D" uid="uid://ge712eyufumm" path="res://!project/art/player-yellow.png" id="9_ax7bo"]
 
 [node name="Factory" type="Node" unique_id=1415317399]
 
@@ -17,13 +17,13 @@ texture = ExtResource("1_8dbqw")
 hframes = 39
 vframes = 4
 
-[node name="Blue" type="Sprite2D" parent="." unique_id=991712522]
-texture = ExtResource("2_tye60")
+[node name="Black" type="Sprite2D" parent="." unique_id=991712522]
+texture = ExtResource("2_ura76")
 hframes = 39
 vframes = 4
 
-[node name="Brown" type="Sprite2D" parent="." unique_id=918028481]
-texture = ExtResource("3_ura76")
+[node name="Blue" type="Sprite2D" parent="." unique_id=918028481]
+texture = ExtResource("2_tye60")
 hframes = 39
 vframes = 4
 
@@ -32,27 +32,27 @@ texture = ExtResource("4_65gjf")
 hframes = 39
 vframes = 4
 
-[node name="Red" type="Sprite2D" parent="." unique_id=1636873525]
+[node name="Indigo" type="Sprite2D" parent="." unique_id=1636873525]
+texture = ExtResource("5_65gjf")
+hframes = 39
+vframes = 4
+
+[node name="Magenta" type="Sprite2D" parent="." unique_id=1505902002]
+texture = ExtResource("6_mipfj")
+hframes = 39
+vframes = 4
+
+[node name="Red" type="Sprite2D" parent="." unique_id=637742748]
 texture = ExtResource("5_mipfj")
 hframes = 39
 vframes = 4
 
-[node name="Teal" type="Sprite2D" parent="." unique_id=1505902002]
-texture = ExtResource("6_eslrs")
+[node name="Violet" type="Sprite2D" parent="." unique_id=1641362714]
+texture = ExtResource("8_eslrs")
 hframes = 39
 vframes = 4
 
-[node name="Lapis" type="Sprite2D" parent="." unique_id=637742748]
-texture = ExtResource("7_ax7bo")
-hframes = 39
-vframes = 4
-
-[node name="Azure" type="Sprite2D" parent="." unique_id=1641362714]
-texture = ExtResource("8_gn7ng")
-hframes = 39
-vframes = 4
-
-[node name="Cobalt" type="Sprite2D" parent="." unique_id=171004023]
-texture = ExtResource("9_im5pl")
+[node name="Yellow" type="Sprite2D" parent="." unique_id=171004023]
+texture = ExtResource("9_ax7bo")
 hframes = 39
 vframes = 4

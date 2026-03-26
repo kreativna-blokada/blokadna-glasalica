@@ -1,30 +1,30 @@
 {
 	"lamp": {
-		"title": "Provera UV lampom",
-		"content": "Prvo se UV lampom proverava da li je birač već glasao."
+		"title": "1) Provera UV lampom",
+		"content": "I have come here to chew bubblegum and kick ass... and I'm all out of bubblegum."
 	},
 	"ID": {
-		"title": "Provera identitet",
-		"content": "Birač potom daje ličnu kartu ili pasoš kako bi se utvrdio njegov identitet."
+		"title": "2) Provera identiteta",
+		"content": "My name is Maximus Decimus Meridius, commander of the Armies of the North, General of the Felix Legions and loyal servant to the true emperor, Marcus Aurelius. Father to a murdered son, husband to a murdered wife.\nAnd I will have my vengeance, in this life or the next."
 	},
 	"List": {
-		"title": "Birački spisak",
-		"content": "Birački odbor zatim proverava da li se birač nalazi u biračkom spisku."
+		"title": "3) Birački spisak",
+		"content": "When we arrived on Kashyyyk, things were just as bad as we feared. The droids had us outgunned, outmaneuvered and outmanned by a five-to-one margin.\nWhat none of us had counted on was the Wookiees. We'd all heard the stories of course, but we'd never fought next to them, never seen them rip apart a droid with their bare hands.\nThey were magnificent."
     },
     "Spray": {
-      "title": "Nevidljivi sprej",
-      "content": "Biraču se na prst nanosi nevidljivi sprej."
+      "title": "4) Nevidljivi sprej",
+      "content": "I find your lack of faith disturbing."
     },
     "Ballot": {
-      "title": "Glasački listić",
-      "content": "Biraču se daje listić za glasanje."
+      "title": "5) Glasački listić",
+      "content": "If you only knew\nthe power of the Dark Side."
     },
     "Booth": {
-      "title": "Popunjavanje glasački listić",
-      "content": "Birač odlazi iza paravana i popunjava glasački listić."
+      "title": "6) Popunjavanje glasačkog listića",
+      "content": "I am altering the deal.\nPray I do not alter it any further."
     },
     "Box": {
       "title": "Think inside the box",
-      "content": "Nakon što birač glasačke listiće ubaci u kutije, odmah napušta biračko mesto."
+      "content": "Do or do not.\nThere is no try."
     }
 }
