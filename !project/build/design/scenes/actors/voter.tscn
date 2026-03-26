@@ -4,6 +4,9 @@
 [ext_resource type="Script" uid="uid://8cjtw14xitbg" path="res://!project/build/design/scenes/actors/voter.gd" id="2_5suuu"]
 [ext_resource type="Texture2D" uid="uid://cct3uwf0t5cpk" path="res://!project/art/player.png" id="3_3da2g"]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5suuu"]
+height = 100.0
+
 [sub_resource type="Animation" id="Animation_014nc"]
 length = 0.001
 tracks/0/type = "value"
@@ -185,11 +188,18 @@ scale = Vector2(2, 2)
 modulate = Color(0.89, 0.89, 0.89, 1)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("3_3da2g")
+centered = false
+offset = Vector2(-59, -200)
 hframes = 39
 vframes = 5
 region_rect = Rect2(100, 100, 100, 100)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="4" unique_id=1711024557]
+
+[node name="CollisionShape2D" parent="." index="5" unique_id=312657875]
+position = Vector2(0, -16)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_5suuu")
 
 [node name="AnimationPlayer" parent="." index="6" unique_id=830087118]
 libraries/ = SubResource("AnimationLibrary_7wrt8")

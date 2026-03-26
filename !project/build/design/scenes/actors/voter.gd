@@ -20,6 +20,8 @@ var _voting_course_pointer: int = 0
 var _course_target: Node2D = null
 var _is_course_finished: bool = false
 var _is_shuffling: bool = false
+var _feet_offset_enhancer: int = 2
+var _stop_reach_threshold: float = 5.0
 
 var _wait_frame_coord: Dictionary = {}
 
@@ -128,17 +130,15 @@ func handle_animations() -> void:
 func voter_movement() -> void:
 	if _course_target == null: return
 
-	#todo: clean this tentative workaround for sprite height affecting distance calculation
-	var sprite_height: float = character_texture.get_rect().size.y * character_texture.scale.y
-	var find_feet_position: Vector2 = global_position + Vector2(0, sprite_height / 2.0)
+	var feet_offset: Vector2 = $CollisionShape2D.position * _feet_offset_enhancer
+	var feet_position: Vector2 = global_position + feet_offset
 	var target_position: Vector2 = _course_target.global_position
-	var distance: float = find_feet_position.distance_to(target_position)
-	if distance < 5.0:
+	var distance: float = feet_position.distance_to(target_position)
+	if distance < _stop_reach_threshold:
 		_on_stop_reach()
 	else:
-		var direction: Vector2 = (target_position - find_feet_position).normalized()
+		var direction: Vector2 = (target_position - feet_position).normalized()
 		velocity = direction * speed
-		#todo: update blunt movement
 
 func _on_stop_reach() -> void:
 	velocity = Vector2.ZERO
