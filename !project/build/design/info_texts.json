@@ -1,0 +1,30 @@
+{
+	"lamp": {
+		"title": "Provera UV lampom",
+		"content": "Prvo se UV lampom proverava da li je birač već glasao."
+	},
+	"ID": {
+		"title": "Provera identitet",
+		"content": "Birač potom daje ličnu kartu ili pasoš kako bi se utvrdio njegov identitet."
+	},
+	"List": {
+		"title": "Birački spisak",
+		"content": "Birački odbor zatim proverava da li se birač nalazi u biračkom spisku."
+    },
+    "Spray": {
+      "title": "Nevidljivi sprej",
+      "content": "Biraču se na prst nanosi nevidljivi sprej."
+    },
+    "Ballot": {
+      "title": "Glasački listić",
+      "content": "Biraču se daje listić za glasanje."
+    },
+    "Booth": {
+      "title": "Popunjavanje glasački listić",
+      "content": "Birač odlazi iza paravana i popunjava glasački listić."
+    },
+    "Box": {
+      "title": "Think inside the box",
+      "content": "Nakon što birač glasačke listiće ubaci u kutije, odmah napušta biračko mesto."
+    }
+}

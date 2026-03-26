@@ -25,6 +25,7 @@ var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
 @onready var voter_loading_position: Node2D = $Scenery/VoterStops/Load
 
 @onready var _timer: Timer = $Timer
+@onready var _info_dialog: DialogOverlay = $"../Info Dialog"
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -38,6 +39,7 @@ var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
 func _ready() -> void:
 	_init_vars()
 	_init_nodes()
+	_info_dialog.dialog_closed.connect(_on_info_dialog_closed)
 
 	_get_voter( 0 )
 
@@ -149,6 +151,7 @@ func _get_voter(_index: int) -> Node:
 		var walking_course: Array = get_voting_course(voter)
 		voter.set_walking_course(walking_course)
 		voter.voter_queued.connect(func(): _active_voters.append(voter))
+		voter.voter_stopped.connect(_on_voter_stopped)
 
 		print("[STAGE] Successfully fetched voter of index: ", _index)
 
@@ -237,6 +240,14 @@ func _update_voters_queue() -> void:
 #╚════██║██║██║   ██║██║╚██╗██║██╔══██║██║     ╚════██║
 #███████║██║╚██████╔╝██║ ╚████║██║  ██║███████╗███████║
 #╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚══════╝
+
+func _on_voter_stopped(stop_name: String) -> void:
+	_info_dialog.show_info(stop_name)
+
+func _on_info_dialog_closed() -> void:
+	var selected: Voter = _get_selected_voter()
+	if selected and selected.is_stopping:
+		selected.continue_course()
 
 func _on_timer_timeout() -> void:
 	#_increase_spawn_rate()

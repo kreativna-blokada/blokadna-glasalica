@@ -11,6 +11,7 @@ extends Character
 
 #signals
 signal voter_queued
+signal voter_stopped(stop_name: String)
 
 #private vars
 var _initial_texture: Texture2D = null
@@ -197,6 +198,9 @@ func _on_stop_reached() -> void:
 
 	if _voting_course_pointer in Globals.VotingCourse:
 		is_stopping = true
+		var stop_node: Node2D = get_vote_stop(_voting_course_pointer)
+		if stop_node:
+			voter_stopped.emit(stop_node.name)
 	else:
 		_free_current_stop()
 		_initiate_course()
