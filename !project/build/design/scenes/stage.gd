@@ -25,7 +25,7 @@ var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
 @onready var voter_loading_position: Node2D = $Scenery/VoterStops/Load
 
 @onready var _timer: Timer = $Timer
-@onready var _info_dialog: DialogOverlay = $"../Info Dialog"
+@onready var _info_dialog: InfoDialog = $"../Info Dialog"
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -241,14 +241,17 @@ func _update_voters_queue() -> void:
 #███████║██║╚██████╔╝██║ ╚████║██║  ██║███████╗███████║
 #╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚══════╝
 
-func _on_voter_stopped(stop_name: String) -> void:
-	_info_dialog.show_info(stop_name)
+#signal voter.voter_stopped.emit() => show info dialog
+func _on_voter_stopped(vote_stop_name: String) -> void:
+	_info_dialog.show_info(vote_stop_name)
 
+#voter continues course after info dialog is closed
 func _on_info_dialog_closed() -> void:
-	var selected: Voter = _get_selected_voter()
-	if selected and selected.is_stopping:
-		selected.continue_course()
+	var selected_voter: Voter = _get_selected_voter()
+	if selected_voter and selected_voter.is_stopping:
+		selected_voter.continue_course()
 
+#spawning voters signal handler
 func _on_timer_timeout() -> void:
 	#_increase_spawn_rate()
 	if _has_free_vote_spot() and _active_voters.size() < _max_voter_queue:

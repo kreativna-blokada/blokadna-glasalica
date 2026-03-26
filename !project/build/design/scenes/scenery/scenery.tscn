@@ -84,6 +84,7 @@ scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_door")
 
 [node name="Exit" type="Sprite2D" parent="Setup" unique_id=885589455]
+visible = false
 z_index = -3
 position = Vector2(1141, 904)
 scale = Vector2(1.5, 1.5)

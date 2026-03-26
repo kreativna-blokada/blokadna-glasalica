@@ -6,71 +6,110 @@
 #date            : 20260325
 #version         : 1.0
 #===============================================================================
-class_name DialogOverlay
+class_name InfoDialog
 extends CanvasLayer
 
-
+#signals
 signal dialog_closed
 
-@onready var title_label: Label = %Title
-@onready var content_label: Label = %Content
-
+#private vars
+var _info_file: FileAccess = FileAccess.open("res://!project/build/design/info_texts.json", FileAccess.READ)
 var _info_data: Dictionary = {}
 var _tween: Tween = null
 
+#onready vars
+@onready var title_label: Label = %Title
+@onready var content_label: Label = %Content
+
+#CALLBACKS
+# ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
+#██╔════╝██╔══██╗██║     ██║     ██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝
+#██║     ███████║██║     ██║     ██████╔╝███████║██║     █████╔╝ ███████╗
+#██║     ██╔══██║██║     ██║     ██╔══██╗██╔══██║██║     ██╔═██╗ ╚════██║
+#╚██████╗██║  ██║███████╗███████╗██████╔╝██║  ██║╚██████╗██║  ██╗███████║
+# ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
 func _ready() -> void:
-	process_mode = Node.PROCESS_MODE_ALWAYS
+	#input and tweens working, if tree gets paused
+	#process_mode = Node.PROCESS_MODE_ALWAYS
 	_load_info_texts()
 
-
-func _load_info_texts() -> void:
-	var file := FileAccess.open("res://!project/build/design/info_texts.json", FileAccess.READ)
-	if file:
-		var json := JSON.new()
-		if json.parse(file.get_as_text()) == OK:
-			_info_data = json.data
-
-
-func show_info(stop_name: String) -> void:
-	var key := _find_key(stop_name)
-	if key.is_empty():
-		return
-	title_label.text = _info_data[key]["title"]
-	content_label.text = _info_data[key]["content"]
-	content_label.visible_ratio = 0.0
-	visible = true
-	if _tween:
-		_tween.kill()
-	_tween = create_tween()
-	var duration: float = content_label.text.length() * 0.06
-	_tween.tween_property(content_label, "visible_ratio", 1.0, duration)
-
-
-func _find_key(stop_name: String) -> String:
-	if _info_data.has(stop_name):
-		return stop_name
-	for key in _info_data:
-		if key.to_lower() == stop_name.to_lower():
-			return key
-	return ""
-
-
-func _close_dialog() -> void:
-	if _tween:
-		_tween.kill()
-		_tween = null
-	visible = false
-	dialog_closed.emit()
-
-
-func _on_close_button_pressed() -> void:
-	_close_dialog()
-
-
+#consumes input, closes dialog on "start" press
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
 		return
 	if event.is_action_pressed("start"):
 		_close_dialog()
+		#input consumed, no tree propagation
 		get_viewport().set_input_as_handled()
+
+#FUNCTIONS
+#███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
+#██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
+#█████╗  ██║   ██║██╔██╗ ██║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
+#██╔══╝  ██║   ██║██║╚██╗██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
+#██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
+#╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+
+#loads from json file to dictionary
+func _load_info_texts() -> void:
+	if _info_file:
+		var json := JSON.new()
+		if json.parse(_info_file.get_as_text()) == OK:
+			_info_data = json.data
+
+#shows dialog with content based on voting stop
+func show_info(vote_stop_name: String) -> void:
+	var key := _get_info_key(vote_stop_name)
+	if key.is_empty():
+		return
+
+	_set_content(key)
+	visible = true
+	_unveil_text()
+
+#sets dialog components' content
+func _set_content(key: String) -> void:
+	title_label.text = _info_data[key]["title"]
+	content_label.text = _info_data[key]["content"]
+	content_label.visible_ratio = 0.0
+
+#show text, fixed time/char
+func _unveil_text() -> void:
+	if _tween:
+		_tween.kill()
+	_tween = create_tween()
+	var time_for_char: float = 0.06 # seconds per char
+	#total time in seconds for the full text to appear
+	var duration: float = content_label.text.length() * time_for_char
+	#tweening visible_ratio (char count) from 0 to 1 over the duration
+	_tween.tween_property(content_label, "visible_ratio", 1.0, duration)
+
+#direct dictionary lookup, falling back to a manual case-insensitive search
+func _get_info_key(search_key: String) -> String:
+	if _info_data.has(search_key):
+		return search_key
+	for key in _info_data:
+		if key.to_lower() == search_key.to_lower():
+			return key
+	return ""
+
+#stops tween, emits dialog_closed
+func _close_dialog() -> void:
+	if _tween:
+		_tween.kill()
+		_tween = null
+
+	visible = false
+	dialog_closed.emit()
+
+#SIGNALS
+#███████╗██╗ ██████╗ ███╗   ██╗ █████╗ ██╗     ███████╗
+#██╔════╝██║██╔════╝ ████╗  ██║██╔══██╗██║     ██╔════╝
+#███████╗██║██║  ███╗██╔██╗ ██║███████║██║     ███████╗
+#╚════██║██║██║   ██║██║╚██╗██║██╔══██║██║     ╚════██║
+#███████║██║╚██████╔╝██║ ╚████║██║  ██║███████╗███████║
+#╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚══════╝
+
+func _on_close_button_pressed() -> void:
+	_close_dialog()

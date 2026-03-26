@@ -11,7 +11,7 @@ extends Character
 
 #signals
 signal voter_queued
-signal voter_stopped(stop_name: String)
+signal voter_stopped(vote_stop_name: String)
 
 #private vars
 var _initial_texture: Texture2D = null

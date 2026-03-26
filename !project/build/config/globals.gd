@@ -14,6 +14,7 @@ const PATH: String = "res://!project/build/config/globals.gd"
 enum Scene {
 	Game,
 	Voter,
+	Info,
 	Playround
 }
 
@@ -29,6 +30,9 @@ var Scenes: Dictionary[Variant, Variant] = {
 			"animation": "AnimationPlayer",
 			"audio": "AudioStreamPlayer",
 		}
+	},
+	Scene.Info: {
+		"path": "res://!project/build/design/scenes/overlays/info.tscn"
 	},
 	Scene.Playround: {
 		"path": "res://!project/build/design/scenes/playground.tscn"
