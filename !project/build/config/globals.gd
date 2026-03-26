@@ -125,13 +125,13 @@ var VoterStops: Dictionary = {
 	"group":		"voting_course"
 }
 var VoterStopsSounds: Dictionary = { # sounds values = stops index + one voter queue
-	VoterStops["stops"][0] + VoterStops["queue"]: "res://!project/audio/round-one.mp3",
-	VoterStops["stops"][1] + VoterStops["queue"]: "res://!project/audio/round-two.mp3",
-	VoterStops["stops"][2] + VoterStops["queue"]: "res://!project/audio/round-two.mp3",
-	VoterStops["stops"][3] + VoterStops["queue"]: "res://!project/audio/round-three.mp3",
-	VoterStops["stops"][4] + VoterStops["queue"]: "res://!project/audio/round-four.mp3",
-	VoterStops["stops"][5] + VoterStops["queue"]: "res://!project/audio/round-five.mp3",
-	VoterStops["stops"][6] + VoterStops["queue"]: "res://!project/audio/choose-your-destiny.mp3",
+	VoterStops["stops"][0] + VoterStops["queue"]: "res://!project/audio/bubblegum.mp3",
+	VoterStops["stops"][1] + VoterStops["queue"]: "res://!project/audio/Maximus Decimus Meridius.mp3",
+	VoterStops["stops"][2] + VoterStops["queue"]: "res://!project/audio/Wookiees.mp3",
+	VoterStops["stops"][3] + VoterStops["queue"]: "res://!project/audio/lack of faith.mp3",
+	VoterStops["stops"][4] + VoterStops["queue"]: "res://!project/audio/Dark Side.mp3",
+	VoterStops["stops"][5] + VoterStops["queue"]: "res://!project/audio/deal.mp3",
+	VoterStops["stops"][6] + VoterStops["queue"]: "res://!project/audio/try.mp3",
 }
 var VotingCourse: Array = VoterStops["stops"].map(func(index): return index + VoterStops["queue"])
 

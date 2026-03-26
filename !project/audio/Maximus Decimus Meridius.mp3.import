@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bx23gysb2okdh"
+path="res://.godot/imported/Maximus Decimus Meridius.mp3-0d94e886de5965886c2619d94c406319.mp3str"
+
+[deps]
+
+source_file="res://!project/audio/Maximus Decimus Meridius.mp3"
+dest_files=["res://.godot/imported/Maximus Decimus Meridius.mp3-0d94e886de5965886c2619d94c406319.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
