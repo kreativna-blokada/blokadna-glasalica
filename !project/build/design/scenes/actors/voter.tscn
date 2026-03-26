@@ -187,6 +187,7 @@ scale = Vector2(1.5, 1.5)
 texture = ExtResource("3_3da2g")
 hframes = 39
 vframes = 5
+region_rect = Rect2(100, 100, 100, 100)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="4" unique_id=1711024557]
 
