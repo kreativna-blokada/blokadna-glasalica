@@ -8,7 +8,7 @@
 shader = ExtResource("3_85jrd")
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 shader_parameter/outline_width = 3.0
-shader_parameter/enabled = true
+shader_parameter/enabled = false
 
 [node name="Character" type="CharacterBody2D" unique_id=1417136144]
 collision_layer = 0
