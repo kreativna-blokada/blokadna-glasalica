@@ -7,7 +7,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b5jgq"]
 shader = ExtResource("3_85jrd")
 shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/outline_width = 2.0
+shader_parameter/outline_width = 3.0
 shader_parameter/enabled = true
 
 [node name="Character" type="CharacterBody2D" unique_id=1417136144]
