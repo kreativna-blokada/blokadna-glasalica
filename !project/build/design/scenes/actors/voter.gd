@@ -328,10 +328,10 @@ func play_stop_sound() -> void:
 		var sound_path = voter_stops_sounds[_voting_course_pointer]
 
 		if not sound_path.is_empty() and FileAccess.file_exists(sound_path):
-			vote_stop_sound.volume_db = 10.0
+			vote_stop_sound.volume_db = 16.0
 			#todo: delete sound volume adjustment
 			if _voting_course_pointer == 11:
-				vote_stop_sound.volume_db = 10.0
+				vote_stop_sound.volume_db = 16.0
 
 			var sound_stream = load(sound_path)
 			vote_stop_sound.stream = sound_stream

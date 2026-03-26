@@ -16,6 +16,7 @@ signal dialog_closed
 @onready var content_label: Label = %Content
 
 var _info_data: Dictionary = {}
+var _tween: Tween = null
 
 
 func _ready() -> void:
@@ -37,7 +38,13 @@ func show_info(stop_name: String) -> void:
 		return
 	title_label.text = _info_data[key]["title"]
 	content_label.text = _info_data[key]["content"]
+	content_label.visible_ratio = 0.0
 	visible = true
+	if _tween:
+		_tween.kill()
+	_tween = create_tween()
+	var duration: float = content_label.text.length() * 0.06
+	_tween.tween_property(content_label, "visible_ratio", 1.0, duration)
 
 
 func _find_key(stop_name: String) -> String:
@@ -50,6 +57,9 @@ func _find_key(stop_name: String) -> String:
 
 
 func _close_dialog() -> void:
+	if _tween:
+		_tween.kill()
+		_tween = null
 	visible = false
 	dialog_closed.emit()
 
