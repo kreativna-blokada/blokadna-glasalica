@@ -38,7 +38,6 @@ func show_info(stop_name: String) -> void:
 	title_label.text = _info_data[key]["title"]
 	content_label.text = _info_data[key]["content"]
 	visible = true
-	get_tree().paused = true
 
 
 func _find_key(stop_name: String) -> String:
@@ -52,7 +51,6 @@ func _find_key(stop_name: String) -> String:
 
 func _close_dialog() -> void:
 	visible = false
-	get_tree().paused = false
 	dialog_closed.emit()
 
 
@@ -65,4 +63,4 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("start"):
 		_close_dialog()
-	get_viewport().set_input_as_handled()
+		get_viewport().set_input_as_handled()
