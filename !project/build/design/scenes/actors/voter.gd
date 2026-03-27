@@ -325,19 +325,39 @@ func _restore_walk_texture() -> void:
 
 #plays voting stop sound
 func play_stop_sound() -> void:
-	if voter_stops_sounds.has(_voting_course_pointer):
-		var sound_key: String = "cool" if get_tree().current_scene.cool_game else "play"
-		var sound_path = voter_stops_sounds[_voting_course_pointer][sound_key]
+	var path: String = _get_sound_path(_voting_course_pointer)
 
-		if not sound_path.is_empty() and FileAccess.file_exists(sound_path):
-			vote_stop_sound.volume_db = 16.0
-			#todo: delete sound volume adjustment
-			if _voting_course_pointer == 11:
-				vote_stop_sound.volume_db = 16.0
+	if not path.is_empty() and FileAccess.file_exists(path):
+		vote_stop_sound.volume_db = 16.0
+		#todo: delete sound volume update
+		if _voting_course_pointer == 7 or _voting_course_pointer == 13:
+			vote_stop_sound.volume_db = 20.0
 
-			var sound_stream = load(sound_path)
-			vote_stop_sound.stream = sound_stream
-			vote_stop_sound.play()
+		var sound_stream = load(path)
+		vote_stop_sound.stream = sound_stream
+		vote_stop_sound.play()
+
+func _get_sound_path(index: int) -> String:
+	if not get_tree().current_scene.cool_game:
+		if voter_stops_sounds.has(index):
+			return voter_stops_sounds[index]
+		return ""
+	else:
+		var stop_node: Node2D = get_vote_stop(index)
+		if stop_node:
+			return _get_cool_sound(stop_node.name)
+		return ""
+
+func _get_cool_sound(stop_name: String) -> String:
+	var json_info_key: String = stop_name
+	var file: FileAccess = FileAccess.open("res://!project/build/design/cool_infos.json", FileAccess.READ)
+	if file:
+		var json := JSON.new()
+		if json.parse(file.get_as_text()) == OK:
+			var data: Dictionary = json.data
+			if data.has(json_info_key) and data[json_info_key].has("sound"):
+				return data[json_info_key]["sound"]
+	return ""
 
 func update_hud_frames() -> void:
 	if hud_sprites.size() < 6:

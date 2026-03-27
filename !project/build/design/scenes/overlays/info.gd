@@ -17,6 +17,9 @@ var _info_file: FileAccess = FileAccess.open("res://!project/build/design/info_t
 var _info_data: Dictionary = {}
 var _tween: Tween = null
 
+var _cool_info: FileAccess = FileAccess.open("res://!project/build/design/cool_infos.json", FileAccess.READ)
+var _cool_data: Dictionary = {}
+
 #onready vars
 @onready var title_label: Label = %Title
 @onready var content_label: Label = %Content
@@ -51,12 +54,17 @@ func _unhandled_input(event: InputEvent) -> void:
 #██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
 #╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
-#loads from json file to dictionary
+#loads from json files to dictionaries
 func _load_info_texts() -> void:
-	if _info_file:
+	_info_data = _parse_json_file(_info_file)
+	_cool_data = _parse_json_file(_cool_info)
+
+func _parse_json_file(file: FileAccess) -> Dictionary:
+	if file:
 		var json := JSON.new()
-		if json.parse(_info_file.get_as_text()) == OK:
-			_info_data = json.data
+		if json.parse(file.get_as_text()) == OK:
+			return json.data
+	return {}
 
 #shows dialog with content based on voting stop
 func show_info(vote_stop_name: String) -> void:
@@ -70,9 +78,9 @@ func show_info(vote_stop_name: String) -> void:
 
 #sets dialog components' content
 func _set_content(key: String) -> void:
-	title_label.text = _info_data[key]["title"]
-	var content_key = "cool_game" if get_tree().current_scene.cool_game else "content"
-	content_label.text = _info_data[key][content_key]
+	var data: Dictionary = _cool_data if owner.cool_game else _info_data
+	title_label.text = data[key]["title"]
+	content_label.text = data[key]["content"]
 	content_label.visible_ratio = 0.0
 
 #show text, fixed time/char
