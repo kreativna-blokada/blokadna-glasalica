@@ -140,7 +140,7 @@ var VoterStopsSounds: Dictionary = { # sounds values = stops index + one voter q
 var VotingCourse: Array = VoterStops["stops"].map(func(index): return index + VoterStops["queue"])
 
 var VoterIdleAnimations: Dictionary = {
-	"Texture2D": "res://!project/art/player2.png",
+	"Texture2D": VoterFactory[Voter.Player]["Texture2D"],
 	"Animation": {
 		Direction.TopLeft:     { "Name": "top-left",     "Frame Coord": {"x": 0, "y": 4} },
 		Direction.TopRight:    { "Name": "top-right",    "Frame Coord": {"x": 1, "y": 4} },
