@@ -71,7 +71,8 @@ func show_info(vote_stop_name: String) -> void:
 #sets dialog components' content
 func _set_content(key: String) -> void:
 	title_label.text = _info_data[key]["title"]
-	content_label.text = _info_data[key]["content"]
+	var content_key = "cool_game" if get_tree().current_scene.cool_game else "content"
+	content_label.text = _info_data[key][content_key]
 	content_label.visible_ratio = 0.0
 
 #show text, fixed time/char

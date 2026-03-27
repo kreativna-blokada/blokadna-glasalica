@@ -243,7 +243,8 @@ func _update_voters_queue() -> void:
 
 #signal voter.voter_stopped.emit() => show info dialog
 func _on_voter_stopped(vote_stop_name: String) -> void:
-	_info_dialog.show_info(vote_stop_name)
+	if owner.info_dialog:
+		_info_dialog.show_info(vote_stop_name)
 
 #voter continues course after info dialog is closed
 func _on_info_dialog_closed() -> void:

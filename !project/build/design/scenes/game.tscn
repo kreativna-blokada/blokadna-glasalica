@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cugarisbw1qyg"]
 
+[ext_resource type="Script" uid="uid://dygcruy3yvqbt" path="res://!project/build/design/scenes/game.gd" id="1_egxfs"]
 [ext_resource type="PackedScene" uid="uid://d0oly2y4yepkm" path="res://!project/build/design/scenes/scenery/progress_map.tscn" id="1_icv6h"]
 [ext_resource type="PackedScene" uid="uid://cs6vwofk5yyfp" path="res://!project/build/design/scenes/overlays/info.tscn" id="1_nrnfg"]
 [ext_resource type="Script" uid="uid://egc5bohaewmh" path="res://!project/build/design/scenes/stage.gd" id="1_whd4d"]
@@ -8,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://!project/build/design/scenes/overlays/controls.tscn" id="5_ywe5c"]
 
 [node name="Game" type="Node" unique_id=1771661075]
+script = ExtResource("1_egxfs")
 
 [node name="Info Dialog" parent="." unique_id=642568901 instance=ExtResource("1_nrnfg")]
 visible = false

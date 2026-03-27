@@ -193,7 +193,8 @@ func _on_stop_reached() -> void:
 	_wait_frame_coord = _find_wait_animation_frame_coord()
 	if not _wait_frame_coord.is_empty():
 		_apply_wait_texture()
-	play_stop_sound()
+	if get_tree().current_scene.stop_sounds:
+		play_stop_sound()
 	update_hud_frames()
 
 	if _voting_course_pointer in Globals.VotingCourse:
@@ -325,7 +326,8 @@ func _restore_walk_texture() -> void:
 #plays voting stop sound
 func play_stop_sound() -> void:
 	if voter_stops_sounds.has(_voting_course_pointer):
-		var sound_path = voter_stops_sounds[_voting_course_pointer]
+		var sound_key: String = "cool" if get_tree().current_scene.cool_game else "play"
+		var sound_path = voter_stops_sounds[_voting_course_pointer][sound_key]
 
 		if not sound_path.is_empty() and FileAccess.file_exists(sound_path):
 			vote_stop_sound.volume_db = 16.0
