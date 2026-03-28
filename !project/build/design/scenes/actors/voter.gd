@@ -81,7 +81,7 @@ func _process(_delta: float) -> void:
 func handle_input() -> void:
 	pass
 
-func get_vote_stop(index: int) -> Node2D:
+func _get_vote_stop(index: int) -> Node2D:
 	if index >= 0 and index < voting_course.size():
 		return voting_course[index]
 	return null
@@ -164,7 +164,7 @@ func set_walking_course(stops: Array) -> void:
 func _update_course_target() -> void:
 	var next_stop: Node2D = null
 	if _voting_course_pointer < voting_course.size():
-		next_stop = get_vote_stop(_voting_course_pointer)
+		next_stop = _get_vote_stop(_voting_course_pointer)
 
 	if next_stop == null:
 		_is_course_finished = true
@@ -184,7 +184,7 @@ func _on_queue_reached() -> void:
 		_is_shuffling = false
 		return
 
-	starting_spot = get_vote_stop(1)
+	starting_spot = _get_vote_stop(1)
 	voter_queued.emit()
 
 func _on_stop_reached() -> void:
@@ -199,7 +199,7 @@ func _on_stop_reached() -> void:
 
 	if _voting_course_pointer in Globals.VotingCourse:
 		is_stopping = true
-		var stop_node: Node2D = get_vote_stop(_voting_course_pointer)
+		var stop_node: Node2D = _get_vote_stop(_voting_course_pointer)
 		if stop_node:
 			voter_stopped.emit(stop_node.name)
 	else:
@@ -210,7 +210,7 @@ func _on_stop_reached() -> void:
 func release_from_queue() -> bool:
 	if not _is_waiting_stop_free(4):
 		return false
-	var stop: Node2D = get_vote_stop(4)
+	var stop: Node2D = _get_vote_stop(4)
 	if stop and stop.has_method("occupy"):
 		stop.occupy(self)
 	_restore_walk_texture()
@@ -228,7 +228,7 @@ func continue_course() -> bool:
 	if next_waiting != -1 and not _is_waiting_stop_free(next_waiting):
 		return false
 	if next_waiting != -1:
-		var stop: Node2D = get_vote_stop(next_waiting)
+		var stop: Node2D = _get_vote_stop(next_waiting)
 		if stop and stop.has_method("occupy"):
 			stop.occupy(self)
 	_free_current_stop()
@@ -250,7 +250,7 @@ func _find_next_waiting_stop() -> int:
 func _is_waiting_stop_free(index: int) -> bool:
 	if index >= voting_course.size():
 		return true
-	var stop: Node2D = get_vote_stop(index)
+	var stop: Node2D = _get_vote_stop(index)
 	if stop == null:
 		return true
 	if stop.has_method("is_free"):
@@ -262,7 +262,7 @@ func _is_next_stop_free() -> bool:
 	var next_index: int = _voting_course_pointer + 1
 	if next_index >= voting_course.size():
 		return true
-	var next_stop: Node2D = get_vote_stop(next_index)
+	var next_stop: Node2D = _get_vote_stop(next_index)
 	if next_stop == null:
 		return true
 	if next_stop.has_method("is_free"):
@@ -271,25 +271,15 @@ func _is_next_stop_free() -> bool:
 #todo: cleanup
 
 func _occupy_current_stop() -> void:
-	var stop: Node2D = get_vote_stop(_voting_course_pointer)
+	var stop: Node2D = _get_vote_stop(_voting_course_pointer)
 	if stop and stop.has_method("occupy"):
 		stop.occupy(self)
 #todo: cleanup
 
 func _free_current_stop() -> void:
-	var stop: Node2D = get_vote_stop(_voting_course_pointer)
+	var stop: Node2D = _get_vote_stop(_voting_course_pointer)
 	if stop and stop.has_method("free_up"):
 		stop.free_up()
-#todo: cleanup
-
-func move_to_queue_spot(target_spot: Node2D) -> void:
-	starting_spot = target_spot
-	_course_target = target_spot
-	voting_course[1] = target_spot
-
-	is_queueing = false
-	_is_shuffling = true
-	_restore_walk_texture()
 #todo: cleanup
 
 func _set_idle_texture(direction_name: String) -> void:
@@ -343,7 +333,7 @@ func _get_sound_path(index: int) -> String:
 			return voter_stops_sounds[index]
 		return ""
 	else:
-		var stop_node: Node2D = get_vote_stop(index)
+		var stop_node: Node2D = _get_vote_stop(index)
 		if stop_node:
 			return _get_cool_sound(stop_node.name)
 		return ""

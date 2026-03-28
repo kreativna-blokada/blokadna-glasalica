@@ -11,7 +11,7 @@ extends Node2D
 
 #data containers
 var _active_voters: Array = []
-var _max_voter_queue: int = 7
+var _max_voter_queue: int = 8
 var _selected_voter: Voter = null
 
 #broadcast variables

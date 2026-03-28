@@ -4,9 +4,6 @@ extends CharacterBody2D
 @export_group("Movement")
 @export var speed : float
 
-const _SPEED: float = 300.0
-const JUMP_VELOCITY: float = -400.0
-
 @onready var animation_player := $AnimationPlayer
 @onready var character_texture := $CharacterSprite
 
@@ -21,24 +18,13 @@ var anim_map := {
 	State.WALK: "walk",
 }
 
-####func _physics_process(delta: float) -> void:
-####	# Add the gravity.
-####	if not is_on_floor():
-####		velocity += get_gravity() * delta
-
-####	# Handle jump.
-####	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-####		velocity.y = JUMP_VELOCITY
-
-####	# Get the input direction and handle the movement/deceleration.
-####	# As good practice, you should replace UI actions with custom gameplay actions.
-####	var direction := Input.get_axis("ui_left", "ui_right")
-####	if direction:
-####		velocity.x = direction * _SPEED
-####	else:
-####		velocity.x = move_toward(velocity.x, 0, _SPEED)
-
-####	move_and_slide()
+#CALLBACKS
+# ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
+#██╔════╝██╔══██╗██║     ██║     ██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝
+#██║     ███████║██║     ██║     ██████╔╝███████║██║     █████╔╝ ███████╗
+#██║     ██╔══██║██║     ██║     ██╔══██╗██╔══██║██║     ██╔═██╗ ╚════██║
+#╚██████╗██║  ██║███████╗███████╗██████╔╝██║  ██║╚██████╗██║  ██╗███████║
+# ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
 func _ready() -> void:
 	pass
@@ -51,6 +37,14 @@ func _process(delta: float) -> void:
 	move_and_slide()
 
 	animation_player.play(anim_map[State.IDLE])
+
+#FUNCTIONS
+#███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
+#██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
+#█████╗  ██║   ██║██╔██╗ ██║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
+#██╔══╝  ██║   ██║██║╚██╗██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
+#██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
+#╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
 #handle player interaction
 func handle_input() -> void:
@@ -67,12 +61,15 @@ func handle_movement() -> void:
 		else:
 			state = State.WALK
 
+#sets heading based on input
 func set_heading() -> void:
 	pass
 
+#flips sprite based on heading
 func flip_sprites() -> void:
 	if heading == Vector2.RIGHT:
 		character_texture.flip_h = false
 
+#used for movement and animation handling
 func can_move() -> bool:
 	return state == State.IDLE or state == State.WALK
