@@ -35,10 +35,28 @@ var _symbol_names: Array = ["UV", "ID", "Check", "Spray", "Ballot", "Vote", "Box
 
 func _ready() -> void:
 	await get_tree().process_frame
+	_init_stage()
+	_init_symbol_textures()
+	_init_progress_indicators()
+
+func _process(_delta: float) -> void:
+	_update_indicators()
+	_update_symbols()
+
+#FUNCTIONS
+#███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
+#██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
+#█████╗  ██║   ██║██╔██╗ ██║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
+#██╔══╝  ██║   ██║██║╚██╗██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
+#██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
+#╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+
+func _init_stage() -> void:
 	_stage = get_parent().get_node("Stage")
 	if _stage:
 		_voting_course = _stage.get_node("Scenery/VoterStops").get_children()
 
+func _init_symbol_textures() -> void:
 	var symbol_children: Array = _hbox_symbols.get_children()
 	for i in _symbol_names.size():
 		var textures: Dictionary = {
@@ -51,6 +69,7 @@ func _ready() -> void:
 			"textures": textures,
 		})
 
+func _init_progress_indicators() -> void:
 	var progress_children: Array = _hbox_progress.get_children()
 	for i in _progress_indices.size():
 		var slot: Control = progress_children[_progress_indices[i]]
@@ -62,7 +81,7 @@ func _ready() -> void:
 		slot.add_child(indicator)
 		_indicators.append(indicator)
 
-func _process(_delta: float) -> void:
+func _update_indicators() -> void:
 	for i in _waiting_stops.size():
 		var stop_index: int = _waiting_stops[i]
 		var occupied: bool = false
@@ -70,6 +89,8 @@ func _process(_delta: float) -> void:
 			occupied = not _voting_course[stop_index].is_free()
 		_indicators[i].visible = occupied
 
+func _update_symbols() -> void:
+	for i in _waiting_stops.size():
 		var behind_count: int = _count_consecutive_behind(i)
 		var color: String = "green"
 		if behind_count >= 3:
@@ -77,14 +98,6 @@ func _process(_delta: float) -> void:
 		elif behind_count >= 2:
 			color = "yellow"
 		_symbol_textures[i]["node"].texture = _symbol_textures[i]["textures"][color]
-
-#FUNCTIONS
-#███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
-#██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
-#█████╗  ██║   ██║██╔██╗ ██║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
-#██╔══╝  ██║   ██║██║╚██╗██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
-#██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
-#╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
 func _count_consecutive_behind(index: int) -> int:
 	var count: int = 0

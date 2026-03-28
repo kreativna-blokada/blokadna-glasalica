@@ -15,6 +15,7 @@ extends CharacterBody2D
 #private vars
 enum State {WALK, IDLE, WAIT, STOP, FINISH}
 enum Type {PLAYER, VOTER}
+
 var _state := State.IDLE
 var _heading := Vector2.RIGHT
 var _animation_map := {
