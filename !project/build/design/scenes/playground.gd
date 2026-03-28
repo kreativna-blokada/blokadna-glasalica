@@ -2,7 +2,7 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Playground behaves identically to game.tscn, when open playground.tscn and run it (F6), it will:
-#				   1) Load game.tscn via Globals.Scene.Game
+#				   1) Load game.tscn via Globals.Scenes["path"]
 #				   2) Instantiate and add it as a child of Playground
 #				   3) The entire game tree (Stage, Scenery, VoterSlots, Timer, Info Dialog, Controls, Progress Map) runs exactly as if game.tscn was launched directly
 #				   All internal references work because owner, $ paths, and % unique names resolve within the game scene's own tree.

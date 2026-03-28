@@ -1,18 +1,37 @@
+##
+# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+##
+#description     : Progress map HUD overlay
+#author          : Zeljko Vulovic
+#date            : 20260210
+#version         : 1.0
+#===============================================================================
 extends CanvasLayer
 
+#private vars
 var _indicators: Array = []
+var _symbol_textures: Array = []
+var _voting_course: Array = []
+var _stage: Node2D = null
+
+#data containers
+const HUD_PATH: String = "res://!project/art/UI/HUD/"
 var _waiting_stops: Array = [3, 4, 5, 6, 7, 9, 12]
 var _progress_indices: Array = [0, 1, 2, 3, 4, 5, 7]
 var _symbol_indices: Array = [0, 1, 2, 3, 4, 5, 7]
 var _symbol_names: Array = ["UV", "ID", "Check", "Spray", "Ballot", "Vote", "Box"]
-var _symbol_textures: Array = []
 
-const HUD_PATH: String = "res://!project/art/UI/HUD/"
-
+#onready vars
 @onready var _hbox_progress: HBoxContainer = $CenterContainer/VBoxContainer/HBoxProgress
 @onready var _hbox_symbols: HBoxContainer = $CenterContainer/VBoxContainer/HBoxSymbols
-var _voting_course: Array = []
-var _stage: Node2D = null
+
+#CALLBACKS
+# ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
+#██╔════╝██╔══██╗██║     ██║     ██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝
+#██║     ███████║██║     ██║     ██████╔╝███████║██║     █████╔╝ ███████╗
+#██║     ██╔══██║██║     ██║     ██╔══██╗██╔══██║██║     ██╔═██╗ ╚════██║
+#╚██████╗██║  ██║███████╗███████╗██████╔╝██║  ██║╚██████╗██║  ██╗███████║
+# ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
 func _ready() -> void:
 	await get_tree().process_frame
@@ -58,6 +77,14 @@ func _process(_delta: float) -> void:
 		elif behind_count >= 2:
 			color = "yellow"
 		_symbol_textures[i]["node"].texture = _symbol_textures[i]["textures"][color]
+
+#FUNCTIONS
+#███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
+#██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
+#█████╗  ██║   ██║██╔██╗ ██║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
+#██╔══╝  ██║   ██║██║╚██╗██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
+#██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
+#╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
 func _count_consecutive_behind(index: int) -> int:
 	var count: int = 0

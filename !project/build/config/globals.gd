@@ -127,7 +127,7 @@ var VoterStops: Dictionary = {
 	"stops":		[3, 4, 5, 6, 7, 9, 12],
 	"queue":		1,
 	"group":		"voting_course"
-}
+} #todo: move to configs, not globals
 var VoterStopsSounds: Dictionary = { # sounds values = stops index + one voter queue
 	VoterStops["stops"][0] + VoterStops["queue"]: "res://!project/audio/alexzavesa-double-woosh-1-463575.mp3",
 	VoterStops["stops"][1] + VoterStops["queue"]: "res://!project/audio/alexzavesa-electric-boom-1-463651.mp3",
@@ -141,10 +141,12 @@ var VotingCourse: Array = VoterStops["stops"].map(func(index): return index + Vo
 
 var VoterIdleAnimations: Dictionary = {
 	"Texture2D": VoterFactory[Voter.Player]["Texture2D"],
-	"Animation": {
-		Direction.TopLeft:     { "Name": "top-left",     "Frame Coord": {"x": 0, "y": 4} },
-		Direction.TopRight:    { "Name": "top-right",    "Frame Coord": {"x": 1, "y": 4} },
-		Direction.BottomLeft:  { "Name": "bottom-left",  "Frame Coord": {"x": 3, "y": 4} },
-		Direction.BottomRight: { "Name": "bottom-right", "Frame Coord": {"x": 2, "y": 4} },
+	"Animation": { "Frames": {"Total": 37, "Hframes": 39, "Vframes": 5}, "Lenght": 1.3, "Step": 0.1,
+	"Animations": {
+			Direction.TopLeft:     { "Name": "top-left",     "Frame Coord": {"x": 0, "y": 4} },
+			Direction.TopRight:    { "Name": "top-right",    "Frame Coord": {"x": 1, "y": 4} },
+			Direction.BottomLeft:  { "Name": "bottom-left",  "Frame Coord": {"x": 3, "y": 4} },
+			Direction.BottomRight: { "Name": "bottom-right", "Frame Coord": {"x": 2, "y": 4} },
+		}
 	},
 }
