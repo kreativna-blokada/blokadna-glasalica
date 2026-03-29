@@ -16,15 +16,15 @@
 [node name="Correct" type="TouchScreenButton" parent="Validation" unique_id=1023365775]
 position = Vector2(1703, 723)
 scale = Vector2(0.087, 0.087)
-texture_normal = ExtResource("1_4h5hc")
-texture_pressed = ExtResource("2_ial34")
+texture_normal = ExtResource("2_ial34")
+texture_pressed = ExtResource("1_4h5hc")
 action = "right"
 
 [node name="Incorrect" type="TouchScreenButton" parent="Validation" unique_id=1381538608]
 position = Vector2(1528, 896)
 scale = Vector2(0.087, 0.087)
-texture_normal = ExtResource("2_jxo6d")
-texture_pressed = ExtResource("4_ial34")
+texture_normal = ExtResource("4_ial34")
+texture_pressed = ExtResource("2_jxo6d")
 action = "wrong"
 
 [node name="Selection" type="Node" parent="." unique_id=1948632298]
@@ -32,13 +32,13 @@ action = "wrong"
 [node name="Select" type="TouchScreenButton" parent="Selection" unique_id=1121920787]
 position = Vector2(39, 723)
 scale = Vector2(0.087, 0.087)
-texture_normal = ExtResource("3_ial34")
-texture_pressed = ExtResource("6_eaahr")
+texture_normal = ExtResource("6_eaahr")
+texture_pressed = ExtResource("3_ial34")
 action = "select"
 
 [node name="Initiate" type="TouchScreenButton" parent="Selection" unique_id=1003241037]
 position = Vector2(205, 896)
 scale = Vector2(0.087, 0.087)
-texture_normal = ExtResource("4_eaahr")
-texture_pressed = ExtResource("8_0hb4n")
+texture_normal = ExtResource("8_0hb4n")
+texture_pressed = ExtResource("4_eaahr")
 action = "start"
