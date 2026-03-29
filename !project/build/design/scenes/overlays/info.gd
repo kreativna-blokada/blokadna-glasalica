@@ -16,6 +16,7 @@ signal dialog_closed
 var _info_file: FileAccess = FileAccess.open("res://!project/build/design/info_texts.json", FileAccess.READ)
 var _info_data: Dictionary = {}
 var _tween: Tween = null
+var _is_closing: bool = false
 
 var _cool_info: FileAccess = FileAccess.open("res://!project/build/design/cool_infos.json", FileAccess.READ)
 var _cool_data: Dictionary = {}
@@ -23,6 +24,8 @@ var _cool_data: Dictionary = {}
 #onready vars
 @onready var title_label: Label = %Title
 @onready var content_label: RichTextLabel = %Content
+@onready var background: ColorRect = %Background
+@onready var panel: PanelContainer = %Panel
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -39,7 +42,7 @@ func _ready() -> void:
 
 #consumes input, closes dialog on "start" press
 func _unhandled_input(event: InputEvent) -> void:
-	if not visible:
+	if not visible or _is_closing:
 		return
 	if event.is_action_pressed("start"):
 		_close_dialog()
@@ -74,6 +77,7 @@ func show_info(vote_stop_name: String) -> void:
 
 	_set_content(key)
 	visible = true
+	await _opening_animation()
 	_unveil_text()
 
 #sets dialog components' content
@@ -82,6 +86,26 @@ func _set_content(key: String) -> void:
 	title_label.text = data[key]["title"]
 	content_label.text = "[center]" + data[key]["content"] + "[/center]"
 	content_label.visible_ratio = 0.0
+
+#entrance animation: background fades in, panel scales up with overshoot
+func _opening_animation() -> void:
+	background.color.a = 0.0
+	panel.modulate.a = 0.0
+	panel.scale = Vector2(0.8, 0.8)
+
+	#wait one frame so layout computes panel size for correct pivot
+	await get_tree().process_frame
+	panel.pivot_offset = panel.size / 2.0
+
+	var open_tween := create_tween().set_parallel(true)
+	open_tween.tween_property(background, "color:a", 0.5, 0.3) \
+		.set_ease(Tween.EASE_OUT)
+	open_tween.tween_property(panel, "modulate:a", 1.0, 0.35) \
+		.set_ease(Tween.EASE_OUT)
+	open_tween.tween_property(panel, "scale", Vector2.ONE, 0.4) \
+		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+
+	await open_tween.finished
 
 #show text, fixed time/char
 func _unveil_text() -> void:
@@ -103,14 +127,32 @@ func _get_info_key(search_key: String) -> String:
 			return key
 	return ""
 
-#stops tween, emits dialog_closed
+#stops tween, plays exit animation, emits dialog_closed
 func _close_dialog() -> void:
+	if _is_closing:
+		return
+	_is_closing = true
+
 	if _tween:
 		_tween.kill()
 		_tween = null
 
+	await _closing_animation()
 	visible = false
+	_is_closing = false
 	dialog_closed.emit()
+
+#exit animation: panel shrinks and fades, background fades out
+func _closing_animation() -> void:
+	var close_tween := create_tween().set_parallel(true)
+	close_tween.tween_property(panel, "modulate:a", 0.0, 0.2) \
+		.set_ease(Tween.EASE_IN)
+	close_tween.tween_property(panel, "scale", Vector2(0.9, 0.9), 0.2) \
+		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
+	close_tween.tween_property(background, "color:a", 0.0, 0.25) \
+		.set_ease(Tween.EASE_IN)
+
+	await close_tween.finished
 
 #SIGNALS
 #███████╗██╗ ██████╗ ███╗   ██╗ █████╗ ██╗     ███████╗
