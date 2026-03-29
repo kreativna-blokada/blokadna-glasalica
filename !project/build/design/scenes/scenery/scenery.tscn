@@ -171,19 +171,19 @@ position = Vector2(751, 851)
 position = Vector2(525, 650)
 
 [node name="ID" parent="VoterStops" unique_id=1486878023 instance=ExtResource("12_ugfii")]
-position = Vector2(670, 590)
+position = Vector2(714, 547)
 
 [node name="List" parent="VoterStops" unique_id=1004387658 instance=ExtResource("12_ugfii")]
-position = Vector2(883, 478)
+position = Vector2(854, 492)
 
 [node name="Spray" parent="VoterStops" unique_id=1854902337 instance=ExtResource("12_ugfii")]
-position = Vector2(1157, 545)
+position = Vector2(1173, 554)
 
 [node name="Ballot" parent="VoterStops" unique_id=1258328132 instance=ExtResource("12_ugfii")]
-position = Vector2(1395, 662)
+position = Vector2(1411, 661)
 
 [node name="Voting" parent="VoterStops" unique_id=71325222 instance=ExtResource("12_ugfii")]
-position = Vector2(1458, 751)
+position = Vector2(1482, 762)
 
 [node name="Booth" parent="VoterStops" unique_id=1315984266 instance=ExtResource("12_ugfii")]
 position = Vector2(1266, 860)
