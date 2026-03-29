@@ -46,15 +46,17 @@ horizontal_alignment = 1
 [node name="HSeparator" type="HSeparator" parent="CenterContainer/Panel/MarginContainer/VBoxContainer" unique_id=471691514]
 layout_mode = 2
 
-[node name="Content" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer" unique_id=1393085881]
+[node name="Content" type="RichTextLabel" parent="CenterContainer/Panel/MarginContainer/VBoxContainer" unique_id=1393085881]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(600, 200)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 40
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+text = ""
+fit_content = true
+scroll_active = false
+visible_characters_behavior = 1
 
 [node name="CloseButton" type="Button" parent="CenterContainer/Panel/MarginContainer/VBoxContainer" unique_id=1441245576]
 visible = false

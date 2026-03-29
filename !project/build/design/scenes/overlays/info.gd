@@ -22,7 +22,7 @@ var _cool_data: Dictionary = {}
 
 #onready vars
 @onready var title_label: Label = %Title
-@onready var content_label: Label = %Content
+@onready var content_label: RichTextLabel = %Content
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -80,7 +80,7 @@ func show_info(vote_stop_name: String) -> void:
 func _set_content(key: String) -> void:
 	var data: Dictionary = _cool_data if owner.cool_game else _info_data
 	title_label.text = data[key]["title"]
-	content_label.text = data[key]["content"]
+	content_label.text = "[center]" + data[key]["content"] + "[/center]"
 	content_label.visible_ratio = 0.0
 
 #show text, fixed time/char

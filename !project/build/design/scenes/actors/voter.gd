@@ -307,6 +307,16 @@ func _free_current_stop() -> void:
 		stop.free_up()
 #todo: cleanup
 
+func move_to_queue_spot(target_spot: Node2D) -> void:
+	starting_spot = target_spot
+	_course_target = target_spot
+	voting_course[1] = target_spot
+
+	is_queueing = false
+	_is_shuffling = true
+	_walk_texture_restoring()
+#todo: cleanup
+
 func _set_idle_texture(direction_name: String) -> void:
 	animation_player.stop()
 	_initial_texture = character_texture.texture
