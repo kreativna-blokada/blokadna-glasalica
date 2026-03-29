@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bpkafbvvugoew"
-path="res://.godot/imported/input-right.png-9db93f742e0d53dfd52c408c19f4a59d.ctex"
+uid="uid://trtlhsve38j3"
+path="res://.godot/imported/input-right-active.png-33205a9b4b1aceb277b7336f097b62f5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://!project/art/UI/Buttons/input-right.png"
-dest_files=["res://.godot/imported/input-right.png-9db93f742e0d53dfd52c408c19f4a59d.ctex"]
+source_file="res://!project/art/UI/Buttons/input-right-active.png"
+dest_files=["res://.godot/imported/input-right-active.png-33205a9b4b1aceb277b7336f097b62f5.ctex"]
 
 [params]
 
