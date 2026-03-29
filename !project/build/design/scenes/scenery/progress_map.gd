@@ -17,8 +17,8 @@ var _stage: Node2D = null
 #data containers
 const HUD_PATH: String = "res://!project/art/UI/HUD/"
 var _waiting_stops: Array = [3, 4, 5, 6, 7, 9, 12]
-var _progress_indices: Array = [0, 1, 2, 3, 4, 5, 7]
-var _symbol_indices: Array = [0, 1, 2, 3, 4, 5, 7]
+var _progress_indices: Array = [0, 1, 2, 3, 4, 5, 6]
+var _symbol_indices: Array = [0, 1, 2, 3, 4, 5, 6]
 var _symbol_names: Array = ["UV", "ID", "Check", "Spray", "Ballot", "Vote", "Box"]
 
 #onready vars
@@ -37,10 +37,10 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_init_stage()
 	####_init_symbol_textures()
-	####_init_progress_indicators()
+	_init_progress_indicators()
 
 func _process(_delta: float) -> void:
-	####_update_indicators()
+	_update_indicators()
 	####_update_symbols()
 	pass
 
@@ -76,8 +76,8 @@ func _init_progress_indicators() -> void:
 		var slot: Control = progress_children[_progress_indices[i]]
 		var indicator: ColorRect = ColorRect.new()
 		indicator.color = Color.RED
-		indicator.custom_minimum_size = Vector2(40, 20)
-		indicator.size = Vector2(40, 20)
+		indicator.custom_minimum_size = Vector2(180, 20)
+		indicator.size = Vector2(180, 20)
 		indicator.visible = false
 		slot.add_child(indicator)
 		_indicators.append(indicator)
@@ -98,7 +98,7 @@ func _update_symbols() -> void:
 			color = "red"
 		elif behind_count >= 2:
 			color = "yellow"
-		_symbol_textures[i]["node"].texture = _symbol_textures[i]["textures"][color]
+		####_symbol_textures[i]["node"].texture = _symbol_textures[i]["textures"][color]
 
 func _count_consecutive_behind(index: int) -> int:
 	var count: int = 0
