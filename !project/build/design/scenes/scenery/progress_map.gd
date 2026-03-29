@@ -36,12 +36,13 @@ var _symbol_names: Array = ["UV", "ID", "Check", "Spray", "Ballot", "Vote", "Box
 func _ready() -> void:
 	await get_tree().process_frame
 	_init_stage()
-	_init_symbol_textures()
-	_init_progress_indicators()
+	####_init_symbol_textures()
+	####_init_progress_indicators()
 
 func _process(_delta: float) -> void:
-	_update_indicators()
-	_update_symbols()
+	####_update_indicators()
+	####_update_symbols()
+	pass
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗

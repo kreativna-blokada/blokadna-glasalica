@@ -6,10 +6,11 @@
 [ext_resource type="Script" uid="uid://egc5bohaewmh" path="res://!project/build/design/scenes/stage.gd" id="1_whd4d"]
 [ext_resource type="PackedScene" uid="uid://b0hekwx8gev5y" path="res://!project/build/design/scenes/scenery/scenery.tscn" id="2_scnry"]
 [ext_resource type="Script" uid="uid://dv4vi1n10xo74" path="res://!project/build/design/scenes/actors/voters.gd" id="3_whd4d"]
-[ext_resource type="PackedScene" path="res://!project/build/design/scenes/overlays/controls.tscn" id="5_ywe5c"]
+[ext_resource type="PackedScene" uid="uid://bvusekekschrb" path="res://!project/build/design/scenes/overlays/controls.tscn" id="5_ywe5c"]
 
 [node name="Game" type="Node" unique_id=1771661075]
 script = ExtResource("1_egxfs")
+cool_game = true
 
 [node name="Info Dialog" parent="." unique_id=642568901 instance=ExtResource("1_nrnfg")]
 visible = false
