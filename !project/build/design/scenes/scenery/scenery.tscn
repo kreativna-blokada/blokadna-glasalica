@@ -9,9 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://1t3vagxag6xt" path="res://!project/art/voting_box.png" id="6_vbox"]
 [ext_resource type="Texture2D" uid="uid://bbx61xsoc0hs0" path="res://!project/art/table1.png" id="7_t1"]
 [ext_resource type="Texture2D" uid="uid://bh0tina8uva5e" path="res://!project/art/table2.png" id="8_t2"]
-[ext_resource type="Texture2D" uid="uid://byrpwvnbcylq0" path="res://!project/art/table3.png" id="9_t3"]
-[ext_resource type="Texture2D" uid="uid://cp8miiu5dqrfd" path="res://!project/art/table4.png" id="10_t4"]
-[ext_resource type="Texture2D" uid="uid://cqpi048ceudyq" path="res://!project/art/table5.png" id="11_t5"]
 [ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/scenery/voting_stop.tscn" id="12_ugfii"]
 [ext_resource type="Script" uid="uid://bw25mgovar025" path="res://!project/build/design/scenes/scenery/scenery.gd" id="13_scnry"]
 
@@ -73,21 +70,23 @@ texture = ExtResource("8_t2")
 
 [node name="ID" type="Sprite2D" parent="Setup" unique_id=2106236266]
 z_index = -2
-position = Vector2(854.99994, 392.99997)
+position = Vector2(830.99994, 377)
 scale = Vector2(1.7, 1.7)
-texture = ExtResource("9_t3")
+texture = ExtResource("7_t1")
 
 [node name="Ballot" type="Sprite2D" parent="Setup" unique_id=831766924]
 z_index = -2
-position = Vector2(1248, 493)
+position = Vector2(1212, 456)
 scale = Vector2(1.55, 1.55)
-texture = ExtResource("10_t4")
+texture = ExtResource("7_t1")
+flip_h = true
 
 [node name="Voting" type="Sprite2D" parent="Setup" unique_id=163396145]
 z_index = -2
-position = Vector2(1439, 583.00006)
+position = Vector2(1464.0001, 559)
 scale = Vector2(1.55, 1.55)
-texture = ExtResource("11_t5")
+texture = ExtResource("8_t2")
+flip_h = true
 
 [node name="Entry" type="Sprite2D" parent="Setup" unique_id=546491139]
 z_index = -3
@@ -175,13 +174,13 @@ position = Vector2(525, 650)
 position = Vector2(670, 590)
 
 [node name="List" parent="VoterStops" unique_id=1004387658 instance=ExtResource("12_ugfii")]
-position = Vector2(767, 545)
+position = Vector2(883, 478)
 
 [node name="Spray" parent="VoterStops" unique_id=1854902337 instance=ExtResource("12_ugfii")]
-position = Vector2(905, 494)
+position = Vector2(1157, 545)
 
 [node name="Ballot" parent="VoterStops" unique_id=1258328132 instance=ExtResource("12_ugfii")]
-position = Vector2(1137, 566)
+position = Vector2(1395, 662)
 
 [node name="Voting" parent="VoterStops" unique_id=71325222 instance=ExtResource("12_ugfii")]
 position = Vector2(1458, 751)
