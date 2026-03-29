@@ -9,7 +9,7 @@
     },
 	"List": {
 		"title": "3) Birački spisak",
-		"content": "Birački odbor zatim proverava da li se birač nalazi u biračkom spisku."
+		"content": "Birački odbor zatim proverava da li se birač nalazi u biračkom spisku,\na kada ga pronađe, birač se potpisuje na svoje mesto u izvodu iz biračkog spiska\n(za svaki nivo izbora postoji poseban izvod iz biračkog spiska)."
     },
     "Spray": {
       "title": "4) Nevidljivi sprej",
@@ -26,7 +26,7 @@
     },
     "Box": {
       "title": "Think inside the box",
-      "content": "Nakon što birač glasačke listiće ubaci u kutije, odmah napušta biračko mesto.",
+      "content": "Na biračkim mestima biće onoliko glasačkih kutija koliko se izbora održava, a birački odbor se stara o tome da birači glasačke listiće ubacuju u odgovarajuće glasačke kutije.\nNakon što birač glasačke listiće ubaci u kutije, odmah napušta biračko mesto.",
       "sound": "res://!project/audio/bubblegum.mp3"
     }
 }
