@@ -123,22 +123,6 @@ var VoterFactory: Dictionary[Variant, Variant] = {
 	},
 }
 
-var VoterStops: Dictionary = {
-	"stops":		[3, 4, 5, 6, 7, 9, 12],
-	"queue":		1,
-	"group":		"voting_course"
-} #todo: move to configs, not globals
-var VoterStopsSounds: Dictionary = { # sounds values = stops index + one voter queue
-	VoterStops["stops"][0] + VoterStops["queue"]: "res://!project/audio/alexzavesa-double-woosh-1-463575.mp3",
-	VoterStops["stops"][1] + VoterStops["queue"]: "res://!project/audio/alexzavesa-electric-boom-1-463651.mp3",
-	VoterStops["stops"][2] + VoterStops["queue"]: "res://!project/audio/alexzavesa-electronic-impact-stomps-4-463657.mp3",
-	VoterStops["stops"][3] + VoterStops["queue"]: "res://!project/audio/alexzavesa-future-game-glitch-1-463641.mp3",
-	VoterStops["stops"][4] + VoterStops["queue"]: "res://!project/audio/alexzavesa-future-game-glitch-2-463631.mp3",
-	VoterStops["stops"][5] + VoterStops["queue"]: "res://!project/audio/alexzavesa-future-game-glitch-10-463642.mp3",
-	VoterStops["stops"][6] + VoterStops["queue"]: "res://!project/audio/alexzavesa-glitch-3-463646.mp3",
-}
-var VotingCourse: Array = VoterStops["stops"].map(func(index): return index + VoterStops["queue"])
-
 var VoterIdleAnimations: Dictionary = {
 	"Texture2D": VoterFactory[Voter.Player]["Texture2D"],
 	"Animation": { "Frames": {"Total": 37, "Hframes": 39, "Vframes": 5}, "Lenght": 1.3, "Step": 0.1,

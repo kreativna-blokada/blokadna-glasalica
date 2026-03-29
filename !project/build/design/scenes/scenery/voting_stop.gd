@@ -9,9 +9,13 @@
 class_name VotingStop
 extends Node2D
 
+@export_group("Gameplay Sounds")
+@export var stop_sound : AudioStream
+@export var cool_sound : AudioStream
+
 #private vars
-var _voting_course_group: String = Globals.VoterStops["group"]
-var _voting_course_stops: Array = Globals.VotingCourse
+var _voting_course_group: String = Configs.VoterStops["group"]
+var _voting_course_stops: Array = Configs.VotingCourse
 
 #broadcast variables
 var occupant : Character = null

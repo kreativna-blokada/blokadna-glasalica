@@ -1,32 +1,32 @@
 {
-  "Lamp": {
-      "title": "1) Provera UV lampom",
-      "content": "Prvo se UV lampom proverava da li je birač već glasao."
-  },
-  "ID": {
-      "title": "2) Provera identiteta",
-      "content": "Birač potom daje ličnu kartu ili pasoš kako bi se utvrdio njegov identitet."
-  },
-  "List": {
-      "title": "3) Birački spisak",
-      "content": "Birački odbor zatim proverava da li se birač nalazi u biračkom spisku,\na kada ga pronađe, birač se potpisuje na svoje mesto u izvodu iz biračkog spiska\n(za svaki nivo izbora postoji poseban izvod iz biračkog spiska)."
-  },
-  "Spray": {
-    "title": "4) Nevidljivi sprej",
-    "content": "Biraču se na prst nanosi nevidljivi sprej."
-  },
-  "Ballot": {
-    "title": "5) Glasački listić",
-    "content": "Tek nakon toga se biraču daje listić za glasanje."
-  },
-  "Booth": {
-    "title": "6) Popunjavanje glasačkog listića",
-    "content": "Birač odlazi iza paravana i popunjava glasački listić.",
-    "sound": "res://!project/audio/bubblegum.mp3"
-  },
-  "Box": {
-    "title": "Think inside the box",
-    "content": "Na biračkim mestima biće onoliko glasačkih kutija koliko se izbora održava, a birački odbor se stara o tome da birači glasačke listiće ubacuju u odgovarajuće glasačke kutije.\nNakon što birač glasačke listiće ubaci u kutije, odmah napušta biračko mesto.",
-    "sound": "res://!project/audio/bubblegum.mp3"
-  }
+    "Lamp": {
+        "title": "1) Provera UV lampom",
+        "content": "Prvo se UV lampom proverava da li je birač već glasao."
+    },
+    "ID": {
+        "title": "2) Provera identiteta",
+        "content": "Birač potom daje ličnu kartu ili pasoš kako bi se utvrdio njegov identitet."
+    },
+    "List": {
+        "title": "3) Birački spisak",
+        "content": "Birački odbor zatim proverava da li se birač nalazi u biračkom spisku,\na kada ga pronađe, birač se potpisuje na svoje mesto u izvodu iz biračkog spiska\n(za svaki nivo izbora postoji poseban izvod iz biračkog spiska)."
+    },
+    "Spray": {
+      "title": "4) Nevidljivi sprej",
+      "content": "Biraču se na prst nanosi nevidljivi sprej."
+    },
+    "Ballot": {
+      "title": "5) Glasački listić",
+      "content": "Tek nakon toga se biraču daje listić za glasanje."
+    },
+    "Booth": {
+      "title": "6) Popunjavanje glasačkog listića",
+      "content": "Birač odlazi iza paravana i popunjava glasački listić.",
+      "sound": "res://!project/audio/bubblegum.mp3"
+    },
+    "Box": {
+      "title": "Think inside the box",
+      "content": "Na biračkim mestima biće onoliko glasačkih kutija koliko se izbora održava, a birački odbor se stara o tome da birači glasačke listiće ubacuju u odgovarajuće glasačke kutije.\nNakon što birač glasačke listiće ubaci u kutije, odmah napušta biračko mesto.",
+      "sound": "res://!project/audio/bubblegum.mp3"
+    }
 }
