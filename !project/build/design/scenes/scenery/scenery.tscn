@@ -13,8 +13,13 @@
 [ext_resource type="Texture2D" uid="uid://cp8miiu5dqrfd" path="res://!project/art/table4.png" id="10_t4"]
 [ext_resource type="Texture2D" uid="uid://cqpi048ceudyq" path="res://!project/art/table5.png" id="11_t5"]
 [ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/scenery/voting_stop.tscn" id="12_ugfii"]
+[ext_resource type="Script" uid="uid://bw25mgovar025" path="res://!project/build/design/scenes/scenery/scenery.gd" id="13_scnry"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hcqac"]
+height = 60.0
 
 [node name="Scenery" type="Node2D" unique_id=2093316346]
+script = ExtResource("13_scnry")
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1072840265]
 z_index = -3
@@ -90,12 +95,25 @@ position = Vector2(645, 820)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_door")
 
+[node name="Area2D" type="Area2D" parent="Setup/Entry" unique_id=108462272]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Setup/Entry/Area2D" unique_id=1796451470]
+position = Vector2(0.666, 65)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_hcqac")
+
 [node name="Exit" type="Sprite2D" parent="Setup" unique_id=885589455]
-visible = false
 z_index = -3
-position = Vector2(1141, 904)
+position = Vector2(1103, 921)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("5_doorr")
+
+[node name="Area2D" type="Area2D" parent="Setup/Exit" unique_id=1945661836]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Setup/Exit/Area2D" unique_id=1118343694]
+position = Vector2(0.666, 65)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_hcqac")
 
 [node name="Background" type="ColorRect" parent="Setup" unique_id=1940963652]
 visible = false
@@ -107,35 +125,35 @@ color = Color(0.5764706, 0.654902, 0.6784314, 1)
 [node name="VoterSpots" type="Node2D" parent="." unique_id=1048574528]
 
 [node name="0" parent="VoterSpots" unique_id=244476538 instance=ExtResource("12_ugfii")]
-position = Vector2(531.00006, 894)
+position = Vector2(494, 915)
 rotation = -0.06981317
 
 [node name="1" parent="VoterSpots" unique_id=1510888160 instance=ExtResource("12_ugfii")]
-position = Vector2(466, 865)
+position = Vector2(430, 888)
 rotation = -0.06981317
 
 [node name="2" parent="VoterSpots" unique_id=1720027597 instance=ExtResource("12_ugfii")]
-position = Vector2(401, 837.00006)
+position = Vector2(365, 860)
 rotation = -0.06981317
 
 [node name="3" parent="VoterSpots" unique_id=1346262140 instance=ExtResource("12_ugfii")]
-position = Vector2(337, 810)
+position = Vector2(300, 833)
 rotation = -0.06981317
 
 [node name="4" parent="VoterSpots" unique_id=1934680512 instance=ExtResource("12_ugfii")]
-position = Vector2(273, 783)
+position = Vector2(236, 804.99994)
 rotation = -0.06981317
 
 [node name="5" parent="VoterSpots" unique_id=1604228881 instance=ExtResource("12_ugfii")]
-position = Vector2(210, 756)
+position = Vector2(173, 777)
 rotation = -0.06981317
 
 [node name="6" parent="VoterSpots" unique_id=1839089870 instance=ExtResource("12_ugfii")]
-position = Vector2(146.99998, 729)
+position = Vector2(110, 750)
 rotation = -0.06981317
 
 [node name="7" parent="VoterSpots" unique_id=271406167 instance=ExtResource("12_ugfii")]
-position = Vector2(83, 703.00006)
+position = Vector2(46, 725)
 rotation = -0.06981317
 
 [node name="VoterStops" type="Node2D" parent="." unique_id=1040820995]
@@ -181,7 +199,12 @@ position = Vector2(982, 880)
 position = Vector2(976, 754)
 
 [node name="Exit" parent="VoterStops" unique_id=2047232221 instance=ExtResource("12_ugfii")]
-position = Vector2(864, 880)
+position = Vector2(841, 900)
 
 [node name="Out" parent="VoterStops" unique_id=830837166 instance=ExtResource("12_ugfii")]
-position = Vector2(1600, 1200)
+position = Vector2(1533, 1242)
+
+[connection signal="body_entered" from="Setup/Entry/Area2D" to="." method="_on_entry_body_entered"]
+[connection signal="body_exited" from="Setup/Entry/Area2D" to="." method="_on_entry_body_exited"]
+[connection signal="body_entered" from="Setup/Exit/Area2D" to="." method="_on_exit_body_entered"]
+[connection signal="body_exited" from="Setup/Exit/Area2D" to="." method="_on_exit_body_exited"]
