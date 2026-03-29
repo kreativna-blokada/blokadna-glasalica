@@ -21,7 +21,7 @@
     },
     "Booth": {
       "title": "6) Popunjavanje glasačkog listića",
-      "content": "Birač odlazi iza paravana i popunajva glasački listić.",
+      "content": "Birač odlazi iza paravana i popunjava glasački listić.",
       "sound": "res://!project/audio/bubblegum.mp3"
     },
     "Box": {
