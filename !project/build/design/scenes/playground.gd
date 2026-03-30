@@ -15,7 +15,7 @@ class_name Playground
 extends Node2D
 
 func _ready() -> void:
-	# load the full game scene so playground runs identically to game.tscn
+	# loads the full main game(play) scene so playground runs identically to game.tscn
 	var game_scene: PackedScene = load(Globals.Scenes[Globals.Scene.Game]["path"])
 	var game_instance: Node = game_scene.instantiate()
 	add_child(game_instance)

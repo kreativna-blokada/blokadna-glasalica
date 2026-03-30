@@ -9,9 +9,20 @@
 class_name VotingStop
 extends Node2D
 
+@export var is_stop : bool
 @export_group("Gameplay Sounds")
 @export var stop_sound : AudioStream
 @export var cool_sound : AudioStream
+@export_group("Stop Animations")
+enum StopAnim {
+	NONE,
+	TOP_LEFT,
+	TOP_RIGHT,
+	BOTTOM_LEFT,
+	BOTTOM_RIGHT
+}
+@export var walk_animation: StopAnim = StopAnim.NONE
+@export var wait_animation: StopAnim = StopAnim.NONE
 
 #private vars
 var _voting_course_group: String = Configs.VoterStops["group"]

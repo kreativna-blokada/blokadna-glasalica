@@ -173,63 +173,93 @@ rotation = -0.06981317
 
 [node name="Load" parent="VoterStops" unique_id=330516695 instance=ExtResource("12_ugfii")]
 position = Vector2(-100, 700)
+walk_animation = 4
+wait_animation = 4
 
 [node name="Entry" parent="VoterStops" unique_id=176420187 instance=ExtResource("12_ugfii")]
 position = Vector2(600, 935)
 rotation = -0.0418879
+walk_animation = 4
 
 [node name="Enter" parent="VoterStops" unique_id=627238140 instance=ExtResource("12_ugfii")]
 position = Vector2(751, 851)
+walk_animation = 2
 
 [node name="Lamp" parent="VoterStops" unique_id=293210780 instance=ExtResource("12_ugfii")]
 position = Vector2(525, 650)
+is_stop = true
 stop_sound = ExtResource("12_2sfpg")
 cool_sound = ExtResource("13_qpjah")
+walk_animation = 1
+wait_animation = 1
 
 [node name="ID" parent="VoterStops" unique_id=1486878023 instance=ExtResource("12_ugfii")]
 position = Vector2(714, 547)
+is_stop = true
 stop_sound = ExtResource("14_jvw4y")
 cool_sound = ExtResource("15_0v8w5")
+walk_animation = 2
+wait_animation = 1
 
 [node name="List" parent="VoterStops" unique_id=1004387658 instance=ExtResource("12_ugfii")]
 position = Vector2(854, 492)
+is_stop = true
 stop_sound = ExtResource("16_fupqg")
 cool_sound = ExtResource("17_a3n54")
+walk_animation = 2
+wait_animation = 1
 
 [node name="Spray" parent="VoterStops" unique_id=1854902337 instance=ExtResource("12_ugfii")]
 position = Vector2(1173, 554)
+is_stop = true
 stop_sound = ExtResource("18_oany1")
 cool_sound = ExtResource("19_hc7mv")
+walk_animation = 4
+wait_animation = 2
 
 [node name="Ballot" parent="VoterStops" unique_id=1258328132 instance=ExtResource("12_ugfii")]
 position = Vector2(1411, 661)
+is_stop = true
 stop_sound = ExtResource("20_sjbew")
 cool_sound = ExtResource("21_8sgi2")
+walk_animation = 4
+wait_animation = 2
 
 [node name="Voting" parent="VoterStops" unique_id=71325222 instance=ExtResource("12_ugfii")]
 position = Vector2(1482, 762)
+walk_animation = 4
 
 [node name="Booth" parent="VoterStops" unique_id=1315984266 instance=ExtResource("12_ugfii")]
 position = Vector2(1266, 860)
+is_stop = true
 stop_sound = ExtResource("22_tekev")
 cool_sound = ExtResource("23_njcvq")
+walk_animation = 3
+wait_animation = 1
 
 [node name="Ende" parent="VoterStops" unique_id=1577443113 instance=ExtResource("12_ugfii")]
 position = Vector2(1100, 931)
+walk_animation = 3
 
 [node name="Vote" parent="VoterStops" unique_id=93119268 instance=ExtResource("12_ugfii")]
 position = Vector2(982, 880)
+walk_animation = 1
 
 [node name="Box" parent="VoterStops" unique_id=123985902 instance=ExtResource("12_ugfii")]
 position = Vector2(976, 754)
+is_stop = true
 stop_sound = ExtResource("24_kmrnq")
 cool_sound = ExtResource("25_3uaup")
+walk_animation = 2
+wait_animation = 1
 
 [node name="Exit" parent="VoterStops" unique_id=2047232221 instance=ExtResource("12_ugfii")]
 position = Vector2(841, 900)
+walk_animation = 3
 
 [node name="Out" parent="VoterStops" unique_id=830837166 instance=ExtResource("12_ugfii")]
 position = Vector2(1533, 1242)
+walk_animation = 4
 
 [connection signal="body_entered" from="Setup/Entry/Area2D" to="." method="_on_entry_body_entered"]
 [connection signal="body_exited" from="Setup/Entry/Area2D" to="." method="_on_entry_body_exited"]

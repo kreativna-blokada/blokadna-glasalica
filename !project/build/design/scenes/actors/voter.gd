@@ -120,33 +120,28 @@ func handle_animations() -> void:
 		_state_entered = true
 
 func _find_walk_animation_name() -> void:
-	match _voting_course_pointer:
-		0, 1, 2: _walk_animation_name = "bottom-right"
-		3: _walk_animation_name = "top-right"
-		4: _walk_animation_name = "top-left"
-		5, 6: _walk_animation_name = "top-right"
-		7, 8, 9: _walk_animation_name = "bottom-right"
-		10, 11: _walk_animation_name = "bottom-left"
-		12: _walk_animation_name = "top-left"
-		13: _walk_animation_name = "top-right"
-		14: _walk_animation_name = "bottom-left"
-		15: _walk_animation_name = "bottom-right"
-		_: _walk_animation_name = "idle"
+	if _course_target is VotingStop:
+		var enum_value: VotingStop.StopAnim = _course_target.walk_animation
+		var enum_key = VotingStop.StopAnim.keys()[enum_value]
+		_walk_animation_name = enum_key.to_lower().replace("_", "-")
+		if _walk_animation_name == "none":
+			_walk_animation_name = "idle"
+	else:
+		_walk_animation_name = "idle"
 
 func _find_wait_animation_frame_coord() -> Dictionary:
-	var animation_name: String
-	match _voting_course_pointer:
-		0: animation_name = "bottom-right"
-		4, 5, 6: animation_name = "top-left"
-		7, 8: animation_name = "top-right"
-		10, 13: animation_name = "top-left"
-		_: return {}
-	var animation_setup: Dictionary = Globals.VoterIdleAnimations["Animation"]["Animations"]
-	for animation_view in animation_setup:
-		if animation_setup[animation_view]["Name"] == animation_name:
-			return animation_setup[animation_view]["Frame Coord"]
+	if not _course_target is VotingStop or _course_target.wait_animation == VotingStop.StopAnim.NONE:
+		return {}
+
+	var enum_value = _course_target.wait_animation
+	var enum_key = VotingStop.StopAnim.keys()[enum_value]
+	var wait_animation_name: String = enum_key.to_lower().replace("_", "-")
+
+	var wait_animations_setup: Dictionary = Globals.VoterIdleAnimations["Animation"]["Animations"]
+	for wait_animation_setup in wait_animations_setup:
+		if wait_animations_setup[wait_animation_setup]["Name"] == wait_animation_name:
+			return wait_animations_setup[wait_animation_setup]["Frame Coord"]
 	return {}
-#todo: cleanup
 
 func voter_movement() -> void:
 	if _course_target == null: return
