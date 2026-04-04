@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://l36qbvcwr0t3"]
+
+[ext_resource type="Texture2D" uid="uid://d1vrluatpmbst" path="res://!project/art/player2.png" id="1_tye60"]
+[ext_resource type="Texture2D" uid="uid://d0hq7kqjrqynq" path="res://!project/art/player-blue.png" id="2_tye60"]
+[ext_resource type="Texture2D" uid="uid://ch3huuf5pcug6" path="res://!project/art/player-black.png" id="2_ura76"]
+[ext_resource type="Texture2D" uid="uid://1qmibcqkntq0" path="res://!project/art/player-green.png" id="4_65gjf"]
+[ext_resource type="Texture2D" uid="uid://owht2x8da4qi" path="res://!project/art/player-indigo.png" id="5_65gjf"]
+[ext_resource type="Texture2D" uid="uid://csvtqh5axdfw8" path="res://!project/art/player-red.png" id="5_mipfj"]
+[ext_resource type="Texture2D" uid="uid://bgd50qhpugqvf" path="res://!project/art/player-magenta.png" id="6_mipfj"]
+[ext_resource type="Texture2D" uid="uid://b4ie7n2fckj2f" path="res://!project/art/player-violet.png" id="8_eslrs"]
+[ext_resource type="Texture2D" uid="uid://ge712eyufumm" path="res://!project/art/player-yellow.png" id="9_ax7bo"]
+
+[node name="Factory" type="Node" unique_id=1415317399]
+
+[node name="Player" type="Sprite2D" parent="." unique_id=322517895]
+texture = ExtResource("1_tye60")
+hframes = 39
+vframes = 5
+
+[node name="Black" type="Sprite2D" parent="." unique_id=991712522]
+texture = ExtResource("2_ura76")
+hframes = 39
+vframes = 5
+
+[node name="Blue" type="Sprite2D" parent="." unique_id=918028481]
+texture = ExtResource("2_tye60")
+hframes = 39
+vframes = 5
+
+[node name="Green" type="Sprite2D" parent="." unique_id=2140999910]
+texture = ExtResource("4_65gjf")
+hframes = 39
+vframes = 5
+
+[node name="Indigo" type="Sprite2D" parent="." unique_id=1636873525]
+texture = ExtResource("5_65gjf")
+hframes = 39
+vframes = 5
+
+[node name="Magenta" type="Sprite2D" parent="." unique_id=1505902002]
+texture = ExtResource("6_mipfj")
+hframes = 39
+vframes = 5
+
+[node name="Red" type="Sprite2D" parent="." unique_id=637742748]
+texture = ExtResource("5_mipfj")
+hframes = 39
+vframes = 5
+
+[node name="Violet" type="Sprite2D" parent="." unique_id=1641362714]
+texture = ExtResource("8_eslrs")
+hframes = 39
+vframes = 5
+
+[node name="Yellow" type="Sprite2D" parent="." unique_id=171004023]
+texture = ExtResource("9_ax7bo")
+hframes = 39
+vframes = 5

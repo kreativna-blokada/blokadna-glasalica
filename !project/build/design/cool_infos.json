@@ -1,0 +1,30 @@
+{
+    "Lamp": {
+        "title": "I'm all out of bubblegum!",
+        "content": "I have come here to chew bubblegum and kick ass... and I'm all out of bubblegum."
+    },
+    "ID": {
+        "title": "Maximus Decimus Meridius",
+        "content": "My name is Maximus Decimus Meridius, commander of the Armies of the North, General of the Felix Legions and loyal servant to the true emperor, Marcus Aurelius. Father to a murdered son, husband to a murdered wife.\nAnd I will have my vengeance, in this life or the next."
+    },
+    "List": {
+        "title": "Wookiees were magnificent",
+        "content": "When we arrived on Kashyyyk, things were just as bad as we feared. The droids had us outgunned, outmaneuvered and outmanned by a five-to-one margin.\nWhat none of us had counted on was the Wookiees. We'd all heard the stories of course, but we'd never fought next to them, never seen them rip apart a droid with their bare hands.\nThey were magnificent."
+    },
+    "Spray": {
+        "title": "Dark Side faith",
+        "content": "I find your lack of faith disturbing."
+    },
+    "Ballot": {
+        "title": "Power of the Dark Side",
+        "content": "If you only knew\nthe power of the Dark Side."
+    },
+    "Booth": {
+        "title": "I am altering the deal!",
+        "content": "I am altering the deal.\nPray I do not alter it any further."
+    },
+    "Box": {
+        "title": "Think inside the box",
+        "content": "Do or do not.\nThere is no try."
+    }
+}
