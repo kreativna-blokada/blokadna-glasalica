@@ -16,7 +16,7 @@ extends Node
 
 #onready vars
 @onready var stage: Stage = $Stage
-@onready var progress_flow: CanvasLayer = $"Progress Map"
+@onready var progress_flow: CanvasLayer = $"Progress Flow"
 
 # called when the node enters the scene tree for the first time.
 func _ready() -> void:
