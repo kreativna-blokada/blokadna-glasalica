@@ -11,8 +11,10 @@ extends CanvasLayer
 #private vars
 var _indicators: Array = []
 var _symbol_textures: Array = []
-var _voting_course: Array = []
-var _stage: Node2D = null
+
+var _stage: Stage = null
+var _current_occupancy: Array = []
+var _current_queue_count: int = 0
 
 #data containers
 const HUD_PATH: String = "res://!project/art/UI/HUD/"
@@ -34,15 +36,8 @@ var _symbol_names: Array = ["UV", "ID", "Check", "Spray", "Ballot", "Vote", "Box
 # ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
 func _ready() -> void:
-	await get_tree().process_frame
-	_init_stage()
 	####_init_symbol_textures()
 	_init_progress_indicators()
-
-func _process(_delta: float) -> void:
-	_update_indicators()
-	####_update_symbols()
-	pass
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -52,23 +47,58 @@ func _process(_delta: float) -> void:
 #██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
 #╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
-func _init_stage() -> void:
-	_stage = get_parent().get_node("Stage")
-	if _stage:
-		_voting_course = _stage.get_node("Scenery/VoterStops").get_children()
+func init(stage: Stage) -> void:
+	_stage = stage
+	_stage.queue_count_updated.connect(_on_queue_count_updated)
+	_stage.stops_occupancy_updated.connect(_on_stops_occupancy_updated)
 
-func _init_symbol_textures() -> void:
-	var symbol_children: Array = _hbox_symbols.get_children()
-	for i in _symbol_names.size():
-		var textures: Dictionary = {
-			"green": load(HUD_PATH + _symbol_names[i] + " - green.png"),
-			"yellow": load(HUD_PATH + _symbol_names[i] + " - yellow.png"),
-			"red": load(HUD_PATH + _symbol_names[i] + " - red.png"),
-		}
-		_symbol_textures.append({
-			"node": symbol_children[_symbol_indices[i]],
-			"textures": textures,
-		})
+	_current_occupancy = _stage.voting_course.map(func(stop): return not stop.is_free())
+	_current_queue_count = _stage._active_voters.size()
+	_update_ui()
+
+func _on_stops_occupancy_updated(stop_occupancy: Array) -> void:
+	_current_occupancy = stop_occupancy
+	_update_ui()
+
+func _on_queue_count_updated(count: int) -> void:
+	_current_queue_count = count
+	_update_ui()
+
+func _update_ui() -> void:
+	for i in _waiting_stops.size():
+		var stop_index: int = _waiting_stops[i]
+		var occupied: bool = false
+		if stop_index < _current_occupancy.size():
+			occupied = _current_occupancy[stop_index]
+		_indicators[i].visible = occupied
+
+	_update_symbols()
+
+func _update_symbols() -> void:
+	for i in _waiting_stops.size():
+		var behind_count: int = _count_consecutive_behind(i)
+		var color: String = "green"
+		if behind_count >= 3:
+			color = "red"
+		elif behind_count >= 2:
+			color = "yellow"
+
+		if i < _symbol_textures.size():
+			_symbol_textures[i]["node"].texture = _symbol_textures[i]["textures"][color]
+
+func _count_consecutive_behind(index: int) -> int:
+	var count: int = 0
+	var i: int = index - 1
+	while i >= 0:
+		var stop_index: int = _waiting_stops[i]
+		if stop_index < _current_occupancy.size() and _current_occupancy[stop_index]:
+			count += 1
+			i -= 1
+		else:
+			break
+	if index == 0 or (count > 0 and i < 0):
+		count += _current_queue_count
+	return count
 
 func _init_progress_indicators() -> void:
 	var progress_children: Array = _hbox_progress.get_children()
@@ -82,35 +112,15 @@ func _init_progress_indicators() -> void:
 		slot.add_child(indicator)
 		_indicators.append(indicator)
 
-func _update_indicators() -> void:
-	for i in _waiting_stops.size():
-		var stop_index: int = _waiting_stops[i]
-		var occupied: bool = false
-		if stop_index < _voting_course.size():
-			occupied = not _voting_course[stop_index].is_free()
-		_indicators[i].visible = occupied
-
-func _update_symbols() -> void:
-	for i in _waiting_stops.size():
-		var behind_count: int = _count_consecutive_behind(i)
-		var color: String = "green"
-		if behind_count >= 3:
-			color = "red"
-		elif behind_count >= 2:
-			color = "yellow"
-		####_symbol_textures[i]["node"].texture = _symbol_textures[i]["textures"][color]
-
-func _count_consecutive_behind(index: int) -> int:
-	var count: int = 0
-	var i: int = index - 1
-	while i >= 0:
-		var stop_index: int = _waiting_stops[i]
-		if stop_index < _voting_course.size() and not _voting_course[stop_index].is_free():
-			count += 1
-			i -= 1
-		else:
-			break
-	if index == 0 or (count > 0 and i < 0):
-		if _stage:
-			count += _stage._active_voters.size()
-	return count
+func _init_symbol_textures() -> void:
+	var symbol_children: Array = _hbox_symbols.get_children()
+	for i in _symbol_names.size():
+		var textures: Dictionary = {
+			"green": load(HUD_PATH + _symbol_names[i] + " - green.png"),
+			"yellow": load(HUD_PATH + _symbol_names[i] + " - yellow.png"),
+			"red": load(HUD_PATH + _symbol_names[i] + " - red.png"),
+		}
+		_symbol_textures.append({
+			"node": symbol_children[_symbol_indices[i]],
+			"textures": textures,
+		})

@@ -14,9 +14,15 @@ extends Node
 @export var stop_sounds: bool = true
 @export var info_dialog: bool = true
 
+#onready vars
+@onready var stage: Stage = $Stage
+@onready var progress_flow: CanvasLayer = $"Progress Map"
+
 # called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # replace with function body.
+	# dependency injection
+	if progress_flow and progress_flow.has_method("init"):
+		progress_flow.init(stage)
 
 # called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
