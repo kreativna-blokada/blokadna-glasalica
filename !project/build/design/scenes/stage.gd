@@ -220,11 +220,11 @@ func _select_next_voter() -> void:
 	if selectable.is_empty():
 		return
 	if _selected_voter and is_instance_valid(_selected_voter):
-		_selected_voter.character_texture.material.set_shader_parameter("enabled", false)
+		_selected_voter.character_texture.material.set_shader_parameter("enabled_outline", false)
 	var current_index: int = selectable.find(_selected_voter)
 	var next_index: int = (current_index + 1) % selectable.size()
 	_selected_voter = selectable[next_index]
-	_selected_voter.character_texture.material.set_shader_parameter("enabled", true)
+	_selected_voter.character_texture.material.set_shader_parameter("enabled_outline", true)
 
 func _get_selected_voter() -> Voter:
 	if _selected_voter and is_instance_valid(_selected_voter):
