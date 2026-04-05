@@ -9,6 +9,9 @@
 class_name VotingStop
 extends Node2D
 
+#signals
+signal occupancy_updated
+
 @export var is_stop : bool
 @export_group("Gameplay Sounds")
 @export var stop_sound : AudioStream
@@ -57,6 +60,8 @@ func is_free() -> bool:
 
 func free_up() -> void:
 	occupant = null
+	occupancy_updated.emit()
 
 func occupy(character: Character) -> void:
 	occupant = character
+	occupancy_updated.emit()

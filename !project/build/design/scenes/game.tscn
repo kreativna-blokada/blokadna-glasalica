@@ -10,12 +10,12 @@
 
 [node name="Game" type="Node" unique_id=1771661075]
 script = ExtResource("1_egxfs")
-cool_game = true
+stop_sounds = false
 
 [node name="Info Dialog" parent="." unique_id=642568901 instance=ExtResource("1_nrnfg")]
 visible = false
 
-[node name="Progress Map" parent="." unique_id=598334440 instance=ExtResource("1_icv6h")]
+[node name="Progress Flow" parent="." unique_id=598334440 instance=ExtResource("1_icv6h")]
 
 [node name="Stage" type="Node2D" parent="." unique_id=1877766357]
 script = ExtResource("1_whd4d")
@@ -33,4 +33,4 @@ one_shot = true
 
 [connection signal="timeout" from="Stage/Timer" to="Stage" method="_on_timer_timeout"]
 
-[editable path="Progress Map"]
+[editable path="Progress Flow"]
