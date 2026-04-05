@@ -40,11 +40,12 @@ func _ready() -> void:
 	#process_mode = Node.PROCESS_MODE_ALWAYS
 	_load_info_texts()
 
-#consumes input, closes dialog on "start" press
+#consumes input, closes dialog
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible or _is_closing:
 		return
-	if event.is_action_pressed("start"):
+	#closes dialog on "start", "right" or "wrong" press
+	if event.is_action_pressed("start") or event.is_action_pressed("right") or event.is_action_pressed("wrong"):
 		_close_dialog()
 		#input consumed, no tree propagation
 		get_viewport().set_input_as_handled()
