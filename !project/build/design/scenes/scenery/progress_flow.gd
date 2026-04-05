@@ -37,7 +37,7 @@ var _symbol_names: Array = ["UV", "ID", "Check", "Spray", "Ballot", "Vote", "Box
 
 func _ready() -> void:
 	####_init_symbol_textures()
-	_init_progress_indicators()
+	_init_outline_materials()
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -70,7 +70,7 @@ func _update_ui() -> void:
 		var occupied: bool = false
 		if stop_index < _current_occupancy.size():
 			occupied = _current_occupancy[stop_index]
-		_indicators[i].visible = occupied
+		_indicators[i].material.set_shader_parameter("enabled_outline", occupied)
 
 	_update_symbols()
 
@@ -100,17 +100,13 @@ func _count_consecutive_behind(index: int) -> int:
 		count += _current_queue_count
 	return count
 
-func _init_progress_indicators() -> void:
-	var progress_children: Array = _hbox_progress.get_children()
-	for i in _progress_indices.size():
-		var slot: Control = progress_children[_progress_indices[i]]
-		var indicator: ColorRect = ColorRect.new()
-		indicator.color = Color.RED
-		indicator.custom_minimum_size = Vector2(180, 20)
-		indicator.size = Vector2(180, 20)
-		indicator.visible = false
-		slot.add_child(indicator)
-		_indicators.append(indicator)
+func _init_outline_materials() -> void:
+	var symbol_children: Array = _hbox_symbols.get_children()
+	for i in _symbol_indices.size():
+		var symbol: TextureRect = symbol_children[_symbol_indices[i]]
+		symbol.material = symbol.material.duplicate()
+		symbol.material.set_shader_parameter("enabled_outline", false)
+		_indicators.append(symbol)
 
 func _init_symbol_textures() -> void:
 	var symbol_children: Array = _hbox_symbols.get_children()

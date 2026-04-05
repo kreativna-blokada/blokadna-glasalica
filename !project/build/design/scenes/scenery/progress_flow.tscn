@@ -2,12 +2,19 @@
 
 [ext_resource type="Script" uid="uid://cyijcbwitwsdg" path="res://!project/build/design/scenes/scenery/progress_flow.gd" id="1_6p1ld"]
 [ext_resource type="Texture2D" uid="uid://cuhe1tglra5ip" path="res://!project/art/UI/Buttons/stop-lamp.png" id="2_aktpo"]
+[ext_resource type="Shader" uid="uid://boii51q6tykpk" path="res://!project/art/shaders/outline.gdshader" id="2_qh0lk"]
 [ext_resource type="Texture2D" uid="uid://dlfkolkueeemx" path="res://!project/art/UI/Buttons/stop-id.png" id="3_qh0lk"]
 [ext_resource type="Texture2D" uid="uid://cxxrl7p6bgrmk" path="res://!project/art/UI/Buttons/stop-list.png" id="4_xcjts"]
 [ext_resource type="Texture2D" uid="uid://dxyehxk1wwiea" path="res://!project/art/UI/Buttons/stop-spray.png" id="5_2egl5"]
 [ext_resource type="Texture2D" uid="uid://cnn7b7nl8olpg" path="res://!project/art/UI/Buttons/stop-ballot.png" id="6_5g41r"]
 [ext_resource type="Texture2D" uid="uid://bxqeglmbirscv" path="res://!project/art/UI/Buttons/stop-booth.png" id="7_lsbry"]
 [ext_resource type="Texture2D" uid="uid://pcilj6pcgqi8" path="res://!project/art/UI/Buttons/stop-box.png" id="8_bfny7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aktpo"]
+shader = ExtResource("2_qh0lk")
+shader_parameter/outline_color = Color(0.33333325, 1, 0, 1)
+shader_parameter/outline_width = 120.0
+shader_parameter/enabled_outline = false
 
 [node name="Progress Flow" type="CanvasLayer" unique_id=598334440]
 script = ExtResource("1_6p1ld")
@@ -27,6 +34,7 @@ theme_override_constants/separation = 60
 alignment = 1
 
 [node name="Scan" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=1797415257]
+material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
 texture = ExtResource("2_aktpo")
@@ -34,6 +42,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="ID" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=1467498483]
+material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
 texture = ExtResource("3_qh0lk")
@@ -41,6 +50,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Check" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=28190968]
+material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
 texture = ExtResource("4_xcjts")
@@ -48,6 +58,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Spray" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=2032902666]
+material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
 texture = ExtResource("5_2egl5")
@@ -55,6 +66,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Ballot" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=666927488]
+material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
 texture = ExtResource("6_5g41r")
@@ -62,6 +74,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Vote" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=155692759]
+material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
 texture = ExtResource("7_lsbry")
@@ -69,6 +82,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Box" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxSymbols" unique_id=980889916]
+material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
 texture = ExtResource("8_bfny7")
