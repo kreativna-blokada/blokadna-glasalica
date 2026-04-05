@@ -19,12 +19,10 @@ var _current_queue_count: int = 0
 #data containers
 const HUD_PATH: String = "res://!project/art/UI/HUD/"
 var _waiting_stops: Array = [3, 4, 5, 6, 7, 9, 12]
-var _progress_indices: Array = [0, 1, 2, 3, 4, 5, 6]
 var _symbol_indices: Array = [0, 1, 2, 3, 4, 5, 6]
 var _symbol_names: Array = ["UV", "ID", "Check", "Spray", "Ballot", "Vote", "Box"]
 
 #onready vars
-@onready var _hbox_progress: HBoxContainer = $CenterContainer/VBoxContainer/HBoxProgress
 @onready var _hbox_symbols: HBoxContainer = $CenterContainer/VBoxContainer/HBoxSymbols
 
 #CALLBACKS
@@ -77,14 +75,13 @@ func _update_ui() -> void:
 func _update_symbols() -> void:
 	for i in _waiting_stops.size():
 		var behind_count: int = _count_consecutive_behind(i)
-		var color: String = "green"
-		if behind_count >= 3:
-			color = "red"
-		elif behind_count >= 2:
-			color = "yellow"
-
-		if i < _symbol_textures.size():
-			_symbol_textures[i]["node"].texture = _symbol_textures[i]["textures"][color]
+		if i < _indicators.size():
+			if behind_count >= 3:
+				_indicators[i].material.set_shader_parameter("modulate_color", Color.RED)
+			elif behind_count >= 2:
+				_indicators[i].material.set_shader_parameter("modulate_color", Color.YELLOW)
+			else:
+				_indicators[i].material.set_shader_parameter("modulate_color", Color.WHITE)
 
 func _count_consecutive_behind(index: int) -> int:
 	var count: int = 0
