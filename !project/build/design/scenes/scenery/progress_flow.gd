@@ -12,11 +12,10 @@ extends CanvasLayer
 var _indicators: Array = []
 
 var _stage: Stage = null
+var _waiting_stops: Array = []
+
 var _queued_voters: int = 0
 var _stops_occupancy: Array = []
-
-#data containers
-var _waiting_stops: Array = []
 
 #onready vars
 @onready var _progress_stops: HBoxContainer = $CenterContainer/VBoxContainer/HBoxContainer
@@ -54,32 +53,38 @@ func _init_indicators() -> void:
 #inits setups, called from game
 func init(stage: Stage) -> void:
 	_stage = stage
-	_stage.stops_idenfitied.connect(_on_waiting_stops_idenfitied)
-
 	_stage.queue_count_updated.connect(_on_queue_count_updated)
 	_stage.stops_occupancy_updated.connect(_on_stops_occupancy_updated)
 
-	# read waiting stops synchronously (stage._ready() already emitted the signal before we connected)
+	_set_waiting_stops()
+	_set_queued_voters()
+	_set_stops_occupancy()
+
+	_highlight_indicators()
+
+#identifies waiting stops list
+func _set_waiting_stops() -> void:
 	_waiting_stops = []
 	for i in _stage.voting_course.size():
 		if _stage.voting_course[i].get("is_stop"):
 			_waiting_stops.append(i)
 
-	_stops_occupancy = _stage.voting_course.map(func(stop): return not stop.is_free())
+#counts queued (waiting) voters
+func _set_queued_voters() -> void:
 	_queued_voters = _stage.queued_voters.size()
-	_highlight_indicators()
 
-func _on_waiting_stops_idenfitied(indices: Array) -> void:
-	_waiting_stops = indices
+#identifies occupied stops (list)
+func _set_stops_occupancy() -> void:
+	_stops_occupancy = []
+	for stop in _stage.voting_course:
+		_stops_occupancy.append(not stop.is_free())
+
+func _on_queue_count_updated(count: int) -> void:
+	_queued_voters = count
 	_highlight_indicators()
 
 func _on_stops_occupancy_updated(occupancy: Array) -> void:
 	_stops_occupancy = occupancy
-	_highlight_indicators()
-
-# Handle queue count update signal
-func _on_queue_count_updated(count: int) -> void:
-	_queued_voters = count
 	_highlight_indicators()
 
 #outline indicators occupied by voters

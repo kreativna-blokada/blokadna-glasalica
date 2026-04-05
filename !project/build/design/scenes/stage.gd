@@ -10,7 +10,6 @@ class_name Stage
 extends Node2D
 
 #signals
-signal stops_idenfitied(indices: Array)
 signal queue_count_updated(count: int)
 signal stops_occupancy_updated(stop_occupancy: Array)
 
@@ -45,8 +44,6 @@ func _ready() -> void:
 	_init_vars()
 	_init_nodes()
 	_info_dialog.dialog_closed.connect(_on_info_dialog_closed)
-
-	_broadcast_waiting_stops()
 
 	_get_voter( 0 )
 
@@ -113,14 +110,6 @@ func _init_stops_occupancy_reactions() -> void:
 #initiallizes gameplay
 func _init_game() -> void:
 	pass
-
-#identifies and broadcastswaiting stops
-func _broadcast_waiting_stops() -> void:
-	var stop_indices: Array = []
-	for i in voting_course.size():
-		if voting_course[i].get("is_stop"):
-			stop_indices.append(i)
-	stops_idenfitied.emit(stop_indices)
 
 func get_total_stops() -> int:
 	return voting_course.size()
