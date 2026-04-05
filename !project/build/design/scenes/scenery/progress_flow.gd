@@ -10,20 +10,16 @@ extends CanvasLayer
 
 #private vars
 var _indicators: Array = []
-var _symbol_textures: Array = []
-var _stage: Stage = null
 
-var _current_occupancy: Array = []
-var _current_queue_count: int = 0
+var _stage: Stage = null
+var _queued_voters: int = 0
+var _stops_occupancy: Array = []
 
 #data containers
-const HUD_PATH: String = "res://!project/art/UI/HUD/"
-var _waiting_stops: Array = [3, 4, 5, 6, 7, 9, 12]
-var _symbol_indices: Array = [0, 1, 2, 3, 4, 5, 6]
-var _symbol_names: Array = ["UV", "ID", "Check", "Spray", "Ballot", "Vote", "Box"]
+var _waiting_stops: Array = []
 
 #onready vars
-@onready var _hbox_symbols: HBoxContainer = $CenterContainer/VBoxContainer/HBoxSymbols
+@onready var _progress_stops: HBoxContainer = $CenterContainer/VBoxContainer/HBoxContainer
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -34,8 +30,7 @@ var _symbol_names: Array = ["UV", "ID", "Check", "Spray", "Ballot", "Vote", "Box
 # ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
 func _ready() -> void:
-	####_init_symbol_textures()
-	_init_outline_materials()
+	_init_indicators()
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -45,75 +40,83 @@ func _ready() -> void:
 #██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
 #╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
+#inits indicators outline
+func _init_indicators() -> void:
+	for indicator in _progress_stops.get_children():
+		var rect: TextureRect = indicator as TextureRect
+		if rect == null:
+			continue
+		rect.material = rect.material.duplicate()
+		rect.material.set_shader_parameter("enabled_outline", false)
+
+		_indicators.append(rect)
+
+#inits setups, called from game
 func init(stage: Stage) -> void:
 	_stage = stage
+	_stage.stops_idenfitied.connect(_on_waiting_stops_idenfitied)
+
 	_stage.queue_count_updated.connect(_on_queue_count_updated)
 	_stage.stops_occupancy_updated.connect(_on_stops_occupancy_updated)
 
-	_current_occupancy = _stage.voting_course.map(func(stop): return not stop.is_free())
-	_current_queue_count = _stage._active_voters.size()
-	_update_ui()
+	# read waiting stops synchronously (stage._ready() already emitted the signal before we connected)
+	_waiting_stops = []
+	for i in _stage.voting_course.size():
+		if _stage.voting_course[i].get("is_stop"):
+			_waiting_stops.append(i)
 
-func _on_stops_occupancy_updated(stop_occupancy: Array) -> void:
-	_current_occupancy = stop_occupancy
-	_update_ui()
+	_stops_occupancy = _stage.voting_course.map(func(stop): return not stop.is_free())
+	_queued_voters = _stage.queued_voters.size()
+	_highlight_indicators()
 
+func _on_waiting_stops_idenfitied(indices: Array) -> void:
+	_waiting_stops = indices
+	_highlight_indicators()
+
+func _on_stops_occupancy_updated(occupancy: Array) -> void:
+	_stops_occupancy = occupancy
+	_highlight_indicators()
+
+# Handle queue count update signal
 func _on_queue_count_updated(count: int) -> void:
-	_current_queue_count = count
-	_update_ui()
+	_queued_voters = count
+	_highlight_indicators()
 
-func _update_ui() -> void:
-	for i in _waiting_stops.size():
-		var stop_index: int = _waiting_stops[i]
-		var occupied: bool = false
-		if stop_index < _current_occupancy.size():
-			occupied = _current_occupancy[stop_index]
-		_indicators[i].material.set_shader_parameter("enabled_outline", occupied)
+#outline indicators occupied by voters
+func _highlight_indicators() -> void:
+	for idx in _waiting_stops.size():
+		var stop_index: int = _waiting_stops[idx]
+		var stop_occupied: bool = false
+		if stop_index < _stops_occupancy.size():
+			stop_occupied = _stops_occupancy[stop_index]
 
-	_update_symbols()
+		_indicators[idx].material.set_shader_parameter("enabled_outline", stop_occupied)
 
-func _update_symbols() -> void:
-	for i in _waiting_stops.size():
-		var behind_count: int = _count_consecutive_behind(i)
-		if i < _indicators.size():
-			if behind_count >= 3:
-				_indicators[i].material.set_shader_parameter("modulate_color", Color.RED)
-			elif behind_count >= 2:
-				_indicators[i].material.set_shader_parameter("modulate_color", Color.YELLOW)
+	_highlight_bottlenecks()
+
+#modulate indicators color based on voters
+func _highlight_bottlenecks() -> void:
+	for idx in _waiting_stops.size():
+		var voters_waiting: int = _count_voters_waiting(idx)
+		if idx < _indicators.size():
+			if voters_waiting >= 3:
+				_indicators[idx].material.set_shader_parameter("modulate_color", Color.RED)
+			elif voters_waiting >= 2:
+				_indicators[idx].material.set_shader_parameter("modulate_color", Color.YELLOW)
 			else:
-				_indicators[i].material.set_shader_parameter("modulate_color", Color.WHITE)
+				_indicators[idx].material.set_shader_parameter("modulate_color", Color.WHITE)
 
-func _count_consecutive_behind(index: int) -> int:
+#count voters waiting behind a given stop (index)
+func _count_voters_waiting(index: int) -> int:
 	var count: int = 0
-	var i: int = index - 1
-	while i >= 0:
-		var stop_index: int = _waiting_stops[i]
-		if stop_index < _current_occupancy.size() and _current_occupancy[stop_index]:
+	var idx: int = index - 1
+	while idx >= 0:
+		var stop_index: int = _waiting_stops[idx]
+		if stop_index < _stops_occupancy.size() and _stops_occupancy[stop_index]:
 			count += 1
-			i -= 1
+			idx -= 1
 		else:
 			break
-	if index == 0 or (count > 0 and i < 0):
-		count += _current_queue_count
+	if index == 0 or (count > 0 and idx < 0):
+		count += _queued_voters
 	return count
-
-func _init_outline_materials() -> void:
-	var symbol_children: Array = _hbox_symbols.get_children()
-	for i in _symbol_indices.size():
-		var symbol: TextureRect = symbol_children[_symbol_indices[i]]
-		symbol.material = symbol.material.duplicate()
-		symbol.material.set_shader_parameter("enabled_outline", false)
-		_indicators.append(symbol)
-
-func _init_symbol_textures() -> void:
-	var symbol_children: Array = _hbox_symbols.get_children()
-	for i in _symbol_names.size():
-		var textures: Dictionary = {
-			"green": load(HUD_PATH + _symbol_names[i] + " - green.png"),
-			"yellow": load(HUD_PATH + _symbol_names[i] + " - yellow.png"),
-			"red": load(HUD_PATH + _symbol_names[i] + " - red.png"),
-		}
-		_symbol_textures.append({
-			"node": symbol_children[_symbol_indices[i]],
-			"textures": textures,
-		})

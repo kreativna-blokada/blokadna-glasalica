@@ -28,8 +28,8 @@ enum StopAnim {
 @export var wait_animation: StopAnim = StopAnim.NONE
 
 #private vars
-var _voting_course_group: String = Configs.VoterStops["group"]
 var _voting_course_stops: Array = Configs.VotingCourse
+var _voting_course_group: String = Configs.VoterStops["group"]
 
 #broadcast variables
 var occupant : Character = null

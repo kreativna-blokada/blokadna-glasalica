@@ -10,11 +10,12 @@ class_name Stage
 extends Node2D
 
 #signals
+signal stops_idenfitied(indices: Array)
 signal queue_count_updated(count: int)
 signal stops_occupancy_updated(stop_occupancy: Array)
 
 #data containers
-var _active_voters: Array = []
+var queued_voters: Array = []
 var _max_voter_queue: int = 8
 var _selected_voter: Voter = null
 
@@ -45,6 +46,8 @@ func _ready() -> void:
 	_init_nodes()
 	_info_dialog.dialog_closed.connect(_on_info_dialog_closed)
 
+	_broadcast_waiting_stops()
+
 	_get_voter( 0 )
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -58,7 +61,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if selected:
 			if selected.is_stopping:
 				selected.continue_course()
-			elif selected.is_queueing and _active_voters.has(selected):
+			elif selected.is_queueing and queued_voters.has(selected):
 				_release_selected_voter(selected)
 	if event.is_action_pressed("select"):
 		_select_next_voter()
@@ -110,6 +113,14 @@ func _init_stops_occupancy_reactions() -> void:
 #initiallizes gameplay
 func _init_game() -> void:
 	pass
+
+#identifies and broadcastswaiting stops
+func _broadcast_waiting_stops() -> void:
+	var stop_indices: Array = []
+	for i in voting_course.size():
+		if voting_course[i].get("is_stop"):
+			stop_indices.append(i)
+	stops_idenfitied.emit(stop_indices)
 
 func get_total_stops() -> int:
 	return voting_course.size()
@@ -173,8 +184,8 @@ func _get_voter(_index: int) -> Node:
 		var walking_course: Array = get_voting_course(voter)
 		voter.set_walking_course(walking_course)
 		voter.voter_queued.connect(func():
-			_active_voters.append(voter)
-			queue_count_updated.emit(_active_voters.size())
+			queued_voters.append(voter)
+			queue_count_updated.emit(queued_voters.size())
 		)
 		voter.voter_stopped.connect(_on_voter_stopped)
 
@@ -235,8 +246,8 @@ func _release_selected_voter(voter: Voter) -> void:
 	var freed_spot: Node2D = voter.starting_spot
 	if not voter.release_from_queue():
 		return
-	_active_voters.erase(voter)
-	queue_count_updated.emit(_active_voters.size())
+	queued_voters.erase(voter)
+	queue_count_updated.emit(queued_voters.size())
 	if freed_spot and freed_spot.has_method("free_up"):
 		freed_spot.free_up()
 	await get_tree().create_timer(0.5).timeout
@@ -244,7 +255,7 @@ func _release_selected_voter(voter: Voter) -> void:
 #todo: cleanup
 
 func _update_voters_queue() -> void:
-	var active_voters_sorting: Array = _active_voters.duplicate()
+	var active_voters_sorting: Array = queued_voters.duplicate()
 	active_voters_sorting.sort_custom(func(first_voter: Voter, second_voter: Voter):
 		return queue_spots.find(first_voter.starting_spot) < queue_spots.find(second_voter.starting_spot)
 	)
@@ -281,7 +292,7 @@ func _on_info_dialog_closed() -> void:
 #spawning voters signal handler
 func _on_timer_timeout() -> void:
 	#_increase_spawn_rate()
-	if _has_free_vote_spot() and _active_voters.size() < _max_voter_queue:
+	if _has_free_vote_spot() and queued_voters.size() < _max_voter_queue:
 		_spawn_voters()
 
 	_timer.start()       # Restart the X second timer
