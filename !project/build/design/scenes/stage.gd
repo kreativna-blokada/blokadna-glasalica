@@ -256,7 +256,7 @@ func _update_voters_queue() -> void:
 			if spot_ahead.is_free():
 				voter_init_spot.free_up()
 				spot_ahead.occupy(voter)
-				voter.move_to_queue_spot(spot_ahead)
+				voter.assign_queue_spot(spot_ahead)
 #todo: cleanup
 
 #SIGNALS
