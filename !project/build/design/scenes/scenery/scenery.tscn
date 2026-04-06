@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cdx6n220g3udv" path="res://!project/art/background.png" id="1_hcqac"]
 [ext_resource type="Texture2D" uid="uid://dtq2mbiupcaix" path="res://!project/art/room.png" id="1_room"]
 [ext_resource type="Texture2D" uid="uid://bnbwm40jaltgt" path="res://!project/art/plant.png" id="2_plant"]
+[ext_resource type="AudioStream" uid="uid://cns2gdgtdo0rb" path="res://!project/audio/freesound_community-people-talking-20327.mp3" id="2_qpjah"]
 [ext_resource type="Texture2D" uid="uid://cf55eeua2caey" path="res://!project/art/voting_table.png" id="3_vtable"]
 [ext_resource type="Texture2D" uid="uid://dv8afp8brclto" path="res://!project/art/door.png" id="4_door"]
 [ext_resource type="Texture2D" uid="uid://d2qginyfevwft" path="res://!project/art/door-right.png" id="5_doorr"]
@@ -31,6 +32,10 @@ height = 60.0
 
 [node name="Scenery" type="Node2D" unique_id=2093316346]
 script = ExtResource("13_scnry")
+loop_sound = ExtResource("2_qpjah")
+
+[node name="Ambiente" type="AudioStreamPlayer" parent="." unique_id=2093316347]
+autoplay = true
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1072840265]
 z_index = -3
