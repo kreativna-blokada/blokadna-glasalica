@@ -37,8 +37,6 @@ var is_stopping: bool = false
 @onready var vote_stop_sound: AudioStreamPlayer = $AudioStreamPlayer
 @onready var footstep_collider: CollisionShape2D = $CollisionShape2D
 
-@onready var hud_sprites: Array = $HUD.get_children()
-
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
 #██╔════╝██╔══██╗██║     ██║     ██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝
@@ -245,7 +243,6 @@ func _on_stop_reached() -> void:
 	_wait_frame_coord = _find_wait_animation_frame_coord()
 	if get_tree().current_scene.stop_sounds:
 		play_stop_sound()
-	update_hud_frames()
 
 	if _voting_course_pointer in Configs.VotingCourse:
 		is_stopping = true
@@ -365,17 +362,6 @@ func _get_stop_sound(index: int) -> AudioStream:
 	if stop_node and (stop_node.stop_sound or stop_node.cool_sound):
 		return stop_node.stop_sound if not get_tree().current_scene.cool_game else stop_node.cool_sound
 	return null
-
-func update_hud_frames() -> void:
-	if hud_sprites.size() < 6:
-		return
-	match _voting_course_pointer:
-		1: hud_sprites[0].frame = 35
-		2: hud_sprites[1].frame = 35
-		3: hud_sprites[2].frame = 35
-		4: hud_sprites[3].frame = 35
-		5: hud_sprites[4].frame = 35
-		6: hud_sprites[5].frame = 35
 
 func set_heading() -> void:
 	pass
