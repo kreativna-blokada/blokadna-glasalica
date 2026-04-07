@@ -38,8 +38,6 @@ var is_stopping: bool = false
 @onready var footstep_collider: CollisionShape2D = $CollisionShape2D
 
 @onready var hud_sprites: Array = $HUD.get_children()
-@onready var status_label: Label = $Dialog/Label
-@onready var dialog_sprite: Sprite2D = $Dialog
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -378,14 +376,6 @@ func update_hud_frames() -> void:
 		4: hud_sprites[3].frame = 35
 		5: hud_sprites[4].frame = 35
 		6: hud_sprites[5].frame = 35
-
-func setup_dialog(txt: String, img_path: String, should_flip: bool, label_pos: Vector2, wait_anim: String) -> void:
-	status_label.text = txt
-	status_label.position = label_pos
-	dialog_sprite.flip_h = should_flip
-
-	if FileAccess.file_exists(img_path):
-		dialog_sprite.texture = load(img_path)
 
 func set_heading() -> void:
 	pass
