@@ -16,6 +16,7 @@ signal voter_stopped(vote_stop_name: String)
 #private vars
 var _cached_texture: Texture2D = null
 var _walk_animation_name: String = "idle"
+var _wait_frame_coord: Dictionary = {}
 var _voting_course_pointer: int = 0
 var _course_target: Node2D = null
 var _state_entered: bool = false
@@ -24,12 +25,10 @@ var _is_shuffling: bool = false
 var _feet_offset_enhancer: int = 2
 var _stop_reach_threshold: float = 5.0
 
-var _wait_frame_coord: Dictionary = {}
-
 #broadcast variables
 var voter_factory_index: int = -1
 var voting_course: Array = []
-var starting_spot: Node2D = null
+var starting_spot: VotingStop = null
 var is_queueing: bool = false
 var is_stopping: bool = false
 
@@ -212,7 +211,7 @@ func set_walking_course(stops: Array) -> void:
 
 #loads next stop or handles completion
 func _update_course_target() -> void:
-	var next_stop: Node2D = null
+	var next_stop: VotingStop = null
 	if _voting_course_pointer < voting_course.size():
 		next_stop = _get_vote_stop(_voting_course_pointer)
 
@@ -246,7 +245,7 @@ func _on_stop_reached() -> void:
 
 	if _voting_course_pointer in Configs.VotingCourse:
 		is_stopping = true
-		var stop_node: Node2D = _get_vote_stop(_voting_course_pointer)
+		var stop_node: VotingStop = _get_vote_stop(_voting_course_pointer)
 		if stop_node:
 			voter_stopped.emit(stop_node.name)
 	else:
@@ -259,7 +258,7 @@ func _on_stop_reached() -> void:
 func release_from_queue() -> bool:
 	if not _is_waiting_stop_free(4):
 		return false
-	var stop: Node2D = _get_vote_stop(4)
+	var stop: VotingStop = _get_vote_stop(4)
 	if stop and stop.has_method("occupy"):
 		stop.occupy(self)
 	is_queueing = false
@@ -276,7 +275,7 @@ func continue_course() -> bool:
 	if next_waiting != -1 and not _is_waiting_stop_free(next_waiting):
 		return false
 	if next_waiting != -1:
-		var stop: Node2D = _get_vote_stop(next_waiting)
+		var stop: VotingStop = _get_vote_stop(next_waiting)
 		if stop and stop.has_method("occupy"):
 			stop.occupy(self)
 	_free_current_stop()
@@ -287,7 +286,7 @@ func continue_course() -> bool:
 #todo: cleanup
 
 #retrieves voting stop by index (pointer)
-func _get_vote_stop(index: int) -> Node2D:
+func _get_vote_stop(index: int) -> VotingStop:
 	if index >= 0 and index < voting_course.size():
 		return voting_course[index]
 	return null
@@ -302,7 +301,7 @@ func _find_next_vote_stop() -> int:
 func _is_waiting_stop_free(index: int) -> bool:
 	if index >= voting_course.size():
 		return true
-	var stop: Node2D = _get_vote_stop(index)
+	var stop: VotingStop = _get_vote_stop(index)
 	if stop == null:
 		return true
 	if stop.has_method("is_free"):
@@ -314,7 +313,7 @@ func _is_next_stop_free() -> bool:
 	var next_index: int = _voting_course_pointer + 1
 	if next_index >= voting_course.size():
 		return true
-	var next_stop: Node2D = _get_vote_stop(next_index)
+	var next_stop: VotingStop = _get_vote_stop(next_index)
 	if next_stop == null:
 		return true
 	if next_stop.has_method("is_free"):
@@ -322,17 +321,15 @@ func _is_next_stop_free() -> bool:
 	return true
 #todo: cleanup
 
-func _occupy_current_stop() -> void:
-	var stop: Node2D = _get_vote_stop(_voting_course_pointer)
-	if stop and stop.has_method("occupy"):
-		stop.occupy(self)
-#todo: cleanup
-
 func _free_current_stop() -> void:
-	var stop: Node2D = _get_vote_stop(_voting_course_pointer)
+	var stop: VotingStop = _get_vote_stop(_voting_course_pointer)
 	if stop and stop.has_method("free_up"):
 		stop.free_up()
-#todo: cleanup
+
+func _occupy_current_stop() -> void:
+	var stop: VotingStop = _get_vote_stop(_voting_course_pointer)
+	if stop and stop.has_method("occupy"):
+		stop.occupy(self)
 
 #assigns a queue target and resets state for shuffling
 func assign_queue_spot(target_spot: Node2D) -> void:
@@ -346,19 +343,16 @@ func assign_queue_spot(target_spot: Node2D) -> void:
 
 #plays voting stop sound
 func play_stop_sound() -> void:
-	var sound_stream: AudioStream = _get_stop_sound(_voting_course_pointer)
+	var stop_node: VotingStop = _get_vote_stop(_voting_course_pointer)
+	var sound_stream: AudioStream = _get_stop_sound(stop_node)
 
 	if sound_stream:
-		vote_stop_sound.volume_db = 16.0
-		#todo: delete sound volume update
-		if _voting_course_pointer == 7 or _voting_course_pointer == 13:
-			vote_stop_sound.volume_db = 20.0
-
+		vote_stop_sound.volume_db = stop_node.sound_volume
 		vote_stop_sound.stream = sound_stream
 		vote_stop_sound.play()
 
-func _get_stop_sound(index: int) -> AudioStream:
-	var stop_node: Node2D = _get_vote_stop(index)
+#retrieves stop sound from occupied voting stop
+func _get_stop_sound(stop_node: Node2D) -> AudioStream:
 	if stop_node and (stop_node.stop_sound or stop_node.cool_sound):
 		return stop_node.stop_sound if not get_tree().current_scene.cool_game else stop_node.cool_sound
 	return null

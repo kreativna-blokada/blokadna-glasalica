@@ -16,6 +16,7 @@ signal occupancy_updated
 @export_group("Gameplay Sounds")
 @export var stop_sound : AudioStream
 @export var cool_sound : AudioStream
+@export var sound_volume : float
 @export_group("Stop Animations")
 enum StopAnim {
 	NONE,
