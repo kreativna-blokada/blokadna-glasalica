@@ -85,12 +85,12 @@ func handle_input() -> void:
 func handle_movement() -> void:
 	var state_check := _state
 
-	if _is_course_finished:
-		_state = State.FINISH
+	if is_queueing:
+		_state = State.WAIT
 	elif is_stopping:
 		_state = State.STOP
-	elif is_queueing:
-		_state = State.WAIT
+	elif _is_course_finished:
+		_state = State.FINISH
 	else:
 		if _state == State.WAIT or _state == State.STOP:
 			_state = State.IDLE
@@ -102,16 +102,16 @@ func handle_movement() -> void:
 
 #updates animations based on state
 func handle_animations() -> void:
-	if _state == State.FINISH:
+	if _state == State.WAIT:
 		if not _state_entered:
-			animation_player.play("top-left")
+			_set_queue_voter_texture()
 	elif _state == State.STOP:
 		if not _state_entered:
 			if not _wait_frame_coord.is_empty():
 				_set_idle_voter_texture()
-	elif _state == State.WAIT:
+	elif _state == State.FINISH:
 		if not _state_entered:
-			_set_queue_voter_texture("bottom-right")
+			animation_player.play("top-left")
 	elif _state == State.WALK:
 		if animation_player.current_animation != _walk_animation_name:
 			animation_player.play(_walk_animation_name)
@@ -122,8 +122,8 @@ func handle_animations() -> void:
 		_state_entered = true
 
 #finds voter queueing / waiting (static) texture
-func _set_queue_voter_texture(direction_name: String) -> void:
-	_load_idle_pose(_find_idle_frame_coords(direction_name))
+func _set_queue_voter_texture() -> void:
+	_load_idle_pose(_find_idle_frame_coords("bottom-right"))
 
 #finds idle / waiting (static) texture
 func _set_idle_voter_texture() -> void:
@@ -151,28 +151,23 @@ func _find_idle_frame_coords(anim_name: String) -> Dictionary:
 			return animation_setup[animation_view]["Frame Coord"]
 	return {}
 
-#resolves wait frame coords based on stop type
+#resolves wait frame coords based on vote stop setup
 func _find_wait_animation_frame_coord() -> Dictionary:
 	if not _course_target is VotingStop or _course_target.wait_animation == VotingStop.StopAnim.NONE:
 		return {}
 	#get booted wait_animation from voting_stop
-	var direction_name: String = _get_stop_animation_name(_course_target.wait_animation)
+	var direction_name: String = _course_target.get_wait_animation_name()
 	return _find_idle_frame_coords(direction_name)
 
-#finds walk animation name by target stop type
+#finds walk animation name by target stop setup
 func _find_walk_animation_name() -> void:
 	if _course_target is VotingStop:
 		#get booted walk_animation from voting_stop
-		_walk_animation_name = _get_stop_animation_name(_course_target.walk_animation)
+		_walk_animation_name = _course_target.get_walk_animation_name()
 		if _walk_animation_name == "none":
 			_walk_animation_name = "idle"
 	else:
 		_walk_animation_name = "idle"
-
-#converts stop animation enum value to string name
-func _get_stop_animation_name(enum_value: int) -> String:
-	var enum_key = VotingStop.StopAnim.keys()[enum_value]
-	return enum_key.to_lower().replace("_", "-")
 
 #restores texture after wait state
 func _restore_walking_texture() -> void:

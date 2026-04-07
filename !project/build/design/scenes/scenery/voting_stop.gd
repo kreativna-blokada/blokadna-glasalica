@@ -65,3 +65,16 @@ func free_up() -> void:
 func occupy(character: Character) -> void:
 	occupant = character
 	occupancy_updated.emit()
+
+#gets animation name from animation enum
+func get_wait_animation_name() -> String:
+	return _get_stop_animation_name(wait_animation)
+
+#gets animation name from animation enum
+func get_walk_animation_name() -> String:
+	return _get_stop_animation_name(walk_animation)
+
+#converts stop animation enum value to animation name string
+func _get_stop_animation_name(animation_name_enum: int) -> String:
+	var nimation_name_key = StopAnim.keys()[animation_name_enum]
+	return nimation_name_key.to_lower().replace("_", "-")
