@@ -192,15 +192,15 @@ func _on_stop_reach() -> void:
 	velocity = Vector2.ZERO
 
 	if _voting_course_pointer == 0:
-		_initiate_course()
+		_next_stop()
 		return
 	if _voting_course_pointer == 1:
 		_on_queue_reached()
 		return
 	_on_stop_reached()
 
-#advances voter to the first stop
-func _initiate_course() -> void:
+#advances to the next voting stop
+func _next_stop() -> void:
 	_voting_course_pointer += 1
 	_update_course_target()
 
@@ -236,31 +236,35 @@ func _on_queue_reached() -> void:
 	starting_spot = _get_vote_stop(1)
 	voter_queued.emit()
 
+#handles arrival, decides transition
 func _on_stop_reached() -> void:
-	_occupy_current_stop()
-
-	_wait_frame_coord = _find_wait_animation_frame_coord()
 	if get_tree().current_scene.stop_sounds:
 		play_stop_sound()
 
-	if _voting_course_pointer in Configs.VotingCourse:
+	_voter_occupies_stop()
+	_wait_frame_coord = _find_wait_animation_frame_coord()
+
+	var stop_node: VotingStop = _get_vote_stop(_voting_course_pointer)
+	#stops are actional or transitional
+	if stop_node and stop_node.is_stop:
 		is_stopping = true
-		var stop_node: VotingStop = _get_vote_stop(_voting_course_pointer)
-		if stop_node:
-			voter_stopped.emit(stop_node.name)
+		#informs stop name to info dialog
+		voter_stopped.emit(stop_node.name)
 	else:
 		if not _wait_frame_coord.is_empty():
 			_set_idle_voter_texture()
+
 		_free_current_stop()
-		_initiate_course()
-#todo: cleanup
+		_next_stop()
 
 func release_from_queue() -> bool:
-	if not _is_waiting_stop_free(4):
+	var next_waiting: int = _find_next_wait_stop_index()
+	if next_waiting != -1 and not _is_waiting_stop_free(next_waiting):
 		return false
-	var stop: VotingStop = _get_vote_stop(4)
-	if stop and stop.has_method("occupy"):
-		stop.occupy(self)
+	if next_waiting != -1:
+		var stop: VotingStop = _get_vote_stop(next_waiting)
+		if stop and stop.has_method("occupy"):
+			stop.occupy(self)
 	is_queueing = false
 	starting_spot = null
 	_voting_course_pointer += 1
@@ -271,7 +275,7 @@ func release_from_queue() -> bool:
 func continue_course() -> bool:
 	if not is_stopping:
 		return false
-	var next_waiting: int = _find_next_vote_stop()
+	var next_waiting: int = _find_next_wait_stop_index()
 	if next_waiting != -1 and not _is_waiting_stop_free(next_waiting):
 		return false
 	if next_waiting != -1:
@@ -291,10 +295,11 @@ func _get_vote_stop(index: int) -> VotingStop:
 		return voting_course[index]
 	return null
 
-func _find_next_vote_stop() -> int:
-	var vote_stops: Array = Configs.VotingCourse
-	for index in vote_stops:
-		if index > _voting_course_pointer:
+#finds next voting stop index ahead in course
+func _find_next_wait_stop_index() -> int:
+	for index in range(_voting_course_pointer + 1, voting_course.size()):
+		var stop = voting_course[index]
+		if stop is VotingStop and stop.is_stop:
 			return index
 	return -1
 
@@ -309,24 +314,12 @@ func _is_waiting_stop_free(index: int) -> bool:
 	return true
 #todo: cleanup
 
-func _is_next_stop_free() -> bool:
-	var next_index: int = _voting_course_pointer + 1
-	if next_index >= voting_course.size():
-		return true
-	var next_stop: VotingStop = _get_vote_stop(next_index)
-	if next_stop == null:
-		return true
-	if next_stop.has_method("is_free"):
-		return next_stop.is_free()
-	return true
-#todo: cleanup
-
 func _free_current_stop() -> void:
 	var stop: VotingStop = _get_vote_stop(_voting_course_pointer)
 	if stop and stop.has_method("free_up"):
 		stop.free_up()
 
-func _occupy_current_stop() -> void:
+func _voter_occupies_stop() -> void:
 	var stop: VotingStop = _get_vote_stop(_voting_course_pointer)
 	if stop and stop.has_method("occupy"):
 		stop.occupy(self)
@@ -356,6 +349,3 @@ func _get_stop_sound(stop_node: Node2D) -> AudioStream:
 	if stop_node and (stop_node.stop_sound or stop_node.cool_sound):
 		return stop_node.stop_sound if not get_tree().current_scene.cool_game else stop_node.cool_sound
 	return null
-
-func set_heading() -> void:
-	pass

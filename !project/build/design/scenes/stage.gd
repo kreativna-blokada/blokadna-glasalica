@@ -214,6 +214,7 @@ func _get_selectable_voters() -> Array:
 		return ahead._voting_course_pointer > behind._voting_course_pointer
 	)
 	return selectable
+#todo: cleanup
 
 func _select_next_voter() -> void:
 	var selectable: Array = _get_selectable_voters()
@@ -225,6 +226,7 @@ func _select_next_voter() -> void:
 	var next_index: int = (current_index + 1) % selectable.size()
 	_selected_voter = selectable[next_index]
 	_selected_voter.character_texture.material.set_shader_parameter("enabled_outline", true)
+#todo: cleanup
 
 func _get_selected_voter() -> Voter:
 	if _selected_voter and is_instance_valid(_selected_voter):

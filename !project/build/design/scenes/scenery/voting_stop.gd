@@ -29,8 +29,7 @@ enum StopAnim {
 @export var wait_animation: StopAnim = StopAnim.NONE
 
 #private vars
-var _voting_course_stops: Array = Configs.VotingCourse
-var _voting_course_group: String = Configs.VoterStops["group"]
+var _voting_course_group: String = "voting_course"
 
 #broadcast variables
 var occupant : Character = null
@@ -44,9 +43,9 @@ var occupant : Character = null
 # ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
 func _ready() -> void:
-	var index: int = get_index()
-	if index in _voting_course_stops:
+	if is_stop:
 		add_to_group(_voting_course_group)
+
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
