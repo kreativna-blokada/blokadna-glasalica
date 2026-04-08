@@ -16,11 +16,10 @@ signal voter_stopped(vote_stop_name: String)
 var _cached_texture: Texture2D = null
 var _wait_frame_coord: Dictionary = {}
 var _walk_animation_name: String = "idle"
-var _voting_course_pointer: int = 0
-var _course_target: Node2D = null
 var _state_entered: bool = false
 var _is_shuffling: bool = false
 var _is_course_finished: bool = false
+var _course_target: Node2D = null
 var _feet_offset_enhancer: int = 2
 var _stop_reach_threshold: float = 5.0
 
@@ -28,6 +27,7 @@ var _stop_reach_threshold: float = 5.0
 var voter_factory_index: int = -1
 var starting_spot: VotingStop = null
 var voting_course: Array = []
+var voting_course_pointer: int = 0
 var is_queueing: bool = false
 var is_stopping: bool = false
 
@@ -194,17 +194,17 @@ func voter_movement() -> void:
 func _on_stop_reach() -> void:
 	velocity = Vector2.ZERO
 
-	if _voting_course_pointer == 0:
+	if voting_course_pointer == 0:
 		_next_stop()
 		return
-	if _voting_course_pointer == 1:
+	if voting_course_pointer == 1:
 		_on_queue_reached()
 		return
 	_on_stop_reached()
 
 #advances to the next voting stop
 func _next_stop() -> void:
-	_voting_course_pointer += 1
+	voting_course_pointer += 1
 	_update_course_target()
 
 #initiates voting path and course progression
@@ -215,8 +215,8 @@ func set_walking_course(stops: Array) -> void:
 #loads next stop or handles completion
 func _update_course_target() -> void:
 	var next_stop: VotingStop = null
-	if _voting_course_pointer < voting_course.size():
-		next_stop = _get_vote_stop(_voting_course_pointer)
+	if voting_course_pointer < voting_course.size():
+		next_stop = _get_vote_stop(voting_course_pointer)
 
 	if next_stop == null:
 		_course_target = null
@@ -246,10 +246,10 @@ func _on_stop_reached() -> void:
 	if get_tree().current_scene.stop_sounds:
 		play_stop_sound()
 
-	_voter_occupies_stop(_voting_course_pointer)
+	_voter_occupies_stop(voting_course_pointer)
 	_wait_frame_coord = _find_wait_animation_frame_coord()
 
-	var stop_node: VotingStop = _get_vote_stop(_voting_course_pointer)
+	var stop_node: VotingStop = _get_vote_stop(voting_course_pointer)
 	#stops are actional or transitional
 	if stop_node and stop_node.is_stop:
 		#handle_movement() & handle_animations()
@@ -307,7 +307,7 @@ func _get_vote_stop(index: int) -> VotingStop:
 
 #finds next voting stop index ahead in course
 func _find_next_wait_stop_index() -> int:
-	for index in range(_voting_course_pointer + 1, voting_course.size()):
+	for index in range(voting_course_pointer + 1, voting_course.size()):
 		var stop = voting_course[index]
 		if stop is VotingStop and stop.is_stop:
 			return index
@@ -321,7 +321,7 @@ func _is_target_stop_free(index: int) -> bool:
 
 #stop frees it's occupant
 func _free_current_stop() -> void:
-	var stop: VotingStop = _get_vote_stop(_voting_course_pointer)
+	var stop: VotingStop = _get_vote_stop(voting_course_pointer)
 	if stop and stop.has_method("free_up"):
 		stop.free_up()
 
@@ -344,7 +344,7 @@ func assign_queue_spot(target_spot: Node2D) -> void:
 
 #plays voting stop sound
 func play_stop_sound() -> void:
-	var stop_node: VotingStop = _get_vote_stop(_voting_course_pointer)
+	var stop_node: VotingStop = _get_vote_stop(voting_course_pointer)
 	var sound_stream: AudioStream = _get_stop_sound(stop_node)
 
 	if sound_stream:
