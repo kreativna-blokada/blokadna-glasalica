@@ -3,8 +3,7 @@
 ##
 #description     : Voter actor controller
 #author          : Zeljko Vulovic
-#date            : 20260210
-#version         : 1.0
+#version         : 1.1
 #===============================================================================
 class_name Voter
 extends Character
@@ -15,20 +14,20 @@ signal voter_stopped(vote_stop_name: String)
 
 #private vars
 var _cached_texture: Texture2D = null
-var _walk_animation_name: String = "idle"
 var _wait_frame_coord: Dictionary = {}
+var _walk_animation_name: String = "idle"
 var _voting_course_pointer: int = 0
 var _course_target: Node2D = null
 var _state_entered: bool = false
-var _is_course_finished: bool = false
 var _is_shuffling: bool = false
+var _is_course_finished: bool = false
 var _feet_offset_enhancer: int = 2
 var _stop_reach_threshold: float = 5.0
 
 #broadcast variables
 var voter_factory_index: int = -1
-var voting_course: Array = []
 var starting_spot: VotingStop = null
+var voting_course: Array = []
 var is_queueing: bool = false
 var is_stopping: bool = false
 
@@ -46,7 +45,6 @@ var is_stopping: bool = false
 
 func _ready() -> void:
 	#await get_tree().process_frame
-	##_update_course_target()
 
 	_animation_map[State.IDLE] = "bottom-right"
 	#separate the materials to control outlines independently
@@ -89,6 +87,7 @@ func handle_movement() -> void:
 	else:
 		if _state == State.WAIT or _state == State.STOP:
 			_state = State.IDLE
+			#texture after wait/stop
 			_restore_walking_texture()
 		super.handle_movement()
 
@@ -113,6 +112,7 @@ func handle_animations() -> void:
 	else:
 		super.handle_animations()
 
+	#indicates state entering
 	if not _state_entered:
 		_state_entered = true
 
@@ -128,7 +128,9 @@ func _set_idle_voter_texture() -> void:
 func _load_idle_pose(coords: Dictionary) -> void:
 	if coords.is_empty(): return
 
+	#stops animation to show static pose
 	animation_player.stop()
+	#caches texture for later restoration
 	if _cached_texture == null:
 		_cached_texture = character_texture.texture
 
@@ -182,6 +184,7 @@ func voter_movement() -> void:
 	var target_position: Vector2 = _course_target.global_position
 	var movement_distance: float = feet_position.distance_to(target_position)
 	if movement_distance < _stop_reach_threshold:
+		#handles arrival
 		_on_stop_reach()
 	else:
 		var movement_direction: Vector2 = (target_position - feet_position).normalized()
@@ -234,10 +237,12 @@ func _on_queue_reached() -> void:
 		return
 
 	starting_spot = _get_vote_stop(1)
+	#signals queue entry
 	voter_queued.emit()
 
 #handles arrival, decides transition
 func _on_stop_reached() -> void:
+	#plays stop arrival sound if stop has it
 	if get_tree().current_scene.stop_sounds:
 		play_stop_sound()
 
@@ -247,11 +252,13 @@ func _on_stop_reached() -> void:
 	var stop_node: VotingStop = _get_vote_stop(_voting_course_pointer)
 	#stops are actional or transitional
 	if stop_node and stop_node.is_stop:
+		#handle_movement() & handle_animations()
 		is_stopping = true
 		#informs stop name to info dialog
 		voter_stopped.emit(stop_node.name)
 	else:
 		if not _wait_frame_coord.is_empty():
+			#handle_animations() & State.STOP
 			_set_idle_voter_texture()
 
 		_free_current_stop()
@@ -262,6 +269,7 @@ func can_leave_queue() -> bool:
 	if not _is_next_stop_free():
 		return false
 
+	#advance to first stop
 	starting_spot = null
 	is_queueing = false
 	_next_stop()
@@ -273,6 +281,7 @@ func can_continue_voting_course() -> bool:
 	if not is_stopping or not _is_next_stop_free():
 		return false
 
+	#continue course
 	is_stopping = false
 	_free_current_stop()
 	_next_stop()
@@ -330,6 +339,7 @@ func assign_queue_spot(target_spot: Node2D) -> void:
 
 	is_queueing = false
 	_is_shuffling = true
+	#restore walking texture to allow shuffling movement
 	_restore_walking_texture()
 
 #plays voting stop sound
