@@ -241,7 +241,7 @@ func _on_stop_reached() -> void:
 	if get_tree().current_scene.stop_sounds:
 		play_stop_sound()
 
-	_voter_occupies_stop()
+	_voter_occupies_stop(_voting_course_pointer)
 	_wait_frame_coord = _find_wait_animation_frame_coord()
 
 	var stop_node: VotingStop = _get_vote_stop(_voting_course_pointer)
@@ -257,37 +257,38 @@ func _on_stop_reached() -> void:
 		_free_current_stop()
 		_next_stop()
 
-func release_from_queue() -> bool:
-	var next_waiting: int = _find_next_wait_stop_index()
-	if next_waiting != -1 and not _is_waiting_stop_free(next_waiting):
+#checks if voter can exit queue and advance to first stop
+func can_leave_queue() -> bool:
+	if not _is_next_stop_free():
 		return false
-	if next_waiting != -1:
-		var stop: VotingStop = _get_vote_stop(next_waiting)
-		if stop and stop.has_method("occupy"):
-			stop.occupy(self)
-	is_queueing = false
-	starting_spot = null
-	_voting_course_pointer += 1
-	_update_course_target()
-	return true
-#todo: cleanup
 
-func continue_course() -> bool:
-	if not is_stopping:
-		return false
-	var next_waiting: int = _find_next_wait_stop_index()
-	if next_waiting != -1 and not _is_waiting_stop_free(next_waiting):
-		return false
-	if next_waiting != -1:
-		var stop: VotingStop = _get_vote_stop(next_waiting)
-		if stop and stop.has_method("occupy"):
-			stop.occupy(self)
-	_free_current_stop()
-	is_stopping = false
-	_voting_course_pointer += 1
-	_update_course_target()
+	starting_spot = null
+	is_queueing = false
+	_next_stop()
+
 	return true
-#todo: cleanup
+
+#checks if voter can leave current stop and continue course
+func can_continue_voting_course() -> bool:
+	if not is_stopping or not _is_next_stop_free():
+		return false
+
+	is_stopping = false
+	_free_current_stop()
+	_next_stop()
+
+	return true
+
+#checks if next wait stop is free
+func _is_next_stop_free() -> bool:
+	var next_stop_index: int = _find_next_wait_stop_index()
+	if next_stop_index != -1 and not _is_target_stop_free(next_stop_index):
+		return false
+
+	if next_stop_index != -1:
+		#reserves the next wait stop
+		_voter_occupies_stop(next_stop_index)
+	return true
 
 #retrieves voting stop by index (pointer)
 func _get_vote_stop(index: int) -> VotingStop:
@@ -303,24 +304,21 @@ func _find_next_wait_stop_index() -> int:
 			return index
 	return -1
 
-func _is_waiting_stop_free(index: int) -> bool:
-	if index >= voting_course.size():
-		return true
+#checks if voting stop at index is unoccupied
+func _is_target_stop_free(index: int) -> bool:
 	var stop: VotingStop = _get_vote_stop(index)
-	if stop == null:
-		return true
-	if stop.has_method("is_free"):
-		return stop.is_free()
-	return true
-#todo: cleanup
+	if stop == null: return true #null reference safe
+	return not stop.has_method("is_free") or stop.is_free()
 
+#stop frees it's occupant
 func _free_current_stop() -> void:
 	var stop: VotingStop = _get_vote_stop(_voting_course_pointer)
 	if stop and stop.has_method("free_up"):
 		stop.free_up()
 
-func _voter_occupies_stop() -> void:
-	var stop: VotingStop = _get_vote_stop(_voting_course_pointer)
+#voter occupies vote stop
+func _voter_occupies_stop(pointer: int) -> void:
+	var stop: VotingStop = _get_vote_stop(pointer)
 	if stop and stop.has_method("occupy"):
 		stop.occupy(self)
 

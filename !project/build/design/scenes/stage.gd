@@ -57,7 +57,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		var selected: Voter = _get_selected_voter()
 		if selected:
 			if selected.is_stopping:
-				selected.continue_course()
+				selected.can_continue_voting_course()
 			elif selected.is_queueing and queued_voters.has(selected):
 				_release_selected_voter(selected)
 	if event.is_action_pressed("select"):
@@ -235,7 +235,7 @@ func _get_selected_voter() -> Voter:
 
 func _release_selected_voter(voter: Voter) -> void:
 	var freed_spot: Node2D = voter.starting_spot
-	if not voter.release_from_queue():
+	if not voter.can_leave_queue():
 		return
 	queued_voters.erase(voter)
 	queue_count_updated.emit(queued_voters.size())
@@ -278,7 +278,7 @@ func _on_voter_stopped(vote_stop_name: String) -> void:
 func _on_info_dialog_closed() -> void:
 	var selected_voter: Voter = _get_selected_voter()
 	if selected_voter and selected_voter.is_stopping:
-		selected_voter.continue_course()
+		selected_voter.can_continue_voting_course()
 
 #spawning voters signal handler
 func _on_timer_timeout() -> void:
