@@ -57,7 +57,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		var selected: Voter = _get_selected_voter()
 		if selected:
 			if selected.is_stopping:
-				selected.continue_course()
+				selected.can_continue_voting_course()
 			elif selected.is_queueing and queued_voters.has(selected):
 				_release_selected_voter(selected)
 	if event.is_action_pressed("select"):
@@ -214,6 +214,7 @@ func _get_selectable_voters() -> Array:
 		return ahead._voting_course_pointer > behind._voting_course_pointer
 	)
 	return selectable
+#todo: cleanup
 
 func _select_next_voter() -> void:
 	var selectable: Array = _get_selectable_voters()
@@ -225,6 +226,7 @@ func _select_next_voter() -> void:
 	var next_index: int = (current_index + 1) % selectable.size()
 	_selected_voter = selectable[next_index]
 	_selected_voter.character_texture.material.set_shader_parameter("enabled_outline", true)
+#todo: cleanup
 
 func _get_selected_voter() -> Voter:
 	if _selected_voter and is_instance_valid(_selected_voter):
@@ -233,7 +235,7 @@ func _get_selected_voter() -> Voter:
 
 func _release_selected_voter(voter: Voter) -> void:
 	var freed_spot: Node2D = voter.starting_spot
-	if not voter.release_from_queue():
+	if not voter.can_leave_queue():
 		return
 	queued_voters.erase(voter)
 	queue_count_updated.emit(queued_voters.size())
@@ -256,7 +258,7 @@ func _update_voters_queue() -> void:
 			if spot_ahead.is_free():
 				voter_init_spot.free_up()
 				spot_ahead.occupy(voter)
-				voter.move_to_queue_spot(spot_ahead)
+				voter.assign_queue_spot(spot_ahead)
 #todo: cleanup
 
 #SIGNALS
@@ -276,7 +278,7 @@ func _on_voter_stopped(vote_stop_name: String) -> void:
 func _on_info_dialog_closed() -> void:
 	var selected_voter: Voter = _get_selected_voter()
 	if selected_voter and selected_voter.is_stopping:
-		selected_voter.continue_course()
+		selected_voter.can_continue_voting_course()
 
 #spawning voters signal handler
 func _on_timer_timeout() -> void:

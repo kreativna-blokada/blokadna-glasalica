@@ -195,6 +195,7 @@ position = Vector2(525, 650)
 is_stop = true
 stop_sound = ExtResource("12_2sfpg")
 cool_sound = ExtResource("13_qpjah")
+sound_volume = 16.0
 walk_animation = 1
 wait_animation = 1
 
@@ -203,6 +204,7 @@ position = Vector2(714, 547)
 is_stop = true
 stop_sound = ExtResource("14_jvw4y")
 cool_sound = ExtResource("15_0v8w5")
+sound_volume = 16.0
 walk_animation = 2
 wait_animation = 1
 
@@ -211,6 +213,7 @@ position = Vector2(854, 492)
 is_stop = true
 stop_sound = ExtResource("16_fupqg")
 cool_sound = ExtResource("17_a3n54")
+sound_volume = 16.0
 walk_animation = 2
 wait_animation = 1
 
@@ -219,6 +222,7 @@ position = Vector2(1173, 554)
 is_stop = true
 stop_sound = ExtResource("18_oany1")
 cool_sound = ExtResource("19_hc7mv")
+sound_volume = 16.0
 walk_animation = 4
 wait_animation = 2
 
@@ -227,6 +231,7 @@ position = Vector2(1411, 661)
 is_stop = true
 stop_sound = ExtResource("20_sjbew")
 cool_sound = ExtResource("21_8sgi2")
+sound_volume = 16.0
 walk_animation = 4
 wait_animation = 2
 
@@ -239,6 +244,7 @@ position = Vector2(1266, 860)
 is_stop = true
 stop_sound = ExtResource("22_tekev")
 cool_sound = ExtResource("23_njcvq")
+sound_volume = 16.0
 walk_animation = 3
 wait_animation = 1
 
@@ -255,6 +261,7 @@ position = Vector2(976, 754)
 is_stop = true
 stop_sound = ExtResource("24_kmrnq")
 cool_sound = ExtResource("25_3uaup")
+sound_volume = 16.0
 walk_animation = 2
 wait_animation = 1
 
