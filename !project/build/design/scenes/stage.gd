@@ -11,7 +11,7 @@ extends Node2D
 
 #signals
 signal queue_count_updated(count: int)
-signal stops_occupancy_updated(stop_occupancy: Array)
+signal stops_occupancy_updated(stops_occupancy_flags: Array)
 
 #private vars
 var _max_voter_queue: int = 8
@@ -94,13 +94,11 @@ func _handle_start_action() -> void:
 	if selected_voter.is_stopping:
 		selected_voter.can_continue_voting_course()
 	elif selected_voter.is_queueing and queued_voters.has(selected_voter):
-		_release_selected_voter(selected_voter)
-#todo: review
+		_dequeue_voter(selected_voter)
 
 #handles the 'select' action to cycle through voters
 func _handle_select_action() -> void:
 	_select_next_voter()
-#todo: review
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -183,40 +181,50 @@ func _get_active_selected_voter() -> Voter:
 		return _selected_voter
 	return null
 
-#releases a voter from the queue and advances them
-func _release_selected_voter(voter: Voter) -> void:
-	var freed_spot: Node2D = voter.starting_spot
+#manages voter release and queue consolidation
+func _dequeue_voter(voter: Voter) -> void:
 	if not voter.can_leave_queue(): return
 
+	var queue_spot: Node2D = voter.starting_spot
+	#removes voter from queue
 	queued_voters.erase(voter)
+	#signals queue count (_on_queue_count_updated)
 	queue_count_updated.emit(queued_voters.size())
 
-	if freed_spot and freed_spot.has_method("free_up"):
-		freed_spot.free_up()
+	#removes voter from the spot, makes position vacant
+	if queue_spot and queue_spot.has_method("free_up"):
+		queue_spot.free_up()
 
 	#shuffles the remaining queue after a delay
 	await get_tree().create_timer(0.5).timeout
-	_update_voters_queue()
-#todo: review
+	_shift_voters_forward()
 
-#shifts queued voters forward to fill gaps
-func _update_voters_queue() -> void:
-	var active_voters: Array = queued_voters.duplicate()
-	active_voters.sort_custom(func(a, b):
-		return queue_spots.find(a.starting_spot) < queue_spots.find(b.starting_spot)
+#forward movment for waiting voters
+func _shift_voters_forward() -> void:
+	#copy to prevent array mutations during iteration
+	var queuing_voters: Array = queued_voters.duplicate()
+	#sorts by queue position to ensure a shift sequence
+	queuing_voters.sort_custom(func(primary, secondary):
+		return queue_spots.find(primary.starting_spot) < queue_spots.find(secondary.starting_spot)
 	)
 
-	for voter in active_voters:
-		var current_spot: Node2D = voter.starting_spot
-		var spot_index: int = queue_spots.find(current_spot)
+	#iterates for step-forward
+	for voter in queuing_voters:
+		#voters know their queue (starting) position
+		var queue_spot: Node2D = voter.starting_spot
+		var spot_index: int = queue_spots.find(queue_spot)
+		#voter is already at the front of the queue line
 		if spot_index <= 0: continue
 
-		var spot_ahead: Node2D = queue_spots[spot_index - 1]
-		if spot_ahead.is_free():
-			current_spot.free_up()
-			spot_ahead.occupy(voter)
-			voter.assign_queue_spot(spot_ahead)
-#todo: review
+		#target position is the next from voters' queue position
+		var target_queue_spot: Node2D = queue_spots[spot_index - 1]
+		if target_queue_spot.is_free():
+			queue_spot.free_up()
+
+			#marks target spot as occupied
+			target_queue_spot.occupy(voter)
+			#updates voter position in the queue
+			voter.assign_queue_spot(target_queue_spot)
 
 #cycles to next available voter
 func _select_next_voter() -> void:
@@ -230,7 +238,6 @@ func _select_next_voter() -> void:
 	var selected_voter_index: int = selectable_voters.find(_selected_voter)
 	var next_voter_index: int = (selected_voter_index + 1) % selectable_voters.size()
 	_selected_voter = selectable_voters[next_voter_index]
-
 	#sets voter outline, or selects currently available voter
 	_set_voter_outline(_selected_voter, true)
 

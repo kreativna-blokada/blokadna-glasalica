@@ -331,11 +331,11 @@ func _voter_occupies_stop(pointer: int) -> void:
 	if stop and stop.has_method("occupy"):
 		stop.occupy(self)
 
-#assigns a queue target and resets state for shuffling
-func assign_queue_spot(target_spot: Node2D) -> void:
-	starting_spot = target_spot
-	_course_target = target_spot
-	voting_course[1] = target_spot
+#assigns a queue target spot and resets state for shuffling
+func assign_queue_spot(target_queue_spot: Node2D) -> void:
+	starting_spot = target_queue_spot
+	_course_target = target_queue_spot
+	voting_course[1] = target_queue_spot
 
 	is_queueing = false
 	_is_shuffling = true
