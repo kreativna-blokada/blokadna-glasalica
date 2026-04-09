@@ -154,16 +154,18 @@ func _get_voter(index: int) -> Voter:
 
 #defines the voting process route for voter
 func get_voting_course(voter: Voter) -> Array:
-	var walking_course: Array = [voter_loading_position]
-	var queue_place: Node2D = _find_first_queue_spot()
+	#starting course with the voter loading stop
+	var walk_course: Array = [voter_loading_position]
 
+	var queue_place: Node2D = _find_first_queue_spot()
 	if queue_place:
 		queue_place.occupy(voter)
-		walking_course.append(queue_place)
+		#infiltrating queue stop into the voter stops
+		walk_course.append(queue_place)
 
-	walking_course.append_array(voting_course.slice(1))
-	return walking_course
-#todo: review
+	#adds rest of the course, excluding loading stop
+	walk_course.append_array(voting_course.slice(1))
+	return walk_course
 
 #checks if any queue spot is available
 func _any_free_queue_spots() -> bool:
@@ -273,10 +275,9 @@ func _on_voter_queued(voter: Voter) -> void:
 
 #triggers course continuation when dialog closes
 func _on_info_dialog_closed() -> void:
-	var selected: Voter = _get_active_selected_voter()
-	if selected and selected.is_stopping:
-		selected.can_continue_voting_course()
-#todo: review
+	var selected_voter: Voter = _get_active_selected_voter()
+	if selected_voter and selected_voter.is_stopping:
+		selected_voter.can_continue_voting_course()
 
 #spawning voters signal handler
 func _on_timer_timeout() -> void:
