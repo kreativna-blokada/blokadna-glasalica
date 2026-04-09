@@ -173,16 +173,12 @@ func _get_voter(index: int) -> Voter:
 	voters_factory_container.add_child(voter)
 
 	voter.position = voter_loading_position.global_position
-	voter.set_walking_course(get_voting_course(voter))
-	voter.voter_queued.connect(func():
-		queued_voters.append(voter)
-		queue_count_updated.emit(queued_voters.size())
-	)
-	voter.voter_queued.connect(_on_voter_queued.bind(voter))
+	var walking_course: Array = get_voting_course(voter)
+	voter.set_walking_course(walking_course)
+	voter.voter_queued.connect(_on_voter_queued.bind(voter)) #!
 	voter.voter_stopped.connect(_on_voter_stopped)
 
 	return voter
-#todo: review
 
 #defines the movement path for a new voter
 func get_voting_course(voter: Voter) -> Array:
@@ -283,11 +279,10 @@ func _set_voter_outline(voter: Voter, is_selected: bool) -> void:
 #███████║██║╚██████╔╝██║ ╚████║██║  ██║███████╗███████║
 #╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚══════╝
 
-#handles voter arrival at a queue spot
+#adds voter to queue and signals queue count
 func _on_voter_queued(voter: Voter) -> void:
 	queued_voters.append(voter)
 	queue_count_updated.emit(queued_voters.size())
-#todo: review
 
 #displays info dialog when a voter reaches a stop
 func _on_voter_stopped(vote_stop_name: String) -> void:
