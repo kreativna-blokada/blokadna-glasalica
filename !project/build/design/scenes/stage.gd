@@ -127,18 +127,6 @@ func _wire_stop_occupancy_updates() -> void:
 				)
 			)
 
-#checks if any queue spot is available
-func _has_free_queue_spot() -> bool:
-	return queue_spots.any(func(spot): return spot.is_free())
-#todo: review
-
-#returns the first available queue spot
-func _find_queue_spot() -> Node2D:
-	for spot in queue_spots:
-		if spot.is_free(): return spot
-	return null
-#todo: review
-
 #loads voters w/ random setups
 func _spawn_voters() -> void:
 	var index: int = _rand.randi() % _voters_diversity
@@ -164,10 +152,10 @@ func _get_voter(index: int) -> Voter:
 
 	return voter
 
-#defines the movement path for a new voter
+#defines the voting process route for voter
 func get_voting_course(voter: Voter) -> Array:
 	var walking_course: Array = [voter_loading_position]
-	var queue_place: Node2D = _find_queue_spot()
+	var queue_place: Node2D = _find_first_queue_spot()
 
 	if queue_place:
 		queue_place.occupy(voter)
@@ -176,6 +164,16 @@ func get_voting_course(voter: Voter) -> Array:
 	walking_course.append_array(voting_course.slice(1))
 	return walking_course
 #todo: review
+
+#checks if any queue spot is available
+func _any_free_queue_spots() -> bool:
+	return queue_spots.any(func(spot): return spot.is_free())
+
+#returns first available queue spot
+func _find_first_queue_spot() -> Node2D:
+	for spot in queue_spots:
+		if spot.is_free(): return spot
+	return null
 
 #returns (validates) currently selected voter
 func _get_active_selected_voter() -> Voter:
@@ -283,8 +281,8 @@ func _on_info_dialog_closed() -> void:
 #spawning voters signal handler
 func _on_timer_timeout() -> void:
 	#_increase_spawn_rate()
-	if _has_free_queue_spot() and queued_voters.size() < _max_voter_queue:
+	if _any_free_queue_spots() and queued_voters.size() < _max_voter_queue:
 		_spawn_voters()
-#todo: review
+
 	timer.start()       # Restart the X second timer
 #Note: spawns enemies after initial time out expires
