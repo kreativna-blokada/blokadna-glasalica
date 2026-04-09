@@ -158,13 +158,12 @@ func _find_queue_spot() -> Node2D:
 	return null
 #todo: review
 
-#instantiates a voter with a random configuration
+#loads voters w/ random setups
 func _spawn_voters() -> void:
 	var index: int = _rand.randi() % _voters_diversity
 	_get_voter(index)
-#todo: review
 
-#loads and configures a voter from the factory
+#gets and sets a voter from the factory
 func _get_voter(index: int) -> Voter:
 	if not voters_factory_container or not voters_factory_container.has_method("load_voter"):
 		push_error("[STAGE] Voter factory container is missing or invalid!")
@@ -172,9 +171,13 @@ func _get_voter(index: int) -> Voter:
 
 	var voter: Voter = voters_factory_container.load_voter(index)
 	voters_factory_container.add_child(voter)
-	voter.position = voter_loading_position.global_position
 
+	voter.position = voter_loading_position.global_position
 	voter.set_walking_course(get_voting_course(voter))
+	voter.voter_queued.connect(func():
+		queued_voters.append(voter)
+		queue_count_updated.emit(queued_voters.size())
+	)
 	voter.voter_queued.connect(_on_voter_queued.bind(voter))
 	voter.voter_stopped.connect(_on_voter_stopped)
 
@@ -259,7 +262,8 @@ func _get_selectable_voters() -> Array:
 
 	selectable_voters.sort_custom(func(primary, secondary):
 		if primary.is_queueing != secondary.is_queueing:
-			return secondary.is_queueing #prioritize waiting over queueing
+			#prioritize waiting over queueing
+			return secondary.is_queueing
 		if primary.is_queueing:
 			return queue_spots.find(primary.starting_spot) < queue_spots.find(secondary.starting_spot)
 		return primary.voting_course_pointer > secondary.voting_course_pointer
