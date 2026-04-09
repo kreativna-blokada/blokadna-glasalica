@@ -50,6 +50,35 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 
+#initiallizes variables
+func _init_vars() -> void:
+	_rand.randomize()
+	_voters_diversity = Globals.VoterFactory.size()#+1
+	#_timer.start()			# if autostart isn't selected, will start the timer
+	#spawn_voters(_spawn_rate)# do this or else it will take X secs before spawn
+
+	#init loading voters peculiarity
+	#_timer.set_wait_time(_spawn_cycle_range_max)
+	#_timer.start()
+
+#initiallizes structures
+func _init_nodes() -> void:
+	#init loading voters peculiarity
+	#_load_spawn_vars()
+	##_timer.set_wait_time(_spawn_cycle_range_max)
+	timer.start()
+
+	_wire_stop_occupancy_updates()
+
+#initializes connections
+func _init_signals() -> void:
+	if info_dialog:
+		info_dialog.dialog_closed.connect(_on_info_dialog_closed)
+
+#initiallizes gameplay
+func _init_game() -> void:
+	pass
+
 #built-in callback, called authomatically, no signal connection needed
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("start"):
@@ -80,35 +109,6 @@ func _handle_select_action() -> void:
 #██╔══╝  ██║   ██║██║╚██╗██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
 #██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
 #╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
-
-#initiallizes variables
-func _init_vars() -> void:
-	_rand.randomize()
-	_voters_diversity = Globals.VoterFactory.size()#+1
-	#_timer.start()			# if autostart isn't selected, will start the timer
-	#spawn_voters(_spawn_rate)# do this or else it will take X secs before spawn
-
-	#init loading voters peculiarity
-	#_timer.set_wait_time(_spawn_cycle_range_max)
-	#_timer.start()
-
-#initiallizes structures
-func _init_nodes() -> void:
-	#init loading voters peculiarity
-	#_load_spawn_vars()
-	##_timer.set_wait_time(_spawn_cycle_range_max)
-	timer.start()
-
-	_wire_stop_occupancy_updates()
-
-#initializes connections
-func _init_signals() -> void:
-	if info_dialog:
-		info_dialog.dialog_closed.connect(_on_info_dialog_closed)
-
-#initiallizes gameplay
-func _init_game() -> void:
-	pass
 
 #updates the flow indicators, or by connecting to each voting stop's signal
 #the stage can detect when a voter has physically reached or left a station,
