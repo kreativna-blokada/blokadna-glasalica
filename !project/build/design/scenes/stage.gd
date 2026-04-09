@@ -3,8 +3,7 @@
 ##
 #description     : Master game stage runner
 #author          : Zeljko Vulovic
-#date            : 20260110
-#version         : 1.0
+#version         : 1.1
 #===============================================================================
 class_name Stage
 extends Node2D
@@ -50,7 +49,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 
-#built-in callback, called authomatically, no signal connection needed
+#built-in callback, called authomatically
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("start"):
 		_handle_start_action()
@@ -61,18 +60,9 @@ func _unhandled_input(event: InputEvent) -> void:
 func _init_vars() -> void:
 	_rand.randomize()
 	_voters_diversity = Globals.VoterFactory.size()#+1
-	#_timer.start()			# if autostart isn't selected, will start the timer
-	#spawn_voters(_spawn_rate)# do this or else it will take X secs before spawn
-
-	#init loading voters peculiarity
-	#_timer.set_wait_time(_spawn_cycle_range_max)
-	#_timer.start()
 
 #initiallizes structures
 func _init_nodes() -> void:
-	#init loading voters peculiarity
-	#_load_spawn_vars()
-	##_timer.set_wait_time(_spawn_cycle_range_max)
 	timer.start()
 
 	_wire_stop_occupancy_updates()
@@ -96,7 +86,7 @@ func _handle_start_action() -> void:
 	elif selected_voter.is_queueing and queued_voters.has(selected_voter):
 		_dequeue_voter(selected_voter)
 
-#handles the 'select' action to cycle through voters
+#cycles (outlines) through voters
 func _handle_select_action() -> void:
 	_select_next_voter()
 
@@ -288,9 +278,7 @@ func _on_info_dialog_closed() -> void:
 
 #spawning voters signal handler
 func _on_timer_timeout() -> void:
-	#_increase_spawn_rate()
 	if _any_free_queue_spots() and queued_voters.size() < _max_voter_queue:
 		_spawn_voters()
 
 	timer.start()       # Restart the X second timer
-#Note: spawns enemies after initial time out expires
