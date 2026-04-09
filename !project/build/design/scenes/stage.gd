@@ -127,25 +127,6 @@ func _wire_stop_occupancy_updates() -> void:
 				)
 			)
 
-#finds a free slot nearest to the voter
-func reserve_slot(voter: Character) -> Node2D:
-	var available_slots := voting_course.filter(func(slot): return slot.is_free())
-	if available_slots.is_empty(): return null
-
-	available_slots.sort_custom(func(a, b):
-		return voter.global_position.distance_to(a.global_position) < voter.global_position.distance_to(b.global_position)
-	)
-	available_slots[0].occupy(voter)
-	return available_slots[0]
-#todo: review
-
-#frees a previously reserved slot
-func free_slot(voter: Character) -> void:
-	var target_slots := voting_course.filter(func(slot): return slot.get("occupant") == voter)
-	if not target_slots.is_empty():
-		target_slots[0].free_up()
-#todo: review
-
 #checks if any queue spot is available
 func _has_free_queue_spot() -> bool:
 	return queue_spots.any(func(spot): return spot.is_free())
@@ -169,13 +150,16 @@ func _get_voter(index: int) -> Voter:
 		push_error("[STAGE] Voter factory container is missing or invalid!")
 		return null
 
+	#creates an instance using factory script, adds it to the scene
 	var voter: Voter = voters_factory_container.load_voter(index)
 	voters_factory_container.add_child(voter)
 
 	voter.position = voter_loading_position.global_position
 	var walking_course: Array = get_voting_course(voter)
+	#assigns movement path for a loaded voter
 	voter.set_walking_course(walking_course)
-	voter.voter_queued.connect(_on_voter_queued.bind(voter)) #!
+	#connects signals for sync queue count and to use dialog
+	voter.voter_queued.connect(_on_voter_queued.bind(voter))
 	voter.voter_stopped.connect(_on_voter_stopped)
 
 	return voter
@@ -279,16 +263,15 @@ func _set_voter_outline(voter: Voter, is_selected: bool) -> void:
 #███████║██║╚██████╔╝██║ ╚████║██║  ██║███████╗███████║
 #╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚══════╝
 
+#signal voter.voter_stopped.emit() => show info dialog
+func _on_voter_stopped(vote_stop_name: String) -> void:
+	if owner.info_dialog:
+		info_dialog.show_info(vote_stop_name)
+
 #adds voter to queue and signals queue count
 func _on_voter_queued(voter: Voter) -> void:
 	queued_voters.append(voter)
 	queue_count_updated.emit(queued_voters.size())
-
-#displays info dialog when a voter reaches a stop
-func _on_voter_stopped(vote_stop_name: String) -> void:
-	if info_dialog:
-		info_dialog.show_info(vote_stop_name)
-#todo: review
 
 #triggers course continuation when dialog closes
 func _on_info_dialog_closed() -> void:
