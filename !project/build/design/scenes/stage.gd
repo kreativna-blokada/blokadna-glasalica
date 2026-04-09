@@ -253,12 +253,7 @@ func _select_next_voter() -> void:
 
 #gets all voters available for selection
 func _get_selectable_voters() -> Array:
-	var voter_group: String = Globals.EntityProperties[Globals.Entity.Voter]["group"]
-	var voter_nodes: Array = get_tree().get_nodes_in_group(voter_group)
-	var selectable_voters: Array = voter_nodes.filter(
-		func(voter): return voter is Voter and (voter.is_stopping or voter.is_queueing)
-	)
-	var selectable: Array = voters_factory_container.get_children().filter(
+	var selectable_voters: Array = voters_factory_container.get_children().filter(
 		func(voter): return voter is Voter and (voter.is_stopping or voter.is_queueing)
 	)
 
