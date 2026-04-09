@@ -50,6 +50,13 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 
+#built-in callback, called authomatically, no signal connection needed
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("start"):
+		_handle_start_action()
+	elif event.is_action_pressed("select"):
+		_handle_select_action()
+
 #initiallizes variables
 func _init_vars() -> void:
 	_rand.randomize()
@@ -78,13 +85,6 @@ func _init_signals() -> void:
 #initiallizes gameplay
 func _init_game() -> void:
 	pass
-
-#built-in callback, called authomatically, no signal connection needed
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("start"):
-		_handle_start_action()
-	elif event.is_action_pressed("select"):
-		_handle_select_action()
 
 #release a queueing voter or continue a waiting voter
 func _handle_start_action() -> void:
