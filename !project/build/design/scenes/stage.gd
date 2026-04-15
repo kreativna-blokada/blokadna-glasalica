@@ -2,7 +2,7 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Master game stage runner
-#author          : Zeljko Vulovic
+#maintainer      : Zeljko Vulovic
 #version         : 1.1
 #===============================================================================
 class_name Stage
@@ -12,14 +12,14 @@ extends Node2D
 signal queue_count_updated(count: int)
 signal stops_occupancy_updated(stops_occupancy_flags: Array)
 
+#broadcast vars
+var queued_voters: Array = []
+
 #private vars
-var _max_voter_queue: int = 8
 var _selected_voter: Voter = null
+var _max_voter_queue: int = 8
 var _voters_diversity: int = 0
 var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
-
-#broadcast variables
-var queued_voters: Array = []
 
 #onready vars
 @onready var voters_factory_container: Node2D = $VoterSlots

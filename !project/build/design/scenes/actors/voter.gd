@@ -2,7 +2,7 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Voter actor controller
-#author          : Zeljko Vulovic
+#maintainer      : Zeljko Vulovic
 #version         : 1.1
 #===============================================================================
 class_name Voter
@@ -11,6 +11,14 @@ extends Character
 #signals
 signal voter_queued
 signal voter_stopped(vote_stop_name: String)
+
+#broadcast vars
+var voter_factory_index: int = -1
+var starting_spot: VotingStop = null
+var voting_course_pointer: int = 0
+var voting_course: Array = []
+var is_queueing: bool = false
+var is_stopping: bool = false
 
 #private vars
 var _cached_texture: Texture2D = null
@@ -22,14 +30,6 @@ var _is_course_finished: bool = false
 var _course_target: Node2D = null
 var _feet_offset_enhancer: int = 2
 var _stop_reach_threshold: float = 5.0
-
-#broadcast variables
-var voter_factory_index: int = -1
-var starting_spot: VotingStop = null
-var voting_course: Array = []
-var voting_course_pointer: int = 0
-var is_queueing: bool = false
-var is_stopping: bool = false
 
 #onready vars
 @onready var vote_stop_sound: AudioStreamPlayer = $AudioStreamPlayer
