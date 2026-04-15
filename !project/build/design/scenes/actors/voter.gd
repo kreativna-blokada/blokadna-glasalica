@@ -46,7 +46,6 @@ var _stop_reach_threshold: float = 5.0
 func _ready() -> void:
 	#await get_tree().process_frame
 
-	_animation_map[State.IDLE] = "bottom-right"
 	#separate the materials to control outlines independently
 	character_texture.material = character_texture.material.duplicate()
 
@@ -56,11 +55,7 @@ func _process(_delta: float) -> void:
 	else:
 		voter_movement()
 
-	handle_input()
-	handle_movement()
-	handle_animations()
-	set_heading()
-	move_and_slide()
+	super(_delta)
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -72,7 +67,7 @@ func _process(_delta: float) -> void:
 
 #handle interaction with voters
 func handle_input() -> void:
-	pass
+	super.handle_input()
 
 #transitions state by course status
 func handle_movement() -> void:
@@ -188,7 +183,7 @@ func voter_movement() -> void:
 		_on_stop_reach()
 	else:
 		var movement_direction: Vector2 = (target_position - feet_position).normalized()
-		velocity = movement_direction * speed
+		velocity = movement_direction * movement_speed
 
 #stops voter, dispatches handler
 func _on_stop_reach() -> void:

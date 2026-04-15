@@ -165,7 +165,7 @@ _data = {
 
 [node name="Voter" unique_id=1417136144 instance=ExtResource("1_5suuu")]
 script = ExtResource("2_5suuu")
-speed = 100.0
+movement_speed = 120.0
 
 [node name="CharacterSprite" parent="." index="1" unique_id=3088008]
 modulate = Color(0.89, 0.89, 0.89, 1)
