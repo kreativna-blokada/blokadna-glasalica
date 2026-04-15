@@ -2,8 +2,7 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Full-screen info dialog overlay
-#author          : Zeljko Vulovic
-#date            : 20260325
+#maintainer      : Zeljko Vulovic
 #version         : 1.0
 #===============================================================================
 class_name InfoDialog
@@ -15,17 +14,19 @@ signal dialog_closed
 #private vars
 var _info_file: FileAccess = FileAccess.open("res://!project/build/design/info_texts.json", FileAccess.READ)
 var _info_data: Dictionary = {}
-var _tween: Tween = null
-var _is_closing: bool = false
+var _tweening: Tween = null
+var _is_closed: bool = false
 
 var _cool_info: FileAccess = FileAccess.open("res://!project/build/design/cool_infos.json", FileAccess.READ)
 var _cool_data: Dictionary = {}
 
+var _secs_per_char: float = 0.06
+
 #onready vars
-@onready var title_label: Label = %Title
-@onready var content_label: RichTextLabel = %Content
 @onready var background: ColorRect = %Background
 @onready var panel: PanelContainer = %Panel
+@onready var title_label: Label = %Title
+@onready var content_label: RichTextLabel = %Content
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -36,13 +37,11 @@ var _cool_data: Dictionary = {}
 # ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
 func _ready() -> void:
-	#input and tweens working, if tree gets paused
-	#process_mode = Node.PROCESS_MODE_ALWAYS
 	_load_info_texts()
 
 #consumes input, closes dialog
 func _unhandled_input(event: InputEvent) -> void:
-	if not visible or _is_closing:
+	if not visible or _is_closed:
 		return
 	#closes dialog on "start", "right" or "wrong" press
 	if event.is_action_pressed("start") or event.is_action_pressed("right") or event.is_action_pressed("wrong"):
@@ -70,6 +69,15 @@ func _parse_json_file(file: FileAccess) -> Dictionary:
 			return json.data
 	return {}
 
+#direct dictionary lookup, falling back to a manual case-insensitive search
+func _get_info_key(search_key: String) -> String:
+	if _info_data.has(search_key):
+		return search_key
+	for key in _info_data:
+		if key.to_lower() == search_key.to_lower():
+			return key
+	return ""
+
 #shows dialog with content based on voting stop
 func show_info(vote_stop_name: String) -> void:
 	var key := _get_info_key(vote_stop_name)
@@ -88,7 +96,7 @@ func _set_content(key: String) -> void:
 	content_label.text = "[center]" + data[key]["content"] + "[/center]"
 	content_label.visible_ratio = 0.0
 
-#entrance animation: background fades in, panel scales up with overshoot
+#open animation: background fades in, panel scales up with overshoot
 func _opening_animation() -> void:
 	background.color.a = 0.0
 	panel.modulate.a = 0.0
@@ -98,6 +106,7 @@ func _opening_animation() -> void:
 	await get_tree().process_frame
 	panel.pivot_offset = panel.size / 2.0
 
+	#tweens in parallel: background fades, panel fades and scales
 	var open_tween := create_tween().set_parallel(true)
 	open_tween.tween_property(background, "color:a", 0.5, 0.3) \
 		.set_ease(Tween.EASE_OUT)
@@ -110,41 +119,35 @@ func _opening_animation() -> void:
 
 #show text, fixed time/char
 func _unveil_text() -> void:
-	if _tween:
-		_tween.kill()
-	_tween = create_tween()
-	var time_for_char: float = 0.06 # seconds per char
+	if _tweening:
+		_tweening.kill()
+	_tweening = create_tween()
+	var time_for_char: float = _secs_per_char # s/c
 	#total time in seconds for the full text to appear
 	var duration: float = content_label.text.length() * time_for_char
 	#tweening visible_ratio (char count) from 0 to 1 over the duration
-	_tween.tween_property(content_label, "visible_ratio", 1.0, duration)
+	_tweening.tween_property(content_label, "visible_ratio", 1.0, duration)
 
-#direct dictionary lookup, falling back to a manual case-insensitive search
-func _get_info_key(search_key: String) -> String:
-	if _info_data.has(search_key):
-		return search_key
-	for key in _info_data:
-		if key.to_lower() == search_key.to_lower():
-			return key
-	return ""
-
-#stops tween, plays exit animation, emits dialog_closed
+#stops tween, plays exit animation
 func _close_dialog() -> void:
-	if _is_closing:
+	if _is_closed:
 		return
-	_is_closing = true
+	_is_closed = true
 
-	if _tween:
-		_tween.kill()
-		_tween = null
+	if _tweening:
+		_tweening.kill()
+		_tweening = null
 
 	await _closing_animation()
 	visible = false
-	_is_closing = false
+	_is_closed = false
+	#signals dialog close
+	#course continuation
 	dialog_closed.emit()
 
 #exit animation: panel shrinks and fades, background fades out
 func _closing_animation() -> void:
+	#tweens in parallel: panel fades and scales down, background fades out
 	var close_tween := create_tween().set_parallel(true)
 	close_tween.tween_property(panel, "modulate:a", 0.0, 0.2) \
 		.set_ease(Tween.EASE_IN)
