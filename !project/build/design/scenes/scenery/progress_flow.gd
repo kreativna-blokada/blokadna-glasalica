@@ -2,14 +2,15 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Progress flow overlay
-#author          : Zeljko Vulovic
-#date            : 20260404
+#maintainer      : Zeljko Vulovic
 #version         : 1.1
 #===============================================================================
 extends CanvasLayer
 
 #private vars
 var _indicators: Array = []
+var _indicator_alert_trashhold: int = 3
+var _indicator_warning_trashhold: int = 2
 
 var _stage: Stage = null
 var _waiting_stops: Array = []
@@ -104,9 +105,9 @@ func _highlight_bottlenecks() -> void:
 	for idx in _waiting_stops.size():
 		var voters_waiting: int = _count_voters_waiting(idx)
 		if idx < _indicators.size():
-			if voters_waiting >= 3:
+			if voters_waiting >= _indicator_alert_trashhold:
 				_indicators[idx].material.set_shader_parameter("modulate_color", Color.RED)
-			elif voters_waiting >= 2:
+			elif voters_waiting >= _indicator_warning_trashhold:
 				_indicators[idx].material.set_shader_parameter("modulate_color", Color.YELLOW)
 			else:
 				_indicators[idx].material.set_shader_parameter("modulate_color", Color.WHITE)

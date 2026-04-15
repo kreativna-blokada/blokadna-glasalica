@@ -2,13 +2,11 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##                 FACTORY METHOD CLASS
 #description     : Class for randomized generation of Voter characters
-#author          : Zeljko Vulovic
-#date            : 20260110
+#maintainer      : Zeljko Vulovic
 #version         : 1.0
 #===============================================================================
 class_name VotersFactory
 extends Node
-
 
 #private vars
 var _voter_scene: PackedScene = preload("res://!project/build/design/scenes/actors/voter.tscn")

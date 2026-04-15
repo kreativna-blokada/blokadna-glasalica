@@ -2,8 +2,7 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Voting stop placeholder
-#author          : Zeljko Vulovic
-#date            : 20260110
+#maintainer      : Zeljko Vulovic
 #version         : 1.0
 #===============================================================================
 class_name VotingStop
@@ -12,12 +11,17 @@ extends Node2D
 #signals
 signal occupancy_updated
 
+#broadcast vars
+var occupant : Character = null
+
 @export var is_stop : bool
 @export_group("Gameplay Sounds")
 @export var stop_sound : AudioStream
 @export var cool_sound : AudioStream
 @export var sound_volume : float
 @export_group("Stop Animations")
+@export var walk_animation: StopAnim = StopAnim.NONE
+@export var wait_animation: StopAnim = StopAnim.NONE
 enum StopAnim {
 	NONE,
 	TOP_LEFT,
@@ -25,14 +29,9 @@ enum StopAnim {
 	BOTTOM_LEFT,
 	BOTTOM_RIGHT
 }
-@export var walk_animation: StopAnim = StopAnim.NONE
-@export var wait_animation: StopAnim = StopAnim.NONE
 
 #private vars
 var _voting_course_group: String = "voting_course"
-
-#broadcast variables
-var occupant : Character = null
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -45,7 +44,6 @@ var occupant : Character = null
 func _ready() -> void:
 	if is_stop:
 		add_to_group(_voting_course_group)
-
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
