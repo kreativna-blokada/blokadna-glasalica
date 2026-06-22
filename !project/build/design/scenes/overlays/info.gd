@@ -43,8 +43,8 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible or _is_closed:
 		return
-	#closes dialog on "start", "right" or "wrong" press
-	if event.is_action_pressed("start") or event.is_action_pressed("right") or event.is_action_pressed("wrong"):
+	#closes dialog on "start" or "wrong" press
+	if event.is_action_pressed("start") or event.is_action_pressed("wrong"):
 		_close_dialog()
 		#input consumed, no tree propagation
 		get_viewport().set_input_as_handled()

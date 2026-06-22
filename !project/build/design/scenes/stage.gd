@@ -20,6 +20,7 @@ var _selected_voter: Voter = null
 var _max_voter_queue: int = 8
 var _voters_diversity: int = 0
 var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
+var _pending_vote_stop_name: String = ""
 
 #onready vars
 @onready var voters_factory_container: Node2D = $VoterSlots
@@ -55,6 +56,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		_handle_start_action()
 	elif event.is_action_pressed("select"):
 		_handle_select_action()
+	elif event.is_action_pressed("right"):
+		_handle_right_action()
 
 #initiallizes variables
 func _init_vars() -> void:
@@ -89,6 +92,13 @@ func _handle_start_action() -> void:
 #cycles (outlines) through voters
 func _handle_select_action() -> void:
 	_select_next_voter()
+
+#opens info dialog for the pending vote stop
+func _handle_right_action() -> void:
+	if _pending_vote_stop_name.is_empty() or not info_dialog:
+		return
+	info_dialog.show_info(_pending_vote_stop_name)
+	_pending_vote_stop_name = ""
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -260,10 +270,9 @@ func _set_voter_outline(voter: Voter, is_selected: bool) -> void:
 #███████║██║╚██████╔╝██║ ╚████║██║  ██║███████╗███████║
 #╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚══════╝
 
-#signal voter.voter_stopped.emit() => show info dialog
+#signal voter.voter_stopped.emit() => store stop name for on-demand dialog
 func _on_voter_stopped(vote_stop_name: String) -> void:
-	if owner.info_dialog:
-		info_dialog.show_info(vote_stop_name)
+	_pending_vote_stop_name = vote_stop_name
 
 #adds voter to queue and signals queue count
 func _on_voter_queued(voter: Voter) -> void:
