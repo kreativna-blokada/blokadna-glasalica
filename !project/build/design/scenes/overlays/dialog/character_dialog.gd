@@ -1,14 +1,11 @@
 class_name CharacterDialog
-extends Control
+extends CharacterDialogBase
 
-@export var textboxScalePx: Vector2i = Vector2(800, 600)
-@export var _unveilSpeed: float = 30 # per second
 @onready var background: Control = $PanelContainer/BackgroundContainer/Background
 @onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel
 
 var _requestedText: String = ""
-var _lastUnveiledCharIndex: int = 0
-var _unveilTimer: float = 1.0 / _unveilSpeed
+var _unveiledText: String = ""
 
 # 16 pixel padding for the actual borders of the dialog box
 # and then some :D
@@ -23,22 +20,15 @@ func _ready() -> void:
 
 func set_text(text_str: String) -> void:
 	_requestedText = text_str
-	_lastUnveiledCharIndex = 0
+	reset_unveil()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if _requestedText.length() == 0:
+	if _unveiledText == _requestedText:
 		return
-	
-	text.text = _requestedText.substr(0, _lastUnveiledCharIndex)
 
-	_unveilTimer -= delta
-	if _unveilTimer <= 0:
-		_unveilTimer = 1 / _unveilSpeed
-		_lastUnveiledCharIndex += 1
-		if _lastUnveiledCharIndex > _requestedText.length():
-			_lastUnveiledCharIndex = 0
-			_requestedText = ""
+	_unveiledText = get_unveiled(_requestedText, delta)
+	text.text = _unveiledText
 
 func _initialize_placement():
 	# Background is scaled up 8x to properly fit pixel art
@@ -51,3 +41,7 @@ func _initialize_placement():
 
 	text.position += textMargin
 	text.size -= textMargin
+
+func _on_gui_input(event: InputEvent) -> void:
+	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
+		unveil_full_text(_requestedText)

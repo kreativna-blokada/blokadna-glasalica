@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://l81incjb540b"]
+[gd_scene format=3 uid="uid://dj8eo78sgplh5"]
 
-[ext_resource type="Script" uid="uid://bf410qqgq0h7w" path="res://!project/build/design/scenes/overlays/character_dialog.gd" id="1_d77re"]
-[ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="1_xee6c"]
-[ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="3_mdnoa"]
+[ext_resource type="Script" uid="uid://bf410qqgq0h7w" path="res://!project/build/design/scenes/overlays/dialog/character_dialog.gd" id="1_vhlpw"]
+[ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="2_028c8"]
+[ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="3_fi7f4"]
 
 [node name="CharacterDialog" type="Control" unique_id=1292698811]
 layout_mode = 3
@@ -11,7 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_d77re")
+script = ExtResource("1_vhlpw")
 metadata/_edit_vertical_guides_ = [960.0]
 metadata/_edit_horizontal_guides_ = [540.0]
 
@@ -48,7 +48,7 @@ offset_top = 420.0
 offset_right = 870.0
 offset_bottom = 450.0
 scale = Vector2(8, 8)
-texture = ExtResource("1_xee6c")
+texture = ExtResource("2_028c8")
 patch_margin_left = 2
 patch_margin_top = 2
 patch_margin_right = 3
@@ -76,7 +76,7 @@ offset_right = 120.0
 offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_mdnoa")
+theme = ExtResource("3_fi7f4")
 theme_override_font_sizes/normal_font_size = 32
 text = "Lorem ipšum ćolor"
 scroll_active = false
