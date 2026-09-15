@@ -6,9 +6,15 @@ extends Node
 var _unveilTimer: float = 1.0 / unveilSpeed
 var _lastUnveiledCharIndex: int = 0
 
-# Called when the node enters the scene tree for the first time.
+# 16 pixel padding for the actual borders of the dialog box
+# and then some :D
+const textMargin: Vector2 = Vector2(24, 24)
+
+func initialize(textboxScale: Vector2i) -> void:
+	textboxScalePx = textboxScale
+
 func _ready() -> void:
-	pass  # Replace with function body.
+	pass
 
 func reset_unveil() -> void:
 	_lastUnveiledCharIndex = 0
@@ -25,8 +31,8 @@ func get_unveiled(text: String, delta: float) -> String:
 			_lastUnveiledCharIndex = text.length()
 			
 	return text.substr(0, _lastUnveiledCharIndex)
-	
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+
+func apply_margins(node: Control, margin: Vector2) -> void:
+	node.position += margin
+	node.size -= margin * 2

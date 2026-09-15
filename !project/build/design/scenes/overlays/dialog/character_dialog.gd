@@ -7,14 +7,6 @@ extends CharacterDialogBase
 var _requestedText: String = ""
 var _unveiledText: String = ""
 
-# 16 pixel padding for the actual borders of the dialog box
-# and then some :D
-const textMargin: Vector2 = Vector2(24, 24)
-
-
-func initialize(textboxScale: Vector2i) -> void:
-	textboxScalePx = textboxScale
-
 func _ready() -> void:
 	_initialize_placement()
 
@@ -39,8 +31,7 @@ func _initialize_placement():
 	background.position = windowSize * 0.5 - background.size * background.scale * 0.5
 	text.position = windowSize * 0.5 - text.size * text.scale * 0.5
 
-	text.position += textMargin
-	text.size -= textMargin
+	apply_margins(text, textMargin)
 
 func _on_gui_input(event: InputEvent) -> void:
 	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:

@@ -1,12 +1,69 @@
-﻿class_name MultiChoiceCharacterDialog
+class_name MultiChoiceCharacterDialog
 extends CharacterDialogBase
 
+var choiceOriginal: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/dialog_choice.tscn")
 
-# Called when the node enters the scene tree for the first time.
+@onready var background: Control = $PanelContainer/BackgroundContainer/Background
+@onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel
+
+var _choices: Array[DialogChoice] = []
+var _requestedText: String = ""
+var _unveiledText: String = ""
+
+const MAX_NUM_CHOICES: int = 3
+@export var _choiceHeight: int = 100
+
+const choiceMargin: Vector2 = Vector2(24,8) 
+
+func set_text(text_str: String, choices_str: Array[String]) -> void:
+	_initialize_choices(choices_str)
+	_requestedText = text_str
+
+func _initialize_choices(choices_str: Array[String]) -> void:
+	var numChoices: int = len(choices_str)
+	
+	for i in range(numChoices):
+		_choices[i].set_text(choices_str[i])
+		_choices[i].show()
+	
+	# hide whatever other choices are left
+	for i in range(numChoices, MAX_NUM_CHOICES):
+		_choices[i].hide()
+
+	_initialize_placement(numChoices)
+
+func _initialize_placement(num_choices: int) -> void:
+	# Background is scaled up 8x to properly fit pixel art
+	background.size = textboxScalePx * 0.125
+	text.size = textboxScalePx
+	# Top-left-anchored position, move by half of scale back from center of screen
+	var windowSize: Vector2i = get_window().size
+	background.position = windowSize * 0.5 - background.size * background.scale * 0.5
+	text.position = windowSize * 0.5 - text.size * text.scale * 0.5
+	# Scale the main textbox down to accomodate choices
+	text.size -= Vector2(0, _choiceHeight * num_choices)
+
+	for i in range(num_choices):
+		_choices[i].position = text.position + Vector2(0, textboxScalePx.y - textMargin.y - (MAX_NUM_CHOICES - i) * _choiceHeight)
+		_choices[i].size = Vector2(textboxScalePx.x, _choiceHeight)
+		apply_margins(_choices[i], choiceMargin)
+
+	apply_margins(text, textMargin)
+	apply_margins(text, textMargin)
+
 func _ready() -> void:
-	pass  # Replace with function body.
+	# pre-allocate the choices and hide them, to avoid dynamic instantiation
+	for i in range(MAX_NUM_CHOICES):
+		var choiceInstance: DialogChoice = choiceOriginal.instantiate();
+		choiceInstance.hide()
+		_choices.append(choiceInstance)
+		add_child(choiceInstance)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if _unveiledText == _requestedText:
+		return
+
+	_unveiledText = get_unveiled(_requestedText, delta)
+	text.text = _unveiledText
