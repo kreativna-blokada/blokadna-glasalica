@@ -1,7 +1,7 @@
 class_name CharacterDialog
 extends CharacterDialogBase
 
-@onready var background: Control = $PanelContainer/BackgroundContainer/Background
+@onready var panel: Control = $PanelContainer
 @onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel
 
 var _requestedText: String = ""
@@ -23,13 +23,10 @@ func _process(delta: float) -> void:
 	text.text = _unveiledText
 
 func _initialize_placement():
-	# Background is scaled up 8x to properly fit pixel art
-	background.size = textboxScalePx * 0.125
-	text.size = textboxScalePx
+	panel.size = textboxScalePx
 	# Top-left-anchored position, move by half of scale back from center of screen
 	var windowSize: Vector2i = get_window().size
-	background.position = windowSize * 0.5 - background.size * background.scale * 0.5
-	text.position = windowSize * 0.5 - text.size * text.scale * 0.5
+	panel.position = windowSize * 0.5 - panel.size * panel.scale * 0.5
 
 	apply_margins(text, textMargin)
 
