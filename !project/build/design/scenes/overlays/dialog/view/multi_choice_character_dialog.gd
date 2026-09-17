@@ -1,7 +1,7 @@
 class_name MultiChoiceCharacterDialog
 extends CharacterDialogBase
 
-var choiceOriginal: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/dialog_choice.tscn")
+var choiceOriginal: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/dialog_choice.tscn")
 
 @onready var background: Control = $PanelContainer/BackgroundContainer/Background
 @onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel

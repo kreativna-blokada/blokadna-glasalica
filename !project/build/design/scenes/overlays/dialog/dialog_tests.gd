@@ -1,7 +1,7 @@
 extends Control
 
-var dialogBoxOriginal: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/character_dialog.tscn")
-var multiChoiceDialogBoxOriginal: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/multi_choice_character_dialog.tscn")
+var dialogBoxOriginal: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/character_dialog.tscn")
+var multiChoiceDialogBoxOriginal: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/multi_choice_character_dialog.tscn")
 
 
 # Called when the node enters the scene tree for the first time.
