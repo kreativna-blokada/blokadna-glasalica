@@ -1,7 +1,7 @@
-﻿class_name DialogTree
+class_name DialogTree
 
-func _init() -> void:
-	_deserialize()
+func _init(file_path: String) -> void:
+	_deserialize(file_path)
 	_validate()
 	pass
 
@@ -41,41 +41,52 @@ func _validate() -> bool:
 	
 	return len(invalid_nodes) == 0
 
-func _deserialize() -> void:
-	# example before actual deserialization comes in
-	var root_descriptor: DialogDescriptor = DialogDescriptor.new(
-			"Hello world", DialogDescriptor.Speaker.LEFT,
-			[
-				DialogDescriptor.ChoiceDescriptor.new("Choice one", 100),
-				DialogDescriptor.ChoiceDescriptor.new("Choice two", 2),
-				DialogDescriptor.ChoiceDescriptor.new("Choice three", 3)
-			])
+func _deserialize(file_path: String) -> void:
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
+	var data: Dictionary = JSON.parse_string(file.get_as_text())
 
-	_root = DialogTreeNode.new(root_descriptor)
+	var id_to_node: Dictionary = {}
+	var node_dependencies: Dictionary = {}
 
-	var c1_descriptor: DialogDescriptor = DialogDescriptor.new(
-			"Hello world", DialogDescriptor.Speaker.LEFT,
-			[
-				DialogDescriptor.ChoiceDescriptor.new("Choice one", 100),
-				DialogDescriptor.ChoiceDescriptor.new("Choice two", 2),
-				DialogDescriptor.ChoiceDescriptor.new("Choice three", 3)
-			])
-	var c2_descriptor: DialogDescriptor = DialogDescriptor.new(
-			"DOBAR DAN I DOBRODOSLI NA PREDAVANJE", DialogDescriptor.Speaker.LEFT,
-			[
-				DialogDescriptor.ChoiceDescriptor.new("iz operativnih sistema", 100),
-				DialogDescriptor.ChoiceDescriptor.new("iz osnova racunarske tehnike", 2)
-			])
-	var c3_descriptor: DialogDescriptor = DialogDescriptor.new(
-			"Nema izbora ovde", DialogDescriptor.Speaker.LEFT,
-			[])
+	for id in data:
+		var choiceDescriptors: Array[DialogDescriptor.ChoiceDescriptor] = []
+		var dependencies: Array[String] = []
+		# only if choices actually exist
+		if "choices" in data[id]:
+			for choice in data[id].choices:
+				var choice_descriptor: DialogDescriptor.ChoiceDescriptor = DialogDescriptor.ChoiceDescriptor.new(choice.text, choice.score)
+				choiceDescriptors.push_back(choice_descriptor)
+				# a choice can terminate the conversation, or lead to another node
+				if "next" in choice:
+					dependencies.push_back(choice.next)
+				else:
+					dependencies.push_back("")
+		# otherwise, a next node might exist
+		elif "next" in data[id]:
+			dependencies.push_back(data[id].next)
+		# if not, this is a leaf node with no choices.
+		else:
+			dependencies.push_back("")
+		
+		var descriptor: DialogDescriptor = DialogDescriptor.new(
+				data[id].text,
+				DialogDescriptor.Speaker.LEFT, # todo serialize
+				choiceDescriptors
+		)
 
-	var c1 : DialogTreeNode = DialogTreeNode.new(c1_descriptor)
-	c1.add_children([null, null, null])
-	var c2 : DialogTreeNode = DialogTreeNode.new(c2_descriptor)
-	c2.add_children([null, null])
-	var c3 : DialogTreeNode = DialogTreeNode.new(c3_descriptor)
-	c3.add_children([null])
-	_root.add_children([c1, c2, c3])
-
+		id_to_node[id] = DialogTreeNode.new(descriptor)
+		node_dependencies[id] = dependencies
+		
+	# there MUST be a root node
+	_root = id_to_node["root"]
+	for id in node_dependencies:
+		for dep_id in node_dependencies[id]:
+			if dep_id == "":
+				id_to_node[id].add_child(null)
+			else:
+				id_to_node[id].add_child(id_to_node[dep_id])
+	
+	
+	file.close()
+	
 var _root: DialogTreeNode

@@ -11,7 +11,7 @@ func _ready() -> void:
 	# _create_multi_choice_dialog_box()
 
 	print("Instantiating dummy tree")
-	var tree: DialogTree = DialogTree.new()
+	var tree: DialogTree = DialogTree.new("res://!project/build/design/scenes/overlays/dialog/resources/sample_dialog.json")
 	
 
 func _create_basic_dialog_box() -> void:
