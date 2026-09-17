@@ -10,6 +10,10 @@ func _ready() -> void:
 	_create_basic_dialog_box()
 	# _create_multi_choice_dialog_box()
 
+	print("Instantiating dummy tree")
+	var tree: DialogTree = DialogTree.new()
+	
+
 func _create_basic_dialog_box() -> void:
 	var instance: CharacterDialog = dialogBoxOriginal.instantiate()
 	instance.initialize(Vector2i(800, 600))
