@@ -3,6 +3,11 @@ extends Control
 
 @onready var _text: RichTextLabel = $ChoiceText
 
+signal choice_clicked(sender: DialogChoice);
+
+const TOUCH_DEBOUNCE_TIME: float = 0.1
+var _touch_debounce_timer: float = 0
+
 func set_text(text: String) -> void:
 	_text.text = text
 
@@ -13,4 +18,14 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if _touch_debounce_timer > 0:
+		_touch_debounce_timer -= delta
 	pass
+
+func _on_click_detector_gui_input(event: InputEvent) -> void:
+	if _touch_debounce_timer > 0: return
+	
+	# forward the event upwards
+	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
+		choice_clicked.emit(self)
+		_touch_debounce_timer = TOUCH_DEBOUNCE_TIME

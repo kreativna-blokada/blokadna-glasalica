@@ -1,6 +1,8 @@
 class_name MultiChoiceCharacterDialog
 extends CharacterDialogBase
 
+signal finished(choice: int)
+
 var choiceOriginal: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/dialog_choice.tscn")
 
 @onready var background: Control = $PanelContainer/BackgroundContainer/Background
@@ -56,9 +58,19 @@ func _ready() -> void:
 	for i in range(MAX_NUM_CHOICES):
 		var choiceInstance: DialogChoice = choiceOriginal.instantiate();
 		choiceInstance.hide()
+		choiceInstance.choice_clicked.connect(_on_choice_clicked)
 		_choices.append(choiceInstance)
 		add_child(choiceInstance)
 
+func _on_choice_clicked(sender: DialogChoice) -> void:
+	if _unveiledText == _requestedText:
+		var i: int = 0
+		for choice in _choices:
+			if sender == choice:
+				finished.emit(i)
+			i += 1
+	else:
+		unveil_full_text(_requestedText)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
