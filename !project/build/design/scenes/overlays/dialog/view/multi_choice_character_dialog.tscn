@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dj8eo78sgplh5"]
 
-[ext_resource type="Script" uid="uid://otlunh4shbrk" path="res://!project/build/design/scenes/overlays/dialog/view/multi_choice_character_dialog.gd" id="1_vhlpw"]
+[ext_resource type="Script" uid="uid://dvk40mtvdgbw" path="res://!project/build/design/scenes/overlays/dialog/view/multi_choice_character_dialog.gd" id="1_vhlpw"]
 [ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="2_028c8"]
 [ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="3_fi7f4"]
 
@@ -25,14 +25,13 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.6)
 
 [node name="PanelContainer" type="Control" parent="." unique_id=854600279]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+custom_minimum_size = Vector2(300, 200)
+anchors_preset = 0
+offset_right = 442.0
+offset_bottom = 288.0
 
 [node name="BackgroundContainer" type="Control" parent="PanelContainer" unique_id=1637075119]
+custom_minimum_size = Vector2(300, 200)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -41,24 +40,19 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Background" type="NinePatchRect" parent="PanelContainer/BackgroundContainer" unique_id=1357298290]
-custom_minimum_size = Vector2(30, 30)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -0.19791667
-anchor_top = -0.18518518
-anchor_right = -0.14739583
-anchor_bottom = -0.14907408
-offset_left = 840.0
-offset_top = 420.0
-offset_right = 868.0
-offset_bottom = 461.0
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(8, 8)
 texture = ExtResource("2_028c8")
 patch_margin_left = 2
 patch_margin_top = 2
 patch_margin_right = 3
 patch_margin_bottom = 3
-metadata/_edit_use_anchors_ = true
 
 [node name="TextContainer" type="Control" parent="PanelContainer" unique_id=1036597439]
 layout_mode = 1
@@ -70,18 +64,15 @@ grow_vertical = 2
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/TextContainer" unique_id=300978397]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -500.0
-offset_top = -320.0
-offset_right = 500.0
-offset_bottom = 86.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme = ExtResource("3_fi7f4")
 theme_override_font_sizes/normal_font_size = 32
 text = "Lorem ipšum ćolor"
 scroll_active = false
+
+[connection signal="gui_input" from="PanelContainer/TextContainer" to="." method="_on_text_container_gui_input"]

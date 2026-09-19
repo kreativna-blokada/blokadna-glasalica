@@ -3,7 +3,9 @@ class_name DialogTree
 func _init(file_path: String) -> void:
 	_deserialize(file_path)
 	_validate()
-	pass
+
+func get_root() -> DialogTreeNode:
+	return _root
 
 # dfs go through each node
 # the number of children should always equal the number of choices

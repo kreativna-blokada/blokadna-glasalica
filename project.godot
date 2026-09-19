@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Glasalica"
 config/version="0.7.0"
-run/main_scene="uid://xo6ugvkdo8iw"
+run/main_scene="uid://djqhwmvapxh04"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.png"
 
@@ -21,6 +21,7 @@ config/icon="res://icon.png"
 Configs="*uid://dhhyvc7jn85c8"
 Globals="*uid://ej3a17l3oane"
 Signals="*uid://mla4tmb8bcml"
+ScreenManager="*uid://b4jx7uay2aiw0"
 
 [display]
 

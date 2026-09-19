@@ -19,6 +19,14 @@ func get_num_children() -> int:
 func get_children() -> Array[DialogTreeNode]:
 	return _children
 
+func get_child(idx: int) -> DialogTreeNode:
+	return _children[idx]
+
+func get_dialog_descriptor() -> DialogDescriptor:
+	return _dialog_descriptor
+
+
+
 var _dialog_descriptor: DialogDescriptor
 # loosely coupled with the choices, to allow easier deserialization
 var _children: Array[DialogTreeNode]
