@@ -91,19 +91,7 @@ func _update_buttons() -> void:
 
 #checks if a voter is stopped at the stage stop index
 func _has_stopped_voter_at_stop(stop_index: int) -> bool:
-	if _stage == null or stop_index >= _stage.voting_course.size():
-		return false
-
-	var target_stop: VotingStop = _stage.voting_course[stop_index]
-	for child in _stage.voters_factory_container.get_children():
-		var voter: Voter = child as Voter
-		if voter == null or not voter.is_stopping:
-			continue
-		if voter.voting_course_pointer < 0 or voter.voting_course_pointer >= voter.voting_course.size():
-			continue
-		if voter.voting_course[voter.voting_course_pointer] == target_stop:
-			return true
-	return false
+	return _stage != null and _stage.get_stopped_voter_at_stop(stop_index) != null
 
 #emits selected stop data for gameplay handlers
 func _on_stop_button_pressed(idx: int) -> void:

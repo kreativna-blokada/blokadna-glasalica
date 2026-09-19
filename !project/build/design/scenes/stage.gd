@@ -20,7 +20,6 @@ var _selected_voter: Voter = null
 var _max_voter_queue: int = 8
 var _voters_diversity: int = 0
 var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
-var _pending_vote_stop_name: String = ""
 var _is_queue_consolidating: bool = false
 
 #onready vars
@@ -30,7 +29,6 @@ var _is_queue_consolidating: bool = false
 @onready var voter_loading_position: Node2D = $Scenery/VoterStops/Load
 
 @onready var timer: Timer = $Timer
-@onready var info_dialog: InfoDialog = get_parent().get_node("Info Dialog")
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -43,7 +41,6 @@ var _is_queue_consolidating: bool = false
 func _ready() -> void:
 	_init_vars()
 	_init_nodes()
-	_init_signals()
 
 	#loads first voter
 	_get_voter(0)
@@ -57,8 +54,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		_handle_start_action()
 	elif event.is_action_pressed("select"):
 		_handle_select_action()
-	elif event.is_action_pressed("right"):
-		_handle_right_action()
 	elif event.is_action_pressed("next"):
 		# print_debug("next")
 		_handle_next_action()
@@ -73,11 +68,6 @@ func _init_nodes() -> void:
 	timer.start()
 
 	_wire_stop_occupancy_updates()
-
-#initializes connections
-func _init_signals() -> void:
-	if info_dialog:
-		info_dialog.dialog_closed.connect(_on_info_dialog_closed)
 
 #initiallizes gameplay
 func _init_game() -> void:
@@ -108,17 +98,6 @@ func _handle_next_action() -> void:
 #cycles (outlines) through voters
 func _handle_select_action() -> void:
 	_select_next_voter()
-
-#opens info dialog for the pending vote stop
-func _handle_right_action() -> void:
-	show_vote_stop_info(_pending_vote_stop_name)
-	_pending_vote_stop_name = ""
-
-#opens info dialog for a specific voting stop
-func show_vote_stop_info(vote_stop_name: String) -> void:
-	if vote_stop_name.is_empty() or not info_dialog:
-		return
-	info_dialog.show_info(vote_stop_name)
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -164,9 +143,8 @@ func _get_voter(index: int) -> Voter:
 	var walking_course: Array = get_voting_course(voter)
 	#assigns movement path for a loaded voter
 	voter.set_walking_course(walking_course)
-	#connects signals for sync queue count and to use dialog
+	#connects signal for syncing the queue count
 	voter.voter_queued.connect(_on_voter_queued.bind(voter))
-	voter.voter_stopped.connect(_on_voter_stopped)
 
 	return voter
 
@@ -199,6 +177,22 @@ func _find_first_queue_spot() -> Node2D:
 func _get_active_selected_voter() -> Voter:
 	if _selected_voter and is_instance_valid(_selected_voter):
 		return _selected_voter
+	return null
+
+#returns the voter currently waiting at a specific voting stop
+func get_stopped_voter_at_stop(stop_index: int) -> Voter:
+	if stop_index < 0 or stop_index >= voting_course.size():
+		return null
+
+	var target_stop: VotingStop = voting_course[stop_index]
+	for child in voters_factory_container.get_children():
+		var voter: Voter = child as Voter
+		if voter == null or not voter.is_stopping:
+			continue
+		if voter.voting_course_pointer < 0 or voter.voting_course_pointer >= voter.voting_course.size():
+			continue
+		if voter.voting_course[voter.voting_course_pointer] == target_stop:
+			return voter
 	return null
 
 #manages voter release and queue consolidation
@@ -293,20 +287,10 @@ func _set_voter_outline(voter: Voter, is_selected: bool) -> void:
 #███████║██║╚██████╔╝██║ ╚████║██║  ██║███████╗███████║
 #╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚══════╝
 
-#signal voter.voter_stopped.emit() => store stop name for on-demand dialog
-func _on_voter_stopped(vote_stop_name: String) -> void:
-	_pending_vote_stop_name = vote_stop_name
-
 #adds voter to queue and signals queue count
 func _on_voter_queued(voter: Voter) -> void:
 	queued_voters.append(voter)
 	queue_count_updated.emit(queued_voters.size())
-
-#triggers course continuation when dialog closes
-func _on_info_dialog_closed() -> void:
-	var selected_voter: Voter = _get_active_selected_voter()
-	if selected_voter and selected_voter.is_stopping:
-		selected_voter.can_continue_voting_course()
 
 #spawning voters signal handler
 func _on_timer_timeout() -> void:
