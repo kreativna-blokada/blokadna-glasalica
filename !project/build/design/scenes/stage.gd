@@ -58,6 +58,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		_handle_select_action()
 	elif event.is_action_pressed("right"):
 		_handle_right_action()
+	elif event.is_action_pressed("next"):
+		# print_debug("next")
+		_handle_next_action()
 
 #initiallizes variables
 func _init_vars() -> void:
@@ -88,6 +91,18 @@ func _handle_start_action() -> void:
 		selected_voter.can_continue_voting_course()
 	elif selected_voter.is_queueing and queued_voters.has(selected_voter):
 		_dequeue_voter(selected_voter)
+
+func _handle_next_action() -> void:
+	var selected_voter: Voter = _get_active_selected_voter()
+	if not selected_voter:
+		_select_next_voter()
+		selected_voter = _get_active_selected_voter()
+
+	if selected_voter.is_stopping:
+		selected_voter.can_continue_voting_course()
+	elif selected_voter.is_queueing and queued_voters.has(selected_voter):
+		_dequeue_voter(selected_voter)
+
 
 #cycles (outlines) through voters
 func _handle_select_action() -> void:

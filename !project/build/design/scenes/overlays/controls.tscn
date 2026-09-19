@@ -8,21 +8,23 @@
 [ext_resource type="Texture2D" uid="uid://buvdxuyq6y88s" path="res://!project/art/UI/Buttons/input-wrong-active.png" id="4_ial34"]
 [ext_resource type="Texture2D" uid="uid://dd6mrsxeupov" path="res://!project/art/UI/Buttons/input-select-active.png" id="6_eaahr"]
 [ext_resource type="Texture2D" uid="uid://deht4nyl20k5t" path="res://!project/art/UI/Buttons/input-start-active.png" id="8_0hb4n"]
+[ext_resource type="Texture2D" uid="uid://cbdxc56qr4g0g" path="res://!project/art/UI/Buttons/input-play-active.png" id="9_10x56"]
+[ext_resource type="Texture2D" uid="uid://c2jnfolhndkyi" path="res://!project/art/UI/Buttons/input-play-inactive.png" id="10_dtdly"]
 
 [node name="Controls" type="CanvasLayer" unique_id=1497570896]
 
 [node name="Validation" type="Node" parent="." unique_id=373289907]
 
 [node name="Correct" type="TouchScreenButton" parent="Validation" unique_id=1023365775]
+visible = false
 position = Vector2(1703, 723)
-scale = Vector2(0.087, 0.087)
 texture_normal = ExtResource("2_ial34")
 texture_pressed = ExtResource("1_4h5hc")
 action = "right"
 
 [node name="Incorrect" type="TouchScreenButton" parent="Validation" unique_id=1381538608]
+visible = false
 position = Vector2(1528, 896)
-scale = Vector2(0.087, 0.087)
 texture_normal = ExtResource("4_ial34")
 texture_pressed = ExtResource("2_jxo6d")
 action = "wrong"
@@ -30,15 +32,23 @@ action = "wrong"
 [node name="Selection" type="Node" parent="." unique_id=1948632298]
 
 [node name="Select" type="TouchScreenButton" parent="Selection" unique_id=1121920787]
+visible = false
 position = Vector2(39, 723)
-scale = Vector2(0.087, 0.087)
 texture_normal = ExtResource("6_eaahr")
 texture_pressed = ExtResource("3_ial34")
 action = "select"
 
 [node name="Initiate" type="TouchScreenButton" parent="Selection" unique_id=1003241037]
+visible = false
 position = Vector2(205, 896)
-scale = Vector2(0.087, 0.087)
 texture_normal = ExtResource("8_0hb4n")
 texture_pressed = ExtResource("4_eaahr")
 action = "start"
+
+[node name="Node" type="Node" parent="." unique_id=228220347]
+
+[node name="Next" type="TouchScreenButton" parent="Node" unique_id=391491167]
+position = Vector2(316, 907)
+texture_normal = ExtResource("9_10x56")
+texture_pressed = ExtResource("10_dtdly")
+action = "next"
