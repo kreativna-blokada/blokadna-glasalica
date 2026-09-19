@@ -9,8 +9,8 @@ var dialog_controller_scene: PackedScene = preload("res://!project/build/design/
 func _ready() -> void:
 	print("Instantiating dialog")
 	#_create_basic_dialog_box()
-	_create_multi_choice_dialog_box()
-	# _create_dialog_controller()
+	# _create_multi_choice_dialog_box()
+	_create_dialog_controller()
 
 func _create_dialog_controller() -> void:
 	var instance: DialogController = dialog_controller_scene.instantiate()
@@ -20,15 +20,15 @@ func _create_dialog_controller() -> void:
 func _create_basic_dialog_box() -> void:
 	var instance: CharacterDialog = dialogBoxOriginal.instantiate()
 	instance.initialize(Vector2i(800, 600))
-	instance.set_text("Hello world! Lorem ipsum dolor sit amet niška banja topla voda za nišlije živa zgoda")
+	#instance.set_text("Hello world! Lorem ipsum dolor sit amet niška banja topla voda za nišlije živa zgoda")
 	add_child(instance)
 
 func _create_multi_choice_dialog_box() -> void:
 	var instance: MultiChoiceCharacterDialog = multiChoiceDialogBoxOriginal.instantiate()
 	instance.initialize(Vector2i(800, 600))
 	add_child(instance)
-	instance.set_text("Hello world! Lorem ipsum dolor sit amet niška banja topla voda za nišlije živa zgoda",
-	["Ma je li", "Op", "Lorem ipsum dolor sit amet tralala"])
+	#instance.set_text("Hello world! Lorem ipsum dolor sit amet niška banja topla voda za nišlije živa zgoda",
+	#["Ma je li", "Op", "Lorem ipsum dolor sit amet tralala"])
 
 	instance.finished.connect(_on_multi_choice_finished)
 

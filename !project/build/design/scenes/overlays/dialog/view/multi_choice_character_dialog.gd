@@ -16,17 +16,17 @@ var _unveiledText: String = ""
 const MAX_NUM_CHOICES: int = 3
 @export var _choiceHeight: int = 100
 
-const choiceMargin: Vector2 = Vector2(24,8) 
+const choiceMargin: Vector2 = Vector2(24,8)
 
-func set_text(text_str: String, choices_str: Array[String]) -> void:
-	_initialize_choices(choices_str)
-	_requestedText = text_str
+func set_text(dialog_descriptor: DialogDescriptor) -> void:
+	_initialize_choices(dialog_descriptor.choices)
+	_requestedText = dialog_descriptor.text
 
-func _initialize_choices(choices_str: Array[String]) -> void:
-	var numChoices: int = len(choices_str)
+func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> void:
+	var numChoices: int = len(choices)
 	
 	for i in range(numChoices):
-		_choices[i].set_text(choices_str[i])
+		_choices[i].set_text(choices[i].text)
 		_choices[i].show()
 	
 	# hide whatever other choices are left
