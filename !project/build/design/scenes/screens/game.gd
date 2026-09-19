@@ -21,6 +21,8 @@ func _ready() -> void:
 	# dependency injection, wiring stage w/ progress flow
 	if progress_flow and progress_flow.has_method("init"):
 		progress_flow.init(stage)
+	if progress_flow and progress_flow.has_signal("stop_button_pressed"):
+		progress_flow.connect("stop_button_pressed", Callable(self, "_on_stop_button_pressed"))
 	Signals.game_close_requested.connect(_on_game_close_requested)
 
 #signal Signals.game_close_requested => quits the application
@@ -30,3 +32,6 @@ func _on_game_close_requested() -> void:
 # called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
+
+func _on_stop_button_pressed(stop_name: String, _stop_index: int) -> void:
+	stage.show_vote_stop_info(stop_name)

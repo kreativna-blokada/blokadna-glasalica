@@ -2,29 +2,21 @@
 
 [ext_resource type="Script" uid="uid://cyijcbwitwsdg" path="res://!project/build/design/scenes/scenery/progress_flow.gd" id="1_6p1ld"]
 [ext_resource type="Texture2D" uid="uid://cuhe1tglra5ip" path="res://!project/art/UI/Buttons/stop-lamp.png" id="2_aktpo"]
-[ext_resource type="Shader" uid="uid://boii51q6tykpk" path="res://!project/art/shaders/outline.gdshader" id="2_qh0lk"]
 [ext_resource type="Texture2D" uid="uid://dlfkolkueeemx" path="res://!project/art/UI/Buttons/stop-id.png" id="3_qh0lk"]
 [ext_resource type="Texture2D" uid="uid://cxxrl7p6bgrmk" path="res://!project/art/UI/Buttons/stop-list.png" id="4_xcjts"]
 [ext_resource type="Texture2D" uid="uid://dxyehxk1wwiea" path="res://!project/art/UI/Buttons/stop-spray.png" id="5_2egl5"]
 [ext_resource type="Texture2D" uid="uid://cnn7b7nl8olpg" path="res://!project/art/UI/Buttons/stop-ballot.png" id="6_5g41r"]
 [ext_resource type="Texture2D" uid="uid://bxqeglmbirscv" path="res://!project/art/UI/Buttons/stop-booth.png" id="7_lsbry"]
 [ext_resource type="Texture2D" uid="uid://pcilj6pcgqi8" path="res://!project/art/UI/Buttons/stop-box.png" id="8_bfny7"]
+[ext_resource type="Texture2D" uid="uid://drvshxrdvhmnu" path="res://!project/art/UI/Buttons/stop-lamp-disabled.png" id="9_lampd"]
+[ext_resource type="Texture2D" uid="uid://c82anim1ppixb" path="res://!project/art/UI/Buttons/stop-id-disabled.png" id="10_idd"]
+[ext_resource type="Texture2D" uid="uid://dd050ge676m1n" path="res://!project/art/UI/Buttons/stop-list-disabled.png" id="11_listd"]
+[ext_resource type="Texture2D" uid="uid://bp2y27uofaib4" path="res://!project/art/UI/Buttons/stop-spray-disabled.png" id="12_sprayd"]
+[ext_resource type="Texture2D" uid="uid://csoduog5354mj" path="res://!project/art/UI/Buttons/stop-ballot-disabled.png" id="13_ballotd"]
+[ext_resource type="Texture2D" uid="uid://da0ly0j8w5jyv" path="res://!project/art/UI/Buttons/stop-booth-disabled.png" id="14_boothd"]
+[ext_resource type="Texture2D" uid="uid://d1dikdkjqgbi5" path="res://!project/art/UI/Buttons/stop-box-disabled.png" id="15_boxd"]
 [ext_resource type="Texture2D" uid="uid://buvdxuyq6y88s" path="res://!project/art/UI/Buttons/input-wrong-active.png" id="9_close_a"]
 [ext_resource type="Texture2D" uid="uid://nhfp3g4hnx61" path="res://!project/art/UI/Buttons/input-wrong-default.png" id="10_close_d"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qh0lk"]
-shader = ExtResource("2_qh0lk")
-shader_parameter/outline_color = Color(0.33333325, 1, 0, 1)
-shader_parameter/outline_width = 120.0
-shader_parameter/enabled_outline = false
-shader_parameter/modulate_color = Color(1, 1, 1, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_aktpo"]
-shader = ExtResource("2_qh0lk")
-shader_parameter/outline_color = Color(0.33333325, 1, 0, 1)
-shader_parameter/outline_width = 120.0
-shader_parameter/enabled_outline = false
-shader_parameter/modulate_color = Color(1, 1, 1, 1)
 
 [node name="Progress Flow" type="CanvasLayer" unique_id=598334440]
 script = ExtResource("1_6p1ld")
@@ -43,67 +35,67 @@ layout_mode = 2
 theme_override_constants/separation = 30
 alignment = 1
 
-[node name="Scan" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1797415257]
+[node name="Scan" type="TextureButton" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1797415257]
 texture_filter = 1
-material = SubResource("ShaderMaterial_qh0lk")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
-texture = ExtResource("2_aktpo")
-expand_mode = 1
+disabled = true
+texture_normal = ExtResource("2_aktpo")
+texture_disabled = ExtResource("9_lampd")
 stretch_mode = 5
 
-[node name="ID" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1467498483]
+[node name="ID" type="TextureButton" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1467498483]
 texture_filter = 1
-material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
-texture = ExtResource("3_qh0lk")
-expand_mode = 1
+disabled = true
+texture_normal = ExtResource("3_qh0lk")
+texture_disabled = ExtResource("10_idd")
 stretch_mode = 5
 
-[node name="Check" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=28190968]
+[node name="Check" type="TextureButton" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=28190968]
 texture_filter = 1
-material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
-texture = ExtResource("4_xcjts")
-expand_mode = 1
+disabled = true
+texture_normal = ExtResource("4_xcjts")
+texture_disabled = ExtResource("11_listd")
 stretch_mode = 5
 
-[node name="Spray" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=2032902666]
+[node name="Spray" type="TextureButton" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=2032902666]
 texture_filter = 1
-material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
-texture = ExtResource("5_2egl5")
-expand_mode = 1
+disabled = true
+texture_normal = ExtResource("5_2egl5")
+texture_disabled = ExtResource("12_sprayd")
 stretch_mode = 5
 
-[node name="Ballot" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=666927488]
+[node name="Ballot" type="TextureButton" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=666927488]
 texture_filter = 1
-material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
-texture = ExtResource("6_5g41r")
-expand_mode = 1
+disabled = true
+texture_normal = ExtResource("6_5g41r")
+texture_disabled = ExtResource("13_ballotd")
 stretch_mode = 5
 
-[node name="Vote" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=155692759]
+[node name="Vote" type="TextureButton" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=155692759]
 texture_filter = 1
-material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
-texture = ExtResource("7_lsbry")
-expand_mode = 1
+disabled = true
+texture_normal = ExtResource("7_lsbry")
+texture_disabled = ExtResource("14_boothd")
 stretch_mode = 5
 
-[node name="Box" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=980889916]
+[node name="Box" type="TextureButton" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=980889916]
 texture_filter = 1
-material = SubResource("ShaderMaterial_aktpo")
 custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
-texture = ExtResource("8_bfny7")
-expand_mode = 1
+disabled = true
+texture_normal = ExtResource("8_bfny7")
+texture_disabled = ExtResource("15_boxd")
 stretch_mode = 5
 
 [node name="CloseSlot" type="Control" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1774402215]

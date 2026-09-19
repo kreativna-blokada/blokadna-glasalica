@@ -110,10 +110,14 @@ func _handle_select_action() -> void:
 
 #opens info dialog for the pending vote stop
 func _handle_right_action() -> void:
-	if _pending_vote_stop_name.is_empty() or not info_dialog:
-		return
-	info_dialog.show_info(_pending_vote_stop_name)
+	show_vote_stop_info(_pending_vote_stop_name)
 	_pending_vote_stop_name = ""
+
+#opens info dialog for a specific voting stop
+func show_vote_stop_info(vote_stop_name: String) -> void:
+	if vote_stop_name.is_empty() or not info_dialog:
+		return
+	info_dialog.show_info(vote_stop_name)
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
