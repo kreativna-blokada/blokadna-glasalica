@@ -6,7 +6,7 @@ func _ready():
 	var root: Window = get_tree().get_root()
 	current_scene = root.get_child(root.get_child_count() - 1)
 
-func load_scene(path):
+func switch_scene(path):
 	call_deferred("_deferred_goto_scene", path)
 
 func _deferred_goto_scene(path):
