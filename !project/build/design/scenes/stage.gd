@@ -21,6 +21,7 @@ var _max_voter_queue: int = 8
 var _voters_diversity: int = 0
 var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
 var _pending_vote_stop_name: String = ""
+var _is_queue_consolidating: bool = false
 
 #onready vars
 @onready var voters_factory_container: Node2D = $VoterSlots
@@ -202,9 +203,10 @@ func _get_active_selected_voter() -> Voter:
 
 #manages voter release and queue consolidation
 func _dequeue_voter(voter: Voter) -> void:
+	#can_leave_queue() clears starting_spot, so retain it before advancing the voter
+	var queue_spot: VotingStop = voter.starting_spot
 	if not voter.can_leave_queue(): return
 
-	var queue_spot: Node2D = voter.starting_spot
 	#removes voter from queue
 	queued_voters.erase(voter)
 	#signals queue count (_on_queue_count_updated)
@@ -215,8 +217,10 @@ func _dequeue_voter(voter: Voter) -> void:
 		queue_spot.free_up()
 
 	#shuffles the remaining queue after a delay
+	_is_queue_consolidating = true
 	await get_tree().create_timer(0.5).timeout
 	_shift_voters_forward()
+	_is_queue_consolidating = false
 
 #forward movment for waiting voters
 func _shift_voters_forward() -> void:
@@ -306,7 +310,7 @@ func _on_info_dialog_closed() -> void:
 
 #spawning voters signal handler
 func _on_timer_timeout() -> void:
-	if _any_free_queue_spots() and queued_voters.size() < _max_voter_queue:
+	if not _is_queue_consolidating and _any_free_queue_spots() and queued_voters.size() < _max_voter_queue:
 		_spawn_voters()
 
 	timer.start()       # Restart the X second timer
