@@ -5,7 +5,8 @@ signal finished(choice: int)
 
 var choiceOriginal: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/dialog_choice.tscn")
 
-@onready var background: Control = $PanelContainer/BackgroundContainer/Background
+@onready var background: Control = $PanelContainer
+@onready var text_container: Control = $PanelContainer/TextContainer
 @onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel
 
 var _choices: Array[DialogChoice] = []
@@ -35,22 +36,19 @@ func _initialize_choices(choices_str: Array[String]) -> void:
 	_initialize_placement(numChoices)
 
 func _initialize_placement(num_choices: int) -> void:
-	# Background is scaled up 8x to properly fit pixel art
-	background.size = textboxScalePx * 0.125
-	text.size = textboxScalePx
+	background.size = textboxScalePx
+	print("background size set to %s" % background.size)
 	# Top-left-anchored position, move by half of scale back from center of screen
 	var windowSize: Vector2i = get_window().size
 	background.position = windowSize * 0.5 - background.size * background.scale * 0.5
-	text.position = windowSize * 0.5 - text.size * text.scale * 0.5
 	# Scale the main textbox down to accomodate choices
-	text.size -= Vector2(0, _choiceHeight * num_choices)
+	text_container.size -= Vector2(0, _choiceHeight * num_choices)
 
 	for i in range(num_choices):
-		_choices[i].position = text.position + Vector2(0, textboxScalePx.y - textMargin.y - (MAX_NUM_CHOICES - i) * _choiceHeight)
+		_choices[i].position = background.position + Vector2(0, textboxScalePx.y - textMargin.y - (MAX_NUM_CHOICES - i) * _choiceHeight)
 		_choices[i].size = Vector2(textboxScalePx.x, _choiceHeight)
 		apply_margins(_choices[i], choiceMargin)
 
-	apply_margins(text, textMargin)
 	apply_margins(text, textMargin)
 
 func _ready() -> void:
@@ -79,3 +77,10 @@ func _process(delta: float) -> void:
 
 	_unveiledText = get_unveiled(_requestedText, delta)
 	text.text = _unveiledText
+
+
+func _on_text_container_gui_input(event: InputEvent) -> void:
+	# no need to debounce anything here
+	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
+		unveil_full_text(_requestedText)
+	
