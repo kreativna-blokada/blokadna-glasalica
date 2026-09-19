@@ -18,17 +18,25 @@ func initialize(dialog_path: String, dialog_size: Vector2i) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	_create_view()
+	_connect_events()
+	_update_view()
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+func _create_view() -> void:
 	_dialog_box = _dialog_box_scene.instantiate()
 	_multi_choice_dialog_box = _multi_choice_dialog_box_scene.instantiate()
 	_dialog_box.initialize(_dialog_size)
 	_multi_choice_dialog_box.initialize(_dialog_size)
 	add_child(_dialog_box)
 	add_child(_multi_choice_dialog_box)
-	_update_view()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _connect_events() -> void:
+	_dialog_box.finished.connect(_on_simple_dialog_finish)
+	_multi_choice_dialog_box.finished.connect(_on_multi_choice_dialog_finish)
 
 func _update_view() -> void:
 	var view_element: CharacterDialogBase
@@ -42,3 +50,24 @@ func _update_view() -> void:
 		_multi_choice_dialog_box.hide()
 
 	view_element.set_text(_current_node.get_dialog_descriptor())
+
+
+func _finish_dialog() -> void:
+	_multi_choice_dialog_box.hide()
+	_dialog_box.hide()
+	
+	
+func _advance(choice: int) -> void:
+	_current_node = _current_node.get_child(choice)
+	if _current_node == null:
+		_finish_dialog()
+	else:
+		_update_view()
+	
+
+func _on_simple_dialog_finish() -> void:
+	_advance(0)
+	
+
+func _on_multi_choice_dialog_finish(choice: int) -> void:
+	_advance(choice)

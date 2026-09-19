@@ -21,6 +21,7 @@ const choiceMargin: Vector2 = Vector2(24,8)
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_initialize_choices(dialog_descriptor.choices)
 	_requestedText = dialog_descriptor.text
+	reset_unveil()
 
 func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> void:
 	var numChoices: int = len(choices)
@@ -42,14 +43,15 @@ func _initialize_placement(num_choices: int) -> void:
 	var windowSize: Vector2i = get_window().size
 	background.position = windowSize * 0.5 - background.size * background.scale * 0.5
 	# Scale the main textbox down to accomodate choices
-	text_container.size -= Vector2(0, _choiceHeight * num_choices)
+	text_container.position = Vector2(0,0)
+	text_container.size = background.size - Vector2(0, _choiceHeight * num_choices)
 
 	for i in range(num_choices):
 		_choices[i].position = background.position + Vector2(0, textboxScalePx.y - textMargin.y - (MAX_NUM_CHOICES - i) * _choiceHeight)
 		_choices[i].size = Vector2(textboxScalePx.x, _choiceHeight)
 		apply_margins(_choices[i], choiceMargin)
 
-	apply_margins(text, textMargin)
+	apply_margins(text_container, textMargin)
 
 func _ready() -> void:
 	# pre-allocate the choices and hide them, to avoid dynamic instantiation
