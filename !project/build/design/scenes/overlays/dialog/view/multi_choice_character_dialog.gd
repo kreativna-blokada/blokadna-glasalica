@@ -16,12 +16,16 @@ var _unveiledText: String = ""
 const MAX_NUM_CHOICES: int = 3
 @export var _choiceHeight: int = 100
 
+const TOUCH_DEBOUNCE_TIME: float = 0.1
+var _touch_debounce_timer: float = 0
+
 const choiceMargin: Vector2 = Vector2(24,8)
 
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_initialize_choices(dialog_descriptor.choices)
 	_requestedText = dialog_descriptor.text
 	reset_unveil()
+	_touch_debounce_timer = TOUCH_DEBOUNCE_TIME
 
 func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> void:
 	var numChoices: int = len(choices)
@@ -46,7 +50,7 @@ func _initialize_placement(num_choices: int) -> void:
 	text_container.size = background.size - Vector2(0, _choiceHeight * num_choices)
 
 	for i in range(num_choices):
-		_choices[i].position = background.position + Vector2(0, textboxScalePx.y - textMargin.y - (MAX_NUM_CHOICES - i) * _choiceHeight)
+		_choices[i].position = background.position + Vector2(0, textboxScalePx.y - textMargin.y - (num_choices - i) * _choiceHeight)
 		_choices[i].size = Vector2(textboxScalePx.x, _choiceHeight)
 		apply_margins(_choices[i], choiceMargin)
 
@@ -73,6 +77,9 @@ func _on_choice_clicked(sender: DialogChoice) -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if _touch_debounce_timer > 0:
+		_touch_debounce_timer -= delta
+	
 	if _unveiledText == _requestedText:
 		return
 
@@ -81,7 +88,7 @@ func _process(delta: float) -> void:
 
 
 func _on_text_container_gui_input(event: InputEvent) -> void:
-	# no need to debounce anything here
+	if _touch_debounce_timer > 0: return
+	
 	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
 		unveil_full_text(_requestedText)
-	
