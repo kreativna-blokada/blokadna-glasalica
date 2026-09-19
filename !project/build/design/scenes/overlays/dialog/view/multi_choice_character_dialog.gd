@@ -38,7 +38,6 @@ func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> v
 
 func _initialize_placement(num_choices: int) -> void:
 	background.size = textboxScalePx
-	print("background size set to %s" % background.size)
 	# Top-left-anchored position, move by half of scale back from center of screen
 	var windowSize: Vector2i = get_window().size
 	background.position = windowSize * 0.5 - background.size * background.scale * 0.5

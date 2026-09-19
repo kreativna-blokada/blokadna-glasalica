@@ -4,11 +4,13 @@ extends Control
 @onready var _dialog_box_scene: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/character_dialog.tscn")
 @onready var _multi_choice_dialog_box_scene: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/multi_choice_character_dialog.tscn")
 
+signal choice_made(choice_descriptor: DialogDescriptor.ChoiceDescriptor)
+signal finished()
+
 var _dialog_box: CharacterDialog
 var _multi_choice_dialog_box: MultiChoiceCharacterDialog
 var _dialog_tree: DialogTree
 var _current_node: DialogTreeNode
-
 var _dialog_size: Vector2i
 
 func initialize(dialog_path: String, dialog_size: Vector2i) -> void:
@@ -61,6 +63,7 @@ func _advance(choice: int) -> void:
 	_current_node = _current_node.get_child(choice)
 	if _current_node == null:
 		_finish_dialog()
+		finished.emit()
 	else:
 		_update_view()
 	
@@ -70,4 +73,5 @@ func _on_simple_dialog_finish() -> void:
 	
 
 func _on_multi_choice_dialog_finish(choice: int) -> void:
+	choice_made.emit(_current_node.get_dialog_descriptor().choices[choice])
 	_advance(choice)

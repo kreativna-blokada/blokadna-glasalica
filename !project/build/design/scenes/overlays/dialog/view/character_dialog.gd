@@ -17,6 +17,7 @@ func _ready() -> void:
 
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_requestedText = dialog_descriptor.text
+	_touch_debounce_timer = TOUCH_DEBOUNCE_TIME
 	reset_unveil()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
