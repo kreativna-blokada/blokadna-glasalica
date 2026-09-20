@@ -51,5 +51,7 @@ func load_voter(_index: int) -> Node:
 
 #dynimacally loaded instance's texture
 func _get_texture(_index: int) -> Resource:
-	var texture = Globals.VoterFactory[_index]["Texture2D"]
-	return load(texture)
+	var texture_path: String = Globals.VoterFactory[_index]["Texture2D"]
+	if not ResourceLoader.exists(texture_path, "Texture2D"):
+		texture_path = Globals.VoterFactory[Globals.Voter.Player]["Texture2D"]
+	return load(texture_path)

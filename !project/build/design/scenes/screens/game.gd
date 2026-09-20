@@ -25,6 +25,7 @@ var _dialog_voter: Voter = null
 @onready var stage: Stage = $Stage
 @onready var progress_flow: CanvasLayer = $"Progress Flow"
 @onready var dialog_layer: CanvasLayer = $"Dialog Layer"
+@onready var controls: CanvasLayer = $Controls
 
 # called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -33,6 +34,8 @@ func _ready() -> void:
 		progress_flow.init(stage)
 	if progress_flow and progress_flow.has_signal("stop_button_pressed"):
 		progress_flow.connect("stop_button_pressed", Callable(self, "_on_stop_button_pressed"))
+	if controls and controls.has_method("init"):
+		controls.init(stage)
 	Signals.game_close_requested.connect(_on_game_close_requested)
 
 #signal Signals.game_close_requested => quits the application

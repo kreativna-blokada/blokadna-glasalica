@@ -11,6 +11,7 @@ extends Character
 #signals
 signal voter_queued
 signal voter_stopped(vote_stop_name: String)
+signal course_point_reached(point_name: StringName)
 
 #broadcast vars
 var voter_factory_index: int = -1
@@ -129,9 +130,10 @@ func _load_idle_pose(coords: Dictionary) -> void:
 	#caches texture for later restoration
 	if _cached_texture == null:
 		_cached_texture = character_texture.texture
+	if _cached_texture == null:
+		return
 
-	var idle_texture_path: String = Globals.VoterFactory[voter_factory_index]["Texture2D"]
-	character_texture.texture = load(idle_texture_path)
+	character_texture.texture = _cached_texture
 	character_texture.hframes = Globals.VoterIdleAnimations["Animation"]["Frames"]["Hframes"]
 	character_texture.vframes = Globals.VoterIdleAnimations["Animation"]["Frames"]["Vframes"]
 	character_texture.frame_coords = Vector2i(coords["x"], coords["y"])
@@ -251,11 +253,13 @@ func _on_stop_reached() -> void:
 	_wait_frame_coord = _find_wait_animation_frame_coord()
 
 	var stop_node: VotingStop = _get_vote_stop(voting_course_pointer)
+	if stop_node:
+		course_point_reached.emit(stop_node.name)
 	#stops are actional or transitional
 	if stop_node and stop_node.is_stop:
 		#handle_movement() & handle_animations()
 		is_stopping = true
-		#informs stop name to info dialog
+		#informs listeners which action stop was reached
 		voter_stopped.emit(stop_node.name)
 	else:
 		if not _wait_frame_coord.is_empty():

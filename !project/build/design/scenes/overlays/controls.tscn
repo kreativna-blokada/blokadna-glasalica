@@ -10,8 +10,10 @@
 [ext_resource type="Texture2D" uid="uid://deht4nyl20k5t" path="res://!project/art/UI/Buttons/input-start-active.png" id="8_0hb4n"]
 [ext_resource type="Texture2D" uid="uid://cbdxc56qr4g0g" path="res://!project/art/UI/Buttons/input-play-active.png" id="9_10x56"]
 [ext_resource type="Texture2D" uid="uid://c2jnfolhndkyi" path="res://!project/art/UI/Buttons/input-play-inactive.png" id="10_dtdly"]
+[ext_resource type="Script" uid="uid://dukeudf631kni" path="res://!project/build/design/scenes/overlays/controls.gd" id="11_controls"]
 
 [node name="Controls" type="CanvasLayer" unique_id=1497570896]
+script = ExtResource("11_controls")
 
 [node name="Validation" type="Node" parent="." unique_id=373289907]
 
