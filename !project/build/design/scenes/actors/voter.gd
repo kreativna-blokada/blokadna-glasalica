@@ -32,6 +32,7 @@ var _is_course_finished: bool = false
 var _course_target: Node2D = null
 var _feet_offset_enhancer: int = 2
 var _stop_reach_threshold: float = 5.0
+var _descriptor: VoterDescriptor
 
 #onready vars
 @onready var vote_stop_sound: AudioStreamPlayer = $AudioStreamPlayer
@@ -67,6 +68,12 @@ func _process(_delta: float) -> void:
 #██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
 #╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
+func init(voter_descriptor: VoterDescriptor) -> void:
+	_descriptor = voter_descriptor
+
+func get_dialog_path(stop_name: String) -> String:
+	return _descriptor.get_dialog_path(stop_name)
+
 #handle interaction with voters
 func handle_input() -> void:
 	super.handle_input()
@@ -91,6 +98,7 @@ func handle_movement() -> void:
 	if _state != state_check:
 		_state_entered = false
 
+	
 #updates animations based on state
 func handle_animations() -> void:
 	if _state == State.WAIT:

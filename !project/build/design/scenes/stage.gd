@@ -23,6 +23,8 @@ var _max_voter_queue: int = 8
 var _voter_factory_indices: Array[int] = []
 var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
 var _is_queue_consolidating: bool = false
+var _mission_descriptor: MissionDescriptor = GameManager.get_mission_descriptor()
+
 
 #onready vars
 @onready var voters_factory: VotersFactory = $VoterSlots
@@ -39,6 +41,10 @@ var _is_queue_consolidating: bool = false
 #██║     ██╔══██║██║     ██║     ██╔══██╗██╔══██║██║     ██╔═██╗ ╚════██║
 #╚██████╗██║  ██║███████╗███████╗██████╔╝██║  ██║╚██████╗██║  ██╗███████║
 # ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
+
+func init(mission_descriptor: MissionDescriptor) -> void:
+	_mission_descriptor = mission_descriptor
+
 
 func _ready() -> void:
 	_init_vars()
@@ -152,6 +158,8 @@ func _get_voter(index: int) -> Voter:
 	#connects signal for syncing the queue count
 	voter.voter_queued.connect(_on_voter_queued.bind(voter))
 	voter.course_point_reached.connect(_on_voter_course_point_reached.bind(voter))
+	
+	voter.init(_mission_descriptor.get_voter_descriptor(index))
 
 	return voter
 

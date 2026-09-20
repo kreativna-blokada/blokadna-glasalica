@@ -11,7 +11,6 @@ extends Node
 const DIALOG_CONTROLLER_SCENE: PackedScene = preload(
 	"res://!project/build/design/scenes/overlays/dialog/dialog_controller.tscn"
 )
-const DIALOG_DIRECTORY: String = "res://!project/build/design/dialogues"
 const DIALOG_SIZE: Vector2i = Vector2i(800, 600)
 
 @export_group("Debugging")
@@ -53,7 +52,7 @@ func _on_stop_button_pressed(stop_name: String, stop_index: int) -> void:
 	if voter == null:
 		return
 
-	var dialog_path: String = _get_dialog_path(stop_name)
+	var dialog_path: String = voter.get_dialog_path(stop_name)
 	if not FileAccess.file_exists(dialog_path):
 		voter.can_continue_voting_course()
 		return
@@ -64,9 +63,6 @@ func _on_stop_button_pressed(stop_name: String, stop_index: int) -> void:
 	_dialog_controller.finished.connect(_on_dialog_finished)
 	_dialog_controller.choice_made.connect(_on_dialog_choice_made)
 	dialog_layer.add_child(_dialog_controller)
-
-func _get_dialog_path(stop_name: String) -> String:
-	return "%s/%s_dialog_01.json" % [DIALOG_DIRECTORY, stop_name.to_snake_case()]
 
 func _on_dialog_finished() -> void:
 	var voter: Voter = _dialog_voter

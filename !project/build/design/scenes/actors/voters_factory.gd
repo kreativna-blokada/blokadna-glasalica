@@ -35,9 +35,9 @@ func _init() -> void:
 #╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
 #instanciates loaded scene updated by listed resources
-func load_voter(_index: int) -> Node:
+func load_voter(_index: int) -> Voter:
 	#instantiate the template scene
-	var voter: Node = _voter_scene.instantiate()
+	var voter: Voter = _voter_scene.instantiate() as Voter
 
 	voter.voter_factory_index = _index
 	voter.add_to_group(_voter_group)
@@ -46,7 +46,7 @@ func load_voter(_index: int) -> Node:
 	var texture: Resource = _get_texture(_index)
 	var _voter_scene_sprite = _voter_scene_struct["sprite"]
 	voter.get_node(_voter_scene_sprite).set_texture(texture)
-
+	
 	return voter
 
 #dynimacally loaded instance's texture
