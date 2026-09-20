@@ -6,6 +6,10 @@ var _game_descriptor: GameDescriptor = GameDescriptor.new()
 var _mission_descriptor: MissionDescriptor
 var _current_screen: GameScreen = GameScreen.START
 
+func get_game_descriptor() -> GameDescriptor:
+	if _current_screen == GameScreen.START:
+		push_error("Tried to get game descriptor before game started")
+	return _game_descriptor
 
 func start_game(difficulty: GameDescriptor.Difficulty, mission_descriptor: MissionDescriptor) -> void:
 	_set_difficulty(difficulty)

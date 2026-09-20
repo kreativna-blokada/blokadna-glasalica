@@ -20,6 +20,7 @@ const DIALOG_SIZE: Vector2i = Vector2i(800, 600)
 #private vars
 var _dialog_controller: DialogController = null
 var _dialog_voter: Voter = null
+var _game_descriptor: GameDescriptor = null
 
 #onready vars
 @onready var stage: Stage = $Stage
@@ -33,7 +34,7 @@ func _ready() -> void:
 	if progress_flow and progress_flow.has_method("init"):
 		progress_flow.init(stage)
 	if progress_flow and progress_flow.has_signal("stop_button_pressed"):
-		progress_flow.connect("stop_button_pressed", Callable(self, "_on_stop_button_pressed"))
+		progress_flow.connect("stop_button_pressed", _on_stop_button_pressed)
 	if controls and controls.has_method("init"):
 		controls.init(stage)
 	Signals.game_close_requested.connect(_on_game_close_requested)
@@ -41,6 +42,8 @@ func _ready() -> void:
 #signal Signals.game_close_requested => quits the application
 func _on_game_close_requested() -> void:
 	get_tree().quit()
+
+	_game_descriptor = GameManager.get_game_descriptor()
 
 # called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -63,6 +66,7 @@ func _on_stop_button_pressed(stop_name: String, stop_index: int) -> void:
 	_dialog_controller = DIALOG_CONTROLLER_SCENE.instantiate() as DialogController
 	_dialog_controller.initialize(dialog_path, DIALOG_SIZE)
 	_dialog_controller.finished.connect(_on_dialog_finished)
+	_dialog_controller.choice_made.connect(_on_dialog_choice_made)
 	dialog_layer.add_child(_dialog_controller)
 
 func _get_dialog_path(stop_name: String) -> String:
@@ -78,3 +82,6 @@ func _on_dialog_finished() -> void:
 		controller.queue_free()
 	if voter and is_instance_valid(voter) and voter.is_stopping:
 		voter.can_continue_voting_course()
+
+func _on_dialog_choice_made(choice_descriptor: DialogDescriptor.ChoiceDescriptor) -> void:
+	_game_descriptor.update_points(choice_descriptor.score)
