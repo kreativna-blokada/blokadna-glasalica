@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://cil4h2lqmpepn" path="res://!project/art/UI/StartScreen/start_screen_bg.png" id="1_kyx6a"]
 [ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="2_hc03d"]
 [ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="3_vy6u0"]
+[ext_resource type="Texture2D" uid="uid://dedyjt5as2e08" path="res://!project/art/UI/DialogBox/DialogBoxChoiceNineSlice.png" id="5_vy6u0"]
+[ext_resource type="Script" uid="uid://dlnmb6olmbwo7" path="res://!project/build/design/scenes/screens/start_difficulty_manager.gd" id="5_w8mn6"]
 
 [node name="StartScreen" type="Control" unique_id=2022338941]
 layout_mode = 3
@@ -113,5 +115,130 @@ text = "LEADERBOARDS
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Difficulty" type="Control" parent="." unique_id=707345227]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = 100.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_w8mn6")
+
+[node name="CurrentDifficulty" type="Control" parent="Difficulty" unique_id=1341920346]
+layout_mode = 1
+anchor_left = 0.15
+anchor_right = 0.85
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Bg" type="NinePatchRect" parent="Difficulty/CurrentDifficulty" unique_id=669832872]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("5_vy6u0")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Difficulty/CurrentDifficulty" unique_id=871058023]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("3_vy6u0")
+theme_override_font_sizes/normal_font_size = 52
+text = "Hoću izazov"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Left" type="Control" parent="Difficulty" unique_id=1627085889]
+layout_mode = 1
+anchor_right = 0.15
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Bg" type="NinePatchRect" parent="Difficulty/Left" unique_id=2121555182]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("2_hc03d")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Difficulty/Left" unique_id=1709900610]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("3_vy6u0")
+theme_override_font_sizes/normal_font_size = 72
+text = "<"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Right" type="Control" parent="Difficulty" unique_id=1208540862]
+layout_mode = 1
+anchor_left = 0.85
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Bg" type="NinePatchRect" parent="Difficulty/Right" unique_id=1172778271]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("2_hc03d")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Difficulty/Right" unique_id=1568513825]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("3_vy6u0")
+theme_override_font_sizes/normal_font_size = 72
+text = ">"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="gui_input" from="StartButton" to="." method="_on_start_button_gui_input"]
 [connection signal="gui_input" from="LeaderboardButton" to="." method="_on_leaderboard_button_gui_input"]
+[connection signal="gui_input" from="Difficulty" to="." method="_on_leaderboard_button_gui_input"]
+[connection signal="gui_input" from="Difficulty/Left" to="Difficulty" method="_on_difficulty_button_gui_input"]
+[connection signal="gui_input" from="Difficulty/Right" to="Difficulty" method="_on_difficulty_button_gui_input"]
