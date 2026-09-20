@@ -5,6 +5,7 @@
 #maintainer      : Zeljko Vulovic
 #version         : 1.1
 #===============================================================================
+class_name ProgressFlow
 extends CanvasLayer
 
 #signals

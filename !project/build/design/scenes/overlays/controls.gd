@@ -1,3 +1,4 @@
+class_name Controls
 extends CanvasLayer
 
 var _next_enabled_texture: Texture2D

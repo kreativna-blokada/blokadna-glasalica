@@ -24,26 +24,22 @@ var _game_descriptor: GameDescriptor = null
 
 #onready vars
 @onready var stage: Stage = $Stage
-@onready var progress_flow: CanvasLayer = $"Progress Flow"
+@onready var progress_flow: ProgressFlow = $"Progress Flow"
 @onready var dialog_layer: CanvasLayer = $"Dialog Layer"
-@onready var controls: CanvasLayer = $Controls
+@onready var controls: Controls = $Controls
 
 # called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	# dependency injection, wiring stage w/ progress flow
-	if progress_flow and progress_flow.has_method("init"):
-		progress_flow.init(stage)
-	if progress_flow and progress_flow.has_signal("stop_button_pressed"):
-		progress_flow.connect("stop_button_pressed", _on_stop_button_pressed)
-	if controls and controls.has_method("init"):
-		controls.init(stage)
+	progress_flow.init(stage)
+	progress_flow.stop_button_pressed.connect(_on_stop_button_pressed)
+	controls.init(stage)
 	Signals.game_close_requested.connect(_on_game_close_requested)
+
+	_game_descriptor = GameManager.get_game_descriptor()
 
 #signal Signals.game_close_requested => quits the application
 func _on_game_close_requested() -> void:
 	get_tree().quit()
-
-	_game_descriptor = GameManager.get_game_descriptor()
 
 # called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
