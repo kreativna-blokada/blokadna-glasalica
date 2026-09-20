@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bfwpr0gf10wx0" path="res://!project/build/design/scenes/scenery/progress_flow.tscn" id="1_icv6h"]
 [ext_resource type="Script" uid="uid://egc5bohaewmh" path="res://!project/build/design/scenes/stage.gd" id="1_whd4d"]
 [ext_resource type="PackedScene" uid="uid://b0hekwx8gev5y" path="res://!project/build/design/scenes/scenery/scenery.tscn" id="2_scnry"]
-[ext_resource type="Script" uid="uid://dv4vi1n10xo74" path="res://!project/build/design/scenes/actors/voters.gd" id="3_whd4d"]
+[ext_resource type="Script" uid="uid://dv4vi1n10xo74" path="res://!project/build/design/scenes/actors/voters_factory.gd" id="3_whd4d"]
 [ext_resource type="PackedScene" uid="uid://bvusekekschrb" path="res://!project/build/design/scenes/overlays/controls.tscn" id="5_ywe5c"]
 
 [node name="Game" type="Node" unique_id=1771661075]
@@ -13,7 +13,7 @@ stop_sounds = false
 
 [node name="Progress Flow" parent="." unique_id=598334440 instance=ExtResource("1_icv6h")]
 
-[node name="Dialog Layer" type="CanvasLayer" parent="."]
+[node name="Dialog Layer" type="CanvasLayer" parent="." unique_id=241681050]
 layer = 10
 
 [node name="Stage" type="Node2D" parent="." unique_id=1877766357]

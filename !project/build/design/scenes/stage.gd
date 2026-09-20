@@ -25,7 +25,7 @@ var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
 var _is_queue_consolidating: bool = false
 
 #onready vars
-@onready var voters_factory_container: Node2D = $VoterSlots
+@onready var voters_factory: VotersFactory = $VoterSlots
 @onready var queue_spots: Array = $Scenery/VoterSpots.get_children()
 @onready var voting_course: Array = $Scenery/VoterStops.get_children()
 @onready var voter_loading_position: Node2D = $Scenery/VoterStops/Load
@@ -137,13 +137,13 @@ func _spawn_voters() -> void:
 
 #gets and sets a voter from the factory
 func _get_voter(index: int) -> Voter:
-	if not voters_factory_container or not voters_factory_container.has_method("load_voter"):
+	if not voters_factory:
 		push_error("[STAGE] Voter factory container is missing or invalid!")
 		return null
 
 	#creates an instance using factory script, adds it to the scene
-	var voter: Voter = voters_factory_container.load_voter(index)
-	voters_factory_container.add_child(voter)
+	var voter: Voter = voters_factory.load_voter(index)
+	voters_factory.add_child(voter)
 
 	voter.position = voter_loading_position.global_position
 	var walking_course: Array = get_voting_course(voter)
@@ -215,7 +215,7 @@ func get_stopped_voter_at_stop(stop_index: int) -> Voter:
 		return null
 
 	var target_stop: VotingStop = voting_course[stop_index]
-	for child in voters_factory_container.get_children():
+	for child in voters_factory.get_children():
 		var voter: Voter = child as Voter
 		if voter == null or not voter.is_stopping:
 			continue
@@ -298,7 +298,7 @@ func _select_next_voter() -> void:
 
 #gets all voters available for selection
 func _get_selectable_voters() -> Array:
-	var selectable_voters: Array = voters_factory_container.get_children().filter(
+	var selectable_voters: Array = voters_factory.get_children().filter(
 		func(voter): return voter is Voter and (voter.is_stopping or voter.is_queueing)
 	)
 
