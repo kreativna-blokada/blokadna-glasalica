@@ -2,17 +2,17 @@
   "root": {
     "text": "Blablabla ovo je prvi tekst",
     "choices": [
-      {"text": "ovo je prvi izbor haha", "score": 100, "next": "node1"},
-      {"text": "ovo je drugi izbor", "score": 200, "next": "node2"},
-      {"text": "ovo zavrsava konverzaciju", "score": -20}
+      {"text": "ovo je prvi izbor haha", "explanation": "Odlican izbor", "score": 100, "next": "node1"},
+      {"text": "ovo je drugi izbor", "explanation": "Najbolji izbor", "score": 200, "next": "node2"},
+      {"text": "ovo zavrsava konverzaciju", "explanation": "Katastrofa izbor", "score": -20}
     ]
   },
 
   "node1": {
     "text": "lele šta mi reče",
     "choices": [
-      {"text": "opa", "score": 200},
-      {"text": "ahaa aha", "score": 200}
+      {"text": "opa", "explanation": "Sjajan izbor", "score": 200},
+      {"text": "ahaa aha", "explanation": "Podjednako dobar izbor", "score": 200}
     ]
   },
 

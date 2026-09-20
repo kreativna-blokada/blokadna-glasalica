@@ -56,7 +56,11 @@ func _deserialize(file_path: String) -> void:
 		# only if choices actually exist
 		if "choices" in data[id]:
 			for choice in data[id].choices:
-				var choice_descriptor: DialogDescriptor.ChoiceDescriptor = DialogDescriptor.ChoiceDescriptor.new(choice.text, choice.score)
+				var choice_descriptor: DialogDescriptor.ChoiceDescriptor = DialogDescriptor.ChoiceDescriptor.new(
+						choice.text, 
+						choice.score,
+						choice.explanation
+				)
 				choiceDescriptors.push_back(choice_descriptor)
 				# a choice can terminate the conversation, or lead to another node
 				if "next" in choice:

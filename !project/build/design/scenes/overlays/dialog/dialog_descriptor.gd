@@ -3,10 +3,12 @@
 class ChoiceDescriptor:
 	var text: String
 	var score: int
+	var explanation: String
 	
-	func _init(_text: String, _score: int):
+	func _init(_text: String, _score: int, _explanation: String):
 		text = _text
 		score = _score
+		explanation = _explanation
 
 enum Speaker {LEFT = 0, RIGHT = 1}
 

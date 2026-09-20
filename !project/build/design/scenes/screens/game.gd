@@ -84,4 +84,4 @@ func _on_dialog_finished() -> void:
 		voter.can_continue_voting_course()
 
 func _on_dialog_choice_made(choice_descriptor: DialogDescriptor.ChoiceDescriptor) -> void:
-	_game_descriptor.update_points(choice_descriptor.score)
+	_game_descriptor.track_choice(choice_descriptor)
