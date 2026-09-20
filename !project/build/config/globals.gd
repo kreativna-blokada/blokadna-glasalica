@@ -95,15 +95,17 @@ enum Voter {
 	Red,
 	Violet,
 	Yellow
+	#Yellow,
+	#FemaleBlue
 }
 
 var VoterFactory: Dictionary[Variant, Variant] = {
 	Voter.Player: {
 		"Texture2D": "res://!project/art/player2.png",
 	},
-	Voter.Black: {
-		"Texture2D": "res://!project/art/player-black.png",
-	},
+	#Voter.Black: {
+	#	"Texture2D": "res://!project/art/player-black.png",
+	#},
 	Voter.Blue: {
 		"Texture2D": "res://!project/art/player-blue.png",
 	},
@@ -125,6 +127,9 @@ var VoterFactory: Dictionary[Variant, Variant] = {
 	Voter.Yellow: {
 		"Texture2D": "res://!project/art/player-yellow.png",
 	},
+	#Voter.FemaleBlue: {
+	#	"Texture2D": "res://!project/art/player-female-blue.png",
+	#},
 }
 
 var VoterIdleAnimations: Dictionary = {
