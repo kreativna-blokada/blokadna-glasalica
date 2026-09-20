@@ -22,6 +22,7 @@ Configs="*uid://dhhyvc7jn85c8"
 Globals="*uid://ej3a17l3oane"
 Signals="*uid://mla4tmb8bcml"
 ScreenManager="*uid://b4jx7uay2aiw0"
+GameManager="*uid://bjfmu6oaoxk6g"
 
 [display]
 
