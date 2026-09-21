@@ -21,7 +21,7 @@ config/icon="res://icon.png"
 Configs="*uid://dhhyvc7jn85c8"
 Globals="*uid://ej3a17l3oane"
 Signals="*uid://mla4tmb8bcml"
-ScreenManager="*uid://b4jx7uay2aiw0"
+ScreenManager="*uid://lrhmjicg5tti"
 GameManager="*uid://bjfmu6oaoxk6g"
 
 [display]
