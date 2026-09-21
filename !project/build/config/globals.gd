@@ -12,6 +12,7 @@ extends Node
 const PATH: String = "res://!project/build/config/globals.gd"
 
 enum Scene {
+	Menu,
 	Game,
 	Voter,
 	Info,
@@ -19,8 +20,11 @@ enum Scene {
 }
 
 var Scenes: Dictionary[Variant, Variant] = {
+	Scene.Menu: {
+		"path": "res://!project/build/design/scenes/screens/main_menu.tscn"
+	},
 	Scene.Game: {
-		"path": "res://!project/build/design/scenes/game.tscn"
+		"path": "res://!project/build/design/scenes/screens/game.tscn"
 	},
 	Scene.Voter: {
 		"path": "res://!project/build/design/scenes/actors/voter.tscn",

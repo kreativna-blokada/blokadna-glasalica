@@ -27,3 +27,16 @@ var EntityProperties: Dictionary[Variant, Variant] = {
 		"lives": 0
 	}
 }
+
+var Shake: Dictionary[String, Variant] = {
+	#m/s² along device y axis, above gravity (~9.8)
+	"threshold": 15.0,
+	#up/down movements required to start the game
+	"count": 8,
+	#ms w/o a shake before the counter resets
+	"timeout": 1500,
+	#px the text jumps per shake
+	"jump_height": 120.0,
+	#s for one jump, up and back to rest
+	"jump_duration": 0.5,
+}
