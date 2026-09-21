@@ -1,0 +1,22 @@
+﻿{
+  "root" : {
+    "text": "Izvolite glasački listić!",
+    "next": "response"
+  },
+  
+  "response": {
+    "text": "Primećuje se da je listić pocepan na jednom mestu",
+    "choices": [
+      {
+        "text": "Moram da tražim drugi!",
+        "explanation":  "Potencijalno nevalidan listić mora odmah da se prijavi.",
+        "score": 100
+      },
+      {
+        "text": "Ovaj je okej, znamo se mi.",
+        "explanation":  "Potencijalno nevalidan listić mora odmah da se prijavi. Pocepan lisitć se možda neće računati kao validan glas",
+        "score": -100
+      }
+    ]
+  }
+}
