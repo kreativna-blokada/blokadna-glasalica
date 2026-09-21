@@ -17,13 +17,16 @@ const _GRAVITY: float = 9.8
 var _is_starting: bool = false
 var _shake_done: bool = false
 var _shake_count: int = 0
-var _above_threshold: bool = false
+#+1 up, -1 down, 0 resting; direction of the movement currently over threshold
+var _shake_direction: float = 0.0
 var _last_shake_time: int = 0
 var _jump_tween: Tween
+var _rest_offset: float
 
 #onready vars
 @onready var jumper: CenterContainer = %JumperContainer
 @onready var jump_sound: AudioStreamPlayer = %JumpSound
+@onready var phone_animation: AnimationPlayer = %PhoneAnimation
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -35,6 +38,8 @@ var _jump_tween: Tween
 
 #starts the jump sound looping as soon as the menu loads
 func _ready() -> void:
+	_rest_offset = jumper.position.y
+
 	jump_sound.finished.connect(_on_jump_sound_finished)
 	jump_sound.play()
 
@@ -49,17 +54,21 @@ func _process(_delta: float) -> void:
 		_shake_count = 0
 
 	var vertical_acceleration: float = Input.get_accelerometer().y
-	var is_above_threshold: bool = absf(vertical_acceleration) > Configs.Shake["threshold"]
-	#count only the rising edge, one shake = one crossing over threshold
-	if is_above_threshold and not _above_threshold:
+	var current_direction: float = 0.0
+	if absf(vertical_acceleration) > Configs.Shake["threshold"]:
+		current_direction = signf(vertical_acceleration)
+	#one shake = one new movement over threshold, up or down alone or a direct up/down flip
+	if current_direction != 0.0 and current_direction != _shake_direction:
 		_shake_count += 1
 		_last_shake_time = current_time
-		_jump(signf(vertical_acceleration))
+		_jump(current_direction)
 		if _shake_count >= Configs.Shake["count"]:
 			#stop counting; game starts once the sound finishes this last loop
 			_shake_done = true
 			_is_starting = true
-	_above_threshold = is_above_threshold
+			#phone stops looping and stays still while the last sound plays out
+			phone_animation.play(&"final")
+	_shake_direction = current_direction
 
 #starts game on "start" press as well
 func _unhandled_input(event: InputEvent) -> void:
@@ -99,7 +108,7 @@ func _jump(direction: float) -> void:
 
 	jump_sound.play()
 
-	var rest_position: float = 0.0
+	var rest_position: float = _rest_offset
 	var peak_position: float = rest_position - direction * Configs.Shake["jump_height"]
 	var jump_duration: float = Configs.Shake["jump_duration"]
 

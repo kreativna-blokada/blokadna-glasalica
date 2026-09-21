@@ -1,8 +1,98 @@
-[gd_scene format=3 uid="uid://cpe84b7smud5o"]
+[gd_scene format=3 uid="uid://xo6ugvkdo8iw"]
 
 [ext_resource type="Script" uid="uid://cai4bmusbwfgp" path="res://!project/build/design/scenes/screens/main_menu.gd" id="1_main_menu"]
 [ext_resource type="FontFile" uid="uid://bdaf012h5ofyp" path="res://!project/assets/fonts/LiberationSans-Bold.ttf" id="2_font"]
 [ext_resource type="AudioStream" uid="uid://dj353siuj13e2" path="res://!project/audio/zoki skace.mp3" id="3_jump_sound"]
+[ext_resource type="Texture2D" uid="uid://csyys2s13dajh" path="res://!project/art/UI/pointers/chevrons_1-1.png" id="4_arrow_1"]
+[ext_resource type="Texture2D" uid="uid://cfd0nx6wj213k" path="res://!project/art/UI/pointers/chevrons_2-1.png" id="4_arrow_2"]
+[ext_resource type="Texture2D" uid="uid://bebhkn3sfdusc" path="res://!project/art/UI/pointers/chevrons_4.png" id="4_arrow_3"]
+[ext_resource type="Texture2D" uid="uid://qmrqc23i7p0s" path="res://!project/art/UI/pointers/chevrons_3.png" id="4_arrow_4"]
+[ext_resource type="Texture2D" uid="uid://0aotpu6drjxu" path="res://!project/art/UI/phones/image_01.png" id="5_phone_01"]
+[ext_resource type="Texture2D" uid="uid://byywmc58gij25" path="res://!project/art/UI/phones/image_02.png" id="5_phone_02"]
+[ext_resource type="Texture2D" uid="uid://dyxut2sxi2w36" path="res://!project/art/UI/phones/image_03.png" id="5_phone_03"]
+[ext_resource type="Texture2D" uid="uid://rmq0w7s6s6mq" path="res://!project/art/UI/phones/image_04.png" id="5_phone_04"]
+[ext_resource type="Texture2D" uid="uid://jj4xvyp223vv" path="res://!project/art/UI/phones/image_05.png" id="5_phone_05"]
+[ext_resource type="Texture2D" uid="uid://cexv34qvchd5v" path="res://!project/art/UI/phones/image_06.png" id="5_phone_06"]
+[ext_resource type="Texture2D" uid="uid://dl8op0y6kkrdv" path="res://!project/art/UI/phones/image_07.png" id="5_phone_07"]
+[ext_resource type="Texture2D" uid="uid://b8rjc3hq0sxbb" path="res://!project/art/UI/phones/image_08.png" id="5_phone_08"]
+[ext_resource type="Texture2D" uid="uid://e4rh4l3116d7" path="res://!project/art/UI/phones/image_09.png" id="5_phone_09"]
+[ext_resource type="Texture2D" uid="uid://b8fg3thy11yhf" path="res://!project/art/UI/phones/image_10.png" id="5_phone_10"]
+
+[sub_resource type="Animation" id="Animation_chevrons"]
+resource_name = "chevrons"
+length = 1.2
+loop_mode = 1
+step = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UpPointer:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("4_arrow_1"), ExtResource("4_arrow_2"), ExtResource("4_arrow_3"), ExtResource("4_arrow_4")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DownPointer:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("4_arrow_1"), ExtResource("4_arrow_2"), ExtResource("4_arrow_3"), ExtResource("4_arrow_4")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_arrows"]
+_data = {
+&"chevrons": SubResource("Animation_chevrons")
+}
+
+[sub_resource type="Animation" id="Animation_final"]
+resource_name = "final"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_phone_10")]
+}
+
+[sub_resource type="Animation" id="Animation_shake"]
+resource_name = "shake"
+length = 0.9
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("5_phone_01"), ExtResource("5_phone_02"), ExtResource("5_phone_04"), ExtResource("5_phone_03"), ExtResource("5_phone_05"), ExtResource("5_phone_06"), ExtResource("5_phone_07"), ExtResource("5_phone_08"), ExtResource("5_phone_09")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_phone"]
+_data = {
+&"final": SubResource("Animation_final"),
+&"shake": SubResource("Animation_shake")
+}
 
 [node name="MainMenu" type="Control" unique_id=367170839]
 custom_minimum_size = Vector2(1920, 1080)
@@ -26,23 +116,80 @@ mouse_filter = 2
 [node name="JumperContainer" type="CenterContainer" parent="." unique_id=327250296]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = -1
+anchor_right = 0.6
 anchor_bottom = 1.0
+offset_top = 100.0
+offset_bottom = 36.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
 [node name="SloganLabel" type="Label" parent="JumperContainer" unique_id=1605837650]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(1100, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.496, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 128
+theme_override_font_sizes/font_size = 84
 text = "СТУДЕНТИ ПОБЕЂУЈУ!"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
 uppercase = true
+
+[node name="PointersColumn" type="VBoxContainer" parent="." unique_id=1841027733]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.625
+anchor_top = 0.25
+anchor_right = 0.675
+anchor_bottom = 0.75
+offset_top = 80.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="UpPointer" type="TextureRect" parent="PointersColumn" unique_id=1204851596]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("4_arrow_1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DownPointer" type="TextureRect" parent="PointersColumn" unique_id=1735026114]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("4_arrow_1")
+expand_mode = 1
+stretch_mode = 5
+flip_v = true
+
+[node name="PointersAnimation" type="AnimationPlayer" parent="PointersColumn" unique_id=1592734402]
+libraries/ = SubResource("AnimationLibrary_arrows")
+autoplay = &"chevrons"
+
+[node name="Phone" type="TextureRect" parent="." unique_id=1052193517]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_phone_01")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PhoneAnimation" type="AnimationPlayer" parent="Phone" unique_id=1348762095]
+unique_name_in_owner = true
+libraries/ = SubResource("AnimationLibrary_phone")
+autoplay = &"shake"
+speed_scale = 0.5
 
 [node name="JumpSound" type="AudioStreamPlayer" parent="." unique_id=1292889533]
 unique_name_in_owner = true
