@@ -11,15 +11,16 @@ config_version=5
 [application]
 
 config/name="Blokadna Glasalica"
-run/main_scene="uid://cugarisbw1qyg"
+run/main_scene="res://!project/build/design/scenes/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
-config/icon="res://icon.svg"
+config/icon="res://icon.png"
 
 [autoload]
 
 Configs="*uid://dhhyvc7jn85c8"
 Globals="*uid://ej3a17l3oane"
 Signals="*uid://mla4tmb8bcml"
+SensorSim="*res://!project/build/config/sensor_sim.gd"
 
 [display]
 
