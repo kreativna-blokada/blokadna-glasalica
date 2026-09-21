@@ -24,7 +24,7 @@ var Scenes: Dictionary[Variant, Variant] = {
 		"path": "res://!project/build/design/scenes/screens/main_menu.tscn"
 	},
 	Scene.Game: {
-		"path": "res://!project/build/design/scenes/screens/game.tscn"
+		"path": "res://!project/build/design/scenes/game.tscn"
 	},
 	Scene.Voter: {
 		"path": "res://!project/build/design/scenes/actors/voter.tscn",
