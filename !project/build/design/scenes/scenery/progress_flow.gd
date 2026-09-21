@@ -32,6 +32,10 @@ var _stops_occupancy: Array = []
 func _ready() -> void:
 	_init_indicators()
 
+#signal Close.pressed => requests closing the game screen
+func _on_close_pressed() -> void:
+	Signals.game_close_requested.emit()
+
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
 #██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝

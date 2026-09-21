@@ -7,3 +7,7 @@
 #version         : 1.0
 #===============================================================================
 extends Node
+
+#emitted when the application should be closed
+@warning_ignore("unused_signal")
+signal game_close_requested

@@ -22,6 +22,11 @@ func _ready() -> void:
 	# dependency injection, wiring stage w/ progress flow
 	if progress_flow and progress_flow.has_method("init"):
 		progress_flow.init(stage)
+	Signals.game_close_requested.connect(_on_game_close_requested)
+
+#signal Signals.game_close_requested => quits the application
+func _on_game_close_requested() -> void:
+	get_tree().quit()
 
 # called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:

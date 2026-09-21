@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://cnn7b7nl8olpg" path="res://!project/art/UI/Buttons/stop-ballot.png" id="6_5g41r"]
 [ext_resource type="Texture2D" uid="uid://bxqeglmbirscv" path="res://!project/art/UI/Buttons/stop-booth.png" id="7_lsbry"]
 [ext_resource type="Texture2D" uid="uid://pcilj6pcgqi8" path="res://!project/art/UI/Buttons/stop-box.png" id="8_bfny7"]
+[ext_resource type="Texture2D" uid="uid://buvdxuyq6y88s" path="res://!project/art/UI/Buttons/input-wrong-active.png" id="9_close_a"]
+[ext_resource type="Texture2D" uid="uid://nhfp3g4hnx61" path="res://!project/art/UI/Buttons/input-wrong-default.png" id="10_close_d"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qh0lk"]
 shader = ExtResource("2_qh0lk")
@@ -38,7 +40,7 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1188387519]
 layout_mode = 2
-theme_override_constants/separation = 60
+theme_override_constants/separation = 30
 alignment = 1
 
 [node name="Scan" type="TextureRect" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1797415257]
@@ -103,3 +105,23 @@ layout_mode = 2
 texture = ExtResource("8_bfny7")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="CloseSlot" type="Control" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1774402215]
+custom_minimum_size = Vector2(186, 195)
+layout_mode = 2
+
+[node name="Close" type="TextureButton" parent="CenterContainer/VBoxContainer/HBoxContainer/CloseSlot" unique_id=1349920117]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -93.0
+offset_bottom = 97.0
+grow_horizontal = 0
+texture_normal = ExtResource("9_close_a")
+texture_pressed = ExtResource("10_close_d")
+ignore_texture_size = true
+stretch_mode = 5
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/CloseSlot/Close" to="." method="_on_close_pressed"]
