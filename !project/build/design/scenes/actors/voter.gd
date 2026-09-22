@@ -263,6 +263,11 @@ func _on_stop_reached() -> void:
 	var stop_node: VotingStop = _get_vote_stop(voting_course_pointer)
 	if stop_node:
 		course_point_reached.emit(stop_node.name)
+		
+		if stop_node.name == "Enter":
+			z_index = -2
+		elif stop_node.name == "Exit":
+			z_index = 0
 	#stops are actional or transitional
 	if stop_node and stop_node.is_stop:
 		#handle_movement() & handle_animations()
