@@ -10,8 +10,9 @@ config_version=5
 
 [application]
 
-config/name="Blokadna Glasalica"
-run/main_scene="uid://cpe84b7smud5o"
+config/name="Glasalica"
+config/version="0.7.0"
+run/main_scene="uid://xo6ugvkdo8iw"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.png"
 
