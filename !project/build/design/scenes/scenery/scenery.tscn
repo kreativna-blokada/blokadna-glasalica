@@ -21,7 +21,8 @@
 [ext_resource type="AudioStream" uid="uid://2iencenuu38j" path="res://!project/audio/alexzavesa-glitch-3-463646.mp3" id="24_kmrnq"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hcqac"]
-height = 60.0
+radius = 25.333313
+height = 117.333374
 
 [node name="Scenery" type="Node2D" unique_id=2093316346]
 script = ExtResource("13_scnry")
@@ -110,7 +111,7 @@ texture = ExtResource("4_door")
 [node name="Area2D" type="Area2D" parent="Setup/Entry" unique_id=108462272]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Setup/Entry/Area2D" unique_id=1796451470]
-position = Vector2(0.666, 65)
+position = Vector2(18.666653, 58.666668)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_hcqac")
 

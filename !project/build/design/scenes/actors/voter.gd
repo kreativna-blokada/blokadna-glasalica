@@ -264,6 +264,7 @@ func _on_stop_reached() -> void:
 	if stop_node:
 		course_point_reached.emit(stop_node.name)
 		
+		# make voters not walk on top of doors while in the room
 		if stop_node.name == "Enter":
 			z_index = -2
 		elif stop_node.name == "Exit":
