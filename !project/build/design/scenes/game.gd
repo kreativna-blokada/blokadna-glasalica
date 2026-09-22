@@ -11,7 +11,6 @@ extends Node
 @export_group("Debugging")
 @export var stop_sounds: bool = true
 @export var info_dialog: bool = true
-@export var cool_game: bool = false
 
 #onready vars
 @onready var stage: Stage = $Stage

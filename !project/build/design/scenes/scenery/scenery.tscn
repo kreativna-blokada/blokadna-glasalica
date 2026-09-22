@@ -12,20 +12,13 @@
 [ext_resource type="Texture2D" uid="uid://bh0tina8uva5e" path="res://!project/art/table2.png" id="8_t2"]
 [ext_resource type="AudioStream" uid="uid://bl1a5beu2w3jt" path="res://!project/audio/alexzavesa-double-woosh-1-463575.mp3" id="12_2sfpg"]
 [ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/scenery/voting_stop.tscn" id="12_ugfii"]
-[ext_resource type="AudioStream" uid="uid://s6w6p52j2a48" path="res://!project/audio/bubblegum.mp3" id="13_qpjah"]
 [ext_resource type="Script" uid="uid://bw25mgovar025" path="res://!project/build/design/scenes/scenery/scenery.gd" id="13_scnry"]
 [ext_resource type="AudioStream" uid="uid://bj2cd8bqmqy0j" path="res://!project/audio/alexzavesa-electric-boom-1-463651.mp3" id="14_jvw4y"]
-[ext_resource type="AudioStream" uid="uid://bx23gysb2okdh" path="res://!project/audio/Maximus Decimus Meridius.mp3" id="15_0v8w5"]
 [ext_resource type="AudioStream" uid="uid://j72j7b0ry78b" path="res://!project/audio/alexzavesa-electronic-impact-stomps-4-463657.mp3" id="16_fupqg"]
-[ext_resource type="AudioStream" uid="uid://j8f4g5s7f65e" path="res://!project/audio/Wookiees.mp3" id="17_a3n54"]
 [ext_resource type="AudioStream" uid="uid://dyrmyiclcspgo" path="res://!project/audio/alexzavesa-future-game-glitch-1-463641.mp3" id="18_oany1"]
-[ext_resource type="AudioStream" uid="uid://cy8i8ge0bmnlf" path="res://!project/audio/lack of faith.mp3" id="19_hc7mv"]
 [ext_resource type="AudioStream" uid="uid://cvxvdl45p0a0" path="res://!project/audio/alexzavesa-future-game-glitch-2-463631.mp3" id="20_sjbew"]
-[ext_resource type="AudioStream" uid="uid://k0r0jfs2nmbx" path="res://!project/audio/Dark Side.mp3" id="21_8sgi2"]
 [ext_resource type="AudioStream" uid="uid://ctpx1jbnsuiag" path="res://!project/audio/alexzavesa-future-game-glitch-10-463642.mp3" id="22_tekev"]
-[ext_resource type="AudioStream" uid="uid://5rg3l114nsi1" path="res://!project/audio/deal.mp3" id="23_njcvq"]
 [ext_resource type="AudioStream" uid="uid://2iencenuu38j" path="res://!project/audio/alexzavesa-glitch-3-463646.mp3" id="24_kmrnq"]
-[ext_resource type="AudioStream" uid="uid://dquij0grig1h" path="res://!project/audio/try.mp3" id="25_3uaup"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hcqac"]
 height = 60.0
@@ -194,7 +187,6 @@ walk_animation = 2
 position = Vector2(525, 650)
 is_stop = true
 stop_sound = ExtResource("12_2sfpg")
-cool_sound = ExtResource("13_qpjah")
 sound_volume = 16.0
 walk_animation = 1
 wait_animation = 1
@@ -203,7 +195,6 @@ wait_animation = 1
 position = Vector2(714, 547)
 is_stop = true
 stop_sound = ExtResource("14_jvw4y")
-cool_sound = ExtResource("15_0v8w5")
 sound_volume = 16.0
 walk_animation = 2
 wait_animation = 1
@@ -212,7 +203,6 @@ wait_animation = 1
 position = Vector2(854, 492)
 is_stop = true
 stop_sound = ExtResource("16_fupqg")
-cool_sound = ExtResource("17_a3n54")
 sound_volume = 16.0
 walk_animation = 2
 wait_animation = 1
@@ -221,7 +211,6 @@ wait_animation = 1
 position = Vector2(1173, 554)
 is_stop = true
 stop_sound = ExtResource("18_oany1")
-cool_sound = ExtResource("19_hc7mv")
 sound_volume = 16.0
 walk_animation = 4
 wait_animation = 2
@@ -230,7 +219,6 @@ wait_animation = 2
 position = Vector2(1411, 661)
 is_stop = true
 stop_sound = ExtResource("20_sjbew")
-cool_sound = ExtResource("21_8sgi2")
 sound_volume = 16.0
 walk_animation = 4
 wait_animation = 2
@@ -243,7 +231,6 @@ walk_animation = 4
 position = Vector2(1266, 860)
 is_stop = true
 stop_sound = ExtResource("22_tekev")
-cool_sound = ExtResource("23_njcvq")
 sound_volume = 16.0
 walk_animation = 3
 wait_animation = 1
@@ -260,7 +247,6 @@ walk_animation = 1
 position = Vector2(976, 754)
 is_stop = true
 stop_sound = ExtResource("24_kmrnq")
-cool_sound = ExtResource("25_3uaup")
 sound_volume = 16.0
 walk_animation = 2
 wait_animation = 1

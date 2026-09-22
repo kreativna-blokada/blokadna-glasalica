@@ -349,6 +349,6 @@ func play_stop_sound() -> void:
 
 #retrieves stop sound from occupied voting stop
 func _get_stop_sound(stop_node: Node2D) -> AudioStream:
-	if stop_node and (stop_node.stop_sound or stop_node.cool_sound):
-		return stop_node.stop_sound if not get_tree().current_scene.cool_game else stop_node.cool_sound
+	if stop_node and stop_node.stop_sound:
+		return stop_node.stop_sound
 	return null
