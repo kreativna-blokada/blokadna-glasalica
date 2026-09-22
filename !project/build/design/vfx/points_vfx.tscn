@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cg1i37d5oi64d"]
+
+[ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="1_wbv2k"]
+[ext_resource type="Script" uid="uid://7on8arufcb34" path="res://!project/build/design/vfx/points_vfx.gd" id="1_xgmtk"]
+
+[node name="PointsVfx" type="Node2D" unique_id=1595106523]
+script = ExtResource("1_xgmtk")
+
+[node name="Label" type="RichTextLabel" parent="." unique_id=984150616]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -367.0
+offset_top = -226.0
+offset_right = 367.0
+offset_bottom = 226.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_wbv2k")
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/normal_font_size = 200
+text = "+200"
+horizontal_alignment = 1
+vertical_alignment = 1

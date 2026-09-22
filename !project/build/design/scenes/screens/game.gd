@@ -9,8 +9,13 @@ class_name Game
 extends Node
 
 const DIALOG_CONTROLLER_SCENE: PackedScene = preload(
-	"res://!project/build/design/scenes/overlays/dialog/dialog_controller.tscn"
+		"res://!project/build/design/scenes/overlays/dialog/dialog_controller.tscn"
 )
+
+const POINTS_VFX_SCENE: PackedScene = preload(
+		"res://!project/build/design/vfx/points_vfx.tscn"
+)
+
 const DIALOG_SIZE: Vector2i = Vector2i(800, 600)
 
 @export_group("Debugging")
@@ -77,3 +82,14 @@ func _on_dialog_finished() -> void:
 
 func _on_dialog_choice_made(choice_descriptor: DialogDescriptor.ChoiceDescriptor) -> void:
 	_game_descriptor.track_choice(choice_descriptor)
+	var popup: Node = POINTS_VFX_SCENE.instantiate()
+	dialog_layer.add_child(popup)  # or a dedicated "VFXLayer" node
+	popup.global_position = _dialog_controller.global_position + _dialog_controller.size / 2
+	var points_str: String = "+" + str(choice_descriptor.score)
+	var points_color: Color = Color.GREEN
+	if choice_descriptor.score < 0:
+		points_str = str(choice_descriptor.score)
+		points_color = Color.RED
+		
+	popup.setup(points_str, points_color)
+	popup.play()
