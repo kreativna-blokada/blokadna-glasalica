@@ -111,6 +111,7 @@ custom_minimum_size = Vector2(186, 195)
 layout_mode = 2
 
 [node name="Close" type="TextureButton" parent="CenterContainer/VBoxContainer/HBoxContainer/CloseSlot" unique_id=1349920117]
+unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 1

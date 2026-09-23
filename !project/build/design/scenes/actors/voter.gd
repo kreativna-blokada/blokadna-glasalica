@@ -23,7 +23,8 @@ var is_stopping: bool = false
 #private vars
 var _cached_texture: Texture2D = null
 var _wait_frame_coord: Dictionary = {}
-var _walk_animation_name: String = "idle"
+var _walk_animation_name: String = "bottom-right"
+var _last_walk_animation_name: String = "bottom-right"
 var _state_entered: bool = false
 var _is_shuffling: bool = false
 var _is_course_finished: bool = false
@@ -153,13 +154,18 @@ func _find_wait_animation_frame_coord() -> Dictionary:
 
 #finds walk animation name by target stop setup
 func _find_walk_animation_name() -> void:
+	var next_animation_name: String = "none"
+
 	if _course_target is VotingStop:
 		#get booted walk_animation from voting_stop
-		_walk_animation_name = _course_target.get_walk_animation_name()
-		if _walk_animation_name == "none":
-			_walk_animation_name = "idle"
-	else:
-		_walk_animation_name = "idle"
+		next_animation_name = _course_target.get_walk_animation_name()
+
+	if next_animation_name == "none":
+		_walk_animation_name = _last_walk_animation_name
+		return
+
+	_walk_animation_name = next_animation_name
+	_last_walk_animation_name = next_animation_name
 
 #restores texture after wait state
 func _restore_walking_texture() -> void:
