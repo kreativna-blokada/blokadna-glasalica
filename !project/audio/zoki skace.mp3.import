@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dj353siuj13e2"
+path="res://.godot/imported/zoki skace.mp3-f3a8f03f31631040ea6a30e10fcfc879.mp3str"
+
+[deps]
+
+source_file="res://!project/audio/zoki skace.mp3"
+dest_files=["res://.godot/imported/zoki skace.mp3-f3a8f03f31631040ea6a30e10fcfc879.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

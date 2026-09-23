@@ -17,9 +17,6 @@ var _info_data: Dictionary = {}
 var _tweening: Tween = null
 var _is_closed: bool = false
 
-var _cool_info: FileAccess = FileAccess.open("res://!project/build/design/cool_infos.json", FileAccess.READ)
-var _cool_data: Dictionary = {}
-
 var _secs_per_char: float = 0.06
 
 #onready vars
@@ -60,7 +57,6 @@ func _unhandled_input(event: InputEvent) -> void:
 #loads from json files to dictionaries
 func _load_info_texts() -> void:
 	_info_data = _parse_json_file(_info_file)
-	_cool_data = _parse_json_file(_cool_info)
 
 func _parse_json_file(file: FileAccess) -> Dictionary:
 	if file:
@@ -91,9 +87,8 @@ func show_info(vote_stop_name: String) -> void:
 
 #sets dialog components' content
 func _set_content(key: String) -> void:
-	var data: Dictionary = _cool_data if owner.cool_game else _info_data
-	title_label.text = data[key]["title"]
-	content_label.text = "[center]" + data[key]["content"] + "[/center]"
+	title_label.text = _info_data[key]["title"]
+	content_label.text = "[center]" + _info_data[key]["content"] + "[/center]"
 	content_label.visible_ratio = 0.0
 
 #open animation: background fades in, panel scales up with overshoot

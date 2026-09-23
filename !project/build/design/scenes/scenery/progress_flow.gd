@@ -31,6 +31,13 @@ var _stops_occupancy: Array = []
 
 func _ready() -> void:
 	_init_indicators()
+	#browsers can't close the tab from the game, quit() is a no-op there
+	if OS.has_feature("web"):
+		%Close.hide()
+
+#signal Close.pressed => requests closing the game screen
+func _on_close_pressed() -> void:
+	Signals.game_close_requested.emit()
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗

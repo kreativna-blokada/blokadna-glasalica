@@ -17,7 +17,6 @@ var occupant : Character = null
 @export var is_stop : bool
 @export_group("Gameplay Sounds")
 @export var stop_sound : AudioStream
-@export var cool_sound : AudioStream
 @export var sound_volume : float
 @export_group("Stop Animations")
 @export var walk_animation: StopAnim = StopAnim.NONE

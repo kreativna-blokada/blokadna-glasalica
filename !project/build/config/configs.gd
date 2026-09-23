@@ -27,3 +27,20 @@ var EntityProperties: Dictionary[Variant, Variant] = {
 		"lives": 0
 	}
 }
+
+var Shake: Dictionary[String, Variant] = {
+	#up/down movements required to start the game
+	"count": 8,
+	#ms w/o a shake before the counter resets
+	"timeout": 1500,
+	#m/s² along device y axis, above gravity (~9.8)
+	"shake_threshold": 15.0,
+	#px the text jumps per shake
+	"jump_height": 120.0,
+	#s for one jump, up and back to rest
+	"jump_duration": 0.5,
+	#px the phone must be dragged up/down to count as a shake, web only
+	"drag_threshold": 50.0,
+	#px the phone can be dragged up/down at most, web only
+	"drag_limit": 100.0,
+}

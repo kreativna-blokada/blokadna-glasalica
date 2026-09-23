@@ -21,12 +21,10 @@
     },
     "Booth": {
       "title": "6) Popunjavanje glasačkog listića",
-      "content": "Birač odlazi iza paravana i popunjava glasački listić.",
-      "sound": "res://!project/audio/bubblegum.mp3"
+      "content": "Birač odlazi iza paravana i popunjava glasački listić."
     },
     "Box": {
       "title": "Think inside the box",
-      "content": "Na biračkim mestima biće onoliko glasačkih kutija koliko se izbora održava, a birački odbor se stara o tome da birači glasačke listiće ubacuju u odgovarajuće glasačke kutije.\nNakon što birač glasačke listiće ubaci u kutije, odmah napušta biračko mesto.",
-      "sound": "res://!project/audio/bubblegum.mp3"
+      "content": "Na biračkim mestima biće onoliko glasačkih kutija koliko se izbora održava, a birački odbor se stara o tome da birači glasačke listiće ubacuju u odgovarajuće glasačke kutije.\nNakon što birač glasačke listiće ubaci u kutije, odmah napušta biračko mesto."
     }
 }
