@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://csvtqh5axdfw8"
-path="res://.godot/imported/player-red.png-17981e83cfb98cfefbd9003164f4d6e7.ctex"
+uid="uid://ckl3478p0j8q3"
+path="res://.godot/imported/female_blonde_lilac_skirt.png-8b21246070b190b32269351ea3a2e9d1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://!project/art/player-red.png"
-dest_files=["res://.godot/imported/player-red.png-17981e83cfb98cfefbd9003164f4d6e7.ctex"]
+source_file="res://!project/art/female_blonde_lilac_skirt.png"
+dest_files=["res://.godot/imported/female_blonde_lilac_skirt.png-8b21246070b190b32269351ea3a2e9d1.ctex"]
 
 [params]
 
@@ -36,5 +36,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=4096
+process/size_limit=0
 detect_3d/compress_to=1

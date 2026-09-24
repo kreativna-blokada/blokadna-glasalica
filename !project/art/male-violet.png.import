@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://owht2x8da4qi"
-path="res://.godot/imported/player-indigo.png-8633938169aad32251d407397016ca94.ctex"
+uid="uid://b4ie7n2fckj2f"
+path="res://.godot/imported/male-violet.png-49910a68a99b16b854ffa0326c0610f2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://!project/art/player-indigo.png"
-dest_files=["res://.godot/imported/player-indigo.png-8633938169aad32251d407397016ca94.ctex"]
+source_file="res://!project/art/male-violet.png"
+dest_files=["res://.godot/imported/male-violet.png-49910a68a99b16b854ffa0326c0610f2.ctex"]
 
 [params]
 

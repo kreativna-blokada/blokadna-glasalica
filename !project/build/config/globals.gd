@@ -86,54 +86,78 @@ var EntityProperties: Dictionary[Variant, Variant] = {
 #  ╚═══╝   ╚═════╝    ╚═╝   ╚══════╝╚═╝  ╚═╝
 
 enum Voter {
-	Player,
-	Black,
-	Blue,
-	Green,
-	Indigo,
-	Magenta,
-	Red,
-	Violet,
-	Yellow
-	#Yellow,
-	#FemaleBlue
+	MaleCap,
+	MaleBlack,
+	MaleBlue,
+	MaleGreen,
+	MaleIndigo,
+	MaleMagenta,
+	MaleRed,
+	MaleViolet,
+	MaleYellow,
+	FemaleBlondeLilacSkirt,
+	FemaleBlondeRoseSkirt,
+	FemaleBlondeWineSkirt,
+	FemaleBrunetteLilacSkirt,
+	FemaleBrunetteRoseSkirt,
+	FemaleBrunetteWineSkirt,
+	FemaleShortHairBlondeLilacPants,
+	FemaleShortHairBrunetteRosePants	
 }
 
 var VoterFactory: Dictionary[Variant, Variant] = {
-	Voter.Player: {
-		"Texture2D": "res://!project/art/player2.png",
+	Voter.MaleCap: {
+		"Texture2D": "res://!project/art/male-cap.png",
 	},
-	#Voter.Black: {
-	#	"Texture2D": "res://!project/art/player-black.png",
-	#},
-	Voter.Blue: {
-		"Texture2D": "res://!project/art/player-blue.png",
+	Voter.MaleBlue: {
+		"Texture2D": "res://!project/art/male-blue.png",
 	},
-	Voter.Green: {
-		"Texture2D": "res://!project/art/player-green.png",
+	Voter.MaleGreen: {
+		"Texture2D": "res://!project/art/male-green.png",
 	},
-	Voter.Indigo: {
-		"Texture2D": "res://!project/art/player-indigo.png",
+	Voter.MaleIndigo: {
+		"Texture2D": "res://!project/art/male-indigo.png",
 	},
-	Voter.Magenta: {
-		"Texture2D": "res://!project/art/player-magenta.png",
+	Voter.MaleMagenta: {
+		"Texture2D": "res://!project/art/male-magenta.png",
 	},
-	Voter.Red: {
-		"Texture2D": "res://!project/art/player-red.png",
+	Voter.MaleRed: {
+		"Texture2D": "res://!project/art/male-red.png",
 	},
-	Voter.Violet: {
-		"Texture2D": "res://!project/art/player-violet.png",
+	Voter.MaleViolet: {
+		"Texture2D": "res://!project/art/male-violet.png",
 	},
-	Voter.Yellow: {
-		"Texture2D": "res://!project/art/player-yellow.png",
+	Voter.MaleYellow: {
+		"Texture2D": "res://!project/art/male-yellow.png",
 	},
-	#Voter.FemaleBlue: {
-	#	"Texture2D": "res://!project/art/player-female-blue.png",
-	#},
+	Voter.FemaleBlondeLilacSkirt: {
+		"Texture2D": "res://!project/art/female_blonde_lilac_skirt.png",
+	},
+	Voter.FemaleBlondeRoseSkirt: {
+		"Texture2D": "res://!project/art/female_blonde_rose_skirt.png",
+	},
+	Voter.FemaleBlondeWineSkirt: {
+		"Texture2D": "res://!project/art/female_blonde_wine_skirt.png",
+	},
+	Voter.FemaleBrunetteLilacSkirt: {
+		"Texture2D": "res://!project/art/female_brunette_lilac_skirt.png",
+	},
+	Voter.FemaleBrunetteRoseSkirt:{
+		"Texture2D": "res://!project/art/female_brunette_rose_skirt.png",
+	},
+	Voter.FemaleBrunetteWineSkirt: {
+		"Texture2D": "res://!project/art/female_brunette_wine_skirt.png",
+	},
+	Voter.FemaleShortHairBlondeLilacPants: {
+		"Texture2D": "res://!project/art/female_shorthair_blonde_lilac_pants.png",
+	},
+	Voter.FemaleShortHairBrunetteRosePants: {
+		"Texture2D": "res://!project/art/female_shorthair_brunette_rose_pants.png",
+	}
 }
 
 var VoterIdleAnimations: Dictionary = {
-	"Texture2D": VoterFactory[Voter.Player]["Texture2D"],
+	"Texture2D": VoterFactory[Voter.MaleCap]["Texture2D"],
 	"Animation": { "Frames": {"Total": 37, "Hframes": 39, "Vframes": 5}, "Lenght": 1.3, "Step": 0.1,
 	"Animations": {
 			Direction.TopLeft:     { "Name": "top-left",     "Frame Coord": {"x": 0, "y": 4} },

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0hq7kqjrqynq"
-path="res://.godot/imported/player-blue.png-a639af5e34614c7c4fec21ff7b79e237.ctex"
+uid="uid://17r6y76th1j3"
+path="res://.godot/imported/female_brunette_rose_skirt.png-9a3fac0e6cd89da547636185e70d3449.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://!project/art/player-blue.png"
-dest_files=["res://.godot/imported/player-blue.png-a639af5e34614c7c4fec21ff7b79e237.ctex"]
+source_file="res://!project/art/female_brunette_rose_skirt.png"
+dest_files=["res://.godot/imported/female_brunette_rose_skirt.png-9a3fac0e6cd89da547636185e70d3449.ctex"]
 
 [params]
 
@@ -36,5 +36,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=4096
+process/size_limit=0
 detect_3d/compress_to=1
