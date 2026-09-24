@@ -1,0 +1,22 @@
+﻿{
+  "root" : {
+    "text": "[ANG] Izvolite glasački listić! Glasate iza paravana zaokruživanjem rednog broja ispred naziva željene liste.",
+    "next": "response"
+  },
+  
+  "response": {
+    "text": "Primećuje se da je listić pocepan na jednom mestu",
+    "choices": [
+      {
+        "text": "Moram da tražim drugi!",
+        "explanation":  "Potencijalno nevalidan listić mora odmah da se prijavi.",
+        "score": 250
+      },
+      {
+        "text": "Ovaj je okej, znamo se mi.",
+        "explanation":  "Potencijalno nevalidan listić mora odmah da se prijavi. Pocepan lisitć se možda neće računati kao validan glas",
+        "score": -100
+      }
+    ]
+  }
+}

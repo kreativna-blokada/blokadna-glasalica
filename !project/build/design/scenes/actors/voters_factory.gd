@@ -53,5 +53,5 @@ func load_voter(_index: int) -> Voter:
 func _get_texture(_index: int) -> Resource:
 	var texture_path: String = Globals.VoterFactory[_index]["Texture2D"]
 	if not ResourceLoader.exists(texture_path, "Texture2D"):
-		texture_path = Globals.VoterFactory[Globals.Voter.Player]["Texture2D"]
+		texture_path = Globals.VoterFactory[Globals.Voter.MaleCap]["Texture2D"]
 	return load(texture_path)

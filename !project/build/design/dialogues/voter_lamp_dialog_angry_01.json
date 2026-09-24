@@ -1,6 +1,6 @@
 ﻿{
   "root": {
-    "text": "Uf što sam ljut lele",
+    "text": "[ANG] Uf što sam ljut lele",
     "choices": [
       {"text": "a nemoj brate", "explanation": "Odlican izbor", "score": 100, "next": "node1"},
       {"text": "e sad ću da te ulemam", "explanation": "Mnogo loša varijanta", "score": -200, "next": "node2"}

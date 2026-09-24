@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://l36qbvcwr0t3"]
 
-[ext_resource type="Texture2D" uid="uid://d1vrluatpmbst" path="res://!project/art/player2.png" id="1_tye60"]
-[ext_resource type="Texture2D" uid="uid://d0hq7kqjrqynq" path="res://!project/art/player-blue.png" id="2_tye60"]
+[ext_resource type="Texture2D" uid="uid://ruq7qlula7a" path="res://!project/art/male-cap.png" id="1_tye60"]
+[ext_resource type="Texture2D" uid="uid://d0hq7kqjrqynq" path="res://!project/art/male-blue.png" id="2_tye60"]
 [ext_resource type="Texture2D" uid="uid://ch3huuf5pcug6" path="res://!project/art/player-black.png" id="2_ura76"]
-[ext_resource type="Texture2D" uid="uid://1qmibcqkntq0" path="res://!project/art/player-green.png" id="4_65gjf"]
-[ext_resource type="Texture2D" uid="uid://owht2x8da4qi" path="res://!project/art/player-indigo.png" id="5_65gjf"]
-[ext_resource type="Texture2D" uid="uid://csvtqh5axdfw8" path="res://!project/art/player-red.png" id="5_mipfj"]
-[ext_resource type="Texture2D" uid="uid://bgd50qhpugqvf" path="res://!project/art/player-magenta.png" id="6_mipfj"]
-[ext_resource type="Texture2D" uid="uid://b4ie7n2fckj2f" path="res://!project/art/player-violet.png" id="8_eslrs"]
-[ext_resource type="Texture2D" uid="uid://ge712eyufumm" path="res://!project/art/player-yellow.png" id="9_ax7bo"]
+[ext_resource type="Texture2D" uid="uid://1qmibcqkntq0" path="res://!project/art/male-green.png" id="4_65gjf"]
+[ext_resource type="Texture2D" uid="uid://owht2x8da4qi" path="res://!project/art/male-indigo.png" id="5_65gjf"]
+[ext_resource type="Texture2D" uid="uid://csvtqh5axdfw8" path="res://!project/art/male-red.png" id="5_mipfj"]
+[ext_resource type="Texture2D" uid="uid://bgd50qhpugqvf" path="res://!project/art/male-magenta.png" id="6_mipfj"]
+[ext_resource type="Texture2D" uid="uid://b4ie7n2fckj2f" path="res://!project/art/male-violet.png" id="8_eslrs"]
+[ext_resource type="Texture2D" uid="uid://ge712eyufumm" path="res://!project/art/male-yellow.png" id="9_ax7bo"]
 
 [node name="Factory" type="Node" unique_id=1415317399]
 

@@ -1,6 +1,6 @@
 ﻿{
   "root": {
-    "text": "Blablabla ovo je prvi tekst",
+    "text": "[POL] Blablabla ovo je prvi tekst",
     "choices": [
       {"text": "ovo je prvi izbor haha", "explanation": "Odlican izbor", "score": 100, "next": "node1"},
       {"text": "ovo je drugi izbor", "explanation": "Najbolji izbor", "score": 200, "next": "node2"},
