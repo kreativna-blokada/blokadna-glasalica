@@ -71,7 +71,8 @@ func _on_stop_button_pressed(stop_name: String, stop_index: int) -> void:
 	_dialog_controller = DIALOG_CONTROLLER_SCENE.instantiate() as DialogController
 	#### commented out 7b64814055ee6b6eb9d15d2b811ccde201717f87
 	#### _dialog_controller.initialize(dialog_path, DIALOG_SIZE)
-	_dialog_controller.initialize(DialoguesManager.get_dialogue(dialog_id), DIALOG_SIZE)
+	var dialog_color = DialogColors.get_color(_dialog_voter.name)
+	_dialog_controller.initialize( DialoguesManager.get_dialogue(dialog_id), dialog_color, DIALOG_SIZE)
 	_dialog_controller.finished.connect(_on_dialog_finished)
 	_dialog_controller.choice_made.connect(_on_dialog_choice_made)
 	dialog_layer.add_child(_dialog_controller)

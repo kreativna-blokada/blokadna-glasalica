@@ -5,6 +5,7 @@ signal finished()
 
 @onready var panel: Control = $PanelContainer
 @onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel
+@onready var background: CanvasItem = $PanelContainer/BackgroundContainer
 
 var _requestedText: String = ""
 var _unveiledText: String = ""
@@ -14,6 +15,9 @@ var _touch_debounce_timer: float = 0
 
 func _ready() -> void:
 	_initialize_placement()
+
+func set_tint(_tint: Color) -> void:
+	background.modulate = _tint
 
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_requestedText = dialog_descriptor.text

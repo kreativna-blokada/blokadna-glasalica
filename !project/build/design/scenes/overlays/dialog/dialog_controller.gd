@@ -12,12 +12,14 @@ var _multi_choice_dialog_box: MultiChoiceCharacterDialog
 var _dialog_tree: DialogTree
 var _current_node: DialogTreeNode
 var _dialog_size: Vector2i
+var _dialog_color: Color
 
-func initialize(dialog_path: Dictionary, dialog_size: Vector2i) -> void:
+func initialize(dialog_path: Dictionary, dialog_color: Color, dialog_size: Vector2i) -> void:
 	#### dialog_path should be renamed to dialog_data
 	_dialog_tree = DialogTree.new(dialog_path)
 	_current_node = _dialog_tree.get_root()
 	_dialog_size = dialog_size
+	_dialog_color = dialog_color
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -32,10 +34,12 @@ func _process(delta: float) -> void:
 func _create_view() -> void:
 	_dialog_box = _dialog_box_scene.instantiate()
 	_multi_choice_dialog_box = _multi_choice_dialog_box_scene.instantiate()
-	_dialog_box.initialize(_dialog_size)
-	_multi_choice_dialog_box.initialize(_dialog_size)
 	add_child(_dialog_box)
 	add_child(_multi_choice_dialog_box)
+	_dialog_box.initialize(_dialog_size)
+	_dialog_box.set_tint(_dialog_color)
+	_multi_choice_dialog_box.initialize(_dialog_size)
+	_multi_choice_dialog_box.set_tint(_dialog_color)
 
 func _connect_events() -> void:
 	_dialog_box.finished.connect(_on_simple_dialog_finish)

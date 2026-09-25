@@ -21,6 +21,9 @@ var _touch_debounce_timer: float = 0
 
 const choiceMargin: Vector2 = Vector2(24,8)
 
+func set_tint(_tint: Color) -> void:
+	background.modulate = _tint
+
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_initialize_choices(dialog_descriptor.choices)
 	_requestedText = dialog_descriptor.text

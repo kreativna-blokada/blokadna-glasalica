@@ -3,6 +3,7 @@ extends Node
 
 @export var textboxScalePx: Vector2i = Vector2(800, 600)
 @export var unveilSpeed: float = 30 # per second
+
 var _unveilTimer: float = 1.0 / unveilSpeed
 var _lastUnveiledCharIndex: int = 0
 
@@ -13,6 +14,8 @@ const textMargin: Vector2 = Vector2(24, 24)
 func initialize(textboxScale: Vector2i) -> void:
 	textboxScalePx = textboxScale
 
+func set_tint(_tint: Color) -> void:
+	pass
 
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	pass

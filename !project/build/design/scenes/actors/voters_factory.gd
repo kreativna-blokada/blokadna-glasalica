@@ -8,6 +8,8 @@
 class_name VotersFactory
 extends Node
 
+static var _voter_id = 0
+
 #private vars
 var _voter_scene: PackedScene = preload("res://!project/build/design/scenes/actors/voter.tscn")
 var _voter_group: String = Globals.EntityProperties[Globals.Entity.Voter]["group"]
@@ -46,7 +48,8 @@ func load_voter(_index: int) -> Voter:
 	var texture: Resource = _get_texture(_index)
 	var _voter_scene_sprite = _voter_scene_struct["sprite"]
 	voter.get_node(_voter_scene_sprite).set_texture(texture)
-	
+	voter.name = Globals.Voter.keys()[_index] + "_" + str(_voter_id)
+	_voter_id += 1
 	return voter
 
 #dynimacally loaded instance's texture

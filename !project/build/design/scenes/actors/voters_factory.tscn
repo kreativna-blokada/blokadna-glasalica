@@ -2,7 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://ruq7qlula7a" path="res://!project/art/male-cap.png" id="1_tye60"]
 [ext_resource type="Texture2D" uid="uid://d0hq7kqjrqynq" path="res://!project/art/male-blue.png" id="2_tye60"]
-[ext_resource type="Texture2D" uid="uid://ch3huuf5pcug6" path="res://!project/art/player-black.png" id="2_ura76"]
 [ext_resource type="Texture2D" uid="uid://1qmibcqkntq0" path="res://!project/art/male-green.png" id="4_65gjf"]
 [ext_resource type="Texture2D" uid="uid://owht2x8da4qi" path="res://!project/art/male-indigo.png" id="5_65gjf"]
 [ext_resource type="Texture2D" uid="uid://csvtqh5axdfw8" path="res://!project/art/male-red.png" id="5_mipfj"]
@@ -18,7 +17,6 @@ hframes = 39
 vframes = 5
 
 [node name="Black" type="Sprite2D" parent="." unique_id=991712522]
-texture = ExtResource("2_ura76")
 hframes = 39
 vframes = 5
 
