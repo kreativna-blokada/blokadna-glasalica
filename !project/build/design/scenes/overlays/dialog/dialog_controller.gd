@@ -13,7 +13,8 @@ var _dialog_tree: DialogTree
 var _current_node: DialogTreeNode
 var _dialog_size: Vector2i
 
-func initialize(dialog_path: String, dialog_size: Vector2i) -> void:
+func initialize(dialog_path: Dictionary, dialog_size: Vector2i) -> void:
+	#### dialog_path should be renamed to dialog_data
 	_dialog_tree = DialogTree.new(dialog_path)
 	_current_node = _dialog_tree.get_root()
 	_dialog_size = dialog_size

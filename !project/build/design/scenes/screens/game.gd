@@ -57,14 +57,21 @@ func _on_stop_button_pressed(stop_name: String, stop_index: int) -> void:
 	if voter == null:
 		return
 
-	var dialog_path: String = voter.get_dialog_path(stop_name)
-	if not FileAccess.file_exists(dialog_path):
+	#### commented out 7b64814055ee6b6eb9d15d2b811ccde201717f87
+	#### var dialog_path: String = voter.get_dialog_path(stop_name)
+	#### if not FileAccess.file_exists(dialog_path):
+	#### 	voter.can_continue_voting_course()
+	#### 	return
+	var dialog_id: String = voter.get_dialog_id(stop_name)
+	if not DialoguesManager.has_dialogue(dialog_id):
 		voter.can_continue_voting_course()
 		return
 
 	_dialog_voter = voter
 	_dialog_controller = DIALOG_CONTROLLER_SCENE.instantiate() as DialogController
-	_dialog_controller.initialize(dialog_path, DIALOG_SIZE)
+	#### commented out 7b64814055ee6b6eb9d15d2b811ccde201717f87
+	#### _dialog_controller.initialize(dialog_path, DIALOG_SIZE)
+	_dialog_controller.initialize(DialoguesManager.get_dialogue(dialog_id), DIALOG_SIZE)
 	_dialog_controller.finished.connect(_on_dialog_finished)
 	_dialog_controller.choice_made.connect(_on_dialog_choice_made)
 	dialog_layer.add_child(_dialog_controller)

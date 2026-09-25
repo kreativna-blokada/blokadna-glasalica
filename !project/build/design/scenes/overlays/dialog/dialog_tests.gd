@@ -13,7 +13,11 @@ func _ready() -> void:
 
 func _create_dialog_controller() -> void:
 	dialog_controller = dialog_controller_scene.instantiate()
-	dialog_controller.initialize("res://!project/build/design/scenes/overlays/dialog/resources/sample_dialog.json", Vector2i(800, 600))
+	var dialog_data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://!project/build/design/scenes/overlays/dialog/resources/sample_dialog.json"))
+	if not dialog_data is Dictionary:
+		push_error("DialogTests._create_dialog_controller: sample_dialog.json is not valid JSON")
+		return
+	dialog_controller.initialize(dialog_data, Vector2i(800, 600))
 	dialog_controller.choice_made.connect(_on_dialog_choice)
 	dialog_controller.finished.connect(_on_dialog_finished)
 	add_child(dialog_controller)

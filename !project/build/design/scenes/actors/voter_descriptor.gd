@@ -12,6 +12,9 @@ func _init(personality: String, dialog_paths: Dictionary, content_version: int =
 func get_dialog_path(stop_name: String) -> String:
 	return str(_dialog_paths.get(stop_name.to_snake_case(), ""))
 
+func get_dialog_id(stop_name: String) -> String:
+	return get_dialog_path(stop_name).get_file().get_basename()
+
 func get_personality() -> String:
 	return _personality
 

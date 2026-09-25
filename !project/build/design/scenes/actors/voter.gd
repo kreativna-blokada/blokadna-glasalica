@@ -74,6 +74,10 @@ func init(voter_descriptor: VoterDescriptor) -> void:
 func get_dialog_path(stop_name: String) -> String:
 	return _descriptor.get_dialog_path(stop_name)
 
+#returns the id of the dialogue this voter has at the given stop
+func get_dialog_id(stop_name: String) -> String:
+	return _descriptor.get_dialog_id(stop_name)
+	
 #handle interaction with voters
 func handle_input() -> void:
 	super.handle_input()

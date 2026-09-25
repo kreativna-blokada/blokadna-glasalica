@@ -26,8 +26,12 @@ var _active_content_version: int = 0
 var _remote_update_in_progress: bool = false
 var _random: RandomNumberGenerator = RandomNumberGenerator.new()
 
-
+#### bypassing 7b64814
 func _ready() -> void:
+	pass
+
+#### commented out 7b64814
+func _ready_offline() -> void:
 	_random.randomize()
 	DirAccess.make_dir_recursive_absolute(CACHE_DIRECTORY)
 	_initialize_active_content()
