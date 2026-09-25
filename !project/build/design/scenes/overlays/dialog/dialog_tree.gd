@@ -80,6 +80,11 @@ func _deserialize(data: Dictionary) -> void:
 	for id in data:
 		var choiceDescriptors: Array[DialogDescriptor.ChoiceDescriptor] = []
 		var dependencies: Array[String] = []
+		
+		var speaker := DialogDescriptor.Speaker.LEFT
+		if "speaker" in data[id]:
+			speaker = data[id].speaker
+		
 		# only if choices actually exist
 		if "choices" in data[id]:
 			for choice in data[id].choices:
@@ -103,7 +108,7 @@ func _deserialize(data: Dictionary) -> void:
 		
 		var descriptor: DialogDescriptor = DialogDescriptor.new(
 				data[id].text,
-				DialogDescriptor.Speaker.LEFT, # todo serialize
+				speaker,
 				choiceDescriptors
 		)
 
