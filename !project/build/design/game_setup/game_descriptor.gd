@@ -11,6 +11,9 @@ func set_difficulty(difficulty: Difficulty) -> void:
 	_difficulty = difficulty
 	_timers_enabled = difficulty != Difficulty.EASY
 
+func are_timers_enabled() -> bool:
+	return _timers_enabled
+
 func update_points(points: int) -> void:
 	_points += points
 

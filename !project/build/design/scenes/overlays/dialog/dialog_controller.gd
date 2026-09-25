@@ -14,10 +14,12 @@ var _current_node: DialogTreeNode
 var _dialog_size: Vector2i
 var _dialog_color: Color
 
+var _timers_enabled: bool = false
 var _dialog_timer: DialogTimer = DialogTimer.new()
 
-func initialize(dialog_path: Dictionary, dialog_color: Color, dialog_size: Vector2i) -> void:
+func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog_color: Color, dialog_size: Vector2i) -> void:
 	#### dialog_path should be renamed to dialog_data
+	_timers_enabled = game_descriptor.are_timers_enabled()
 	_dialog_tree = DialogTree.new(dialog_path)
 	_current_node = _dialog_tree.get_root()
 	_dialog_size = dialog_size
@@ -26,7 +28,7 @@ func initialize(dialog_path: Dictionary, dialog_color: Color, dialog_size: Vecto
 	_start_timer_if_needed()
 
 func _start_timer_if_needed() -> void:
-	if _current_node.get_num_choices() > 0:
+	if _timers_enabled and _current_node.get_num_choices() > 0:
 		_dialog_timer.restart()
 		
 
@@ -48,7 +50,8 @@ func _create_view() -> void:
 	
 	_dialog_box.initialize(_dialog_size)
 	_dialog_box.set_tint(_dialog_color)
-	_multi_choice_dialog_box.initialize(_dialog_size)
+	_multi_choice_dialog_box.initialize( _dialog_size)
+	_multi_choice_dialog_box.show_timer_vfx(_timers_enabled)
 	_multi_choice_dialog_box.set_tint(_dialog_color)
 
 func _connect_events() -> void:

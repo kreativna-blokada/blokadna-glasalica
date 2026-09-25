@@ -26,6 +26,13 @@ const choiceMargin: Vector2 = Vector2(24,8)
 func set_tint(tint: Color) -> void:
 	_tint = tint
 
+func show_timer_vfx(show: bool) -> void:
+	var timer: Control = $DialogTimerVfx
+	if show:
+		timer.show()
+	else:
+		timer.hide()
+
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_initialize_choices(dialog_descriptor.choices)
 	_requestedText = dialog_descriptor.text

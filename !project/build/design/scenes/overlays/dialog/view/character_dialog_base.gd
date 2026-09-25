@@ -6,6 +6,7 @@ extends Node
 
 var _unveilTimer: float = 1.0 / unveilSpeed
 var _lastUnveiledCharIndex: int = 0
+var _timers_enabled
 
 # 16 pixel padding for the actual borders of the dialog box
 # and then some :D
