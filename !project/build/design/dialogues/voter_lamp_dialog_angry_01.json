@@ -4,7 +4,8 @@
     "choices": [
       {"text": "a nemoj brate", "explanation": "Odlican izbor", "score": 100, "next": "node1"},
       {"text": "e sad ću da te ulemam", "explanation": "Mnogo loša varijanta", "score": -200, "next": "node2"}
-    ]
+    ],
+    "speaker": "LEFT"
   },
 
   "node1": {
@@ -12,10 +13,12 @@
     "choices": [
       {"text": "e fala ti brate", "explanation": "Sjajan izbor", "score": 200},
       {"text": "mrš", "explanation": "Nemoj tako :(", "score": -200}
-    ]
+    ],
+    "speaker": "RIGHT"
   },
 
   "node2": {
-    "text": "ok ajde idem ja"
+    "text": "ok ajde idem ja",
+    "speaker": "LEFT"
   }
 }

@@ -1,11 +1,13 @@
 ﻿{
   "root" : {
     "text": "[ANG] Izvolite glasački listić! Glasate iza paravana zaokruživanjem rednog broja ispred naziva željene liste.",
+    "speaker": "LEFT",
     "next": "response"
   },
   
   "response": {
     "text": "Primećuje se da je listić pocepan na jednom mestu",
+    "speaker": "RIGHT",
     "choices": [
       {
         "text": "Moram da tražim drugi!",

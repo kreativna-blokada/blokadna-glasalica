@@ -83,7 +83,7 @@ func _deserialize(data: Dictionary) -> void:
 		
 		var speaker := DialogDescriptor.Speaker.LEFT
 		if "speaker" in data[id]:
-			speaker = data[id].speaker
+			speaker = DialogDescriptor.Speaker.get(data[id].speaker)
 		
 		# only if choices actually exist
 		if "choices" in data[id]:

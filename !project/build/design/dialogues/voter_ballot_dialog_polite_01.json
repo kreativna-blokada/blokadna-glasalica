@@ -1,11 +1,13 @@
 ﻿{
   "root" : {
     "text": "[POL] Izvolite glasački listić!",
-    "next": "response"
+    "next": "response",
+    "speaker": "LEFT"
   },
   
   "response": {
     "text": "Primećuje se da je listić pocepan na jednom mestu",
+    "speaker": "RIGHT",
     "choices": [
       {
         "text": "Moram da tražim drugi!",
