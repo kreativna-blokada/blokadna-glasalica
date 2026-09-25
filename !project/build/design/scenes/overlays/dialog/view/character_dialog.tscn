@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://l81incjb540b"]
 
-[ext_resource type="Script" uid="uid://bf410qqgq0h7w" path="res://!project/build/design/scenes/overlays/dialog/view/character_dialog.gd" id="1_d77re"]
+[ext_resource type="Script" uid="uid://d3f6m8s5la72m" path="res://!project/build/design/scenes/overlays/dialog/view/character_dialog.gd" id="1_d77re"]
 [ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="1_xee6c"]
 [ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="3_mdnoa"]
 
@@ -47,6 +47,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Background" type="NinePatchRect" parent="PanelContainer/BackgroundContainer" unique_id=1357298290]
+modulate = Color(0.9647059, 0.9372549, 0.8627451, 1)
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 1
 anchors_preset = -1
