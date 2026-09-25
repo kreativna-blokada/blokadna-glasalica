@@ -4,7 +4,7 @@ extends Control
 @onready var _dialog_box_scene: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/character_dialog.tscn")
 @onready var _multi_choice_dialog_box_scene: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/multi_choice_character_dialog.tscn")
 
-signal choice_made(choice_descriptor: DialogDescriptor.ChoiceDescriptor)
+signal choice_made(choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float)
 signal finished()
 
 var _dialog_box: CharacterDialog
@@ -14,12 +14,21 @@ var _current_node: DialogTreeNode
 var _dialog_size: Vector2i
 var _dialog_color: Color
 
+var _dialog_timer: DialogTimer = DialogTimer.new()
+
 func initialize(dialog_path: Dictionary, dialog_color: Color, dialog_size: Vector2i) -> void:
 	#### dialog_path should be renamed to dialog_data
 	_dialog_tree = DialogTree.new(dialog_path)
 	_current_node = _dialog_tree.get_root()
 	_dialog_size = dialog_size
 	_dialog_color = dialog_color
+	add_child(_dialog_timer)
+	_start_timer_if_needed()
+
+func _start_timer_if_needed() -> void:
+	if _current_node.get_num_choices() > 0:
+		_dialog_timer.restart()
+		
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -71,6 +80,7 @@ func _advance(choice: int) -> void:
 		finished.emit()
 	else:
 		_update_view()
+		_start_timer_if_needed()
 	
 
 func _on_simple_dialog_finish() -> void:
@@ -78,5 +88,5 @@ func _on_simple_dialog_finish() -> void:
 	
 
 func _on_multi_choice_dialog_finish(choice: int) -> void:
-	choice_made.emit(_current_node.get_dialog_descriptor().choices[choice])
+	choice_made.emit(_current_node.get_dialog_descriptor().choices[choice], _dialog_timer.get_elapsed_seconds())
 	_advance(choice)

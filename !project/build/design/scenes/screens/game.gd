@@ -88,15 +88,16 @@ func _on_dialog_finished() -> void:
 	if voter and is_instance_valid(voter) and voter.is_stopping:
 		voter.can_continue_voting_course()
 
-func _on_dialog_choice_made(choice_descriptor: DialogDescriptor.ChoiceDescriptor) -> void:
+func _on_dialog_choice_made(choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float) -> void:
 	_game_descriptor.track_choice(choice_descriptor)
+	var actual_score := DialogScoreCalculator.calculate_score(choice_descriptor, answer_time)
 	var popup: Node = POINTS_VFX_SCENE.instantiate()
 	dialog_layer.add_child(popup)  # or a dedicated "VFXLayer" node
 	popup.global_position = _dialog_controller.global_position + _dialog_controller.size / 2
-	var points_str: String = "+" + str(choice_descriptor.score)
+	var points_str: String = "+%.0f" % actual_score
 	var points_color: Color = Color.GREEN
 	if choice_descriptor.score < 0:
-		points_str = str(choice_descriptor.score)
+		points_str = "%.0f" % actual_score
 		points_color = Color.RED
 		
 	popup.setup(points_str, points_color)
