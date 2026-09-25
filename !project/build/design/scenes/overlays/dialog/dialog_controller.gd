@@ -45,6 +45,7 @@ func _create_view() -> void:
 	_multi_choice_dialog_box = _multi_choice_dialog_box_scene.instantiate()
 	add_child(_dialog_box)
 	add_child(_multi_choice_dialog_box)
+	
 	_dialog_box.initialize(_dialog_size)
 	_dialog_box.set_tint(_dialog_color)
 	_multi_choice_dialog_box.initialize(_dialog_size)

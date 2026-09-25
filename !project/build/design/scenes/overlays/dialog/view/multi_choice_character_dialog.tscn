@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dvk40mtvdgbw" path="res://!project/build/design/scenes/overlays/dialog/view/multi_choice_character_dialog.gd" id="1_vhlpw"]
 [ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="2_028c8"]
 [ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="3_fi7f4"]
+[ext_resource type="PackedScene" uid="uid://royxhud7ipib" path="res://!project/build/design/scenes/overlays/dialog/view/dialog_timer_vfx.tscn" id="4_oepv8"]
 
 [node name="MultiChoiceCharacterDialog" type="Control" unique_id=1292698811]
 layout_mode = 3
@@ -23,6 +24,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.6)
+
+[node name="DialogTimerVfx" parent="." unique_id=489194232 instance=ExtResource("4_oepv8")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 46.0
+offset_top = -129.0
+offset_right = 46.0
+offset_bottom = -129.0
+grow_vertical = 0
 
 [node name="PanelContainer" type="Control" parent="." unique_id=854600279]
 custom_minimum_size = Vector2(300, 200)

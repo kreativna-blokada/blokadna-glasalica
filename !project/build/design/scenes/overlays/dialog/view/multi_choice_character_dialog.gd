@@ -5,7 +5,8 @@ signal finished(choice: int)
 
 var choiceOriginal: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/dialog_choice.tscn")
 
-@onready var background: Control = $PanelContainer
+@onready var panel_container: Control = $PanelContainer
+@onready var background: Control = $PanelContainer/BackgroundContainer
 @onready var text_container: Control = $PanelContainer/TextContainer
 @onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel
 
@@ -51,16 +52,16 @@ func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> v
 	_initialize_placement(numChoices)
 
 func _initialize_placement(num_choices: int) -> void:
-	background.size = textboxScalePx
+	panel_container.size = textboxScalePx
 	# Top-left-anchored position, move by half of scale back from center of screen
 	var windowSize: Vector2i = get_window().size
-	background.position = windowSize * 0.5 - background.size * background.scale * 0.5
+	panel_container.position = windowSize * 0.5 - panel_container.size * panel_container.scale * 0.5
 	# Scale the main textbox down to accomodate choices
 	text_container.position = Vector2(0,0)
-	text_container.size = background.size - Vector2(0, _choiceHeight * num_choices)
-
+	text_container.size = panel_container.size - Vector2(0, _choiceHeight * num_choices)
+	
 	for i in range(num_choices):
-		_choices[i].position = background.position + Vector2(0, textboxScalePx.y - textMargin.y - (num_choices - i) * _choiceHeight)
+		_choices[i].position = panel_container.position + Vector2(0, textboxScalePx.y - textMargin.y - (num_choices - i) * _choiceHeight)
 		_choices[i].size = Vector2(textboxScalePx.x, _choiceHeight)
 		apply_margins(_choices[i], choiceMargin)
 
