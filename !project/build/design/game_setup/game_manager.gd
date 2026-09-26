@@ -15,12 +15,18 @@ func get_mission_descriptor() -> MissionDescriptor:
 	return _mission_descriptor
 
 func start_game(difficulty: GameDescriptor.Difficulty, mission_descriptor: MissionDescriptor) -> void:
+	_game_descriptor = GameDescriptor.new()
 	_set_difficulty(difficulty)
 	_set_mission_descriptor(mission_descriptor)
 	switch_screen(GameScreen.MAIN)
 	
 func go_to_leaderboard() -> void:
 	switch_screen(GameScreen.LEADERBOARD)
+
+#keeps the run score for the leaderboard screen to submit, then opens it
+func end_run() -> void:
+	LeaderboardManager.set_run_points(_game_descriptor.get_points())
+	go_to_leaderboard()
 
 func _set_difficulty(difficulty: GameDescriptor.Difficulty) -> void:
 	_game_descriptor.set_difficulty(difficulty)
@@ -37,4 +43,4 @@ func switch_screen(game_screen: GameScreen) -> void:
 		GameScreen.MAIN:
 			ScreenManager.switch_scene("res://!project/build/design/scenes/screens/game.tscn")
 		GameScreen.LEADERBOARD:
-			ScreenManager.switch_scene("res://!project/build/design/scenes/screens/leaderboards.tscn")
+			ScreenManager.switch_scene("res://!project/build/design/scenes/screens/leaderboard/leaderboard.tscn")

@@ -1,0 +1,144 @@
+[gd_scene format=3 uid="uid://cy1e6a5yoiidk"]
+
+[ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="1_m6o2n"]
+[ext_resource type="PackedScene" uid="uid://eo6df3d4o15k" path="res://!project/build/design/scenes/screens/leaderboard/username_form.tscn" id="2_ufrm"]
+[ext_resource type="Script" uid="uid://oh5ob6ifyq0v" path="res://!project/build/design/scenes/screens/leaderboard/leaderboard.gd" id="3_ldbrd"]
+[ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="4_ldbrd"]
+
+[node name="Leaderboard" type="Control" unique_id=366355869]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_ldbrd")
+
+[node name="Board" type="Control" parent="." unique_id=1739204518]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -560.0
+offset_top = 300.0
+offset_right = 560.0
+offset_bottom = -160.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_m6o2n")
+
+[node name="Bg" type="NinePatchRect" parent="Board" unique_id=904417362]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("4_ldbrd")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="BoardMargin" type="MarginContainer" parent="Board" unique_id=1286035471]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 48
+
+[node name="ScoreScroll" type="ScrollContainer" parent="Board/BoardMargin" unique_id=611893270]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="ScoreRows" type="VBoxContainer" parent="Board/BoardMargin/ScoreScroll" unique_id=1450372986]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="BoardStatusLabel" type="RichTextLabel" parent="Board" unique_id=327815049]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_right = -48.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 52
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackButton" type="Control" parent="." unique_id=1872650934]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 40.0
+offset_top = 60.0
+offset_right = 280.0
+offset_bottom = 160.0
+
+[node name="Bg" type="NinePatchRect" parent="BackButton" unique_id=1016473528]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("4_ldbrd")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="BackButton" unique_id=1537790231]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_m6o2n")
+theme_override_font_sizes/normal_font_size = 52
+text = "BACK"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UsernameForm" parent="." unique_id=1689982698 instance=ExtResource("2_ufrm")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -560.0
+offset_top = 60.0
+offset_right = 560.0
+offset_bottom = 280.0
+grow_horizontal = 2
+
+[node name="SubmitStatusLabel" type="RichTextLabel" parent="." unique_id=1580264417]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -140.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme = ExtResource("1_m6o2n")
+theme_override_font_sizes/normal_font_size = 52
+horizontal_alignment = 1
+vertical_alignment = 1

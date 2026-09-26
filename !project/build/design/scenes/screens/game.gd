@@ -40,6 +40,20 @@ func _ready() -> void:
 	Signals.game_close_requested.connect(_on_game_close_requested)
 
 	_game_descriptor = GameManager.get_game_descriptor()
+	_start_round_timer()
+
+#starts the one-shot timer that ends the run
+func _start_round_timer() -> void:
+	var round_timer: Timer = Timer.new()
+	round_timer.one_shot = true
+	round_timer.wait_time = Configs.Round.duration
+	round_timer.timeout.connect(_on_round_timer_timeout)
+	add_child(round_timer)
+	round_timer.start()
+
+#signal Timer.timeout => the round is over, submit the score on the leaderboard
+func _on_round_timer_timeout() -> void:
+	GameManager.end_run()
 
 #signal Signals.game_close_requested => quits the application
 func _on_game_close_requested() -> void:
@@ -89,8 +103,8 @@ func _on_dialog_finished() -> void:
 		voter.can_continue_voting_course()
 
 func _on_dialog_choice_made(choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float) -> void:
-	_game_descriptor.track_choice(choice_descriptor)
 	var actual_score := DialogScoreCalculator.calculate_score(choice_descriptor, answer_time)
+	_game_descriptor.track_choice(choice_descriptor, actual_score)
 	var popup: Node = POINTS_VFX_SCENE.instantiate()
 	dialog_layer.add_child(popup)  # or a dedicated "VFXLayer" node
 	popup.global_position = _dialog_controller.global_position + _dialog_controller.size / 2

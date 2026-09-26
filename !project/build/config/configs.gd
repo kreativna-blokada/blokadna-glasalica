@@ -44,3 +44,19 @@ var Shake: Dictionary[String, Variant] = {
 	#px the phone can be dragged up/down at most, web only
 	"drag_limit": 100.0,
 }
+
+var Round: Dictionary[String, Variant] = {
+	#s a run lasts before the score is submitted and the leaderboard opens
+	"duration": 180.0,
+}
+
+var Leaderboard: Dictionary[String, Variant] = {
+	#debug firebase database endpoint, public on purpose; its rules get locked once the game is public
+	"debug_endpoint": "https://glasalica-default-rtdb.europe-west1.firebasedatabase.app/",
+	#number of best scores fetched for the leaderboard
+	"top_count": 10,
+	#must match the length limit in the database rules
+	"username_length": 20,
+	#s before a leaderboard request gives up
+	"request_timeout": 10.0,
+}

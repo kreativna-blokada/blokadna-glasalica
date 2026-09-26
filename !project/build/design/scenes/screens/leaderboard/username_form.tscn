@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://eo6df3d4o15k"]
+
+[ext_resource type="Script" uid="uid://dg1wevr06nbho" path="res://!project/build/design/scenes/screens/leaderboard/username_form.gd" id="1_ufrm"]
+[ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="2_ufrm"]
+[ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="3_ufrm"]
+[ext_resource type="FontFile" uid="uid://d1lin6jg5aa4a" path="res://!project/art/UI/Orange Kid.otf" id="4_ufrm"]
+
+[node name="UsernameForm" type="Control" unique_id=2006549502]
+custom_minimum_size = Vector2(1120, 220)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1120.0
+offset_bottom = 220.0
+script = ExtResource("1_ufrm")
+
+[node name="NameField" type="Control" parent="." unique_id=1644754614]
+anchors_preset = 0
+offset_right = 800.0
+offset_bottom = 100.0
+
+[node name="Bg" type="NinePatchRect" parent="NameField" unique_id=1089287599]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("2_ufrm")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="LineEdit" type="LineEdit" parent="NameField" unique_id=2002016412]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+offset_left = 32.0
+offset_right = -32.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_colors/font_placeholder_color = Color(0.08235294, 0.078431375, 0.09803922, 0.5)
+theme_override_colors/caret_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("4_ufrm")
+theme_override_font_sizes/font_size = 52
+placeholder_text = "YOUR NAME"
+alignment = 1
+clear_button_enabled = true
+flat = true
+select_all_on_focus = true
+
+[node name="ConfirmButton" type="Control" parent="." unique_id=1427452890]
+anchors_preset = 0
+offset_left = 840.0
+offset_right = 1120.0
+offset_bottom = 100.0
+
+[node name="Bg" type="NinePatchRect" parent="ConfirmButton" unique_id=1273796622]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("2_ufrm")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ConfirmButton" unique_id=1343093668]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("3_ufrm")
+theme_override_font_sizes/normal_font_size = 52
+text = "CONFIRM"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatusLabel" type="RichTextLabel" parent="." unique_id=1677993560]
+layout_mode = 0
+offset_top = 120.0
+offset_right = 1120.0
+offset_bottom = 200.0
+mouse_filter = 2
+theme = ExtResource("3_ufrm")
+theme_override_font_sizes/normal_font_size = 44
+horizontal_alignment = 1
+vertical_alignment = 1

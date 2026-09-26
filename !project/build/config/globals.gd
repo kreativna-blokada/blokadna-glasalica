@@ -10,6 +10,8 @@ extends Node
 
 
 const PATH: String = "res://!project/build/config/globals.gd"
+#gitignored, bundled into exports through the preset include filter
+const RUNTIME_CREDENTIALS: String = "res://runtime_credentials.cfg"
 
 enum Scene {
 	Menu,
@@ -41,6 +43,19 @@ var Scenes: Dictionary[Variant, Variant] = {
 	Scene.Playround: {
 		"path": "res://!project/build/design/scenes/playground.tscn"
 	}
+}
+
+#outcome of a leaderboard score submission
+enum ScoreSubmit {
+	Accepted,
+	Stored,
+	Failed
+}
+
+#why the database did not give the player the username
+enum NameRefuse {
+	Taken,
+	Failed
 }
 
 #GAMEPLAY
@@ -102,7 +117,7 @@ enum Voter {
 	FemaleBrunetteRoseSkirt,
 	FemaleBrunetteWineSkirt,
 	FemaleShortHairBlondeLilacPants,
-	FemaleShortHairBrunetteRosePants	
+	FemaleShortHairBrunetteRosePants
 }
 
 var VoterFactory: Dictionary[Variant, Variant] = {

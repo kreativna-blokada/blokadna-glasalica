@@ -1,11 +1,10 @@
 # Glasalica — Godot 4.6 (mobile-first) game
 
 ## Layout
-- `project.godot` — root; renderer `mobile`, viewport 1920x1080 keep_height
-- `!project/build/config/` — autoloads: `Configs`, `Globals`, `Signals`, `SensorSim`, plus `Strings.gd`
-- `!project/build/design/scenes/` — scenes/scripts (`main_menu`, `game`, `stage`, `playground`, `actors/`, `scenery/`, `overlays/`)
-- `!project/art/` — assets
 - `android/` — exported Android build; never lint/edit
+- `!project/art/` — assets
+- `project.godot` — root; renderer `mobile`, viewport 1920x1080 keep_height
+- `!project/build/config/` — pure configuration only, no logic: `Configs`, `Globals`, `Signals` autoloads
 
 ## Tooling
 - Godot CLI: `godot` (symlink to Godot.app)
@@ -20,3 +19,6 @@
 ## Conventions
 - Follow Godot GDScript style guide
 - Signals via `Signals` autoload; shared constants/enums in `Globals`
+
+## GodotPrompter
+- Before implementing any Godot system, invoke the matching `godot-prompter:*` skill (index: `godot-prompter:using-godot-prompter`). Applies to subagents too.
