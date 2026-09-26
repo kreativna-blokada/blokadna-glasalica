@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import configparser
 import hashlib
 import json
 import sys
@@ -13,8 +14,23 @@ DIALOGUES_BUILTIN_PATH = SOURCE_DIR / "dialogues_content.bin"
 # local clone of github.com/zeljko-vulovic/glasalica
 HOSTED_PATH = PROJECT_DIR.parent.parent / "glasalica/dialogues.bin"
 
-# must match DialogueScrambler._get_scramble_key()
-KEY = hashlib.sha256(b"gl4sal1ca-917-d1al0g").digest()
+# gitignored, shared with DialogueScrambler._get_scrambler_key()
+RUNTIME_CREDENTIALS = PROJECT_DIR / "runtime_credentials.cfg"
+
+
+# returns the hashed scramble key from the runtime credentials, exits if it is missing
+def get_scrambler_key():
+    runtime_credentials = configparser.ConfigParser(comment_prefixes=(";", "#"))
+    if not runtime_credentials.read(RUNTIME_CREDENTIALS, encoding="utf-8"):
+        sys.exit(f"Missing {RUNTIME_CREDENTIALS}, copy runtime_credentials.example.cfg and set the real values")
+    # Godot ConfigFile strings are quoted
+    scramble_passphrase = runtime_credentials.get("dialogues", "scrambler_key", fallback="").strip().strip('"')
+    if not scramble_passphrase:
+        sys.exit(f"No dialogues/scrambler_key in {RUNTIME_CREDENTIALS}")
+    return hashlib.sha256(scramble_passphrase.encode("utf-8")).digest()
+
+
+KEY = get_scrambler_key()
 
 
 # mirrors DialogTree.find_data_error
