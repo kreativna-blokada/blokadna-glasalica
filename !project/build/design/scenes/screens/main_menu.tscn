@@ -17,6 +17,29 @@
 [ext_resource type="Texture2D" uid="uid://b8rjc3hq0sxbb" path="res://!project/art/UI/phones/image_08.png" id="5_phone_08"]
 [ext_resource type="Texture2D" uid="uid://e4rh4l3116d7" path="res://!project/art/UI/phones/image_09.png" id="5_phone_09"]
 [ext_resource type="Texture2D" uid="uid://b8fg3thy11yhf" path="res://!project/art/UI/phones/image_10.png" id="5_phone_10"]
+[ext_resource type="Shader" uid="uid://c81c1mbuewqk4" path="res://!project/art/shaders/matrix_rain.gdshader" id="7_matrix_rain"]
+[ext_resource type="Shader" uid="uid://cjc7pgh0ptfwi" path="res://!project/art/shaders/digit_countdown.gdshader" id="8_digit_countdown"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_click_normal"]
+bg_color = Color(0.496, 0, 0, 1)
+corner_radius_top_left = 36
+corner_radius_top_right = 36
+corner_radius_bottom_right = 36
+corner_radius_bottom_left = 36
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_click_pressed"]
+bg_color = Color(0.3, 0, 0, 1)
+corner_radius_top_left = 36
+corner_radius_top_right = 36
+corner_radius_bottom_right = 36
+corner_radius_bottom_left = 36
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_click_final"]
+bg_color = Color(0.12, 0.12, 0.12, 1)
+corner_radius_top_left = 36
+corner_radius_top_right = 36
+corner_radius_bottom_right = 36
+corner_radius_bottom_left = 36
 
 [sub_resource type="Animation" id="Animation_chevrons"]
 resource_name = "chevrons"
@@ -94,6 +117,25 @@ _data = {
 &"shake": SubResource("Animation_shake")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_matrix"]
+shader = ExtResource("7_matrix_rain")
+shader_parameter/column_count = 64.0
+shader_parameter/fall_speed = 14.0
+shader_parameter/trail_length = 18.0
+shader_parameter/glyph_color = Color(0.496, 0, 0, 1)
+shader_parameter/background_color = Color(1, 1, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_digits"]
+shader = ExtResource("8_digit_countdown")
+shader_parameter/digit = 1
+shader_parameter/progress = 0.0
+shader_parameter/digit_color = Color(0.496, 0, 0, 1)
+shader_parameter/opacity = 0.5
+shader_parameter/digit_height = 0.6
+shader_parameter/pixel_size = 16.0
+shader_parameter/hold_fraction = 0.35
+shader_parameter/spread_scale = 20.0
+
 [node name="MainMenu" type="Control" unique_id=367170839]
 custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 3
@@ -137,6 +179,60 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 uppercase = true
+
+[node name="HintLabel" type="Label" parent="." unique_id=1279247605]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 0.6
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_top = -129.0
+offset_right = -52.0
+offset_bottom = -79.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.496, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 36
+text = "ПРОТРЕСИ ТЕЛЕФОН ИЛИ КЛИКНИ ДУГМЕ 3 ПУТА"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ClickButton" type="Button" parent="." unique_id=120688566]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3203125
+anchor_top = 0.7685185
+anchor_right = 0.3203125
+anchor_bottom = 0.7685185
+offset_left = -240.0
+offset_top = -80.0
+offset_right = 240.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_click_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_click_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_click_normal")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_click_final")
+
+[node name="ClickCounterLabel" type="Label" parent="ClickButton" unique_id=886640036]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 96
+text = "КЛИКНИ"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PointersColumn" type="VBoxContainer" parent="." unique_id=1841027733]
 layout_mode = 1
@@ -191,6 +287,68 @@ unique_name_in_owner = true
 libraries/ = SubResource("AnimationLibrary_phone")
 autoplay = &"shake"
 speed_scale = 0.5
+
+[node name="MatrixOverlay" type="ColorRect" parent="." unique_id=164233327]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_matrix")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="InitLineLabel" type="Label" parent="MatrixOverlay" unique_id=1873402219]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.496, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 48
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 120
+text = "Пробуди се Србијо"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="FollowStudentsLabel" type="Label" parent="MatrixOverlay" unique_id=1873402220]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.496, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 48
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 120
+text = "прати своје студенте"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="DigitsOverlay" type="ColorRect" parent="." unique_id=1392650874]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_digits")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="JumpSound" type="AudioStreamPlayer" parent="." unique_id=1292889533]
 unique_name_in_owner = true
