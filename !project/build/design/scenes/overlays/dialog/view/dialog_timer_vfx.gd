@@ -1,9 +1,11 @@
 class_name DialogTimerVfx
 extends Control
 
+var _started: bool = false
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+func start_anim() -> void:
+	if _started: return
+	_started = true
 	var clock_hand: Control = $Container/ClockHand
 	var hand_tween: Tween = create_tween().set_loops()
 	hand_tween.tween_property(clock_hand, "rotation_degrees",360, 4.0).from_current()

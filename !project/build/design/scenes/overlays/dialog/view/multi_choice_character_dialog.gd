@@ -9,6 +9,7 @@ var choiceOriginal: PackedScene = preload("res://!project/build/design/scenes/ov
 @onready var background: Control = $PanelContainer/BackgroundContainer
 @onready var text_container: Control = $PanelContainer/TextContainer
 @onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel
+@onready var timer_vfx: DialogTimerVfx = $DialogTimerVfx
 
 var _choices: Array[DialogChoice] = []
 var _requestedText: String = ""
@@ -27,11 +28,10 @@ func set_tint(tint: Color) -> void:
 	_tint = tint
 
 func show_timer_vfx(show: bool) -> void:
-	var timer: Control = $DialogTimerVfx
 	if show:
-		timer.show()
+		timer_vfx.show()
 	else:
-		timer.hide()
+		timer_vfx.hide()
 
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_initialize_choices(dialog_descriptor.choices)
@@ -57,6 +57,7 @@ func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> v
 		_choices[i].hide()
 
 	_initialize_placement(numChoices)
+	timer_vfx.start_anim()
 
 func _initialize_placement(num_choices: int) -> void:
 	panel_container.size = textboxScalePx
@@ -73,6 +74,9 @@ func _initialize_placement(num_choices: int) -> void:
 		apply_margins(_choices[i], choiceMargin)
 
 	apply_margins(text_container, textMargin)
+
+	# place timer to the right of the dialog box
+	timer_vfx.position = panel_container.position + Vector2(panel_container.size.x + 24, 0)
 
 func _ready() -> void:
 	# pre-allocate the choices and hide them, to avoid dynamic instantiation

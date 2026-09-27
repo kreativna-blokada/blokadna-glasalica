@@ -3,12 +3,15 @@ extends Control
 
 @onready var _dialog_box_scene: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/character_dialog.tscn")
 @onready var _multi_choice_dialog_box_scene: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/multi_choice_character_dialog.tscn")
+@onready var _dialog_speakers_scene: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/dialog_speakers.tscn")
 
 signal choice_made(choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float)
 signal finished()
 
 var _dialog_box: CharacterDialog
 var _multi_choice_dialog_box: MultiChoiceCharacterDialog
+var _dialog_speakers: DialogSpeakers
+
 var _dialog_tree: DialogTree
 var _current_node: DialogTreeNode
 var _dialog_size: Vector2i
@@ -42,14 +45,19 @@ func _ready() -> void:
 func _create_view() -> void:
 	_dialog_box = _dialog_box_scene.instantiate()
 	_multi_choice_dialog_box = _multi_choice_dialog_box_scene.instantiate()
+	_dialog_speakers = _dialog_speakers_scene.instantiate()
+	
 	add_child(_dialog_box)
 	add_child(_multi_choice_dialog_box)
+	add_child(_dialog_speakers)
 	
 	_dialog_box.initialize(_dialog_size)
 	_dialog_box.set_tint(_dialog_color)
 	_multi_choice_dialog_box.initialize( _dialog_size)
 	_multi_choice_dialog_box.show_timer_vfx(_timers_enabled)
 	_multi_choice_dialog_box.set_tint(_dialog_color)
+	
+	_dialog_speakers.initialize(_current_node.get_dialog_descriptor().speaker)
 
 func _connect_events() -> void:
 	_dialog_box.finished.connect(_on_simple_dialog_finish)
@@ -67,7 +75,7 @@ func _update_view() -> void:
 		_multi_choice_dialog_box.hide()
 
 	view_element.set_text(_current_node.get_dialog_descriptor())
-
+	_dialog_speakers.set_active_speaker(_current_node.get_dialog_descriptor().speaker)
 
 func _finish_dialog() -> void:
 	_multi_choice_dialog_box.hide()
