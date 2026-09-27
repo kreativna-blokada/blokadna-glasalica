@@ -2,6 +2,7 @@
 extends RefCounted
 
 const DIALOGUE_DIRECTORY: String = "res://!project/build/design/dialogues"
+const CONTENT_DIRECTORY: String = DIALOGUE_DIRECTORY + "/content"
 const MANIFEST_PATH: String = DIALOGUE_DIRECTORY + "/manifest.json"
 const ARCHIVE_PATH: String = DIALOGUE_DIRECTORY + "/dialogues.zip"
 const TEMP_MANIFEST_PATH: String = DIALOGUE_DIRECTORY + "/manifest.json.tmp"
@@ -59,13 +60,13 @@ static func _scan_dialogues() -> Dictionary:
 	var indexes: Dictionary = {}
 	var personalities: Dictionary = {}
 
-	for file_name in DirAccess.get_files_at(DIALOGUE_DIRECTORY):
+	for file_name in DirAccess.get_files_at(CONTENT_DIRECTORY):
 		var match_result: RegExMatch = file_pattern.search(file_name)
 		if match_result == null:
 			continue
 
 		var dialogue_data = JSON.parse_string(
-			FileAccess.get_file_as_string(DIALOGUE_DIRECTORY.path_join(file_name))
+			FileAccess.get_file_as_string(CONTENT_DIRECTORY.path_join(file_name))
 		)
 		if not dialogue_data is Dictionary:
 			push_error("[DIALOGUE PACKAGER] Invalid JSON file: %s" % file_name)
@@ -161,7 +162,7 @@ static func _write_archive(manifest_text: String, dialogue_files: Array[String])
 		error = _write_archive_entry(
 			packer,
 			file_name,
-			FileAccess.get_file_as_bytes(DIALOGUE_DIRECTORY.path_join(file_name))
+			FileAccess.get_file_as_bytes(CONTENT_DIRECTORY.path_join(file_name))
 		)
 		if error != OK:
 			packer.close()

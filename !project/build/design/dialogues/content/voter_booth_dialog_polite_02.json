@@ -1,0 +1,18 @@
+﻿{
+  "root": {
+    "text": "[POL] Molim Vas, da li biste mogli da mi pokažete za koga ste glasali, čisto da proverim?",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Izvinite, ali to je tajna, ne mogu da pokažem.",
+        "explanation": "Ispravno ste postupili. Tajnost glasanja je zagarantovana zakonom.",
+        "score": 100
+      },
+      {
+        "text": "Može, evo, pogledajte.",
+        "explanation": "Ovo je prekršaj pravila o tajnosti glasanja.",
+        "score": -100
+      }
+    ]
+  }
+}

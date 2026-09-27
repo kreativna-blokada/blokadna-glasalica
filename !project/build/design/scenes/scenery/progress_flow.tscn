@@ -8,15 +8,15 @@
 [ext_resource type="Texture2D" uid="uid://cnn7b7nl8olpg" path="res://!project/art/UI/Buttons/stop-ballot.png" id="6_5g41r"]
 [ext_resource type="Texture2D" uid="uid://bxqeglmbirscv" path="res://!project/art/UI/Buttons/stop-booth.png" id="7_lsbry"]
 [ext_resource type="Texture2D" uid="uid://pcilj6pcgqi8" path="res://!project/art/UI/Buttons/stop-box.png" id="8_bfny7"]
+[ext_resource type="Texture2D" uid="uid://buvdxuyq6y88s" path="res://!project/art/UI/Buttons/input-wrong-active.png" id="9_close_a"]
 [ext_resource type="Texture2D" uid="uid://drvshxrdvhmnu" path="res://!project/art/UI/Buttons/stop-lamp-disabled.png" id="9_lampd"]
+[ext_resource type="Texture2D" uid="uid://nhfp3g4hnx61" path="res://!project/art/UI/Buttons/input-wrong-default.png" id="10_close_d"]
 [ext_resource type="Texture2D" uid="uid://c82anim1ppixb" path="res://!project/art/UI/Buttons/stop-id-disabled.png" id="10_idd"]
 [ext_resource type="Texture2D" uid="uid://dd050ge676m1n" path="res://!project/art/UI/Buttons/stop-list-disabled.png" id="11_listd"]
 [ext_resource type="Texture2D" uid="uid://bp2y27uofaib4" path="res://!project/art/UI/Buttons/stop-spray-disabled.png" id="12_sprayd"]
 [ext_resource type="Texture2D" uid="uid://csoduog5354mj" path="res://!project/art/UI/Buttons/stop-ballot-disabled.png" id="13_ballotd"]
 [ext_resource type="Texture2D" uid="uid://da0ly0j8w5jyv" path="res://!project/art/UI/Buttons/stop-booth-disabled.png" id="14_boothd"]
 [ext_resource type="Texture2D" uid="uid://d1dikdkjqgbi5" path="res://!project/art/UI/Buttons/stop-box-disabled.png" id="15_boxd"]
-[ext_resource type="Texture2D" uid="uid://buvdxuyq6y88s" path="res://!project/art/UI/Buttons/input-wrong-active.png" id="9_close_a"]
-[ext_resource type="Texture2D" uid="uid://nhfp3g4hnx61" path="res://!project/art/UI/Buttons/input-wrong-default.png" id="10_close_d"]
 
 [node name="Progress Flow" type="CanvasLayer" unique_id=598334440]
 script = ExtResource("1_6p1ld")

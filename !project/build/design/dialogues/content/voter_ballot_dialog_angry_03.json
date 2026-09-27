@@ -1,0 +1,18 @@
+﻿{
+  "root": {
+    "text": "[ANG] Hoću da slikam listić kao dokaz, niko mi ne može zabraniti!",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Zabranjeno je fotografisanje listića na biračkom mestu.",
+        "explanation": "Ispravno – fotografisanje narušava tajnost glasanja.",
+        "score": 100
+      },
+      {
+        "text": "Slikajte, ali brzo.",
+        "explanation": "Prekršaj – član biračkog odbora ne sme dozvoliti fotografisanje.",
+        "score": -100
+      }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+﻿{
+  "root": {
+    "text": "[ANG] Potpišite se ovde, na ovu liniju, i to brzo!",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Šta radite to, ovo nije moje ime!",
+        "explanation": "Svaki glasač mora biti zaveden samo pod svojim imenom. Potpisivanje na tuđem mestu je ozbiljan prekršaj.",
+        "score": 100,
+        "next": "controller_apologizes"
+      },
+      {
+        "text": "Ma nema veze, potpisujem se tu.",
+        "explanation": "Potpisivanje na pogrešnom mestu može dovesti do izborne prevare.",
+        "score": -100
+      }
+    ]
+  },
+  "controller_apologizes": {
+    "text": "Ju, nisam obratio pažnju, izvinite. Evo, pronaći ćemo vaše ime.",
+    "speaker": "LEFT"
+  }
+}

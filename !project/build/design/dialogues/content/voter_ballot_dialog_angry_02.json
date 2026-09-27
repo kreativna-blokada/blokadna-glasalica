@@ -1,0 +1,18 @@
+﻿{
+  "root": {
+    "text": "[ANG] Zašto mi ne dajete listić, svi pre mene su ga već dobili!",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Moramo da proverimo vaš identitet pre izdavanja listića.",
+        "explanation": "Ispravno – identitet i upis u spisak su obavezni pre izdavanja listića.",
+        "score": 100
+      },
+      {
+        "text": "U redu, evo listić, požurite.",
+        "explanation": "Prekršaj – preskakanje procedure je zabranjeno.",
+        "score": -100
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+﻿{
+  "root": {
+    "text": "[POL] Dobar dan, možete li mi dati ličnu kartu?",
+    "speaker": "LEFT",
+    "next": "voter_reply"
+  },
+  "voter_reply": {
+    "text": "Izvolite.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Samo je prebacite, ne moram da gledam.",
+        "explanation": "Greška – kontrolor mora pažljivo proveriti identitet.",
+        "score": -50,
+        "next": "voter_objects"
+      },
+      {
+        "text": "Hvala, proveriću podatke.",
+        "explanation": "Ispravno – svaki birač mora biti identifikovan.",
+        "score": 100,
+        "next": "voter_passes"
+      }
+    ]
+  },
+  "voter_objects": {
+    "text": "Molim vas da proverite, red je da se poštuje procedura.",
+    "speaker": "RIGHT"
+  },
+  "voter_passes": {
+    "text": "Hvala, prijatno.",
+    "speaker": "RIGHT"
+  }
+}

@@ -6,11 +6,12 @@ import sys
 import time
 from pathlib import Path
 
-#XOR-scrambles dialogues/voter_*.json into dialogues_content.bin
+#XOR-scrambles dialogues/content/voter_*.json into dialogues_content.bin
 #dialogues_content.bin is built into the game and hosted online
 PROJECT_DIR = Path(__file__).resolve().parents[2]
-SOURCE_DIR = PROJECT_DIR / "!project/build/design/dialogues"
-DIALOGUES_BUILTIN_PATH = SOURCE_DIR / "dialogues_content.bin"
+DIALOGUES_DIR = PROJECT_DIR / "!project/build/design/dialogues"
+CONTENT_DIR = DIALOGUES_DIR / "content"
+DIALOGUES_BUILTIN_PATH = DIALOGUES_DIR / "dialogues_content.bin"
 # local clone of github.com/zeljko-vulovic/glasalica
 HOSTED_PATH = PROJECT_DIR.parent.parent / "glasalica/dialogues.bin"
 
@@ -67,7 +68,7 @@ def scramble(plain):
 
 def main():
     dialogues = {}
-    for path in sorted(SOURCE_DIR.glob("voter_*.json")):
+    for path in sorted(CONTENT_DIR.glob("voter_*.json")):
         try:
             dialogue = json.loads(path.read_text(encoding="utf-8-sig"))
         except json.JSONDecodeError as error:

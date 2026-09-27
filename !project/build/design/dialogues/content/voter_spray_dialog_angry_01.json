@@ -1,0 +1,23 @@
+﻿{
+  "root": {
+    "text": "[ANG] Dajte ruku, brzo, nemam ceo dan!",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Neću da mi prskate ruku, to je glupost!",
+        "explanation": "Odbijanje obeležavanja sprejem je prekršaj – birač ne može dobiti glasački listić bez spreja.",
+        "score": -100
+      },
+      {
+        "text": "Samo polako, imam pravo da pitam čemu ovo služi.",
+        "explanation": "Birač ima pravo da bude informisan o proceduri, ali ne sme ometati rad biračkog odbora.",
+        "score": 50
+      },
+      {
+        "text": "Nemam kažiprst na desnoj ruci, prskajte drugi prst.",
+        "explanation": "U slučaju da birač nema kažiprst, sprej se nanosi na sledeći dostupan prst ili na levoj ruci.",
+        "score": 100
+      }
+    ]
+  }
+}

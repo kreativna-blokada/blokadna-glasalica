@@ -1,0 +1,23 @@
+﻿{
+  "root": {
+    "text": "[POL] Molim vas, potpišite se pored svog imena. Hm, ovde već postoji potpis...",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Neko se već potpisao umesto mene! Tražim da se ovo prijavi.",
+        "explanation": "Ako je neko drugi potpisao umesto vas, to je ozbiljan prekršaj i mora se odmah prijaviti biračkom odboru.",
+        "score": 100,
+        "next": "controller_reports"
+      },
+      {
+        "text": "Nema veze, potpisujem se na drugo slobodno mesto.",
+        "explanation": "Potpisivanje na tuđem mestu ili više puta nije dozvoljeno.",
+        "score": -100
+      }
+    ]
+  },
+  "controller_reports": {
+    "text": "Odmah ćemo prijaviti ovu nepravilnost i uneti je u zapisnik.",
+    "speaker": "LEFT"
+  }
+}
