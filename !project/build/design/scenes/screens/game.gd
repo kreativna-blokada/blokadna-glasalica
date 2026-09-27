@@ -16,6 +16,10 @@ const POINTS_VFX_SCENE: PackedScene = preload(
 		"res://!project/build/design/vfx/points_vfx.tscn"
 )
 
+const TEXT_POPUP_SCENE: PackedScene = preload(
+		"res://!project/build/design/scenes/overlays/popups/text_popup.tscn"
+)
+
 const DIALOG_SIZE: Vector2i = Vector2i(800, 600)
 
 @export_group("Debugging")
@@ -25,6 +29,7 @@ const DIALOG_SIZE: Vector2i = Vector2i(800, 600)
 var _dialog_controller: DialogController = null
 var _dialog_voter: Voter = null
 var _game_descriptor: GameDescriptor = null
+var _popup: TextPopup = null
 
 #onready vars
 @onready var stage: Stage = $Stage
@@ -40,6 +45,21 @@ func _ready() -> void:
 	Signals.game_close_requested.connect(_on_game_close_requested)
 
 	_game_descriptor = GameManager.get_game_descriptor()
+	
+	_show_start_popup()
+
+
+func _show_start_popup() -> void:
+	_popup = TEXT_POPUP_SCENE.instantiate() as TextPopup
+	dialog_layer.add_child(_popup)
+	_popup.set_text(GameManager.get_mission_descriptor().get_mission_description())
+	_popup.finished.connect(_start_popup_closed)
+
+
+func _start_popup_closed() -> void:
+	_popup.hide()
+	_popup.queue_free()
+	
 	_start_round_timer()
 
 #starts the one-shot timer that ends the run
@@ -85,7 +105,7 @@ func _on_stop_button_pressed(stop_name: String, stop_index: int) -> void:
 	_dialog_controller = DIALOG_CONTROLLER_SCENE.instantiate() as DialogController
 	#### commented out 7b64814055ee6b6eb9d15d2b811ccde201717f87
 	#### _dialog_controller.initialize(dialog_path, DIALOG_SIZE)
-	var dialog_color = DialogColors.get_color(_dialog_voter.name)
+	var dialog_color: Color = DialogColors.get_color(_dialog_voter.name)
 	_dialog_controller.initialize(_game_descriptor, DialoguesManager.get_dialogue(dialog_id), dialog_color, DIALOG_SIZE)
 	_dialog_controller.finished.connect(_on_dialog_finished)
 	_dialog_controller.choice_made.connect(_on_dialog_choice_made)

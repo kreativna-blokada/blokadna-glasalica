@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://cxeryuhplc7sx"]
+
+[ext_resource type="Script" uid="uid://bhyuht14ycopf" path="res://!project/build/design/scenes/overlays/popups/text_popup.gd" id="1_g5y81"]
+[ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="1_wboge"]
+[ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="2_7j04v"]
+
+[node name="TextPopup" type="Control" unique_id=193475490]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g5y81")
+
+[node name="Container" type="Control" parent="." unique_id=433921096]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -736.0
+offset_top = -456.0
+offset_right = 736.0
+offset_bottom = 456.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="NinePatchRect" parent="Container" unique_id=1186843262]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+scale = Vector2(8, 8)
+texture = ExtResource("1_wboge")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Text" type="RichTextLabel" parent="Container" unique_id=161253462]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("2_7j04v")
+theme_override_font_sizes/normal_font_size = 36
+text = "Ovo je opis nekog random popupa"
+
+[connection signal="gui_input" from="Container" to="." method="_on_container_gui_input"]
