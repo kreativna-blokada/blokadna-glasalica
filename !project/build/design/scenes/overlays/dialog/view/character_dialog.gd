@@ -44,7 +44,7 @@ func _process(delta: float) -> void:
 func _initialize_placement():
 	panel.size = textboxScalePx
 	# Top-left-anchored position, move by half of scale back from center of screen
-	var windowSize: Vector2i = get_window().size
+	var windowSize: Vector2i = get_viewport().get_visible_rect().size
 	panel.position = windowSize * 0.5 - panel.size * panel.scale * 0.5
 
 func _on_gui_input(event: InputEvent) -> void:

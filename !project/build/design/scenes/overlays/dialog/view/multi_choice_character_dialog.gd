@@ -62,7 +62,7 @@ func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> v
 func _initialize_placement(num_choices: int) -> void:
 	panel_container.size = textboxScalePx
 	# Top-left-anchored position, move by half of scale back from center of screen
-	var windowSize: Vector2i = get_window().size
+	var windowSize: Vector2i = get_viewport().get_visible_rect().size
 	panel_container.position = windowSize * 0.5 - panel_container.size * panel_container.scale * 0.5
 	# Scale the main textbox down to accomodate choices
 	text_container.position = Vector2(0,0)
