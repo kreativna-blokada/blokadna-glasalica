@@ -47,8 +47,6 @@ func _initialize_placement():
 	var windowSize: Vector2i = get_window().size
 	panel.position = windowSize * 0.5 - panel.size * panel.scale * 0.5
 
-	apply_margins(text, textMargin)
-
 func _on_gui_input(event: InputEvent) -> void:
 	if _touch_debounce_timer > 0: return
 	

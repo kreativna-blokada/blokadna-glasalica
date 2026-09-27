@@ -38,9 +38,6 @@ func _ready() -> void:
 	_connect_events()
 	_update_view()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
 func _create_view() -> void:
 	_dialog_box = _dialog_box_scene.instantiate()
