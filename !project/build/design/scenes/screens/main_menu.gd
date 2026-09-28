@@ -218,7 +218,7 @@ func _play_countdown() -> void:
 		countdown_tween.tween_callback(digits_material.set_shader_parameter.bind(&"digit", digit))
 		countdown_tween.tween_callback(digits_material.set_shader_parameter.bind(&"opacity", digit_opacities[digit - 1]))
 		countdown_tween.tween_property(digits_material, "shader_parameter/progress", 1.0, digit_durations[digit - 1] * _sequence_slowdown).from(0.0)
-	countdown_tween.tween_callback(get_tree().change_scene_to_file.bind(Globals.Scenes[Globals.Scene.Game]["path"]))
+	countdown_tween.tween_callback(GameManager.start_game.bind(GameDescriptor.Difficulty.NORMAL, MissionDescriptor.new()))
 
 #no-op on mobile and in release builds, hardware sensors take over there
 #Up/Down arrow held = phone moved up/down
@@ -246,9 +246,9 @@ func _jump_slogan(direction: float) -> void:
 	_jump_tween.tween_property(jumper, "position:y", rest_position, jump_duration * 0.6) \
 		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 
-#switches to the main game scene via Globals registry
+#starts the game through GameManager so it switches to the main game screen
 func _start_game() -> void:
 	if _is_starting: return
 	_is_starting = true
 
-	get_tree().change_scene_to_file(Globals.Scenes[Globals.Scene.Game]["path"])
+	GameManager.start_game(GameDescriptor.Difficulty.NORMAL, MissionDescriptor.new())
