@@ -15,6 +15,7 @@ const _GRAVITY: float = 9.8
 
 #private vars
 var _is_starting: bool = false
+var _chosen_difficulty: GameDescriptor.Difficulty = GameDescriptor.Difficulty.NORMAL
 var _shake_done: bool = false
 var _shake_count: int = 0
 var _click_count: int = 0
@@ -61,6 +62,12 @@ func _ready() -> void:
 	click_button.pressed.connect(_on_click_button_pressed)
 	jump_sound.finished.connect(_on_jump_sound_finished)
 	jump_sound.play()
+
+	# TODO:
+	# Re-enable these connections when the difficulty and leaderboard UI are restored.
+	# %Difficulty.initialize(_chosen_difficulty)
+	# %Difficulty.difficulty_changed.connect(_on_difficulty_changed)
+	# %LeaderboardButton.gui_input.connect(_on_leaderboard_button_gui_input)
 
 #counts up/down phone movements via accelerometer, starts game on enough shakes
 func _process(_delta: float) -> void:
@@ -115,6 +122,17 @@ func _on_click_button_pressed() -> void:
 		_is_starting = true
 		await get_tree().create_timer(Configs.Shake["click_pause"]).timeout
 		_finish_start_sequence()
+
+# TODO:
+# Future difficulty UI signal handler.
+func _on_difficulty_changed(difficulty: GameDescriptor.Difficulty) -> void:
+	_chosen_difficulty = difficulty
+
+# TODO:
+# Future leaderboard UI input handler.
+func _on_leaderboard_button_gui_input(event: InputEvent) -> void:
+	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
+		GameManager.go_to_leaderboard()
 
 #loops the jump sound until the shake sequence is done, then counts down to the game
 func _on_jump_sound_finished() -> void:
@@ -218,7 +236,7 @@ func _play_countdown() -> void:
 		countdown_tween.tween_callback(digits_material.set_shader_parameter.bind(&"digit", digit))
 		countdown_tween.tween_callback(digits_material.set_shader_parameter.bind(&"opacity", digit_opacities[digit - 1]))
 		countdown_tween.tween_property(digits_material, "shader_parameter/progress", 1.0, digit_durations[digit - 1] * _sequence_slowdown).from(0.0)
-	countdown_tween.tween_callback(GameManager.start_game.bind(GameDescriptor.Difficulty.NORMAL, MissionDescriptor.new()))
+	countdown_tween.tween_callback(GameManager.start_game.bind(_chosen_difficulty, MissionDescriptor.new()))
 
 #no-op on mobile and in release builds, hardware sensors take over there
 #Up/Down arrow held = phone moved up/down
@@ -251,4 +269,4 @@ func _start_game() -> void:
 	if _is_starting: return
 	_is_starting = true
 
-	GameManager.start_game(GameDescriptor.Difficulty.NORMAL, MissionDescriptor.new())
+	GameManager.start_game(_chosen_difficulty, MissionDescriptor.new())
