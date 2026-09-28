@@ -61,7 +61,7 @@ var Shake: Dictionary[String, Variant] = {
 
 var Round: Dictionary[String, Variant] = {
 	#s a run lasts before the score is submitted and the leaderboard opens
-	"duration": 180.0,
+	"duration": 300.0,
 }
 
 var Leaderboard: Dictionary[String, Variant] = {
