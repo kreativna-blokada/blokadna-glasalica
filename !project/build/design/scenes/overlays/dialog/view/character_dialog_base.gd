@@ -1,7 +1,7 @@
 ﻿class_name CharacterDialogBase
 extends Node
 
-@export var textboxScalePx: Vector2i = Vector2(800, 600)
+@export var textboxScalePx: Vector2i = Vector2(1200, 900)
 @export var unveilSpeed: float = 30 # per second
 
 var _unveilTimer: float = 1.0 / unveilSpeed

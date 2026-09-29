@@ -20,7 +20,7 @@ const TEXT_POPUP_SCENE: PackedScene = preload(
 		"res://!project/build/design/scenes/overlays/popups/text_popup.tscn"
 )
 
-const DIALOG_SIZE: Vector2i = Vector2i(800, 600)
+const DIALOG_SIZE: Vector2i = Vector2i(1200, 900)
 
 @export_group("Debugging")
 @export var stop_sounds: bool = true
