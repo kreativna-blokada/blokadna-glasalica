@@ -9,8 +9,8 @@
     "speaker": "RIGHT",
     "choices": [
       {
-        "text": "Ne mogu da prihvatim nevažeći pasoš. Potreban je važeći dokument ili potvrda MUP-a ako menjate ličnu kartu.",
-        "explanation": "Ispravno, birač glasa sa važećom ličnom kartom, važećim pasošem ili odgovarajućom potvrdom MUP-a.",
+        "text": "Ne mogu da prihvatim samo nevažeći pasoš. Potrebna je važeća lična karta, važeći pasoš ili potvrda MUP-a o podnetom zahtevu za novi dokument.",
+        "explanation": "Ispravno, birač glasa sa važećom ličnom kartom, važećim pasošem ili potvrdom MUP-a ako je lična karta ili pasoš u postupku zamene.",
         "score": 100,
         "next": "voter_leaves"
       },
@@ -29,7 +29,7 @@
     ]
   },
   "chair_confirms": {
-    "text": "Predsednik odbora potvrđuje da je potreban važeći dokument ili potvrda MUP-a.",
+    "text": "Predsednik odbora potvrđuje da je potreban važeći dokument ili potvrda MUP-a o podnetom zahtevu za novi dokument.",
     "speaker": "LEFT",
     "choices": [
       {

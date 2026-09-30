@@ -1,17 +1,17 @@
 {
   "root": {
-    "text": "Izvinite, mislim da sam vam već dao listić, a nisam naneo sprej.",
+    "text": "Izvinite, pripremio sam listić, a još vam nisam naneo sprej.",
     "speaker": "LEFT",
     "choices": [
       {
-        "text": "Molim vas da sada obavite obeležavanje, pre nego što nastavim dalje.",
-        "explanation": "Ispravno, birač ukazuje na propust i traži da se procedura odmah ispravi.",
+        "text": "Molim vas da prvo obavite obeležavanje, pa tek onda izdate listić.",
+        "explanation": "Ispravno, birač ukazuje na propust i traži da se sprej nanese pre izdavanja listića.",
         "score": 100,
         "next": "spray_applied"
       },
       {
-        "text": "Ako sam već dobio listić, nema potrebe da se vraćamo na to.",
-        "explanation": "Pogrešno, propust obeležavanja sprejem treba ispraviti, a ne ignorisati.",
+        "text": "Ako je listić već spreman, nema potrebe da se vraćamo na to.",
+        "explanation": "Pogrešno, obeležavanje sprejem mora prethoditi izdavanju listića.",
         "score": -100
       },
       {
@@ -23,12 +23,12 @@
     ]
   },
   "spray_applied": {
-    "text": "U pravu ste. Hvala što ste ukazali, sada ću naneti sprej.",
+    "text": "U pravu ste. Hvala što ste ukazali, sada ću naneti sprej pa vam izdati listić.",
     "speaker": "LEFT",
     "choices": [
       {
-        "text": "Hvala, posle toga nastavljam iza paravana.",
-        "explanation": "Postupak je ispravljen pre nastavka glasanja.",
+        "text": "Hvala, posle toga preuzimam listić i nastavljam iza paravana.",
+        "explanation": "Postupak je ispravljen pre izdavanja listića i nastavka glasanja.",
         "score": 100
       }
     ]
@@ -38,7 +38,7 @@
     "speaker": "LEFT",
     "choices": [
       {
-        "text": "U redu, izvolite prst za sprej.",
+        "text": "U redu, izvolite prst za sprej, pa onda mogu da preuzmem listić.",
         "explanation": "Birač kombinuje ukazivanje na propust sa nastavkom pravilne procedure.",
         "score": 100
       },

@@ -23,17 +23,17 @@
     ]
   },
   "second_check": {
-    "text": "Proverili smo ponovo i trag je i dalje vidljiv. Bez daljeg utvrđivanja ne možemo da vas pustimo na glasanje.",
+    "text": "Proverili smo ponovo i trag je i dalje vidljiv. Ne možete glasati i morate napustiti biračko mesto.",
     "speaker": "LEFT",
     "choices": [
       {
-        "text": "Tražim da se ovo zabeleži i da predsednik biračkog odbora pogleda.",
-        "explanation": "Ispravno je tražiti da se sporna situacija reši kroz birački odbor i evidentira.",
+        "text": "Tražim da se ovo zabeleži i da predsednik biračkog odbora bude obavešten.",
+        "explanation": "Ispravno je tražiti da se sporna situacija evidentira, ali potvrđen trag spreja znači da birač ne može nastaviti glasanje.",
         "score": 100
       },
       {
         "text": "Baš me briga, idem dalje dok me neko ne zaustavi.",
-        "explanation": "Birač ne sme samovoljno nastaviti postupak kada UV provera ukazuje na problem.",
+        "explanation": "Birač ne sme samovoljno nastaviti postupak kada je UV provera pokazala trag spreja.",
         "score": -200
       }
     ]
