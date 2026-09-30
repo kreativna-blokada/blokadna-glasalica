@@ -24,6 +24,10 @@ const GAME_SUMMARY_SCENE: PackedScene = preload(
 		"res://!project/build/design/scenes/overlays/popups/game_summary.tscn"
 )
 
+const ROUND_TIMER_SCENE: PackedScene = preload(
+		"res://!project/build/design/scenes/overlays/round_timer.tscn"
+)
+
 const DIALOG_SIZE: Vector2i = Vector2i(1200, 900)
 
 @export_group("Debugging")
@@ -34,6 +38,8 @@ var _dialog_controller: DialogController = null
 var _dialog_voter: Voter = null
 var _game_descriptor: GameDescriptor = null
 var _popup: TextPopup = null
+var _round_timer: Timer
+var _round_timer_display: RoundTimerDisplay
 
 #onready vars
 @onready var stage: Stage = $Stage
@@ -49,6 +55,8 @@ func _ready() -> void:
 	Signals.game_close_requested.connect(_on_game_close_requested)
 
 	_game_descriptor = GameManager.get_game_descriptor()
+	_round_timer_display = ROUND_TIMER_SCENE.instantiate() as RoundTimerDisplay
+	dialog_layer.add_child(_round_timer_display)
 	
 	_show_start_popup()
 
@@ -70,12 +78,13 @@ func _start_popup_closed() -> void:
 
 #starts the one-shot timer that ends the run
 func _start_round_timer() -> void:
-	var round_timer: Timer = Timer.new()
-	round_timer.one_shot = true
-	round_timer.wait_time = Configs.Round.duration
-	round_timer.timeout.connect(_on_round_timer_timeout)
-	add_child(round_timer)
-	round_timer.start()
+	_round_timer = Timer.new()
+	_round_timer.one_shot = true
+	_round_timer.wait_time = Configs.Round.duration
+	_round_timer.timeout.connect(_on_round_timer_timeout)
+	add_child(_round_timer)
+	_round_timer.start()
+	_round_timer_display.set_round_timer(_round_timer)
 
 #signal Timer.timeout => the round is over, submit the score on the leaderboard
 func _on_round_timer_timeout() -> void:

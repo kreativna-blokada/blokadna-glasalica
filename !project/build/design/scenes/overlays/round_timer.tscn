@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://bjv4tvg2c5iba"]
+
+[ext_resource type="Script" uid="uid://dvrktbu2py03j" path="res://!project/build/design/scenes/overlays/round_timer.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://d1lin6jg5aa4a" path="res://!project/art/UI/Orange Kid.otf" id="2_n8p3t"]
+
+[node name="RoundTimer" type="Control" unique_id=1095247227]
+z_index = 4096
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="TimeLabel" type="Label" parent="." unique_id=2015927803]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -80.0
+offset_right = 224.0
+offset_bottom = -24.0
+grow_vertical = 0
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("2_n8p3t")
+theme_override_font_sizes/font_size = 64
+text = "00:00"
