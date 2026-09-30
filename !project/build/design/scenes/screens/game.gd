@@ -20,7 +20,7 @@ const TEXT_POPUP_SCENE: PackedScene = preload(
 		"res://!project/build/design/scenes/overlays/popups/text_popup.tscn"
 )
 
-const DIALOG_SIZE: Vector2i = Vector2i(800, 600)
+const DIALOG_SIZE: Vector2i = Vector2i(1200, 900)
 
 @export_group("Debugging")
 @export var stop_sounds: bool = true
@@ -52,7 +52,8 @@ func _ready() -> void:
 func _show_start_popup() -> void:
 	_popup = TEXT_POPUP_SCENE.instantiate() as TextPopup
 	dialog_layer.add_child(_popup)
-	_popup.set_text(GameManager.get_mission_descriptor().get_mission_description())
+	#### tentatively commented out
+	#### _popup.set_text(GameManager.get_mission_descriptor().get_mission_description())
 	_popup.finished.connect(_start_popup_closed)
 
 
@@ -60,6 +61,7 @@ func _start_popup_closed() -> void:
 	_popup.hide()
 	_popup.queue_free()
 	
+	stage.start_spawning()
 	_start_round_timer()
 
 #starts the one-shot timer that ends the run

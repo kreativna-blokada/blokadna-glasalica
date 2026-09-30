@@ -1,11 +1,10 @@
 [gd_scene format=3 uid="uid://djqhwmvapxh04"]
 
-[ext_resource type="Script" uid="uid://dh75lrdrj711o" path="res://!project/build/design/scenes/screens/start_screen.gd" id="1_hc03d"]
 [ext_resource type="Texture2D" uid="uid://cil4h2lqmpepn" path="res://!project/art/UI/StartScreen/start_screen_bg.png" id="1_kyx6a"]
 [ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="2_hc03d"]
 [ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="3_vy6u0"]
 [ext_resource type="Texture2D" uid="uid://dedyjt5as2e08" path="res://!project/art/UI/DialogBox/DialogBoxChoiceNineSlice.png" id="5_vy6u0"]
-[ext_resource type="Script" uid="uid://dlnmb6olmbwo7" path="res://!project/build/design/scenes/screens/start_difficulty_manager.gd" id="5_w8mn6"]
+[ext_resource type="Script" path="res://!project/build/design/scenes/screens/start_difficulty_manager.gd" id="5_w8mn6"]
 
 [node name="StartScreen" type="Control" unique_id=2022338941]
 layout_mode = 3
@@ -14,7 +13,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_hc03d")
 
 [node name="Backgruond" type="TextureRect" parent="." unique_id=510576113]
 layout_mode = 1

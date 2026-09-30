@@ -50,8 +50,11 @@ func _ready() -> void:
 	_init_vars()
 	_init_nodes()
 
+#starts loading voters, the first one immediately, the rest on timer
+func start_spawning() -> void:
 	#loads first voter
 	_get_voter(0)
+	timer.start()
 
 func _process(_delta: float) -> void:
 	pass
@@ -79,8 +82,6 @@ func _init_vars() -> void:
 
 #initiallizes structures
 func _init_nodes() -> void:
-	timer.start()
-
 	_wire_stop_occupancy_updates()
 
 #initiallizes gameplay

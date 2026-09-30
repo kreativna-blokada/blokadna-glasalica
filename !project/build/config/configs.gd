@@ -30,7 +30,9 @@ var EntityProperties: Dictionary[Variant, Variant] = {
 
 var Shake: Dictionary[String, Variant] = {
 	#up/down movements required to start the game
-	"count": 8,
+	"shake_count": 6,
+	#play button clicks required to start the game, fallback when the phone can't be shaken
+	"click_count": 3,
 	#ms w/o a shake before the counter resets
 	"timeout": 1500,
 	#m/s² along device y axis, above gravity (~9.8)
@@ -43,11 +45,23 @@ var Shake: Dictionary[String, Variant] = {
 	"drag_threshold": 50.0,
 	#px the phone can be dragged up/down at most, web only
 	"drag_limit": 100.0,
+	#s the 3 stays on the button after the last click, before the start sequence
+	"click_pause": 0.5,
+	#px font size of the 3 on the button after the 1st, 2nd and 3rd click
+	"click_font_sizes": [80, 100, 120],
+	#s countdown digits 1, 2 and 3 each stay on screen after the last jump sound, before the game starts
+	"digit_durations": [2.0, 2.0, 4.0],
+	#countdown digits 1, 2 and 3 base alpha before each one fades in fully
+	"digit_opacities": [0.64, 0.64, 0.75],
+	#s each matrix text line stays on screen once the matrix rain opens, first one line then the other
+	"init_line_duration": 4.8,
+	#debug builds only: stretches all timing once the matrix rain opens (sound, phone, text, countdown); 2.0 = twice as slow
+	"sequence_slowdown": 1.0,
 }
 
 var Round: Dictionary[String, Variant] = {
 	#s a run lasts before the score is submitted and the leaderboard opens
-	"duration": 180.0,
+	"duration": 300.0,
 }
 
 var Leaderboard: Dictionary[String, Variant] = {
