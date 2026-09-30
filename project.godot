@@ -14,6 +14,8 @@ config/name="Glasalica"
 config/version="0.8.0"
 run/main_scene="res://!project/build/design/scenes/screens/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
+boot_splash/show_image=false
+boot_splash/bg_color=Color(1, 1, 1, 1)
 config/icon="res://icon.png"
 
 [autoload]
