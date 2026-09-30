@@ -20,6 +20,10 @@ const TEXT_POPUP_SCENE: PackedScene = preload(
 		"res://!project/build/design/scenes/overlays/popups/text_popup.tscn"
 )
 
+const GAME_SUMMARY_SCENE: PackedScene = preload(
+		"res://!project/build/design/scenes/overlays/popups/game_summary.tscn"
+)
+
 const DIALOG_SIZE: Vector2i = Vector2i(1200, 900)
 
 @export_group("Debugging")
@@ -75,7 +79,15 @@ func _start_round_timer() -> void:
 
 #signal Timer.timeout => the round is over, submit the score on the leaderboard
 func _on_round_timer_timeout() -> void:
-	GameManager.end_run()
+	_show_game_summary()
+	
+
+func _show_game_summary() -> void:
+	var summary_instance: GameSummary = GAME_SUMMARY_SCENE.instantiate()
+	dialog_layer.add_child(summary_instance)
+	summary_instance.set_choices(_game_descriptor.get_choice_history())
+	summary_instance.continue_pressed.connect(GameManager.end_run)
+
 
 #signal Signals.game_close_requested => quits the application
 func _on_game_close_requested() -> void:
@@ -124,9 +136,9 @@ func _on_dialog_finished() -> void:
 	if voter and is_instance_valid(voter) and voter.is_stopping:
 		voter.can_continue_voting_course()
 
-func _on_dialog_choice_made(choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float) -> void:
+func _on_dialog_choice_made(dialog_text: String, choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float) -> void:
 	var actual_score := DialogScoreCalculator.calculate_score(choice_descriptor, answer_time)
-	_game_descriptor.track_choice(choice_descriptor, actual_score)
+	_game_descriptor.track_choice(dialog_text, choice_descriptor, actual_score)
 	var popup: Node = POINTS_VFX_SCENE.instantiate()
 	dialog_layer.add_child(popup)  # or a dedicated "VFXLayer" node
 	popup.global_position = _dialog_controller.global_position + _dialog_controller.size / 2

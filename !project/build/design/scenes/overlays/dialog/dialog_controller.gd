@@ -5,7 +5,7 @@ extends Control
 @onready var _multi_choice_dialog_box_scene: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/multi_choice_character_dialog.tscn")
 @onready var _dialog_speakers_scene: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/dialog_speakers.tscn")
 
-signal choice_made(choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float)
+signal choice_made(dialog_text: String, choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float)
 signal finished()
 
 var _dialog_box: CharacterDialog
@@ -97,5 +97,6 @@ func _on_simple_dialog_finish() -> void:
 	
 
 func _on_multi_choice_dialog_finish(choice: int) -> void:
-	choice_made.emit(_current_node.get_dialog_descriptor().choices[choice], _dialog_timer.get_elapsed_seconds())
+	var dialog_descriptor := _current_node.get_dialog_descriptor()
+	choice_made.emit(dialog_descriptor.text, dialog_descriptor.choices[choice], _dialog_timer.get_elapsed_seconds())
 	_advance(choice)
