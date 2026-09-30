@@ -29,3 +29,6 @@ export_presets.cfg
 
 # IDE
 .idea/
+
+# leaderboard database, dialogue scramble key
+/runtime_credentials.cfg

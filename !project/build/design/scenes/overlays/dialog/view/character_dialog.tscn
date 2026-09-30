@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://l81incjb540b"]
+
+[ext_resource type="Script" uid="uid://d3f6m8s5la72m" path="res://!project/build/design/scenes/overlays/dialog/view/character_dialog.gd" id="1_d77re"]
+[ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="1_xee6c"]
+[ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="3_mdnoa"]
+
+[node name="CharacterDialog" type="Control" unique_id=1292698811]
+custom_minimum_size = Vector2(800, 600)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_d77re")
+metadata/_edit_vertical_guides_ = [960.0]
+metadata/_edit_horizontal_guides_ = [540.0]
+
+[node name="DimBackground" type="ColorRect" parent="." unique_id=1792635627]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="PanelContainer" type="Control" parent="." unique_id=854600279]
+anchors_preset = 0
+
+[node name="BackgroundContainer" type="Control" parent="PanelContainer" unique_id=1637075119]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="NinePatchRect" parent="PanelContainer/BackgroundContainer" unique_id=1357298290]
+modulate = Color(0.9647059, 0.9372549, 0.8627451, 1)
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("1_xee6c")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="TextContainer" type="Control" parent="PanelContainer" unique_id=1036597439]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/TextContainer" unique_id=300978397]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_mdnoa")
+theme_override_font_sizes/normal_font_size = 48
+text = "Lorem ipšum ćolor"
+scroll_active = false
+
+[node name="ClickDetector" type="Control" parent="." unique_id=527813580]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="gui_input" from="ClickDetector" to="." method="_on_gui_input"]

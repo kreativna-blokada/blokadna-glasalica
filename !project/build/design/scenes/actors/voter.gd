@@ -11,6 +11,7 @@ extends Character
 #signals
 signal voter_queued
 signal voter_stopped(vote_stop_name: String)
+signal course_point_reached(point_name: StringName)
 
 #broadcast vars
 var voter_factory_index: int = -1
@@ -31,6 +32,7 @@ var _is_course_finished: bool = false
 var _course_target: Node2D = null
 var _feet_offset_enhancer: int = 2
 var _stop_reach_threshold: float = 5.0
+var _descriptor: VoterDescriptor
 
 #onready vars
 @onready var vote_stop_sound: AudioStreamPlayer = $AudioStreamPlayer
@@ -66,6 +68,16 @@ func _process(_delta: float) -> void:
 #██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
 #╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
+func init(voter_descriptor: VoterDescriptor) -> void:
+	_descriptor = voter_descriptor
+
+func get_dialog_path(stop_name: String) -> String:
+	return _descriptor.get_dialog_path(stop_name)
+
+#returns the id of the dialogue this voter has at the given stop
+func get_dialog_id(stop_name: String) -> String:
+	return _descriptor.get_dialog_id(stop_name)
+	
 #handle interaction with voters
 func handle_input() -> void:
 	super.handle_input()
@@ -90,6 +102,7 @@ func handle_movement() -> void:
 	if _state != state_check:
 		_state_entered = false
 
+	
 #updates animations based on state
 func handle_animations() -> void:
 	if _state == State.WAIT:
@@ -129,9 +142,10 @@ func _load_idle_pose(coords: Dictionary) -> void:
 	#caches texture for later restoration
 	if _cached_texture == null:
 		_cached_texture = character_texture.texture
+	if _cached_texture == null:
+		return
 
-	var idle_texture_path: String = Globals.VoterFactory[voter_factory_index]["Texture2D"]
-	character_texture.texture = load(idle_texture_path)
+	character_texture.texture = _cached_texture
 	character_texture.hframes = Globals.VoterIdleAnimations["Animation"]["Frames"]["Hframes"]
 	character_texture.vframes = Globals.VoterIdleAnimations["Animation"]["Frames"]["Vframes"]
 	character_texture.frame_coords = Vector2i(coords["x"], coords["y"])
@@ -251,11 +265,19 @@ func _on_stop_reached() -> void:
 	_wait_frame_coord = _find_wait_animation_frame_coord()
 
 	var stop_node: VotingStop = _get_vote_stop(voting_course_pointer)
+	if stop_node:
+		course_point_reached.emit(stop_node.name)
+		
+		# make voters not walk on top of doors while in the room
+		if stop_node.name == "Enter":
+			z_index = -2
+		elif stop_node.name == "Exit":
+			z_index = 0
 	#stops are actional or transitional
 	if stop_node and stop_node.is_stop:
 		#handle_movement() & handle_animations()
 		is_stopping = true
-		#informs stop name to info dialog
+		#informs listeners which action stop was reached
 		voter_stopped.emit(stop_node.name)
 	else:
 		if not _wait_frame_coord.is_empty():

@@ -11,25 +11,28 @@ extends Node2D
 #signals
 signal queue_count_updated(count: int)
 signal stops_occupancy_updated(stops_occupancy_flags: Array)
+signal next_voter_availability_updated(is_available: bool)
 
 #broadcast vars
 var queued_voters: Array = []
 
 #private vars
 var _selected_voter: Voter = null
+var _voter_in_room: Voter = null
 var _max_voter_queue: int = 8
-var _voters_diversity: int = 0
+var _voter_factory_indices: Array[int] = []
 var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
-var _pending_vote_stop_name: String = ""
+var _is_queue_consolidating: bool = false
+var _mission_descriptor: MissionDescriptor = GameManager.get_mission_descriptor()
+
 
 #onready vars
-@onready var voters_factory_container: Node2D = $VoterSlots
+@onready var voters_factory: VotersFactory = $VoterSlots
 @onready var queue_spots: Array = $Scenery/VoterSpots.get_children()
 @onready var voting_course: Array = $Scenery/VoterStops.get_children()
 @onready var voter_loading_position: Node2D = $Scenery/VoterStops/Load
 
 @onready var timer: Timer = $Timer
-@onready var info_dialog: InfoDialog = get_parent().get_node("Info Dialog")
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -39,13 +42,19 @@ var _pending_vote_stop_name: String = ""
 #╚██████╗██║  ██║███████╗███████╗██████╔╝██║  ██║╚██████╗██║  ██╗███████║
 # ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
+func init(mission_descriptor: MissionDescriptor) -> void:
+	_mission_descriptor = mission_descriptor
+
+
 func _ready() -> void:
 	_init_vars()
 	_init_nodes()
-	_init_signals()
 
+#starts loading voters, the first one immediately, the rest on timer
+func start_spawning() -> void:
 	#loads first voter
 	_get_voter(0)
+	timer.start()
 
 func _process(_delta: float) -> void:
 	pass
@@ -56,24 +65,24 @@ func _unhandled_input(event: InputEvent) -> void:
 		_handle_start_action()
 	elif event.is_action_pressed("select"):
 		_handle_select_action()
-	elif event.is_action_pressed("right"):
-		_handle_right_action()
+	elif event.is_action_pressed("next"):
+		# print_debug("next")
+		_handle_next_action()
 
 #initiallizes variables
 func _init_vars() -> void:
 	_rand.randomize()
-	_voters_diversity = Globals.VoterFactory.size()#+1
+	for factory_index in Globals.VoterFactory:
+		var texture_path: String = Globals.VoterFactory[factory_index]["Texture2D"]
+		if ResourceLoader.exists(texture_path, "Texture2D"):
+			_voter_factory_indices.append(int(factory_index))
+
+	if _voter_factory_indices.is_empty():
+		push_error("[STAGE] No voter textures are available!")
 
 #initiallizes structures
 func _init_nodes() -> void:
-	timer.start()
-
 	_wire_stop_occupancy_updates()
-
-#initializes connections
-func _init_signals() -> void:
-	if info_dialog:
-		info_dialog.dialog_closed.connect(_on_info_dialog_closed)
 
 #initiallizes gameplay
 func _init_game() -> void:
@@ -87,18 +96,18 @@ func _handle_start_action() -> void:
 	if selected_voter.is_stopping:
 		selected_voter.can_continue_voting_course()
 	elif selected_voter.is_queueing and queued_voters.has(selected_voter):
-		_dequeue_voter(selected_voter)
+		_handle_next_action()
+
+func _handle_next_action() -> void:
+	if not is_next_voter_available():
+		return
+
+	_dequeue_voter(_get_front_queue_voter())
+
 
 #cycles (outlines) through voters
 func _handle_select_action() -> void:
 	_select_next_voter()
-
-#opens info dialog for the pending vote stop
-func _handle_right_action() -> void:
-	if _pending_vote_stop_name.is_empty() or not info_dialog:
-		return
-	info_dialog.show_info(_pending_vote_stop_name)
-	_pending_vote_stop_name = ""
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -127,26 +136,31 @@ func _wire_stop_occupancy_updates() -> void:
 
 #loads voters w/ random setups
 func _spawn_voters() -> void:
-	var index: int = _rand.randi() % _voters_diversity
+	if _voter_factory_indices.is_empty():
+		return
+	var random_index: int = _rand.randi_range(0, _voter_factory_indices.size() - 1)
+	var index: int = _voter_factory_indices[random_index]
 	_get_voter(index)
 
 #gets and sets a voter from the factory
 func _get_voter(index: int) -> Voter:
-	if not voters_factory_container or not voters_factory_container.has_method("load_voter"):
+	if not voters_factory:
 		push_error("[STAGE] Voter factory container is missing or invalid!")
 		return null
 
 	#creates an instance using factory script, adds it to the scene
-	var voter: Voter = voters_factory_container.load_voter(index)
-	voters_factory_container.add_child(voter)
+	var voter: Voter = voters_factory.load_voter(index)
+	voters_factory.add_child(voter)
 
 	voter.position = voter_loading_position.global_position
 	var walking_course: Array = get_voting_course(voter)
 	#assigns movement path for a loaded voter
 	voter.set_walking_course(walking_course)
-	#connects signals for sync queue count and to use dialog
+	#connects signal for syncing the queue count
 	voter.voter_queued.connect(_on_voter_queued.bind(voter))
-	voter.voter_stopped.connect(_on_voter_stopped)
+	voter.course_point_reached.connect(_on_voter_course_point_reached.bind(voter))
+	
+	voter.init(_mission_descriptor.get_voter_descriptor(index))
 
 	return voter
 
@@ -181,11 +195,59 @@ func _get_active_selected_voter() -> Voter:
 		return _selected_voter
 	return null
 
+#reports whether the front voter can enter an empty voting room
+func is_next_voter_available() -> bool:
+	return not _has_voter_in_room() and _get_front_queue_voter() != null
+
+#returns the queued voter closest to the room entrance
+func _get_front_queue_voter() -> Voter:
+	var front_voter: Voter = null
+	var front_spot_index: int = queue_spots.size()
+
+	for queued_voter in queued_voters:
+		var voter: Voter = queued_voter as Voter
+		if voter == null or not is_instance_valid(voter) or not voter.is_queueing:
+			continue
+		var spot_index: int = queue_spots.find(voter.starting_spot)
+		if spot_index >= 0 and spot_index < front_spot_index:
+			front_voter = voter
+			front_spot_index = spot_index
+
+	return front_voter
+
+func _has_voter_in_room() -> bool:
+	return _voter_in_room != null and is_instance_valid(_voter_in_room)
+
+#returns the voter currently waiting at a specific voting stop
+func get_stopped_voter_at_stop(stop_index: int) -> Voter:
+	if stop_index < 0 or stop_index >= voting_course.size():
+		return null
+
+	var target_stop: VotingStop = voting_course[stop_index]
+	for child in voters_factory.get_children():
+		var voter: Voter = child as Voter
+		if voter == null or not voter.is_stopping:
+			continue
+		if voter.voting_course_pointer < 0 or voter.voting_course_pointer >= voter.voting_course.size():
+			continue
+		if voter.voting_course[voter.voting_course_pointer] == target_stop:
+			return voter
+	return null
+
 #manages voter release and queue consolidation
 func _dequeue_voter(voter: Voter) -> void:
+	if _has_voter_in_room() or voter == null or voter != _get_front_queue_voter():
+		return
+
+	#can_leave_queue() clears starting_spot, so retain it before advancing the voter
+	var queue_spot: VotingStop = voter.starting_spot
 	if not voter.can_leave_queue(): return
 
-	var queue_spot: Node2D = voter.starting_spot
+	_voter_in_room = voter
+	#fallback for voters removed before reaching the normal Exit point
+	voter.tree_exited.connect(_on_room_voter_exited.bind(voter), CONNECT_ONE_SHOT)
+	next_voter_availability_updated.emit(false)
+
 	#removes voter from queue
 	queued_voters.erase(voter)
 	#signals queue count (_on_queue_count_updated)
@@ -196,8 +258,10 @@ func _dequeue_voter(voter: Voter) -> void:
 		queue_spot.free_up()
 
 	#shuffles the remaining queue after a delay
+	_is_queue_consolidating = true
 	await get_tree().create_timer(0.5).timeout
 	_shift_voters_forward()
+	_is_queue_consolidating = false
 
 #forward movment for waiting voters
 func _shift_voters_forward() -> void:
@@ -243,7 +307,7 @@ func _select_next_voter() -> void:
 
 #gets all voters available for selection
 func _get_selectable_voters() -> Array:
-	var selectable_voters: Array = voters_factory_container.get_children().filter(
+	var selectable_voters: Array = voters_factory.get_children().filter(
 		func(voter): return voter is Voter and (voter.is_stopping or voter.is_queueing)
 	)
 
@@ -270,24 +334,30 @@ func _set_voter_outline(voter: Voter, is_selected: bool) -> void:
 #███████║██║╚██████╔╝██║ ╚████║██║  ██║███████╗███████║
 #╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚══════╝
 
-#signal voter.voter_stopped.emit() => store stop name for on-demand dialog
-func _on_voter_stopped(vote_stop_name: String) -> void:
-	_pending_vote_stop_name = vote_stop_name
-
 #adds voter to queue and signals queue count
 func _on_voter_queued(voter: Voter) -> void:
 	queued_voters.append(voter)
 	queue_count_updated.emit(queued_voters.size())
+	next_voter_availability_updated.emit(is_next_voter_available())
 
-#triggers course continuation when dialog closes
-func _on_info_dialog_closed() -> void:
-	var selected_voter: Voter = _get_active_selected_voter()
-	if selected_voter and selected_voter.is_stopping:
-		selected_voter.can_continue_voting_course()
+#unlocks the next voter when the current voter reaches the room exit
+func _on_voter_course_point_reached(point_name: StringName, voter: Voter) -> void:
+	if point_name == &"Exit":
+		_release_room_voter(voter)
+
+#fallback for a room voter removed before reaching Exit
+func _on_room_voter_exited(voter: Voter) -> void:
+	_release_room_voter(voter)
+
+func _release_room_voter(voter: Voter) -> void:
+	if _voter_in_room != voter:
+		return
+	_voter_in_room = null
+	next_voter_availability_updated.emit(is_next_voter_available())
 
 #spawning voters signal handler
 func _on_timer_timeout() -> void:
-	if _any_free_queue_spots() and queued_voters.size() < _max_voter_queue:
+	if not _is_queue_consolidating and _any_free_queue_spots() and queued_voters.size() < _max_voter_queue:
 		_spawn_voters()
 
 	timer.start()       # Restart the X second timer

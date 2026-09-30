@@ -1,0 +1,33 @@
+﻿{
+  "root": {
+    "text": "[POL] Molim Vas, ličnu kartu radi provere identiteta.",
+    "speaker": "LEFT",
+    "next": "voter_reply"
+  },
+  "voter_reply": {
+    "text": "Neću da dajem, znate me, dolazim svake godine.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Nažalost, bez dokumenta ne možete glasati.",
+        "explanation": "Ispravno – bez identifikacije nije dozvoljeno glasanje.",
+        "score": 100,
+        "next": "voter_leaves"
+      },
+      {
+        "text": "Ma nema veze, prođite.",
+        "explanation": "Prekršaj – glasanje bez provere identiteta.",
+        "score": -100,
+        "next": "voter_passes"
+      }
+    ]
+  },
+  "voter_leaves": {
+    "text": "Dobro, idem po dokument.",
+    "speaker": "RIGHT"
+  },
+  "voter_passes": {
+    "text": "Hvala, znao sam da ste čovek.",
+    "speaker": "RIGHT"
+  }
+}

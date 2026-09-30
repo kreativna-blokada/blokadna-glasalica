@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="Glasalica"
-config/version="0.7.0"
-run/main_scene="uid://xo6ugvkdo8iw"
+config/version="0.8.0"
+run/main_scene="res://!project/build/design/scenes/screens/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.png"
 
@@ -21,6 +21,15 @@ config/icon="res://icon.png"
 Configs="*uid://dhhyvc7jn85c8"
 Globals="*uid://ej3a17l3oane"
 Signals="*uid://mla4tmb8bcml"
+DialoguesManager="*res://!project/build/design/dialogues/dialogues_manager.gd"
+ScreenManager="*uid://lrhmjicg5tti"
+GameManager="*uid://bjfmu6oaoxk6g"
+DialogueRepository="*res://!project/build/design/game_setup/dialogue_repository.gd"
+LeaderboardManager="*res://!project/build/design/scenes/screens/leaderboard/leaderboard_manager.gd"
+
+[dialogues]
+
+remote_archive_url=""
 
 [display]
 
@@ -31,7 +40,7 @@ window/stretch/aspect="keep_height"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/rider-plugin/plugin.cfg")
+enabled=PackedStringArray("res://addons/dialogue_packager/plugin.cfg", "res://addons/rider-plugin/plugin.cfg")
 
 [input]
 

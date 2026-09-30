@@ -1,0 +1,40 @@
+{
+  "content_label": "build-1",
+  "content_version": 1,
+  "dialogues": {
+    "ballot": {
+      "angry": 1,
+      "polite": 1
+    },
+    "booth": {
+      "angry": 1,
+      "polite": 1
+    },
+    "id": {
+      "angry": 1,
+      "polite": 1
+    },
+    "lamp": {
+      "angry": 1,
+      "polite": 1
+    },
+    "list": {
+      "angry": 1,
+      "polite": 1
+    },
+    "spray": {
+      "angry": 1,
+      "polite": 1
+    }
+  },
+  "filename": {
+    "index_width": 2,
+    "template": "voter_{topic}_dialog_{personality}_{index}.json"
+  },
+  "minimum_game_version": "0.7.0",
+  "personalities": [
+    "angry",
+    "polite"
+  ],
+  "schema_version": 1
+}
