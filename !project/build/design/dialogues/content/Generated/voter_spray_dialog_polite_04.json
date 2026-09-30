@@ -1,0 +1,52 @@
+{
+  "root": {
+    "text": "Izvinite, mislim da sam vam već dao listić, a nisam naneo sprej.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Molim vas da sada obavite obeležavanje, pre nego što nastavim dalje.",
+        "explanation": "Ispravno, birač ukazuje na propust i traži da se procedura odmah ispravi.",
+        "score": 100,
+        "next": "spray_applied"
+      },
+      {
+        "text": "Ako sam već dobio listić, nema potrebe da se vraćamo na to.",
+        "explanation": "Pogrešno, propust obeležavanja sprejem treba ispraviti, a ne ignorisati.",
+        "score": -100
+      },
+      {
+        "text": "Možete li obavestiti predsednika odbora da se propust ne ponavlja?",
+        "explanation": "Ispravno je tražiti da se proceduralni propust evidentira ili spreči ubuduće.",
+        "score": 80,
+        "next": "chair_notified"
+      }
+    ]
+  },
+  "spray_applied": {
+    "text": "U pravu ste. Hvala što ste ukazali, sada ću naneti sprej.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala, posle toga nastavljam iza paravana.",
+        "explanation": "Postupak je ispravljen pre nastavka glasanja.",
+        "score": 100
+      }
+    ]
+  },
+  "chair_notified": {
+    "text": "Predsednik odbora je obavešten i podsetiće članove na redosled postupka.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U redu, izvolite prst za sprej.",
+        "explanation": "Birač kombinuje ukazivanje na propust sa nastavkom pravilne procedure.",
+        "score": 100
+      },
+      {
+        "text": "Hvala, ali ipak ću otići bez spreja.",
+        "explanation": "Odlazak dalje bez obeležavanja ostavlja propust nerešenim.",
+        "score": -100
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Molim vas, dokument za identifikaciju.",
+    "speaker": "LEFT",
+    "next": "voter_reply"
+  },
+  "voter_reply": {
+    "text": "Lična karta mi je u postupku zamene, ali imam potvrdu MUP-a i stari dokument.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Prihvatićemo potvrdu MUP-a i proveriti podatke pažljivo.",
+        "explanation": "Ispravno, potvrda MUP-a o promeni lične karte može služiti za ostvarivanje prava glasa.",
+        "score": 100,
+        "next": "data_checked"
+      },
+      {
+        "text": "Bez nove lične karte ne možete glasati.",
+        "explanation": "Pogrešno, potvrda MUP-a je predviđena za ovu situaciju.",
+        "score": -100,
+        "next": "voter_explains"
+      },
+      {
+        "text": "Ne treba ništa da proveravamo, dovoljno je što imate papir.",
+        "explanation": "Pogrešno, i uz potvrdu MUP-a identitet mora biti proveren.",
+        "score": -50
+      }
+    ]
+  },
+  "voter_explains": {
+    "text": "Koliko znam, potvrda postoji baš zato što je dokument u zameni.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "U pravu ste, proveriću podatke na potvrdi.",
+        "explanation": "Greška je ispravljena i postupak se nastavlja pravilno.",
+        "score": 80
+      },
+      {
+        "text": "Ne prihvatam potvrdu, morate otići.",
+        "explanation": "Odbijanje važeće potvrde može neopravdano sprečiti birača da glasa.",
+        "score": -150
+      }
+    ]
+  },
+  "data_checked": {
+    "text": "Podaci se poklapaju. Možete nastaviti ka proveri u biračkom spisku.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala, nastavljam dalje.",
+        "explanation": "Procedura je sprovedena mirno i pravilno.",
+        "score": 100
+      }
+    ]
+  }
+}

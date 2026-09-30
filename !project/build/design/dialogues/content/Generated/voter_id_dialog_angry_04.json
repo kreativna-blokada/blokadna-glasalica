@@ -1,0 +1,67 @@
+{
+  "root": {
+    "text": "Molim dokument radi provere identiteta.",
+    "speaker": "LEFT",
+    "next": "voter_reply"
+  },
+  "voter_reply": {
+    "text": "Promenila sam prezime, u spisku je staro. Nemojte odmah da me vraćate kući.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Proverićemo ime, JMBG i ostale podatke. Ako se identitet pouzdano utvrdi, možete nastaviti.",
+        "explanation": "Ispravno, promena prezimena ne mora sprečiti glasanje ako se identitet može utvrditi po drugim podacima, naročito JMBG-u.",
+        "score": 100,
+        "next": "identity_matches"
+      },
+      {
+        "text": "Prezime se ne poklapa, odmah napustite biračko mesto.",
+        "explanation": "Pogrešno, birača ne treba automatski odbiti ako se identitet može utvrditi drugim podacima.",
+        "score": -100,
+        "next": "voter_objects"
+      },
+      {
+        "text": "Nema veze šta piše, prođite bez provere.",
+        "explanation": "Prekršaj, identitet ipak mora biti pažljivo proveren.",
+        "score": -100,
+        "next": "voter_passes"
+      }
+    ]
+  },
+  "identity_matches": {
+    "text": "JMBG i ostali podaci se poklapaju. Možete nastaviti ka proveri u spisku.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala, važno mi je da se ovo rešilo po pravilima.",
+        "explanation": "Korektna komunikacija i pravilno utvrđivanje identiteta.",
+        "score": 100
+      },
+      {
+        "text": "Vidite da sam bila u pravu, sledeći put brže.",
+        "explanation": "Ishod je ispravan, ali nepotrebno zaoštravanje nije dobra komunikacija.",
+        "score": 50
+      }
+    ]
+  },
+  "voter_objects": {
+    "text": "Ali JMBG je isti. Zar ne treba to da proverite?",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "U pravu ste, proveriću podatke pažljivo.",
+        "explanation": "Član odbora ispravlja grešku i vraća se pravilnoj proveri.",
+        "score": 80
+      },
+      {
+        "text": "Neću ništa da proveravam, prezime mora biti isto.",
+        "explanation": "Odbijanje provere može neopravdano uskratiti biraču pravo glasa.",
+        "score": -150
+      }
+    ]
+  },
+  "voter_passes": {
+    "text": "Dobro, samo da završim što pre.",
+    "speaker": "RIGHT"
+  }
+}

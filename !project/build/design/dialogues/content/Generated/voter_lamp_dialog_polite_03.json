@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Izvinite, lampa nam je trenutno kod drugog člana odbora. Možete vi ipak dalje, verovatno je sve u redu.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Sačekaću da proverite lampom, to je deo procedure.",
+        "explanation": "Ispravno, birač ne pristaje na preskakanje obavezne kontrole.",
+        "score": 100,
+        "next": "lamp_returns"
+      },
+      {
+        "text": "Ako vi kažete da može, nastaviću.",
+        "explanation": "Birač ne treba da pristane na nastavak bez UV provere.",
+        "score": -100
+      },
+      {
+        "text": "Možemo li zamoliti predsednika odbora da obezbedi da se provera obavi?",
+        "explanation": "Ispravno je mirno tražiti da se procedura organizuje kako treba.",
+        "score": 100,
+        "next": "chair_called"
+      }
+    ]
+  },
+  "lamp_returns": {
+    "text": "Hvala što ste sačekali. Sada možemo da proverimo.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Izvolite, važno mi je da sve bude pravilno.",
+        "explanation": "Birač sarađuje i podržava pravilno sprovođenje izbora.",
+        "score": 100
+      },
+      {
+        "text": "Dobro, ali ovo kašnjenje bi trebalo zabeležiti ako se ponavlja.",
+        "explanation": "Ukazivanje na ponovljeni proceduralni problem je opravdano ako se problem nastavi.",
+        "score": 50
+      }
+    ]
+  },
+  "chair_called": {
+    "text": "Predsednik odbora kaže da se mora sačekati lampa i da niko ne ide dalje bez provere.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala, sačekaću proveru.",
+        "explanation": "Birač prihvata pravilno rešenje.",
+        "score": 100
+      },
+      {
+        "text": "Onda ću stati sa strane da ne zadržavam red.",
+        "explanation": "Birač čeka proveru bez ometanja rada biračkog mesta.",
+        "score": 80
+      }
+    ]
+  }
+}

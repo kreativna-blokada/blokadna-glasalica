@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Na prstu vam se pod UV lampom vidi trag spreja. Ne možete nastaviti ka glasanju.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Nemoguće, nisam glasao! Proverite još jednom, ali nemojte me odmah odbijati.",
+        "explanation": "Birač ima pravo da traži pažljivu proveru, ali procedura UV kontrole mora da se sprovede.",
+        "score": 50,
+        "next": "second_check"
+      },
+      {
+        "text": "Ma kakav sprej, pustite me da prođem ili pravim haos.",
+        "explanation": "Pretnja i pokušaj preskakanja UV kontrole ometaju rad biračkog mesta.",
+        "score": -200,
+        "next": "warning"
+      },
+      {
+        "text": "U redu, ako se zaista vidi trag, neću nastaviti.",
+        "explanation": "Ispravno je poštovati ishod obavezne UV provere.",
+        "score": 100
+      }
+    ]
+  },
+  "second_check": {
+    "text": "Proverili smo ponovo i trag je i dalje vidljiv. Bez daljeg utvrđivanja ne možemo da vas pustimo na glasanje.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Tražim da se ovo zabeleži i da predsednik biračkog odbora pogleda.",
+        "explanation": "Ispravno je tražiti da se sporna situacija reši kroz birački odbor i evidentira.",
+        "score": 100
+      },
+      {
+        "text": "Baš me briga, idem dalje dok me neko ne zaustavi.",
+        "explanation": "Birač ne sme samovoljno nastaviti postupak kada UV provera ukazuje na problem.",
+        "score": -200
+      }
+    ]
+  },
+  "warning": {
+    "text": "Ako nastavite da ometate rad, moraćemo da pozovemo predsednika biračkog odbora.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Dobro, smiriću se. Neka predsednik biračkog odbora odluči šta dalje.",
+        "explanation": "Povratak mirnoj proceduri je bolji izbor od eskalacije.",
+        "score": 50
+      },
+      {
+        "text": "Neću da čekam nikoga, sklanjajte se.",
+        "explanation": "Nastavak pritiska na članove odbora je ozbiljno ometanje postupka.",
+        "score": -300
+      }
+    ]
+  }
+}

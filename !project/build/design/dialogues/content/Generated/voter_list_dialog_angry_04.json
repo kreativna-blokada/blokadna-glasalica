@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Ne nalazim vas u izvodu iz biračkog spiska za ovo biračko mesto.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Kako me nema? Proverite još jednom pre nego što me odbijete.",
+        "explanation": "Birač opravdano traži pažljivu proveru spiska pre donošenja odluke.",
+        "score": 50,
+        "next": "second_search"
+      },
+      {
+        "text": "Upišite me rukom negde na kraj, neću da idem bez glasanja.",
+        "explanation": "Birač ne sme biti dopisan mimo propisane evidencije.",
+        "score": -200,
+        "next": "manual_entry_refused"
+      },
+      {
+        "text": "Ako nisam u spisku, tražim da mi objasnite kome da se obratim.",
+        "explanation": "Ispravno, birač može tražiti objašnjenje i dalje korake bez ometanja rada.",
+        "score": 100
+      }
+    ]
+  },
+  "second_search": {
+    "text": "Proverili smo još jednom. Vašeg imena zaista nema u ovom izvodu.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U redu, zabeležite da sam došao i recite mi kome da se obratim.",
+        "explanation": "Mirno traženje informacije je pravilno ponašanje u spornoj situaciji.",
+        "score": 80
+      },
+      {
+        "text": "Onda ću se potpisati kod nekog ko se nije pojavio.",
+        "explanation": "Potpisivanje na tuđem mestu je ozbiljan prekršaj.",
+        "score": -200
+      }
+    ]
+  },
+  "manual_entry_refused": {
+    "text": "Ne smemo nikoga dopisivati u izvod po sopstvenoj odluci.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Dobro, onda tražim uputstvo šta mogu dalje.",
+        "explanation": "Birač odustaje od nepravilnog zahteva i traži proceduralno rešenje.",
+        "score": 80
+      },
+      {
+        "text": "Ako me ne upišete, prekidam vam glasanje.",
+        "explanation": "Pretnja prekidom rada biračkog mesta je ozbiljno ometanje postupka.",
+        "score": -300
+      }
+    ]
+  }
+}
