@@ -1,0 +1,52 @@
+{
+  "root": {
+    "text": "Molim vas, potpišite se pored svog imena. Samo trenutak, otvoren je pogrešan izvod.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Sačekaću da pronađete odgovarajući izvod, ne bih da se potpišem na pogrešno mesto.",
+        "explanation": "Ispravno, birač treba da se potpiše samo u odgovarajući izvod i pored svog imena.",
+        "score": 100,
+        "next": "correct_list"
+      },
+      {
+        "text": "Ako vam je lakše, potpisaću se tu pa vi kasnije sredite.",
+        "explanation": "Potpisivanje u pogrešan izvod ili na pogrešno mesto može izazvati ozbiljnu nepravilnost.",
+        "score": -100
+      },
+      {
+        "text": "Možete li mi pokazati moje ime pre potpisa?",
+        "explanation": "Birač razumno traži proveru da se potpisuje na pravilnom mestu.",
+        "score": 100,
+        "next": "name_shown"
+      }
+    ]
+  },
+  "correct_list": {
+    "text": "Hvala na strpljenju. Evo odgovarajućeg izvoda i vašeg imena.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala, sada ću se potpisati.",
+        "explanation": "Postupak se nastavlja pravilno nakon ispravke.",
+        "score": 100
+      }
+    ]
+  },
+  "name_shown": {
+    "text": "Naravno, evo vašeg imena i mesta za potpis.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U redu, potpisujem se ovde.",
+        "explanation": "Birač se potpisuje tek nakon potvrde svog mesta u spisku.",
+        "score": 100
+      },
+      {
+        "text": "Vidim slično ime iznad, možda je svejedno.",
+        "explanation": "Nije svejedno; potpis mora biti pored tačnog imena birača.",
+        "score": -50
+      }
+    ]
+  }
+}

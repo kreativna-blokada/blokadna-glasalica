@@ -1,0 +1,55 @@
+{
+  "root": {
+    "text": "Dajte dokument za proveru identiteta.",
+    "speaker": "LEFT",
+    "next": "voter_reply"
+  },
+  "voter_reply": {
+    "text": "Evo pasoš, istekao je prošlog meseca, ali slika je moja. Nemojte sad da cepidlačite.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Ne mogu da prihvatim samo nevažeći pasoš. Potrebna je važeća lična karta, važeći pasoš ili potvrda MUP-a o podnetom zahtevu za novi dokument.",
+        "explanation": "Ispravno, birač glasa sa važećom ličnom kartom, važećim pasošem ili potvrdom MUP-a ako je lična karta ili pasoš u postupku zamene.",
+        "score": 100,
+        "next": "voter_leaves"
+      },
+      {
+        "text": "Važno je da se vidi slika, možete dalje.",
+        "explanation": "Prekršaj, nevažeći dokument nije dovoljan za utvrđivanje prava na glasanje.",
+        "score": -100,
+        "next": "voter_passes"
+      },
+      {
+        "text": "Sačekajte da predsednik odbora potvrdi, meni je ovo sumnjivo.",
+        "explanation": "Delimično ispravno, ali osnovno pravilo je jasno: nevažeći dokument se ne prihvata.",
+        "score": 50,
+        "next": "chair_confirms"
+      }
+    ]
+  },
+  "chair_confirms": {
+    "text": "Predsednik odbora potvrđuje da je potreban važeći dokument ili potvrda MUP-a o podnetom zahtevu za novi dokument.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Razumem, bez važećeg dokumenta ne mogu da nastavim.",
+        "explanation": "Ispravno zaključivanje nakon provere pravila.",
+        "score": 100
+      },
+      {
+        "text": "Svejedno ću ga pustiti, čovek se već iznervirao.",
+        "explanation": "Pritisak ili nervoza birača ne opravdavaju kršenje pravila identifikacije.",
+        "score": -150
+      }
+    ]
+  },
+  "voter_leaves": {
+    "text": "Dobro, idem po važeći dokument, ali ovo je moglo brže.",
+    "speaker": "RIGHT"
+  },
+  "voter_passes": {
+    "text": "E tako, kad se hoće sve može.",
+    "speaker": "RIGHT"
+  }
+}
