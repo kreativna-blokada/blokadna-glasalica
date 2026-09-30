@@ -79,7 +79,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("3_fi7f4")
-theme_override_font_sizes/normal_font_size = 48
+theme_override_font_sizes/normal_font_size = 29
 text = "Lorem ipšum ćolor"
 scroll_active = false
 

@@ -1,6 +1,6 @@
 [gd_resource type="Theme" format=3 uid="uid://duic02i5k0kb4"]
 
-[ext_resource type="FontFile" uid="uid://d1lin6jg5aa4a" path="res://!project/art/UI/Orange Kid.otf" id="1_2sf17"]
+[ext_resource type="FontFile" uid="uid://w8p5mlgowyma" path="res://!project/art/UI/DejaVuLGCSansMono.ttf" id="1_2sf17"]
 
 [resource]
 RichTextLabel/colors/default_color = Color(0.08235294, 0.078431375, 0.09803922, 1)

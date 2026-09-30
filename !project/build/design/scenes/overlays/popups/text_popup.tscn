@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://pcilj6pcgqi8" path="res://!project/art/UI/Buttons/stop-box.png" id="10_box"]
 [ext_resource type="Texture2D" uid="uid://drvshxrdvhmnu" path="res://!project/art/UI/Buttons/stop-lamp-disabled.png" id="11_lampd"]
 [ext_resource type="Texture2D" uid="uid://buvdxuyq6y88s" path="res://!project/art/UI/Buttons/input-wrong-active.png" id="12_close"]
-[ext_resource type="FontFile" uid="uid://d1lin6jg5aa4a" path="res://!project/art/UI/Orange Kid.otf" id="13_font"]
+[ext_resource type="FontFile" uid="uid://w8p5mlgowyma" path="res://!project/art/UI/DejaVuLGCSansMono.ttf" id="13_font"]
 
 [node name="TextPopup" type="Control" unique_id=193475490]
 layout_mode = 3
@@ -62,7 +62,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 theme = ExtResource("2_7j04v")
-theme_override_font_sizes/normal_font_size = 48
+theme_override_font_sizes/normal_font_size = 29
 text = "Izborni je dan i ti si na biračkom mestu. Imaš 5 minuta. Provedi svakog birača kroz proceduru. 
 Poštuješ pravila: postupaš po zakonu i dobijaš bodove. Kršiš pravila: gubiš bodove i ispadaš ćaci.
 Poštuješ zakon, ne budi ćaci!"
@@ -101,7 +101,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
 theme_override_fonts/font = ExtResource("13_font")
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 29
 text = "Dole levo: pusti sledećeg birača u red."
 vertical_alignment = 1
 autowrap_mode = 3
@@ -179,7 +179,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
 theme_override_fonts/font = ExtResource("13_font")
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 29
 text = "Gore: stanica svetli kad birač čeka. Klikni je za razgovor."
 vertical_alignment = 1
 autowrap_mode = 3
@@ -203,7 +203,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
 theme_override_fonts/font = ExtResource("13_font")
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 29
 text = "Siva stanica: nema nikoga, ne može se kliknuti."
 vertical_alignment = 1
 autowrap_mode = 3
@@ -227,7 +227,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
 theme_override_fonts/font = ExtResource("13_font")
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 29
 text = "Gore desno: izlaz iz igre."
 vertical_alignment = 1
 autowrap_mode = 3
@@ -237,7 +237,7 @@ layout_mode = 2
 size_flags_vertical = 10
 theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
 theme_override_fonts/font = ExtResource("13_font")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 38
 text = "Klikni bilo gde za početak"
 horizontal_alignment = 1
 

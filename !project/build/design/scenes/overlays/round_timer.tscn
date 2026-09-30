@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bjv4tvg2c5iba"]
 
 [ext_resource type="Script" uid="uid://dvrktbu2py03j" path="res://!project/build/design/scenes/overlays/round_timer.gd" id="1_script"]
-[ext_resource type="FontFile" uid="uid://d1lin6jg5aa4a" path="res://!project/art/UI/Orange Kid.otf" id="2_n8p3t"]
+[ext_resource type="FontFile" uid="uid://w8p5mlgowyma" path="res://!project/art/UI/DejaVuLGCSansMono.ttf" id="2_n8p3t"]
 
 [node name="RoundTimer" type="Control" unique_id=1095247227]
 z_index = 4096
@@ -26,5 +26,5 @@ offset_bottom = -24.0
 grow_vertical = 0
 theme_override_constants/outline_size = 15
 theme_override_fonts/font = ExtResource("2_n8p3t")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 38
 text = "00:00"
