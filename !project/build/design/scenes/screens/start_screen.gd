@@ -77,7 +77,6 @@ var _rest_hint_font_size: int
 @onready var init_line_label: Label = %InitLineLabel
 @onready var follow_students_label: Label = %FollowStudentsLabel
 @onready var start_difficulty: StartDifficultyManager = %Difficulty
-@onready var button_leaderboard: Control = %LeaderboardButton
 @onready var hand_hint: TextureRect = $BallotBoxSelection/HandGestureHint
 @onready var left_side_mask: TextureRect = $BallotBoxSelection/LeftSideMask
 @onready var right_side_mask: TextureRect = $BallotBoxSelection/RightSideMask
@@ -101,12 +100,12 @@ func _ready() -> void:
 	_show_side_words(not hand_hint.visible)
 
 	start_button.pressed.connect(_on_start_button_pressed)
+	start_button.gui_input.connect(_on_start_button_input)
 	jump_sound.finished.connect(_on_jump_sound_finished)
 	jump_sound.play()
 
 	start_difficulty.initialize(_chosen_difficulty)
 	start_difficulty.difficulty_changed.connect(_on_difficulty_changed)
-	button_leaderboard.gui_input.connect(_on_leaderboard_button_input)
 	Signals.menu_option_selected.connect(_on_menu_option_selected)
 
 #counts up/down phone movements via accelerometer, starts game on enough shakes
@@ -160,9 +159,9 @@ func _gui_input(event: InputEvent) -> void:
 		_take_card_control()
 	accept_event()
 
-#signal StartButton.pressed => counts clicks, jumps the text; starts the game on enough of them
+#signal StartButton.pressed => counts clicks, jumps the text; starts the game on enough of them; the leaderboard row only opens the leaderboard
 func _on_start_button_pressed() -> void:
-	if _is_starting: return
+	if _is_starting or _menu_choice == Globals.MainMenu.Leaderboard: return
 
 	_click_count += 1
 	#every click shows the 3, never the running count, growing with each click
@@ -181,9 +180,9 @@ func _on_start_button_pressed() -> void:
 func _on_difficulty_changed(difficulty: GameDescriptor.Difficulty) -> void:
 	_chosen_difficulty = difficulty
 
-#signal LeaderboardButton.gui_input => opens the leaderboard on touch or click
-func _on_leaderboard_button_input(event: InputEvent) -> void:
-	if _is_starting: return
+#signal StartButton.gui_input => opens the leaderboard on touch or click while the leaderboard row is ticked
+func _on_start_button_input(event: InputEvent) -> void:
+	if _is_starting or _menu_choice != Globals.MainMenu.Leaderboard: return
 
 	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
 		GameManager.go_to_leaderboard()
@@ -348,10 +347,9 @@ func _finish_start_sequence() -> void:
 	init_line_tween.tween_callback(init_line_label.hide)
 	init_line_tween.tween_callback(follow_students_label.show)
 
-#start sequence is under way, difficulty and leaderboard can no longer be picked
+#start sequence is under way, difficulty can no longer be picked
 func _hide_start_screen_choices() -> void:
 	start_difficulty.hide()
-	button_leaderboard.hide()
 
 #shows or hides the words on the left and right box sides, kept hidden while the hand hint plays
 func _show_side_words(is_shown: bool) -> void:
