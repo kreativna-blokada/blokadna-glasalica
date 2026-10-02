@@ -59,6 +59,13 @@ var Shake: Dictionary[String, Variant] = {
 	"sequence_slowdown": 1.0,
 }
 
+var HandHint: Dictionary[String, Variant] = {
+	#game starts (1 = the first game) on which the pointing hand shows how to move the ballot, never after the last one
+	"play_numbers": [1, 2, 5, 8, 12, 16, 20, 25],
+	#device file holding how many games this player has started
+	"plays_record": "user://hint_plays.cfg",
+}
+
 var Round: Dictionary[String, Variant] = {
 	#s a run lasts before the score is submitted and the leaderboard opens
 	"duration": 300.0,

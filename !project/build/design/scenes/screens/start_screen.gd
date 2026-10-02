@@ -40,6 +40,8 @@ var _box_snapping_animation: Tween
 #stretches all timing once the matrix rain opens; Configs.Shake["sequence_slowdown"] in debug builds, 1.0 otherwise
 var _sequence_slowdown: float = 1.0
 var _clip_mask_pixels: Image
+#games this player started before this screen opened, kept on the device
+var _game_start_count: int = 0
 
 #onready vars
 @onready var jumper: CenterContainer = %JumperContainer
@@ -56,6 +58,7 @@ var _clip_mask_pixels: Image
 @onready var follow_students_label: Label = %FollowStudentsLabel
 @onready var start_difficulty: StartDifficultyManager = %Difficulty
 @onready var button_leaderboard: Control = %LeaderboardButton
+@onready var hand_hint: TextureRect = $BallotBoxSelection/HandGestureHint
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -70,6 +73,8 @@ func _ready() -> void:
 	_rest_slogan_offset = jumper.position.y
 	_clip_mask_pixels = masked_ballot.texture.get_image()
 	_init_web_drag()
+	_load_game_start_count()
+	hand_hint.visible = _is_hint_scheduled()
 
 	start_button.pressed.connect(_on_start_button_pressed)
 	jump_sound.finished.connect(_on_jump_sound_finished)
@@ -317,8 +322,29 @@ func _jump_slogan(direction: float) -> void:
 	_slogan_jumping_animation.tween_property(jumper, "position:y", rest_position, jump_duration * 0.6) \
 		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 
+#reads how many games this player started; zero on the first launch
+func _load_game_start_count() -> void:
+	var start_record: ConfigFile = ConfigFile.new()
+	if start_record.load(Configs.HandHint["plays_record"]) == OK:
+		_game_start_count = int(start_record.get_value("plays", "game_start_count", 0))
+
+#writes how many games this player started to the device
+func _save_game_start_count() -> void:
+	var start_record: ConfigFile = ConfigFile.new()
+	start_record.set_value("plays", "game_start_count", _game_start_count)
+	var save_error: Error = start_record.save(Configs.HandHint["plays_record"])
+	if save_error != OK:
+		push_warning("StartScreen._save_game_start_count: cannot write %s (%s)" % [Configs.HandHint["plays_record"], error_string(save_error)])
+
+#true when the game about to start is one of Configs.HandHint["play_numbers"]
+func _is_hint_scheduled() -> bool:
+	var play_numbers: Array = Configs.HandHint["play_numbers"]
+	return play_numbers.has(_game_start_count + 1)
+
 #starts the game through GameManager so it switches to the main game screen
 func _start_game() -> void:
 	_is_starting = true
+	_game_start_count += 1
+	_save_game_start_count()
 
 	GameManager.start_game(_chosen_difficulty, MissionDescriptor.new())
