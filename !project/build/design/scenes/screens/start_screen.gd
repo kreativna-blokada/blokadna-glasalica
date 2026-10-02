@@ -73,6 +73,8 @@ var _game_start_count: int = 0
 @onready var start_difficulty: StartDifficultyManager = %Difficulty
 @onready var button_leaderboard: Control = %LeaderboardButton
 @onready var hand_hint: TextureRect = $BallotBoxSelection/HandGestureHint
+@onready var left_side_mask: TextureRect = $BallotBoxSelection/LeftSideMask
+@onready var right_side_mask: TextureRect = $BallotBoxSelection/RightSideMask
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -87,6 +89,7 @@ func _ready() -> void:
 	_rest_slogan_offset = jumper.position.y
 	_load_game_start_count()
 	hand_hint.visible = _is_hint_scheduled()
+	_show_side_words(not hand_hint.visible)
 
 	start_button.pressed.connect(_on_start_button_pressed)
 	jump_sound.finished.connect(_on_jump_sound_finished)
@@ -210,9 +213,10 @@ func _take_card_control() -> void:
 	if _card_snapping_animation and _card_snapping_animation.is_running(): return
 	_card_pointer_distance = ballot.position.y - _card_pointer_position
 
-#user understood the hint: hides it, stops the vote and swiftly moves the card from where it is until the starting row is ticked
+#user understood the hint: hides it, reveals the box side words, stops the vote and swiftly moves the card from where it is until the starting row is ticked
 func _snap_card_toward_starting() -> void:
 	hand_hint.hide()
+	_show_side_words(true)
 	#vote already stopped: the card stays where it rests
 	if not vote_animation.is_playing(): return
 
@@ -312,6 +316,11 @@ func _finish_start_sequence() -> void:
 func _hide_start_screen_choices() -> void:
 	start_difficulty.hide()
 	button_leaderboard.hide()
+
+#shows or hides the words on the left and right box sides, kept hidden while the hand hint plays
+func _show_side_words(is_shown: bool) -> void:
+	left_side_mask.visible = is_shown
+	right_side_mask.visible = is_shown
 
 #shows 1, 2 and 3 over everything, each for its own digit_durations entry, then starts the game
 func _play_countdown() -> void:
