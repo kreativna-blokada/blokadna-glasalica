@@ -47,7 +47,7 @@ var _is_card_dragging: bool = false
 var _card_pressing_position: float = 0.0
 #latest pointer height in BallotOrigin space
 var _card_pointer_position: float = 0.0
-#ballot height minus pointer height, fixed once the card has risen to the top
+#ballot height minus pointer height, fixed once the card has snapped to the starting row
 var _card_pointer_distance: float = 0.0
 var _card_snapping_animation: Tween
 #stretches all timing once the matrix rain opens; Configs.Shake["sequence_slowdown"] in debug builds, 1.0 otherwise
@@ -57,6 +57,7 @@ var _game_start_count: int = 0
 
 #onready vars
 @onready var jumper: CenterContainer = %JumperContainer
+@onready var slogan_label: Label = %SloganLabel
 @onready var jump_sound: AudioStreamPlayer = %JumpSound
 @onready var vote_animation: AnimationPlayer = %VoteAnimation
 @onready var ballot: Control = $BallotBoxSelection/MaskedBallot/BallotOrigin/Ballot
@@ -119,12 +120,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		#input consumed, no tree propagation
 		get_viewport().set_input_as_handled()
 
-#grabs the card on a vertical drag and emits the ticked row on release; touch only, mouse clicks arrive as emulated touch
+#hides the hand on any press right of the slogan; grabs the card on a vertical drag and emits the ticked row on release; touch only, mouse clicks arrive as emulated touch
 func _gui_input(event: InputEvent) -> void:
 	if _is_starting: return
 
 	var touch_event: InputEventScreenTouch = event as InputEventScreenTouch
 	if touch_event:
+		if touch_event.pressed and (_is_beside_slogan(touch_event.position) or _is_ballot_touched(touch_event.position)): _snap_card_toward_starting()
 		if touch_event.pressed and _card_touch_index < 0 and _is_ballot_touched(touch_event.position):
 			_card_touch_index = touch_event.index
 			_card_pressing_position = _find_origin_height(touch_event.position)
@@ -193,27 +195,36 @@ func _is_ballot_touched(screen_position: Vector2) -> bool:
 	var masked_position: Vector2 = masked_ballot.get_global_transform_with_canvas().affine_inverse() * screen_position
 	return Rect2(Vector2.ZERO, masked_ballot.size).has_point(masked_position)
 
+#true when the screen point lands right of the slogan, over the ballot box side
+func _is_beside_slogan(screen_position: Vector2) -> bool:
+	return screen_position.x >= slogan_label.get_global_rect().end.x
+
 #converts a screen point into a height in BallotOrigin space, where the ballot moves
 func _find_origin_height(screen_position: Vector2) -> float:
 	return (ballot_origin.get_global_transform_with_canvas().affine_inverse() * screen_position).y
 
-#user understood the hint: hides it, stops the vote and swiftly lifts the card from where it is to the top
+#user grabbed the card: it follows the finger from where it rests, or from the starting row once it has snapped there
 func _take_card_control() -> void:
 	_is_card_dragging = true
-	if _card_snapping_animation: _card_snapping_animation.kill()
-	#card let go before: vote stays paused, the card follows the finger from where it rests
-	if not vote_animation.is_playing():
-		_card_pointer_distance = ballot.position.y - _card_pointer_position
-		return
+	#card still snapping: the snap sets the finger distance once on the starting row
+	if _card_snapping_animation and _card_snapping_animation.is_running(): return
+	_card_pointer_distance = ballot.position.y - _card_pointer_position
 
+#user understood the hint: hides it, stops the vote and swiftly moves the card from where it is until the starting row is ticked
+func _snap_card_toward_starting() -> void:
 	hand_hint.hide()
+	#vote already stopped: the card stays where it rests
+	if not vote_animation.is_playing(): return
+
 	vote_animation.pause()
+	#middle of the starting row tick on the downward vote pass
+	var starting_moment: float = _TOP_BALLOT_MOMENT + (Globals.MainMenu.Starting + 0.5) * _ROW_TICK_SPACING
 	_card_snapping_animation = create_tween()
-	_card_snapping_animation.tween_method(_seek_vote_animation, _find_ballot_moment(ballot.position.y), _TOP_BALLOT_MOMENT, Configs.CardDrag["snap_duration"]) \
+	_card_snapping_animation.tween_method(_seek_vote_animation, _find_ballot_moment(ballot.position.y), starting_moment, Configs.CardDrag["snap_duration"]) \
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	_card_snapping_animation.tween_callback(func() -> void: _card_pointer_distance = ballot.position.y - _card_pointer_position)
 
-#card follows the finger up and down the slot once it has risen to the top; equal depth ticks each row
+#card follows the finger up and down the slot once it has snapped to the starting row; equal depth ticks each row
 func _move_card_vertically() -> void:
 	if _card_snapping_animation and _card_snapping_animation.is_running(): return
 
@@ -251,7 +262,7 @@ func _find_ballot_moment(ballot_height: float) -> float:
 			latest_moment = middle_moment
 	return latest_moment
 
-#card let go: stays where it is, its ticked row becomes the menu choice; let go while still rising, it settles on top and picks nothing
+#card let go: stays where it is, its ticked row becomes the menu choice; let go while still snapping, it settles on the starting row and picks nothing
 func _emit_ticked_choice() -> void:
 	_is_card_dragging = false
 	if _card_snapping_animation and _card_snapping_animation.is_running(): return
