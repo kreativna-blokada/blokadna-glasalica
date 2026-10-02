@@ -27,3 +27,7 @@ signal user_saved(saved_username: String)
 #emitted when the database does not give the player the username; Taken means another player has it
 @warning_ignore("unused_signal")
 signal user_refused(refuse_reason: Globals.NameRefuse)
+
+#emitted when menu is selected; the action is not defined yet
+@warning_ignore("unused_signal")
+signal menu_option_selected(menu_option: Globals.MainMenu)

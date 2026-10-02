@@ -39,7 +39,7 @@ func switch_screen(game_screen: GameScreen) -> void:
 	_current_screen = game_screen
 	match game_screen:
 		GameScreen.START:
-			ScreenManager.switch_scene("res://!project/build/design/scenes/screens/main_menu.tscn")
+			ScreenManager.switch_scene("res://!project/build/design/scenes/screens/start_screen.tscn")
 		GameScreen.MAIN:
 			ScreenManager.switch_scene("res://!project/build/design/scenes/screens/game.tscn")
 		GameScreen.LEADERBOARD:
