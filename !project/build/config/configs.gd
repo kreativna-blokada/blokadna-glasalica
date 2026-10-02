@@ -41,10 +41,6 @@ var Shake: Dictionary[String, Variant] = {
 	"jump_height": 120.0,
 	#s for one jump, up and back to rest
 	"jump_duration": 0.5,
-	#px the phone must be dragged up/down to count as a shake, web only
-	"drag_threshold": 50.0,
-	#px the phone can be dragged up/down at most, web only
-	"drag_limit": 100.0,
 	#s the 3 stays on the button after the last click, before the start sequence
 	"click_pause": 0.5,
 	#px font size of the 3 on the button after the 1st, 2nd and 3rd click
@@ -57,6 +53,36 @@ var Shake: Dictionary[String, Variant] = {
 	"init_line_duration": 4.8,
 	#debug builds only: stretches all timing once the matrix rain opens (sound, phone, text, countdown); 2.0 = twice as slow
 	"sequence_slowdown": 1.0,
+}
+
+var HandHint: Dictionary[String, Variant] = {
+	#game starts (1 = the first game) on which the pointing hand shows how to move the ballot, never after the last one
+	"play_numbers": [1, 2, 5, 8, 12, 16, 20, 25],
+	#device file holding how many games this player has started
+	"plays_record": "user://hint_plays.cfg",
+}
+
+var CardDrag: Dictionary[String, Variant] = {
+	#px the finger moves up/down on the ballot box before the card follows it
+	"drag_threshold": 30.0,
+	#s the card takes to rise from where it was to the top of the slot once grabbed
+	"snap_duration": 0.15,
+	#px the card can be pushed down from its top resting point; the 5 rows share this depth equally
+	"slot_depth": 320.0,
+}
+
+var MenuHint: Dictionary[String, Variant] = {
+	#InfoLabel anchor height (0 = screen top, 1 = bottom) while the team row is chosen, centered between the SloganLabel bottom and the screen bottom
+	"team_hint_anchor": 0.644,
+	#InfoLabel font size while the team row is chosen, smaller so the long team text fits
+	"team_font_size": 48,
+}
+
+var MenuDifficulty: Dictionary[String, Variant] = {
+	#ClickCounterLabel font size while the difficulty row is chosen, small enough for the longest difficulty text to fit the MenuOptionButton
+	"font_size": 52,
+	#s the arrows ignore further taps after switching the difficulty
+	"tap_debounce": 0.1,
 }
 
 var Round: Dictionary[String, Variant] = {
