@@ -48,7 +48,7 @@ var _clip_mask_pixels: Image
 @onready var ballot_box_selection: Control = %BallotBoxSelection
 @onready var masked_ballot: NinePatchRect = %MaskedBallot
 @onready var ballot_card: Node2D = %Card
-@onready var click_button: Button = %ClickButton
+@onready var start_button: Button = %StartButton
 @onready var click_counter_label: Label = %ClickCounterLabel
 @onready var matrix_overlay: ColorRect = %MatrixOverlay
 @onready var digits_overlay: ColorRect = %DigitsOverlay
@@ -56,7 +56,6 @@ var _clip_mask_pixels: Image
 @onready var follow_students_label: Label = %FollowStudentsLabel
 @onready var start_difficulty: StartDifficultyManager = %Difficulty
 @onready var button_leaderboard: Control = %LeaderboardButton
-@onready var start_button: Control = %StartButton
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -72,14 +71,13 @@ func _ready() -> void:
 	_clip_mask_pixels = masked_ballot.texture.get_image()
 	_init_web_drag()
 
-	click_button.pressed.connect(_on_click_button_pressed)
+	start_button.pressed.connect(_on_start_button_pressed)
 	jump_sound.finished.connect(_on_jump_sound_finished)
 	jump_sound.play()
 
 	start_difficulty.initialize(_chosen_difficulty)
 	start_difficulty.difficulty_changed.connect(_on_difficulty_changed)
 	button_leaderboard.gui_input.connect(_on_leaderboard_button_input)
-	start_button.gui_input.connect(_on_start_button_input)
 
 #counts up/down phone movements via accelerometer, starts game on enough shakes
 func _process(_delta: float) -> void:
@@ -98,6 +96,8 @@ func _process(_delta: float) -> void:
 
 #starts game on "start" press as well
 func _unhandled_input(event: InputEvent) -> void:
+	if _is_starting: return
+
 	if event.is_action_pressed("start"):
 		_start_game()
 		#input consumed, no tree propagation
@@ -132,8 +132,8 @@ func _on_ballot_dragged(event: InputEvent) -> void:
 		_move_dragged_artwork(mouse_motion.global_position.y)
 		accept_event()
 
-#signal ClickButton.pressed => counts clicks, jumps the text; starts the game on enough of them
-func _on_click_button_pressed() -> void:
+#signal StartButton.pressed => counts clicks, jumps the text; starts the game on enough of them
+func _on_start_button_pressed() -> void:
 	if _is_starting: return
 
 	_click_count += 1
@@ -159,11 +159,6 @@ func _on_leaderboard_button_input(event: InputEvent) -> void:
 
 	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
 		GameManager.go_to_leaderboard()
-
-#signal StartButton.gui_input => starts the game at once on touch or click, skipping the start sequence
-func _on_start_button_input(event: InputEvent) -> void:
-	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
-		_start_game()
 
 #loops the jump sound until the shake sequence is done, then counts down to the game
 func _on_jump_sound_finished() -> void:
@@ -257,7 +252,7 @@ func _count_phone_shake(direction: float) -> void:
 func _finish_start_sequence() -> void:
 	_shake_done = true
 	_is_starting = true
-	click_button.disabled = true
+	start_button.disabled = true
 	_hide_start_screen_choices()
 	#final count shows the 3 while the last sound plays out
 	click_counter_label.text = str(Configs.Shake["click_count"])
@@ -277,11 +272,10 @@ func _finish_start_sequence() -> void:
 	init_line_tween.tween_callback(init_line_label.hide)
 	init_line_tween.tween_callback(follow_students_label.show)
 
-#start sequence is under way, difficulty, leaderboard and instant start can no longer be picked
+#start sequence is under way, difficulty and leaderboard can no longer be picked
 func _hide_start_screen_choices() -> void:
 	start_difficulty.hide()
 	button_leaderboard.hide()
-	start_button.hide()
 
 #shows 1, 2 and 3 over everything, each for its own digit_durations entry, then starts the game
 func _play_countdown() -> void:
@@ -295,7 +289,7 @@ func _play_countdown() -> void:
 		countdown_tween.tween_callback(digits_material.set_shader_parameter.bind(&"digit", digit))
 		countdown_tween.tween_callback(digits_material.set_shader_parameter.bind(&"opacity", digit_opacities[digit - 1]))
 		countdown_tween.tween_property(digits_material, "shader_parameter/progress", 1.0, digit_durations[digit - 1] * _sequence_slowdown).from(0.0)
-	countdown_tween.tween_callback(GameManager.start_game.bind(_chosen_difficulty, MissionDescriptor.new()))
+	countdown_tween.tween_callback(_start_game)
 
 #no-op on mobile and in release builds, hardware sensors take over there
 #Up/Down arrow held = phone moved up/down
@@ -325,7 +319,6 @@ func _jump_slogan(direction: float) -> void:
 
 #starts the game through GameManager so it switches to the main game screen
 func _start_game() -> void:
-	if _is_starting: return
 	_is_starting = true
 
 	GameManager.start_game(_chosen_difficulty, MissionDescriptor.new())

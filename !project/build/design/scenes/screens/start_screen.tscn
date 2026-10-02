@@ -16,21 +16,21 @@
 [ext_resource type="Texture2D" uid="uid://dwovnnrsfijbn" path="res://!project/art/UI/StartScreen/right_side_words_mask.png" id="11_right_side_words_mask"]
 [ext_resource type="Texture2D" uid="uid://cswr1e57naoql" path="res://!project/art/UI/StartScreen/slot_shade.png" id="11_slot_shade"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_click_normal"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_start_normal"]
 bg_color = Color(0.496, 0, 0, 1)
 corner_radius_top_left = 36
 corner_radius_top_right = 36
 corner_radius_bottom_right = 36
 corner_radius_bottom_left = 36
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_click_pressed"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_start_pressed"]
 bg_color = Color(0.3, 0, 0, 1)
 corner_radius_top_left = 36
 corner_radius_top_right = 36
 corner_radius_bottom_right = 36
 corner_radius_bottom_left = 36
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_click_final"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_start_final"]
 bg_color = Color(0.12, 0.12, 0.12, 1)
 corner_radius_top_left = 36
 corner_radius_top_right = 36
@@ -285,13 +285,13 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.496, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 60
 text = "ПРОТРЕСИ ТЕЛЕФОН
 ИЛИ КЛИКНИ ДУГМЕ 3 ПУТА"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ClickButton" type="Button" parent="." unique_id=120688566]
+[node name="StartButton" type="Button" parent="." unique_id=120688566]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -306,12 +306,12 @@ offset_bottom = 80.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
-theme_override_styles/normal = SubResource("StyleBoxFlat_click_normal")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_click_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_click_normal")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_click_final")
+theme_override_styles/normal = SubResource("StyleBoxFlat_start_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_start_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_start_normal")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_start_final")
 
-[node name="ClickCounterLabel" type="Label" parent="ClickButton" unique_id=886640036]
+[node name="ClickCounterLabel" type="Label" parent="StartButton" unique_id=886640036]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -323,44 +323,6 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 96
 text = "КЛИКНИ"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="StartButton" type="Control" parent="." unique_id=1083161769]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 0
-offset_left = 480.0
-offset_top = 40.0
-offset_right = 880.0
-offset_bottom = 140.0
-
-[node name="Bg" type="NinePatchRect" parent="StartButton" unique_id=1541888173]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.125
-anchor_bottom = 0.125
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(8, 8)
-texture = ExtResource("9_box_slice")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 3
-patch_margin_bottom = 3
-
-[node name="RichTextLabel" type="RichTextLabel" parent="StartButton" unique_id=1277098661]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.9
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme = ExtResource("9_dialog_theme")
-theme_override_font_sizes/normal_font_size = 31
-text = "START"
 horizontal_alignment = 1
 vertical_alignment = 1
 
