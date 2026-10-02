@@ -1,7 +1,7 @@
 ##
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
-#description     : Start screen with the ballot box, entry point, shake the phone (drag the ballot box up/down on web) or click play 3 times to start
+#description     : Start screen with the ballot box, entry point, shake the phone or click play 3 times to start; the ballot card is dragged to pick a menu option
 #maintainer      : Zeljko, Nemanja
 #version         : 1.0
 #===============================================================================
@@ -12,12 +12,22 @@ extends Control
 const _FAKE_ACCEL: float = 25.0
 #m/s², resting value on the device z axis, used to fake the accelerometer on PC debug builds
 const _RESTING_GRAVITY: float = 9.8
-#top row inside the unrotated card, px
-const _TOP_CHOICE_BOUNDS: Rect2 = Rect2(20.0, 110.0, 304.0, 58.0)
+#y of the top row inside the unrotated card, px
+const _TOP_CHOICE_OFFSET: float = 110.0
 #px from one row top to the next, row height plus gap
 const _ROW_CHOICE_SPACING: float = 66.0
-#clip mask alpha above which the ballot is drawn
-const _MASK_ALPHA_THRESHOLD: float = 0.5
+#vote animation track moving the ballot in and out of the slot
+const _TRACK_BALLOT_POSITION: NodePath = ^"BallotBoxSelection/MaskedBallot/BallotOrigin/Ballot:position"
+#s on the vote animation where the ballot rests on top, before going down
+const _TOP_BALLOT_MOMENT: float = 0.8
+#s on the vote animation where the ballot reaches the deepest point in the slot
+const _DEEP_BALLOT_MOMENT: float = 4.0
+#s between two row ticks on the downward vote pass
+const _ROW_TICK_SPACING: float = 0.64
+#halvings when searching the vote animation for the moment matching a ballot height
+const _SEARCH_MOMENT_ITERATIONS: int = 16
+#rows on the card, ticked one after another as the ballot goes down the slot
+const _ROW_COUNT: int = 5
 
 #private vars
 var _is_starting: bool = false
@@ -30,16 +40,18 @@ var _shake_direction: float = 0.0
 var _last_shake_time: int = 0
 var _slogan_jumping_animation: Tween
 var _rest_slogan_offset: float
-#web only: ballot box dragged up/down by pointer stands in for the shake
-var _is_dragging: bool = false
-#+1 up, -1 down, 0 within threshold; direction of the drag last counted as a shake
-var _ballot_dragging_direction: float = 0.0
-var _ballot_dragging_origin: float = 0.0
-var _box_resting_position: float = 0.0
-var _box_snapping_animation: Tween
+#touch index of the finger holding the card, -1 when none
+var _card_touch_index: int = -1
+var _is_card_dragging: bool = false
+#pointer height in BallotOrigin space where the finger went down
+var _card_pressing_position: float = 0.0
+#latest pointer height in BallotOrigin space
+var _card_pointer_position: float = 0.0
+#ballot height minus pointer height, fixed once the card has risen to the top
+var _card_pointer_distance: float = 0.0
+var _card_snapping_animation: Tween
 #stretches all timing once the matrix rain opens; Configs.Shake["sequence_slowdown"] in debug builds, 1.0 otherwise
 var _sequence_slowdown: float = 1.0
-var _clip_mask_pixels: Image
 #games this player started before this screen opened, kept on the device
 var _game_start_count: int = 0
 
@@ -47,9 +59,10 @@ var _game_start_count: int = 0
 @onready var jumper: CenterContainer = %JumperContainer
 @onready var jump_sound: AudioStreamPlayer = %JumpSound
 @onready var vote_animation: AnimationPlayer = %VoteAnimation
-@onready var ballot_box_selection: Control = %BallotBoxSelection
+@onready var ballot: Control = $BallotBoxSelection/MaskedBallot/BallotOrigin/Ballot
 @onready var masked_ballot: NinePatchRect = %MaskedBallot
-@onready var ballot_card: Node2D = %Card
+@onready var ballot_origin: Control = $BallotBoxSelection/MaskedBallot/BallotOrigin
+@onready var choice_highlight: Panel = $BallotBoxSelection/MaskedBallot/BallotOrigin/Ballot/Card/ChoiceHighlight
 @onready var start_button: Button = %StartButton
 @onready var click_counter_label: Label = %ClickCounterLabel
 @onready var matrix_overlay: ColorRect = %MatrixOverlay
@@ -71,8 +84,6 @@ var _game_start_count: int = 0
 #starts the jump sound looping as soon as the menu loads
 func _ready() -> void:
 	_rest_slogan_offset = jumper.position.y
-	_clip_mask_pixels = masked_ballot.texture.get_image()
-	_init_web_drag()
 	_load_game_start_count()
 	hand_hint.visible = _is_hint_scheduled()
 
@@ -108,34 +119,31 @@ func _unhandled_input(event: InputEvent) -> void:
 		#input consumed, no tree propagation
 		get_viewport().set_input_as_handled()
 
-#emits the tapped row's choice; touch only, mouse clicks arrive as emulated touch
+#grabs the card on a vertical drag and emits the ticked row on release; touch only, mouse clicks arrive as emulated touch
 func _gui_input(event: InputEvent) -> void:
 	if _is_starting: return
 
 	var touch_event: InputEventScreenTouch = event as InputEventScreenTouch
-	if not touch_event or not touch_event.pressed: return
-
-	var row_index: int = _find_tapped_choice(touch_event.position)
-	if row_index < 0: return
-
-	Signals.menu_option_selected.emit(row_index as Globals.MainMenu)
-	accept_event()
-
-#signal BallotBoxSelection.gui_input => drags the ballot box up/down and snaps it back, web only
-func _on_ballot_dragged(event: InputEvent) -> void:
-	var mouse_button: InputEventMouseButton = event as InputEventMouseButton
-	if mouse_button and mouse_button.button_index == MOUSE_BUTTON_LEFT:
-		if mouse_button.pressed and not _is_starting:
-			_begin_ballot_dragging(mouse_button.global_position.y)
-		elif not mouse_button.pressed and _is_dragging:
-			_release_dragged_artwork()
+	if touch_event:
+		if touch_event.pressed and _card_touch_index < 0 and _is_ballot_touched(touch_event.position):
+			_card_touch_index = touch_event.index
+			_card_pressing_position = _find_origin_height(touch_event.position)
+			_card_pointer_position = _card_pressing_position
+		elif not touch_event.pressed and touch_event.index == _card_touch_index:
+			_card_touch_index = -1
+			if _is_card_dragging: _emit_ticked_choice()
 		accept_event()
 		return
 
-	var mouse_motion: InputEventMouseMotion = event as InputEventMouseMotion
-	if mouse_motion and _is_dragging:
-		_move_dragged_artwork(mouse_motion.global_position.y)
-		accept_event()
+	var drag_event: InputEventScreenDrag = event as InputEventScreenDrag
+	if not drag_event or drag_event.index != _card_touch_index: return
+
+	_card_pointer_position = _find_origin_height(drag_event.position)
+	if _is_card_dragging:
+		_move_card_vertically()
+	elif absf(_card_pointer_position - _card_pressing_position) >= Configs.CardDrag["drag_threshold"]:
+		_take_card_control()
+	accept_event()
 
 #signal StartButton.pressed => counts clicks, jumps the text; starts the game on enough of them
 func _on_start_button_pressed() -> void:
@@ -180,66 +188,78 @@ func _on_jump_sound_finished() -> void:
 #██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
 #╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
-#maps a screen point onto the moving card; row index under it, -1 when off the rows or hidden in the box
-func _find_tapped_choice(screen_position: Vector2) -> int:
-	if not _is_point_unmasked(screen_position): return -1
-
-	var card_position: Vector2 = ballot_card.get_global_transform_with_canvas().affine_inverse() * screen_position
-	for row_index: int in Globals.MainMenu.size():
-		var choice_bounds: Rect2 = _TOP_CHOICE_BOUNDS
-		choice_bounds.position.y += row_index * _ROW_CHOICE_SPACING
-		if choice_bounds.has_point(card_position): return row_index
-	return -1
-
-#true where the clip mask lets the ballot show, i.e. above the box slot
-func _is_point_unmasked(screen_position: Vector2) -> bool:
+#true when the screen point lands on the ballot box or on the card rising above it
+func _is_ballot_touched(screen_position: Vector2) -> bool:
 	var masked_position: Vector2 = masked_ballot.get_global_transform_with_canvas().affine_inverse() * screen_position
-	if not Rect2(Vector2.ZERO, masked_ballot.size).has_point(masked_position): return false
+	return Rect2(Vector2.ZERO, masked_ballot.size).has_point(masked_position)
 
-	#the mask's top pixel row is stretched upwards over the ballot area above the box
-	var stretched_height: int = int(masked_ballot.size.y) - _clip_mask_pixels.get_height()
-	var mask_pixel: Vector2i = Vector2i(int(masked_position.x), maxi(int(masked_position.y) - stretched_height, 0))
-	if not Rect2i(Vector2i.ZERO, _clip_mask_pixels.get_size()).has_point(mask_pixel): return false
-	return _clip_mask_pixels.get_pixelv(mask_pixel).a > _MASK_ALPHA_THRESHOLD
+#converts a screen point into a height in BallotOrigin space, where the ballot moves
+func _find_origin_height(screen_position: Vector2) -> float:
+	return (ballot_origin.get_global_transform_with_canvas().affine_inverse() * screen_position).y
 
-#browsers expose no reliable accelerometer; the ballot box is dragged up/down by pointer instead
-func _init_web_drag() -> void:
-	if not OS.has_feature("web"): return
+#user understood the hint: hides it, stops the vote and swiftly lifts the card from where it is to the top
+func _take_card_control() -> void:
+	_is_card_dragging = true
+	if _card_snapping_animation: _card_snapping_animation.kill()
+	#card let go before: vote stays paused, the card follows the finger from where it rests
+	if not vote_animation.is_playing():
+		_card_pointer_distance = ballot.position.y - _card_pointer_position
+		return
 
-	_box_resting_position = ballot_box_selection.position.y
-	ballot_box_selection.mouse_filter = Control.MOUSE_FILTER_STOP
-	ballot_box_selection.gui_input.connect(_on_ballot_dragged)
+	hand_hint.hide()
+	vote_animation.pause()
+	_card_snapping_animation = create_tween()
+	_card_snapping_animation.tween_method(_seek_vote_animation, _find_ballot_moment(ballot.position.y), _TOP_BALLOT_MOMENT, Configs.CardDrag["snap_duration"]) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_card_snapping_animation.tween_callback(func() -> void: _card_pointer_distance = ballot.position.y - _card_pointer_position)
 
-#grabs the ballot box: stops any snap-back and marks where the pointer pressed as the drag origin
-func _begin_ballot_dragging(pointer_position: float) -> void:
-	if _box_snapping_animation: _box_snapping_animation.kill()
+#card follows the finger up and down the slot once it has risen to the top; equal depth ticks each row
+func _move_card_vertically() -> void:
+	if _card_snapping_animation and _card_snapping_animation.is_running(): return
 
-	_is_dragging = true
-	_ballot_dragging_direction = 0.0
-	_ballot_dragging_origin = pointer_position
+	var top_height: float = _find_ballot_position(_TOP_BALLOT_MOMENT).y
+	var ballot_height: float = clampf(_card_pointer_position + _card_pointer_distance, top_height, top_height + Configs.CardDrag["slot_depth"])
+	_seek_vote_animation(_find_row_moment(ballot_height))
+	ballot.position = _find_ballot_position(_find_ballot_moment(ballot_height))
 
-#moves the ballot box along the pointer; each new direction past the threshold counts as a shake
-func _move_dragged_artwork(pointer_position: float) -> void:
-	var drag_limit: float = Configs.Shake["drag_limit"]
-	var drag_distance: float = clampf(_ballot_dragging_origin - pointer_position, -drag_limit, drag_limit)
-	ballot_box_selection.position.y = _box_resting_position - drag_distance
+#moment on the downward vote pass ticking the row for this ballot height, the slot depth split evenly between the rows
+func _find_row_moment(ballot_height: float) -> float:
+	var top_height: float = _find_ballot_position(_TOP_BALLOT_MOMENT).y
+	var depth_ratio: float = clampf((ballot_height - top_height) / Configs.CardDrag["slot_depth"], 0.0, 1.0)
+	var row_number: int = mini(floori(depth_ratio * _ROW_COUNT), _ROW_COUNT - 1)
+	return _TOP_BALLOT_MOMENT + (row_number + 0.5) * _ROW_TICK_SPACING
 
-	if _is_starting or absf(drag_distance) < Configs.Shake["drag_threshold"]: return
-	var current_direction: float = signf(drag_distance)
-	if current_direction != _ballot_dragging_direction:
-		_ballot_dragging_direction = current_direction
-		_count_phone_shake(current_direction)
+#ballot position the vote animation gives at a moment
+func _find_ballot_position(moment: float) -> Vector2:
+	var vote_choreography: Animation = vote_animation.get_animation(&"vote")
+	var track_index: int = vote_choreography.find_track(_TRACK_BALLOT_POSITION, Animation.TYPE_VALUE)
+	return vote_choreography.value_track_interpolate(track_index, moment)
 
-#snaps the ballot box back to rest; a counted drag also counts the return as a shake the other way
-func _release_dragged_artwork() -> void:
-	_is_dragging = false
-	if _ballot_dragging_direction != 0.0 and not _is_starting:
-		_count_phone_shake(-_ballot_dragging_direction)
-	_ballot_dragging_direction = 0.0
+#poses the paused vote animation at a moment: ballot, highlight, tick and box labels together
+func _seek_vote_animation(moment: float) -> void:
+	vote_animation.seek(moment, true)
 
-	_box_snapping_animation = create_tween()
-	_box_snapping_animation.tween_property(ballot_box_selection, "position:y", _box_resting_position, Configs.Shake["jump_duration"]) \
-		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+#moment on the downward vote pass where the ballot is at this height, clamped to the top and the deepest point
+func _find_ballot_moment(ballot_height: float) -> float:
+	var earliest_moment: float = _TOP_BALLOT_MOMENT
+	var latest_moment: float = _DEEP_BALLOT_MOMENT
+	for iteration: int in _SEARCH_MOMENT_ITERATIONS:
+		var middle_moment: float = (earliest_moment + latest_moment) / 2.0
+		if _find_ballot_position(middle_moment).y < ballot_height:
+			earliest_moment = middle_moment
+		else:
+			latest_moment = middle_moment
+	return latest_moment
+
+#card let go: stays where it is, its ticked row becomes the menu choice; let go while still rising, it settles on top and picks nothing
+func _emit_ticked_choice() -> void:
+	_is_card_dragging = false
+	if _card_snapping_animation and _card_snapping_animation.is_running(): return
+	Signals.menu_option_selected.emit(_find_ticked_choice() as Globals.MainMenu)
+
+#row index under the highlight and tick, 0 = top row
+func _find_ticked_choice() -> int:
+	return roundi((choice_highlight.position.y - _TOP_CHOICE_OFFSET) / _ROW_CHOICE_SPACING)
 
 #counts one up/down movement, jumps the text; starts the game on enough of them within the timeout
 func _count_phone_shake(direction: float) -> void:

@@ -41,10 +41,6 @@ var Shake: Dictionary[String, Variant] = {
 	"jump_height": 120.0,
 	#s for one jump, up and back to rest
 	"jump_duration": 0.5,
-	#px the phone must be dragged up/down to count as a shake, web only
-	"drag_threshold": 50.0,
-	#px the phone can be dragged up/down at most, web only
-	"drag_limit": 100.0,
 	#s the 3 stays on the button after the last click, before the start sequence
 	"click_pause": 0.5,
 	#px font size of the 3 on the button after the 1st, 2nd and 3rd click
@@ -64,6 +60,15 @@ var HandHint: Dictionary[String, Variant] = {
 	"play_numbers": [1, 2, 5, 8, 12, 16, 20, 25],
 	#device file holding how many games this player has started
 	"plays_record": "user://hint_plays.cfg",
+}
+
+var CardDrag: Dictionary[String, Variant] = {
+	#px the finger moves up/down on the ballot box before the card follows it
+	"drag_threshold": 30.0,
+	#s the card takes to rise from where it was to the top of the slot once grabbed
+	"snap_duration": 0.15,
+	#px the card can be pushed down from its top resting point; the 5 rows share this depth equally
+	"slot_depth": 320.0,
 }
 
 var Round: Dictionary[String, Variant] = {
