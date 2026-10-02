@@ -78,6 +78,13 @@ var MenuHint: Dictionary[String, Variant] = {
 	"team_font_size": 48,
 }
 
+var MenuDifficulty: Dictionary[String, Variant] = {
+	#ClickCounterLabel font size while the difficulty row is chosen, small enough for the longest difficulty text to fit the MenuOptionButton
+	"font_size": 52,
+	#s the arrows ignore further taps after switching the difficulty
+	"tap_debounce": 0.1,
+}
+
 var Round: Dictionary[String, Variant] = {
 	#s a run lasts before the score is submitted and the leaderboard opens
 	"duration": 300.0,

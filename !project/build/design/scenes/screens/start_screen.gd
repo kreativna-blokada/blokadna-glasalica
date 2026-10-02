@@ -60,6 +60,11 @@ var _menu_choice: Globals.MainMenu = Globals.MainMenu.Starting
 var _rest_hint_anchor: float
 #HintLabel font size from the scene, used by every hint but the team one
 var _rest_hint_font_size: int
+#ClickCounterLabel text and font size from the scene, shown before the first click
+var _rest_click_caption: String
+var _rest_click_fontsize: int
+#ms tick of the latest difficulty switch, arrow taps closer than Configs.MenuDifficulty["tap_debounce"] to it are ignored
+var _arrow_switch_moment: int = 0
 
 #onready vars
 @onready var jumper: CenterContainer = %JumperContainer
@@ -70,13 +75,14 @@ var _rest_hint_font_size: int
 @onready var masked_ballot: NinePatchRect = %MaskedBallot
 @onready var ballot_origin: Control = $BallotBoxSelection/MaskedBallot/BallotOrigin
 @onready var choice_highlight: Panel = $BallotBoxSelection/MaskedBallot/BallotOrigin/Ballot/Card/ChoiceHighlight
-@onready var start_button: Button = %StartButton
+@onready var menu_option_button: Button = %MenuOptionButton
 @onready var click_counter_label: Label = %ClickCounterLabel
 @onready var matrix_overlay: ColorRect = %MatrixOverlay
 @onready var digits_overlay: ColorRect = %DigitsOverlay
 @onready var init_line_label: Label = %InitLineLabel
 @onready var follow_students_label: Label = %FollowStudentsLabel
-@onready var start_difficulty: StartDifficultyManager = %Difficulty
+@onready var left_arrow: Control = %LeftArrow
+@onready var right_arrow: Control = %RightArrow
 @onready var hand_hint: TextureRect = $BallotBoxSelection/HandGestureHint
 @onready var left_side_mask: TextureRect = $BallotBoxSelection/LeftSideMask
 @onready var right_side_mask: TextureRect = $BallotBoxSelection/RightSideMask
@@ -95,17 +101,19 @@ func _ready() -> void:
 	_rest_slogan_offset = jumper.position.y
 	_rest_hint_anchor = hint_label.anchor_top
 	_rest_hint_font_size = hint_label.get_theme_font_size(&"font_size")
+	_rest_click_caption = click_counter_label.text
+	_rest_click_fontsize = click_counter_label.get_theme_font_size(&"font_size")
 	_load_game_start_count()
 	hand_hint.visible = _is_hint_scheduled()
 	_show_side_words(not hand_hint.visible)
 
-	start_button.pressed.connect(_on_start_button_pressed)
-	start_button.gui_input.connect(_on_start_button_input)
+	menu_option_button.pressed.connect(_on_menu_option_button_pressed)
+	menu_option_button.gui_input.connect(_on_menu_option_button_input)
 	jump_sound.finished.connect(_on_jump_sound_finished)
 	jump_sound.play()
 
-	start_difficulty.initialize(_chosen_difficulty)
-	start_difficulty.difficulty_changed.connect(_on_difficulty_changed)
+	left_arrow.gui_input.connect(_on_arrow_input)
+	right_arrow.gui_input.connect(_on_arrow_input)
 	Signals.menu_option_selected.connect(_on_menu_option_selected)
 
 #counts up/down phone movements via accelerometer, starts game on enough shakes
@@ -159,15 +167,12 @@ func _gui_input(event: InputEvent) -> void:
 		_take_card_control()
 	accept_event()
 
-#signal StartButton.pressed => counts clicks, jumps the text; starts the game on enough of them; the leaderboard row only opens the leaderboard
-func _on_start_button_pressed() -> void:
-	if _is_starting or _menu_choice == Globals.MainMenu.Leaderboard: return
+#signal MenuOptionButton.pressed => counts clicks, jumps the text; starts the game on enough of them; the leaderboard row only opens the leaderboard, the difficulty row only shows the difficulty
+func _on_menu_option_button_pressed() -> void:
+	if _is_starting or _menu_choice in [Globals.MainMenu.Leaderboard, Globals.MainMenu.Difficulty]: return
 
 	_click_count += 1
-	#every click shows the 3, never the running count, growing with each click
-	var click_font_sizes: Array = Configs.Shake["click_font_sizes"]
-	click_counter_label.text = str(Configs.Shake["click_count"])
-	click_counter_label.add_theme_font_size_override(&"font_size", click_font_sizes[mini(_click_count, click_font_sizes.size()) - 1])
+	_show_button_caption()
 	_jump_slogan(1.0)
 	if _click_count >= Configs.Shake["click_count"]:
 		#clicks stop counting now, the last 3 stays in sight a moment before the start sequence
@@ -176,22 +181,40 @@ func _on_start_button_pressed() -> void:
 		await get_tree().create_timer(Configs.Shake["click_pause"]).timeout
 		_finish_start_sequence()
 
-#signal Difficulty.difficulty_changed => keeps the difficulty the game starts with
-func _on_difficulty_changed(difficulty: GameDescriptor.Difficulty) -> void:
-	_chosen_difficulty = difficulty
+####signal Difficulty.difficulty_changed => keeps the difficulty the game starts with
+####func _on_difficulty_changed(difficulty: GameDescriptor.Difficulty) -> void:
+####	_chosen_difficulty = difficulty
 
-#signal StartButton.gui_input => opens the leaderboard on touch or click while the leaderboard row is ticked
-func _on_start_button_input(event: InputEvent) -> void:
+#signal LeftArrow.gui_input, RightArrow.gui_input => switches the difficulty the game starts with and shows it on the MenuOptionButton; touch only, mouse clicks arrive as emulated touch; taps right after a switch are ignored
+func _on_arrow_input(event: InputEvent) -> void:
+	if _is_starting: return
+
+	var touch_event: InputEventScreenTouch = event as InputEventScreenTouch
+	if not touch_event or not touch_event.pressed: return
+	var current_moment: int = Time.get_ticks_msec()
+	if current_moment - _arrow_switch_moment < Configs.MenuDifficulty["tap_debounce"] * 1000.0: return
+
+	_arrow_switch_moment = current_moment
+	_chosen_difficulty = GameDescriptor.Difficulty.NORMAL if _chosen_difficulty == GameDescriptor.Difficulty.EASY else GameDescriptor.Difficulty.EASY
+	_show_button_caption()
+	accept_event()
+
+#signal MenuOptionButton.gui_input => opens the leaderboard on touch or click while the leaderboard row is ticked
+func _on_menu_option_button_input(event: InputEvent) -> void:
 	if _is_starting or _menu_choice != Globals.MainMenu.Leaderboard: return
 
 	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
 		GameManager.go_to_leaderboard()
 
-#signal Signals.menu_option_selected => shows the hint for the menu option the ballot card has ticked; the team hint shows higher up in place of the hidden StartButton
+#signal Signals.menu_option_selected => shows the hint for the menu option the ballot card has ticked; the team hint shows higher up in place of the hidden MenuOptionButton
 func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
 	_menu_choice = menu_option
 	var is_team_chosen: bool = menu_option == Globals.MainMenu.Team
-	start_button.visible = not is_team_chosen
+	menu_option_button.visible = not is_team_chosen
+	var is_difficulty_chosen: bool = menu_option == Globals.MainMenu.Difficulty
+	left_arrow.visible = is_difficulty_chosen
+	right_arrow.visible = is_difficulty_chosen
+	_show_button_caption()
 	#text and font first, the label box is sized for them when it moves
 	hint_label.add_theme_font_size_override(&"font_size", Configs.MenuHint["team_font_size"] if is_team_chosen else _rest_hint_font_size)
 	hint_label.text = Literals.CHOICE_HINT_TEXTS[menu_option]
@@ -327,7 +350,7 @@ func _count_phone_shake(direction: float) -> void:
 func _finish_start_sequence() -> void:
 	_shake_done = true
 	_is_starting = true
-	start_button.disabled = true
+	menu_option_button.disabled = true
 	_hide_start_screen_choices()
 	#final count shows the 3 while the last sound plays out
 	click_counter_label.text = str(Configs.Shake["click_count"])
@@ -349,7 +372,21 @@ func _finish_start_sequence() -> void:
 
 #start sequence is under way, difficulty can no longer be picked
 func _hide_start_screen_choices() -> void:
-	start_difficulty.hide()
+	left_arrow.hide()
+	right_arrow.hide()
+
+#shows on ClickCounterLabel the chosen difficulty while the difficulty row is ticked, otherwise the click count; every click shows the 3, never the running count, growing with each click
+func _show_button_caption() -> void:
+	if _menu_choice == Globals.MainMenu.Difficulty:
+		click_counter_label.text = Literals.DIFFICULTY_DESCRIPTIONS[_chosen_difficulty]
+		click_counter_label.add_theme_font_size_override(&"font_size", Configs.MenuDifficulty["font_size"])
+	elif _click_count == 0:
+		click_counter_label.text = _rest_click_caption
+		click_counter_label.add_theme_font_size_override(&"font_size", _rest_click_fontsize)
+	else:
+		var click_font_sizes: Array = Configs.Shake["click_font_sizes"]
+		click_counter_label.text = str(Configs.Shake["click_count"])
+		click_counter_label.add_theme_font_size_override(&"font_size", click_font_sizes[mini(_click_count, click_font_sizes.size()) - 1])
 
 #shows or hides the words on the left and right box sides, kept hidden while the hand hint plays
 func _show_side_words(is_shown: bool) -> void:
