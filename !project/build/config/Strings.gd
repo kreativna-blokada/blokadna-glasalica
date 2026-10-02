@@ -6,5 +6,23 @@
 #date            : 20260110
 #version         : 1.0
 #===============================================================================
+class_name Literals
 extends Node
-#class_name Literals
+
+#hint under the slogan explaining the menu option the ballot card has ticked
+const CHOICE_HINT_TEXTS: Dictionary[Globals.MainMenu, String] = {
+	Globals.MainMenu.Leaderboard: "КЛИКНИ НА ДУГМЕ\nДА ПОГЛЕДАШ РАНГ ЛИСТУ",
+	Globals.MainMenu.Difficulty: "КЛИКНИ НА СЕЛЕКТОР\nДА ОДАБЕРЕШ НИВО ТЕЖИНЕ",
+	Globals.MainMenu.Starting: "ПРОТРЕСИ ТЕЛЕФОН\nИЛИ КЛИКНИ ДУГМЕ 3 ПУТА",
+	Globals.MainMenu.Controls: "КЛИКНИ НА СЕЛЕКТОР\nДА ОДАБЕРЕШ КОНТРОЛЕ",
+	Globals.MainMenu.Team: """КРЕАТИВНА БЛОКАДА
+
+Марија М., Игор И.,
+Немања М., Ђорђе Ђ.,
+Александар Љ., Андреј О.,
+Давор В., Марко М.,
+Милош С., Немања Л.,
+Милош П., Владимир А.,
+Жељко В. као и сви
+саборци студентског покрета""",
+}

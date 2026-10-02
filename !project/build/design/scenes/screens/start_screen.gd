@@ -54,6 +54,12 @@ var _card_snapping_animation: Tween
 var _sequence_slowdown: float = 1.0
 #games this player started before this screen opened, kept on the device
 var _game_start_count: int = 0
+#menu option whose hint shows under the slogan
+var _menu_choice: Globals.MainMenu = Globals.MainMenu.Starting
+#HintLabel anchor height from the scene, where every hint but the team one shows
+var _rest_hint_anchor: float
+#HintLabel font size from the scene, used by every hint but the team one
+var _rest_hint_font_size: int
 
 #onready vars
 @onready var jumper: CenterContainer = %JumperContainer
@@ -75,6 +81,7 @@ var _game_start_count: int = 0
 @onready var hand_hint: TextureRect = $BallotBoxSelection/HandGestureHint
 @onready var left_side_mask: TextureRect = $BallotBoxSelection/LeftSideMask
 @onready var right_side_mask: TextureRect = $BallotBoxSelection/RightSideMask
+@onready var hint_label: Label = %HintLabel
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -87,6 +94,8 @@ var _game_start_count: int = 0
 #starts the jump sound looping as soon as the menu loads
 func _ready() -> void:
 	_rest_slogan_offset = jumper.position.y
+	_rest_hint_anchor = hint_label.anchor_top
+	_rest_hint_font_size = hint_label.get_theme_font_size(&"font_size")
 	_load_game_start_count()
 	hand_hint.visible = _is_hint_scheduled()
 	_show_side_words(not hand_hint.visible)
@@ -98,6 +107,7 @@ func _ready() -> void:
 	start_difficulty.initialize(_chosen_difficulty)
 	start_difficulty.difficulty_changed.connect(_on_difficulty_changed)
 	button_leaderboard.gui_input.connect(_on_leaderboard_button_input)
+	Signals.menu_option_selected.connect(_on_menu_option_selected)
 
 #counts up/down phone movements via accelerometer, starts game on enough shakes
 func _process(_delta: float) -> void:
@@ -178,6 +188,16 @@ func _on_leaderboard_button_input(event: InputEvent) -> void:
 	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
 		GameManager.go_to_leaderboard()
 
+#signal Signals.menu_option_selected => shows the hint for the menu option the ballot card has ticked; the team hint shows higher up in place of the hidden StartButton
+func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
+	_menu_choice = menu_option
+	var is_team_chosen: bool = menu_option == Globals.MainMenu.Team
+	start_button.visible = not is_team_chosen
+	#text and font first, the label box is sized for them when it moves
+	hint_label.add_theme_font_size_override(&"font_size", Configs.MenuHint["team_font_size"] if is_team_chosen else _rest_hint_font_size)
+	hint_label.text = Literals.CHOICE_HINT_TEXTS[menu_option]
+	_move_hint_label(Configs.MenuHint["team_hint_anchor"] if is_team_chosen else _rest_hint_anchor)
+
 #loops the jump sound until the shake sequence is done, then counts down to the game
 func _on_jump_sound_finished() -> void:
 	if _shake_done:
@@ -236,13 +256,24 @@ func _move_card_vertically() -> void:
 	var ballot_height: float = clampf(_card_pointer_position + _card_pointer_distance, top_height, top_height + Configs.CardDrag["slot_depth"])
 	_seek_vote_animation(_find_row_moment(ballot_height))
 	ballot.position = _find_ballot_position(_find_ballot_moment(ballot_height))
+	#each row picks itself the moment it is ticked, without waiting for release; taken from the height, the highlight may not have moved yet
+	var ticked_choice: Globals.MainMenu = _find_height_choice(ballot_height) as Globals.MainMenu
+	if ticked_choice != _menu_choice:
+		Signals.menu_option_selected.emit(ticked_choice)
 
-#moment on the downward vote pass ticking the row for this ballot height, the slot depth split evenly between the rows
+#moment on the downward vote pass ticking the row for this ballot height
 func _find_row_moment(ballot_height: float) -> float:
+	return _TOP_BALLOT_MOMENT + (_find_tick_step(ballot_height) + 0.5) * _ROW_TICK_SPACING
+
+#row index ticked at this ballot height, 0 = top row; the deeper the card, the higher the ticked row
+func _find_height_choice(ballot_height: float) -> int:
+	return _ROW_COUNT - 1 - _find_tick_step(ballot_height)
+
+#row tick reached on the downward vote pass at this ballot height, 0 = first tick (bottom row); the slot depth is split evenly between the ticks
+func _find_tick_step(ballot_height: float) -> int:
 	var top_height: float = _find_ballot_position(_TOP_BALLOT_MOMENT).y
 	var depth_ratio: float = clampf((ballot_height - top_height) / Configs.CardDrag["slot_depth"], 0.0, 1.0)
-	var row_number: int = mini(floori(depth_ratio * _ROW_COUNT), _ROW_COUNT - 1)
-	return _TOP_BALLOT_MOMENT + (row_number + 0.5) * _ROW_TICK_SPACING
+	return mini(floori(depth_ratio * _ROW_COUNT), _ROW_COUNT - 1)
 
 #ballot position the vote animation gives at a moment
 func _find_ballot_position(moment: float) -> Vector2:
@@ -271,6 +302,11 @@ func _emit_ticked_choice() -> void:
 	_is_card_dragging = false
 	if _card_snapping_animation and _card_snapping_animation.is_running(): return
 	Signals.menu_option_selected.emit(_find_ticked_choice() as Globals.MainMenu)
+
+#puts HintLabel at an anchor height on the screen, keeping its size and centering; the top anchor pushes the bottom one along when moving down past it
+func _move_hint_label(anchor_height: float) -> void:
+	hint_label.set_anchor(SIDE_TOP, anchor_height, true)
+	hint_label.set_anchor(SIDE_BOTTOM, anchor_height, true)
 
 #row index under the highlight and tick, 0 = top row
 func _find_ticked_choice() -> int:

@@ -289,6 +289,7 @@ autowrap_mode = 3
 uppercase = true
 
 [node name="HintLabel" type="Label" parent="." unique_id=1279247605]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.7814815
@@ -307,6 +308,7 @@ text = "ПРОТРЕСИ ТЕЛЕФОН
 ИЛИ КЛИКНИ ДУГМЕ 3 ПУТА"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="StartButton" type="Button" parent="." unique_id=120688566]
 unique_name_in_owner = true
@@ -655,7 +657,7 @@ offset_bottom = 58.0
 theme_override_colors/font_color = Color(0.18431373, 0.43529412, 0.8784314, 1)
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 27
-text = "СТ(Р)АЊЕ"
+text = "СТ/РАЊЕ"
 vertical_alignment = 1
 
 [node name="Checkbox" type="Panel" parent="BallotBoxSelection/MaskedBallot/BallotOrigin/Ballot/Card/Leaderboard" unique_id=1726052922]

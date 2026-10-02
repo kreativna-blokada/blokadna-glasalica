@@ -71,6 +71,13 @@ var CardDrag: Dictionary[String, Variant] = {
 	"slot_depth": 320.0,
 }
 
+var MenuHint: Dictionary[String, Variant] = {
+	#HintLabel anchor height (0 = screen top, 1 = bottom) while the team row is chosen, centered between the SloganLabel bottom and the screen bottom
+	"team_hint_anchor": 0.644,
+	#HintLabel font size while the team row is chosen, smaller so the long team text fits
+	"team_font_size": 48,
+}
+
 var Round: Dictionary[String, Variant] = {
 	#s a run lasts before the score is submitted and the leaderboard opens
 	"duration": 300.0,
