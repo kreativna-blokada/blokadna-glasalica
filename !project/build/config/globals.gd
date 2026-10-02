@@ -45,6 +45,12 @@ var Scenes: Dictionary[Variant, Variant] = {
 	}
 }
 
+#controls picked on the main menu controls row
+enum Steering {
+	Classic,
+	Screen
+}
+
 #main menu options
 enum MainMenu {
 	Leaderboard,

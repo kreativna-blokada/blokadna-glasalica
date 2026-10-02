@@ -32,6 +32,8 @@ const _ROW_COUNT: int = 5
 #private vars
 var _is_starting: bool = false
 var _chosen_difficulty: GameDescriptor.Difficulty = GameDescriptor.Difficulty.NORMAL
+#controls picked on the controls row, not used by the game yet
+var _chosen_steering: Globals.Steering = Globals.Steering.Classic
 var _shake_done: bool = false
 var _shake_count: int = 0
 var _click_count: int = 0
@@ -56,9 +58,9 @@ var _sequence_slowdown: float = 1.0
 var _game_start_count: int = 0
 #menu option whose hint shows under the slogan
 var _menu_choice: Globals.MainMenu = Globals.MainMenu.Starting
-#HintLabel anchor height from the scene, where every hint but the team one shows
+#InfoLabel anchor height from the scene, where every hint but the team one shows
 var _rest_hint_anchor: float
-#HintLabel font size from the scene, used by every hint but the team one
+#InfoLabel font size from the scene, used by every hint but the team one
 var _rest_hint_font_size: int
 #ClickCounterLabel text and font size from the scene, shown before the first click
 var _rest_click_caption: String
@@ -86,7 +88,7 @@ var _arrow_switch_moment: int = 0
 @onready var hand_hint: TextureRect = $BallotBoxSelection/HandGestureHint
 @onready var left_side_mask: TextureRect = $BallotBoxSelection/LeftSideMask
 @onready var right_side_mask: TextureRect = $BallotBoxSelection/RightSideMask
-@onready var hint_label: Label = %HintLabel
+@onready var info_label: Label = %InfoLabel
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -99,8 +101,8 @@ var _arrow_switch_moment: int = 0
 #starts the jump sound looping as soon as the menu loads
 func _ready() -> void:
 	_rest_slogan_offset = jumper.position.y
-	_rest_hint_anchor = hint_label.anchor_top
-	_rest_hint_font_size = hint_label.get_theme_font_size(&"font_size")
+	_rest_hint_anchor = info_label.anchor_top
+	_rest_hint_font_size = info_label.get_theme_font_size(&"font_size")
 	_rest_click_caption = click_counter_label.text
 	_rest_click_fontsize = click_counter_label.get_theme_font_size(&"font_size")
 	_load_game_start_count()
@@ -167,9 +169,9 @@ func _gui_input(event: InputEvent) -> void:
 		_take_card_control()
 	accept_event()
 
-#signal MenuOptionButton.pressed => counts clicks, jumps the text; starts the game on enough of them; the leaderboard row only opens the leaderboard, the difficulty row only shows the difficulty
+#signal MenuOptionButton.pressed => counts clicks, jumps the text; starts the game on enough of them; the leaderboard row only opens the leaderboard, the difficulty and controls rows only show their choice
 func _on_menu_option_button_pressed() -> void:
-	if _is_starting or _menu_choice in [Globals.MainMenu.Leaderboard, Globals.MainMenu.Difficulty]: return
+	if _is_starting or _menu_choice in [Globals.MainMenu.Leaderboard, Globals.MainMenu.Difficulty, Globals.MainMenu.Controls]: return
 
 	_click_count += 1
 	_show_button_caption()
@@ -185,7 +187,7 @@ func _on_menu_option_button_pressed() -> void:
 ####func _on_difficulty_changed(difficulty: GameDescriptor.Difficulty) -> void:
 ####	_chosen_difficulty = difficulty
 
-#signal LeftArrow.gui_input, RightArrow.gui_input => switches the difficulty the game starts with and shows it on the MenuOptionButton; touch only, mouse clicks arrive as emulated touch; taps right after a switch are ignored
+#signal LeftArrow.gui_input, RightArrow.gui_input => switches the difficulty or the controls of the ticked row and shows it on the MenuOptionButton; touch only, mouse clicks arrive as emulated touch; taps right after a switch are ignored
 func _on_arrow_input(event: InputEvent) -> void:
 	if _is_starting: return
 
@@ -195,7 +197,10 @@ func _on_arrow_input(event: InputEvent) -> void:
 	if current_moment - _arrow_switch_moment < Configs.MenuDifficulty["tap_debounce"] * 1000.0: return
 
 	_arrow_switch_moment = current_moment
-	_chosen_difficulty = GameDescriptor.Difficulty.NORMAL if _chosen_difficulty == GameDescriptor.Difficulty.EASY else GameDescriptor.Difficulty.EASY
+	if _menu_choice == Globals.MainMenu.Controls:
+		_chosen_steering = Globals.Steering.Screen if _chosen_steering == Globals.Steering.Classic else Globals.Steering.Classic
+	else:
+		_chosen_difficulty = GameDescriptor.Difficulty.NORMAL if _chosen_difficulty == GameDescriptor.Difficulty.EASY else GameDescriptor.Difficulty.EASY
 	_show_button_caption()
 	accept_event()
 
@@ -211,14 +216,14 @@ func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
 	_menu_choice = menu_option
 	var is_team_chosen: bool = menu_option == Globals.MainMenu.Team
 	menu_option_button.visible = not is_team_chosen
-	var is_difficulty_chosen: bool = menu_option == Globals.MainMenu.Difficulty
-	left_arrow.visible = is_difficulty_chosen
-	right_arrow.visible = is_difficulty_chosen
+	var is_selector_chosen: bool = menu_option in [Globals.MainMenu.Difficulty, Globals.MainMenu.Controls]
+	left_arrow.visible = is_selector_chosen
+	right_arrow.visible = is_selector_chosen
 	_show_button_caption()
 	#text and font first, the label box is sized for them when it moves
-	hint_label.add_theme_font_size_override(&"font_size", Configs.MenuHint["team_font_size"] if is_team_chosen else _rest_hint_font_size)
-	hint_label.text = Literals.CHOICE_HINT_TEXTS[menu_option]
-	_move_hint_label(Configs.MenuHint["team_hint_anchor"] if is_team_chosen else _rest_hint_anchor)
+	info_label.add_theme_font_size_override(&"font_size", Configs.MenuHint["team_font_size"] if is_team_chosen else _rest_hint_font_size)
+	info_label.text = Literals.CHOICE_HINT_TEXTS[menu_option]
+	_move_info_label(Configs.MenuHint["team_hint_anchor"] if is_team_chosen else _rest_hint_anchor)
 
 #loops the jump sound until the shake sequence is done, then counts down to the game
 func _on_jump_sound_finished() -> void:
@@ -325,10 +330,10 @@ func _emit_ticked_choice() -> void:
 	if _card_snapping_animation and _card_snapping_animation.is_running(): return
 	Signals.menu_option_selected.emit(_find_ticked_choice() as Globals.MainMenu)
 
-#puts HintLabel at an anchor height on the screen, keeping its size and centering; the top anchor pushes the bottom one along when moving down past it
-func _move_hint_label(anchor_height: float) -> void:
-	hint_label.set_anchor(SIDE_TOP, anchor_height, true)
-	hint_label.set_anchor(SIDE_BOTTOM, anchor_height, true)
+#puts InfoLabel at an anchor height on the screen, keeping its size and centering; the top anchor pushes the bottom one along when moving down past it
+func _move_info_label(anchor_height: float) -> void:
+	info_label.set_anchor(SIDE_TOP, anchor_height, true)
+	info_label.set_anchor(SIDE_BOTTOM, anchor_height, true)
 
 #row index under the highlight and tick, 0 = top row
 func _find_ticked_choice() -> int:
@@ -375,10 +380,13 @@ func _hide_start_screen_choices() -> void:
 	left_arrow.hide()
 	right_arrow.hide()
 
-#shows on ClickCounterLabel the chosen difficulty while the difficulty row is ticked, otherwise the click count; every click shows the 3, never the running count, growing with each click
+#shows on ClickCounterLabel the chosen difficulty or controls while their row is ticked, otherwise the click count; every click shows the 3, never the running count, growing with each click
 func _show_button_caption() -> void:
 	if _menu_choice == Globals.MainMenu.Difficulty:
 		click_counter_label.text = Literals.DIFFICULTY_DESCRIPTIONS[_chosen_difficulty]
+		click_counter_label.add_theme_font_size_override(&"font_size", Configs.MenuDifficulty["font_size"])
+	elif _menu_choice == Globals.MainMenu.Controls:
+		click_counter_label.text = Literals.STEERING_DESCRIPTIONS[_chosen_steering]
 		click_counter_label.add_theme_font_size_override(&"font_size", Configs.MenuDifficulty["font_size"])
 	elif _click_count == 0:
 		click_counter_label.text = _rest_click_caption

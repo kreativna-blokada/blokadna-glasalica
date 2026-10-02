@@ -36,3 +36,9 @@ const DIFFICULTY_DESCRIPTIONS: Dictionary[GameDescriptor.Difficulty, String] = {
 	GameDescriptor.Difficulty.EASY: "ЖЕЛИМ ДА УЧИМ",
 	GameDescriptor.Difficulty.NORMAL: "ХОЋУ ИЗАЗОВ",
 }
+
+#MenuOptionButton text for each controls choice while the controls row is ticked
+const STEERING_DESCRIPTIONS: Dictionary[Globals.Steering, String] = {
+	Globals.Steering.Classic: "КЛАСИЧНЕ",
+	Globals.Steering.Screen: "ЕКРАНСКЕ",
+}

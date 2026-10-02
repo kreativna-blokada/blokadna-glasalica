@@ -72,9 +72,9 @@ var CardDrag: Dictionary[String, Variant] = {
 }
 
 var MenuHint: Dictionary[String, Variant] = {
-	#HintLabel anchor height (0 = screen top, 1 = bottom) while the team row is chosen, centered between the SloganLabel bottom and the screen bottom
+	#InfoLabel anchor height (0 = screen top, 1 = bottom) while the team row is chosen, centered between the SloganLabel bottom and the screen bottom
 	"team_hint_anchor": 0.644,
-	#HintLabel font size while the team row is chosen, smaller so the long team text fits
+	#InfoLabel font size while the team row is chosen, smaller so the long team text fits
 	"team_font_size": 48,
 }
 

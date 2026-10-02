@@ -286,7 +286,7 @@ vertical_alignment = 1
 autowrap_mode = 3
 uppercase = true
 
-[node name="HintLabel" type="Label" parent="." unique_id=1279247605]
+[node name="InfoLabel" type="Label" parent="." unique_id=1279247605]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
