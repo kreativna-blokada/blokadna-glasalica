@@ -14,7 +14,7 @@ const PATH: String = "res://!project/build/config/globals.gd"
 const RUNTIME_CREDENTIALS: String = "res://runtime_credentials.cfg"
 
 enum Scene {
-	Menu,
+	Start,
 	Game,
 	Voter,
 	Info,
@@ -22,8 +22,8 @@ enum Scene {
 }
 
 var Scenes: Dictionary[Variant, Variant] = {
-	Scene.Menu: {
-		"path": "res://!project/build/design/scenes/screens/main_menu.tscn"
+	Scene.Start: {
+		"path": "res://!project/build/design/scenes/screens/start_screen.tscn"
 	},
 	Scene.Game: {
 		"path": "res://!project/build/design/scenes/screens/game.tscn"
@@ -43,6 +43,15 @@ var Scenes: Dictionary[Variant, Variant] = {
 	Scene.Playround: {
 		"path": "res://!project/build/design/scenes/playground.tscn"
 	}
+}
+
+#main menu options
+enum MainMenu {
+	Leaderboard,
+	Difficulty,
+	Starting,
+	Controls,
+	Team
 }
 
 #outcome of a leaderboard score submission
