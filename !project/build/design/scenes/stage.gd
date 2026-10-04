@@ -2,7 +2,7 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Master game stage runner
-#maintainer      : Zeljko Vulovic
+#maintainer      : Zeljko
 #version         : 1.1
 #===============================================================================
 class_name Stage

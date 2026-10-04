@@ -2,7 +2,7 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Progress flow overlay
-#maintainer      : Zeljko Vulovic
+#maintainer      : Zeljko
 #version         : 1.1
 #===============================================================================
 class_name ProgressFlow

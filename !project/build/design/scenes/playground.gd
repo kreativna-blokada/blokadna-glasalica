@@ -8,7 +8,7 @@
 #				   3) The entire game tree runs exactly as if game.tscn was launched directly
 #				   All internal references work because owner, $ paths, and % unique names resolve within the game scene's own tree.
 #				   The playground's existing test nodes will still be visible underneath — for hiding them, one can either remove them from playground.tscn in the editor, or add hide() before the add_child call in _ready().
-#maintainer      : Zeljko Vulovic
+#maintainer      : Zeljko
 #version         : 1.0
 #===============================================================================
 class_name Playground

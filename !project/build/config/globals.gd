@@ -2,8 +2,7 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Global configurations loader
-#author          : Zeljko Vulovic
-#date            : 20260110
+#maintainer      : Zeljko
 #version         : 1.0
 #===============================================================================
 extends Node
@@ -18,7 +17,8 @@ enum Scene {
 	Game,
 	Voter,
 	Info,
-	Playround
+	Playround,
+	Leaderboard
 }
 
 var Scenes: Dictionary[Variant, Variant] = {
@@ -42,11 +42,14 @@ var Scenes: Dictionary[Variant, Variant] = {
 	},
 	Scene.Playround: {
 		"path": "res://!project/build/design/scenes/playground.tscn"
+	},
+	Scene.Leaderboard: {
+		"path": "res://!project/build/design/scenes/screens/leaderboard/leaderboard.tscn"
 	}
 }
 
 #controls picked on the main menu controls row
-enum Steering {
+enum ControllerType {
 	Classic,
 	Screen
 }

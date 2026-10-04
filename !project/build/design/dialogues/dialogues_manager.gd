@@ -3,8 +3,7 @@
 ##
 #description     : Dialogue content provider; uses the latest of built-in/cached content
 #                  and refreshes the cache from GitHub on every start (ETag-conditional)
-#author          : Zeljko Vulovic
-#date            : 20260924
+#maintainer      : Zeljko
 #version         : 1.0
 #===============================================================================
 extends Node

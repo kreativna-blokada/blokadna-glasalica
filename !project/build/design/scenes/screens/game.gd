@@ -2,7 +2,7 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Master gameplay runner
-#maintainer      : Zeljko Vulovic
+#maintainer      : Zeljko
 #version         : 1.0
 #===============================================================================
 class_name Game

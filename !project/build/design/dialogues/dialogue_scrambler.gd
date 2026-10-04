@@ -2,8 +2,7 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Unscrambles dialogue content made by scramble_dialogues.py (XOR with a SHA-256 checksum)
-#author          : Zeljko Vulovic
-#date            : 20260924
+#maintainer      : Zeljko
 #version         : 1.0
 #===============================================================================
 class_name DialogueScrambler

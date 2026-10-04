@@ -1,7 +1,7 @@
 ##
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
-#description     : Start screen with the ballot box, entry point, shake the phone or click play 3 times to start; the ballot card is dragged to pick a menu option
+#description     : Entry point main menu screen
 #maintainer      : Zeljko, Nemanja
 #version         : 1.0
 #===============================================================================
@@ -33,7 +33,7 @@ const _ROW_COUNT: int = 5
 var _is_starting: bool = false
 var _chosen_difficulty: GameDescriptor.Difficulty = GameDescriptor.Difficulty.NORMAL
 #controls picked on the controls row, not used by the game yet
-var _chosen_steering: Globals.Steering = Globals.Steering.Classic
+var _chosen_controller: Globals.ControllerType = Globals.ControllerType.Classic
 var _shake_done: bool = false
 var _shake_count: int = 0
 var _click_count: int = 0
@@ -198,7 +198,7 @@ func _on_arrow_input(event: InputEvent) -> void:
 
 	_arrow_switch_moment = current_moment
 	if _menu_choice == Globals.MainMenu.Controls:
-		_chosen_steering = Globals.Steering.Screen if _chosen_steering == Globals.Steering.Classic else Globals.Steering.Classic
+		_chosen_controller = Globals.ControllerType.Screen if _chosen_controller == Globals.ControllerType.Classic else Globals.ControllerType.Classic
 	else:
 		_chosen_difficulty = GameDescriptor.Difficulty.NORMAL if _chosen_difficulty == GameDescriptor.Difficulty.EASY else GameDescriptor.Difficulty.EASY
 	_show_button_caption()
@@ -222,7 +222,7 @@ func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
 	_show_button_caption()
 	#text and font first, the label box is sized for them when it moves
 	info_label.add_theme_font_size_override(&"font_size", Configs.MenuHint["team_font_size"] if is_team_chosen else _rest_hint_font_size)
-	info_label.text = Literals.CHOICE_HINT_TEXTS[menu_option]
+	info_label.text = Literals.MAIN_MENU_DESCRIPTIONS[menu_option]
 	_move_info_label(Configs.MenuHint["team_hint_anchor"] if is_team_chosen else _rest_hint_anchor)
 
 #loops the jump sound until the shake sequence is done, then counts down to the game
@@ -386,7 +386,7 @@ func _show_button_caption() -> void:
 		click_counter_label.text = Literals.DIFFICULTY_DESCRIPTIONS[_chosen_difficulty]
 		click_counter_label.add_theme_font_size_override(&"font_size", Configs.MenuDifficulty["font_size"])
 	elif _menu_choice == Globals.MainMenu.Controls:
-		click_counter_label.text = Literals.STEERING_DESCRIPTIONS[_chosen_steering]
+		click_counter_label.text = Literals.CONTROLLER_DESCRIPTIONS[_chosen_controller]
 		click_counter_label.add_theme_font_size_override(&"font_size", Configs.MenuDifficulty["font_size"])
 	elif _click_count == 0:
 		click_counter_label.text = _rest_click_caption

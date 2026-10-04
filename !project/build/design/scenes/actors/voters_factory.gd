@@ -2,7 +2,7 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##                 FACTORY METHOD CLASS
 #description     : Class for randomized generation of Voter characters
-#maintainer      : Zeljko Vulovic
+#maintainer      : Zeljko
 #version         : 1.0
 #===============================================================================
 class_name VotersFactory

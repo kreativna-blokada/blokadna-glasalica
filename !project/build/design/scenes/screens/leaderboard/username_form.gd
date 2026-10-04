@@ -3,8 +3,7 @@
 ##
 #description     : Leaderboard username field; claims the typed name through LeaderboardManager,
 #                  which stores it once no other player has it, and explains why a name was refused
-#author          : Zeljko Vulovic
-#date            : 20260926
+#maintainer      : Zeljko
 #version         : 1.0
 #===============================================================================
 class_name UsernameForm

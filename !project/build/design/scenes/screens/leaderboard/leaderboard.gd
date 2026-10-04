@@ -3,9 +3,7 @@
 ##
 #description     : Leaderboard screen; lists the best scores with the player's row highlighted,
 #                  submits the finished run score under the stored username, or prompts
-#                  for one and submits once it is saved; without a database endpoint it shows offline
-#author          : Zeljko Vulovic
-#date            : 20260926
+#maintainer      : Zeljko
 #version         : 1.0
 #===============================================================================
 class_name LeaderboardScreen

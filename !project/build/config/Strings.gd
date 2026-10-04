@@ -2,15 +2,14 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Curated registry of string literals
-#author          : Zeljko Vulovic
-#date            : 20260110
+#maintainer      : Zeljko
 #version         : 1.0
 #===============================================================================
 class_name Literals
 extends Node
 
-#hint under the slogan explaining the menu option the ballot card has ticked
-const CHOICE_HINT_TEXTS: Dictionary[Globals.MainMenu, String] = {
+#hint under the button explaining the menu option the ballot card has ticked
+const MAIN_MENU_DESCRIPTIONS: Dictionary[Globals.MainMenu, String] = {
 	Globals.MainMenu.Leaderboard: """КЛИКНИ НА ДУГМЕ
 ДА ПОГЛЕДАШ РАНГ ЛИСТУ""",
 	Globals.MainMenu.Difficulty: """КЛИКНИ НА СЕЛЕКТОР
@@ -38,7 +37,7 @@ const DIFFICULTY_DESCRIPTIONS: Dictionary[GameDescriptor.Difficulty, String] = {
 }
 
 #MenuOptionButton text for each controls choice while the controls row is ticked
-const STEERING_DESCRIPTIONS: Dictionary[Globals.Steering, String] = {
-	Globals.Steering.Classic: "КЛАСИЧНЕ",
-	Globals.Steering.Screen: "ЕКРАНСКЕ",
+const CONTROLLER_DESCRIPTIONS: Dictionary[Globals.ControllerType, String] = {
+	Globals.ControllerType.Classic: "КЛАСИЧНЕ",
+	Globals.ControllerType.Screen: "ЕКРАНСКЕ",
 }

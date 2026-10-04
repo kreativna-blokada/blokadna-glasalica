@@ -6,8 +6,7 @@
 #                  usernames are unique through the usernames list (see database.rules.json);
 #                  release builds use the release endpoint from the gitignored config
 #                  once its debug_release is false, everything else uses the committed debug endpoint
-#author          : Zeljko Vulovic
-#date            : 20260926
+#maintainer      : Zeljko
 #version         : 1.1
 #===============================================================================
 extends Node
