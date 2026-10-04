@@ -204,11 +204,12 @@ func _on_arrow_input(event: InputEvent) -> void:
 	_show_button_caption()
 	accept_event()
 
-#signal MenuOptionButton.gui_input => opens the leaderboard on touch or click while the leaderboard row is ticked
+#signal MenuOptionButton.gui_input => opens the leaderboard on touch while the leaderboard row is ticked; touch only, mouse clicks arrive as emulated touch
 func _on_menu_option_button_input(event: InputEvent) -> void:
 	if _is_starting or _menu_choice != Globals.MainMenu.Leaderboard: return
 
-	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
+	var touch_event: InputEventScreenTouch = event as InputEventScreenTouch
+	if touch_event and touch_event.pressed:
 		GameManager.go_to_leaderboard()
 
 #signal Signals.menu_option_selected => shows the hint for the menu option the ballot card has ticked; the team hint shows higher up in place of the hidden MenuOptionButton
