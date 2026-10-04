@@ -215,6 +215,8 @@ func _on_menu_option_button_input(event: InputEvent) -> void:
 #signal Signals.menu_option_selected => shows the hint for the menu option the ballot card has ticked; the team hint shows higher up in place of the hidden MenuOptionButton
 func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
 	_menu_choice = menu_option
+	#clicks count only on the starting row, leaving it starts them over
+	if menu_option != Globals.MainMenu.Starting: _click_count = 0
 	var is_team_chosen: bool = menu_option == Globals.MainMenu.Team
 	menu_option_button.visible = not is_team_chosen
 	var is_selector_chosen: bool = menu_option in [Globals.MainMenu.Difficulty, Globals.MainMenu.Controls]
