@@ -105,6 +105,7 @@ func _ready() -> void:
 	_rest_hint_font_size = info_label.get_theme_font_size(&"font_size")
 	_rest_click_caption = click_counter_label.text
 	_rest_click_fontsize = click_counter_label.get_theme_font_size(&"font_size")
+	info_label.text = _get_menu_description(_menu_choice)
 	_load_game_start_count()
 	hand_hint.visible = _is_hint_scheduled()
 	_show_side_words(not hand_hint.visible)
@@ -225,8 +226,12 @@ func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
 	_show_button_caption()
 	#text and font first, the label box is sized for them when it moves
 	info_label.add_theme_font_size_override(&"font_size", Configs.MenuHint["team_font_size"] if is_team_chosen else _rest_hint_font_size)
-	info_label.text = Literals.MAIN_MENU_DESCRIPTIONS[menu_option]
+	info_label.text = _get_menu_description(menu_option)
 	_move_info_label(Configs.MenuHint["team_hint_anchor"] if is_team_chosen else _rest_hint_anchor)
+
+#hint for the menu option; on web the starting hint leaves out shaking the phone
+func _get_menu_description(menu_option: Globals.MainMenu) -> String:
+	return Literals.WEB_MENU_START_DESCRIPTION if menu_option == Globals.MainMenu.Starting and OS.has_feature("web") else Literals.MAIN_MENU_DESCRIPTIONS[menu_option]
 
 #loops the jump sound until the shake sequence is done, then counts down to the game
 func _on_jump_sound_finished() -> void:

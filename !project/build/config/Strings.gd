@@ -30,6 +30,9 @@ const MAIN_MENU_DESCRIPTIONS: Dictionary[Globals.MainMenu, String] = {
 саборци студентског покрета""",
 }
 
+#starting hint on web, where the phone can not be shaken
+const WEB_MENU_START_DESCRIPTION: String = "КЛИКНИ ДУГМЕ 3 ПУТА"
+
 #MenuOptionButton text for each difficulty while the difficulty row is ticked
 const DIFFICULTY_DESCRIPTIONS: Dictionary[GameDescriptor.Difficulty, String] = {
 	GameDescriptor.Difficulty.EASY: "ЖЕЛИМ ДА УЧИМ",
