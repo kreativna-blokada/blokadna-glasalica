@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cy1e6a5yoiidk"]
 
-[ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="1_m6o2n"]
+[ext_resource type="Theme" path="res://!project/art/UI/leaderboard_theme.tres" id="1_m6o2n"]
 [ext_resource type="PackedScene" uid="uid://eo6df3d4o15k" path="res://!project/build/design/scenes/screens/leaderboard/username_form.tscn" id="2_ufrm"]
 [ext_resource type="Script" uid="uid://oh5ob6ifyq0v" path="res://!project/build/design/scenes/screens/leaderboard/leaderboard.gd" id="3_ldbrd"]
 [ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="4_ldbrd"]
@@ -12,6 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_m6o2n")
 script = ExtResource("3_ldbrd")
 
 [node name="Board" type="Control" parent="." unique_id=1739204518]
@@ -21,14 +22,13 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -560.0
-offset_top = 300.0
+offset_top = 380.0
 offset_right = 560.0
 offset_bottom = -160.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_m6o2n")
 
-[node name="Bg" type="NinePatchRect" parent="Board" unique_id=904417362]
+[node name="Background" type="NinePatchRect" parent="Board" unique_id=904417362]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.125
@@ -80,6 +80,257 @@ theme_override_font_sizes/normal_font_size = 31
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="PeriodStrip" type="HBoxContainer" parent="Board" unique_id=522855549]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 10
+
+[node name="LeftArrow" type="Control" parent="Board/PeriodStrip" unique_id=1185003539]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Background" type="NinePatchRect" parent="Board/PeriodStrip/LeftArrow" unique_id=865859383]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("4_ldbrd")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Board/PeriodStrip/LeftArrow" unique_id=389069470]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 50
+text = "<"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PeriodScroll" type="ScrollContainer" parent="Board/PeriodStrip" unique_id=81004334]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="PeriodTabs" type="HBoxContainer" parent="Board/PeriodStrip/PeriodScroll" unique_id=1642574075]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="PeriodTab" type="Control" parent="Board/PeriodStrip/PeriodScroll/PeriodTabs" unique_id=32024801]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Background" type="NinePatchRect" parent="Board/PeriodStrip/PeriodScroll/PeriodTabs/PeriodTab" unique_id=992810803]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("4_ldbrd")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="PeriodLabel" type="RichTextLabel" parent="Board/PeriodStrip/PeriodScroll/PeriodTabs/PeriodTab" unique_id=2131843560]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 31
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightArrow" type="Control" parent="Board/PeriodStrip" unique_id=239746923]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Background" type="NinePatchRect" parent="Board/PeriodStrip/RightArrow" unique_id=1165223539]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("4_ldbrd")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Board/PeriodStrip/RightArrow" unique_id=1379018583]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 50
+text = ">"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScoreTabs" type="VBoxContainer" parent="Board" unique_id=370994689]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = -360.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="DailyTab" type="Control" parent="Board/ScoreTabs" unique_id=286948485]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Background" type="NinePatchRect" parent="Board/ScoreTabs/DailyTab" unique_id=1799752974]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("4_ldbrd")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Board/ScoreTabs/DailyTab" unique_id=1890534946]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 31
+text = "ДНЕВНА"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WeeklyTab" type="Control" parent="Board/ScoreTabs" unique_id=51264757]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Background" type="NinePatchRect" parent="Board/ScoreTabs/WeeklyTab" unique_id=1363100390]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("4_ldbrd")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Board/ScoreTabs/WeeklyTab" unique_id=903602451]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 31
+text = "НЕДЕЉНА"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TotalTab" type="Control" parent="Board/ScoreTabs" unique_id=1271651798]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Background" type="NinePatchRect" parent="Board/ScoreTabs/TotalTab" unique_id=1865353056]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("4_ldbrd")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Board/ScoreTabs/TotalTab" unique_id=572728547]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 31
+text = "ИЗБОРНА"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TabsSpacer" type="Control" parent="Board/ScoreTabs" unique_id=1682209598]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="RewardsTab" type="Control" parent="Board/ScoreTabs" unique_id=1806476525]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Background" type="NinePatchRect" parent="Board/ScoreTabs/RewardsTab" unique_id=1597721333]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("4_ldbrd")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Board/ScoreTabs/RewardsTab" unique_id=201100688]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 31
+text = "НАГРАДЕ"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="BackButton" type="Control" parent="." unique_id=1872650934]
 layout_mode = 1
 anchors_preset = 0
@@ -88,7 +339,7 @@ offset_top = 60.0
 offset_right = 280.0
 offset_bottom = 160.0
 
-[node name="Bg" type="NinePatchRect" parent="BackButton" unique_id=1016473528]
+[node name="Background" type="NinePatchRect" parent="BackButton" unique_id=1016473528]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.125
@@ -110,9 +361,8 @@ anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme = ExtResource("1_m6o2n")
 theme_override_font_sizes/normal_font_size = 31
-text = "BACK"
+text = "НАЗАД"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -138,7 +388,6 @@ offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-theme = ExtResource("1_m6o2n")
 theme_override_font_sizes/normal_font_size = 31
 horizontal_alignment = 1
 vertical_alignment = 1

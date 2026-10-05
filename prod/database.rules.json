@@ -14,6 +14,22 @@
         }
       }
     },
+    "leaderboards": {
+      "$run_day": {
+        ".read": true,
+        ".indexOn": ["score"],
+        "$player_id": {
+          "username": {
+            ".write": "newData.exists()",
+            ".validate": "$run_day === ((now + 3600000) - (now + 3600000) % 86400000) / 86400000 + '' && $player_id.matches(/^[0-9a-f]{32}$/) && newData.isString() && newData.val().matches(/^[A-Za-z0-9 _-]+$/) && newData.val().length <= 20 && newData.parent().parent().parent().parent().child('usernames').child(newData.val().toLowerCase()).val() === $player_id"
+          },
+          "score": {
+            ".write": "newData.exists() && newData.parent().child('username').exists()",
+            ".validate": "$run_day === ((now + 3600000) - (now + 3600000) % 86400000) / 86400000 + '' && $player_id.matches(/^[0-9a-f]{32}$/) && newData.isNumber() && newData.val() >= 0 && newData.val() % 1 === 0 && (!data.exists() || newData.val() >= data.val())"
+          }
+        }
+      }
+    },
     "usernames": {
       "$username_key": {
         ".write": "!data.exists() || data.val() === newData.val() || (!newData.exists() && newData.parent().parent().child('scores').child(data.val()).child('username').exists() && newData.parent().parent().child('scores').child(data.val()).child('username').val().toLowerCase() !== $username_key)",

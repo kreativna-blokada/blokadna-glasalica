@@ -70,6 +70,14 @@ enum ScoreSubmit {
 	Failed
 }
 
+#leaderboard tab picking showing scores
+enum ScoreBoard {
+	Daily,
+	Weekly,
+	Total,
+	Rewards
+}
+
 #why the database did not give the player the username
 enum NameRefuse {
 	Taken,
