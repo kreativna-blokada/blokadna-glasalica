@@ -89,6 +89,8 @@ var _arrow_switch_moment: int = 0
 @onready var left_side_mask: TextureRect = $BallotBoxSelection/LeftSideMask
 @onready var right_side_mask: TextureRect = $BallotBoxSelection/RightSideMask
 @onready var info_label: Label = %InfoLabel
+@onready var id_label: Label = %IdLabel
+@onready var web_version_box: VBoxContainer = %WebVersionBox
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -106,6 +108,9 @@ func _ready() -> void:
 	_rest_click_caption = click_counter_label.text
 	_rest_click_fontsize = click_counter_label.get_theme_font_size(&"font_size")
 	info_label.text = _get_menu_description(_menu_choice)
+	id_label.text = Literals.ID_CAPTION % LeaderboardManager.get_player_id()
+	#the web build is the version the box points to, so it has nothing to point to there
+	web_version_box.visible = not OS.has_feature("web")
 	_load_game_start_count()
 	hand_hint.visible = _is_hint_scheduled()
 	_show_side_words(not hand_hint.visible)
