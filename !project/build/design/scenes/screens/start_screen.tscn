@@ -907,6 +907,46 @@ theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="WebVersionBox" type="VBoxContainer" parent="." unique_id=1530624418]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 0.6
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_top = -110.0
+offset_right = -52.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 2
+
+[node name="WebVersionLabel" type="Label" parent="WebVersionBox" unique_id=1530624419]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.496, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 26
+text = "ПОГЛЕДАЈТЕ WEB ВЕРЗИЈУ ЈЕР ЈЕ НАЈАЖУРНИЈА,
+ПОШТО ПЛАТФОРМЕ НАМЕЋУ ОГРАНИЧЕЊА (КАО ШТО ТО РАДИ И ОН)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WebVersionLink" type="LinkButton" parent="WebVersionBox" unique_id=1530624420]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(0.496, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.18431373, 0.43529412, 0.8784314, 1)
+theme_override_colors/font_hover_color = Color(0.18431373, 0.43529412, 0.8784314, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.18431373, 0.43529412, 0.8784314, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 30
+text = "https://kreativna-blokada.itch.io/glasalica"
+uri = "https://kreativna-blokada.itch.io/glasalica"
+
 [node name="MatrixOverlay" type="ColorRect" parent="." unique_id=164233327]
 unique_name_in_owner = true
 visible = false
