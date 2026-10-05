@@ -105,16 +105,23 @@ func submit_score(player_score: int) -> void:
 	var score_body: String = JSON.stringify({"score": player_score})
 	_send_request(score_endpoint, HTTPClient.METHOD_PATCH, score_body, _on_score_request_completed.bind(player_score))
 
-#fetches the best scores; the result arrives through Signals.ranks_fetched
-func fetch_rankings() -> void:
+#fetches the best scores of the given run days, each player once with their best score of those days;
+#without run days fetches the best all-time scores; the result arrives through Signals.ranks_fetched
+func fetch_rankings(run_days: Array[int] = []) -> void:
 	if not is_enabled():
 		Signals.ranks_fetched.emit(false, [] as Array[Dictionary])
 		return
 
-	var top_endpoint: String = "%s/scores.json?orderBy=%s&limitToLast=%d" % [
-		_database_endpoint, "\"score\"".uri_encode(), Configs.Leaderboard.top_count
-	]
-	_send_request(top_endpoint, HTTPClient.METHOD_GET, "", _on_top_request_completed)
+	var top_query: String = "orderBy=%s&limitToLast=%d" % ["\"score\"".uri_encode(), Configs.Leaderboard.top_count]
+	var rankings_fetch: Dictionary = {"pending_count": maxi(run_days.size(), 1), "is_failed": false, "best_entries": {}}
+	if run_days.is_empty():
+		var total_endpoint: String = "%s/scores.json?%s" % [_database_endpoint, top_query]
+		_send_request(total_endpoint, HTTPClient.METHOD_GET, "", _on_top_request_completed.bind(rankings_fetch))
+		return
+
+	for run_day in run_days:
+		var daily_endpoint: String = "%s/leaderboards/%d.json?%s" % [_database_endpoint, run_day, top_query]
+		_send_request(daily_endpoint, HTTPClient.METHOD_GET, "", _on_top_request_completed.bind(rankings_fetch))
 
 #release endpoint only for release builds with debug_release off, otherwise the debug endpoint
 func _resolve_database_endpoint() -> String:
@@ -270,21 +277,42 @@ func _on_daily_request_completed(fetch_result: int, response_code: int, _server_
 		submit_result = Globals.ScoreSubmit.Failed
 	Signals.score_submitted.emit(submit_result)
 
-#signal HTTPRequest.request_completed => emits the fetched scores sorted best first
-func _on_top_request_completed(fetch_result: int, response_code: int, _server_headers: PackedStringArray, server_body: PackedByteArray, server_request: HTTPRequest) -> void:
+#keeps each fetched player's best score, so a player on several daily leaderboards is counted once
+func _merge_best_entries(best_entries: Dictionary, fetched_scores: Variant) -> void:
+	if not fetched_scores is Dictionary:
+		return
+	for player_id in fetched_scores:
+		var score_entry: Variant = fetched_scores[player_id]
+		if not score_entry is Dictionary or not score_entry.get("username") is String:
+			continue
+		if not (score_entry.get("score") is float or score_entry.get("score") is int):
+			continue
+		var player_score: int = int(score_entry.score)
+		if best_entries.has(player_id) and best_entries[player_id].score >= player_score:
+			continue
+		best_entries[player_id] = {"player_id": str(player_id), "username": score_entry.username, "score": player_score}
+
+#signal HTTPRequest.request_completed => once every requested leaderboard answered, emits the best scores sorted best first;
+#a single failed leaderboard fails the whole fetch, so a partial board is never shown
+func _on_top_request_completed(fetch_result: int, response_code: int, _server_headers: PackedStringArray, server_body: PackedByteArray, server_request: HTTPRequest, rankings_fetch: Dictionary) -> void:
 	server_request.queue_free()
 
-	var top_entries: Array[Dictionary] = []
 	if fetch_result != HTTPRequest.RESULT_SUCCESS or response_code != HTTPClient.RESPONSE_OK:
 		push_warning("LeaderboardManager._on_top_request_completed: fetch failed (result %d, HTTP %d)" % [fetch_result, response_code])
+		rankings_fetch.is_failed = true
+	else:
+		_merge_best_entries(rankings_fetch.best_entries, JSON.parse_string(server_body.get_string_from_utf8()))
+
+	rankings_fetch.pending_count -= 1
+	if rankings_fetch.pending_count > 0:
+		return
+
+	var top_entries: Array[Dictionary] = []
+	if rankings_fetch.is_failed:
 		Signals.ranks_fetched.emit(false, top_entries)
 		return
 
-	var fetched_scores: Variant = JSON.parse_string(server_body.get_string_from_utf8())
-	if fetched_scores is Dictionary:
-		for player_id in fetched_scores:
-			var score_entry: Variant = fetched_scores[player_id]
-			if score_entry is Dictionary and score_entry.get("username") is String and (score_entry.get("score") is float or score_entry.get("score") is int):
-				top_entries.append({"player_id": str(player_id), "username": score_entry.username, "score": int(score_entry.score)})
+	top_entries.assign(rankings_fetch.best_entries.values())
 	top_entries.sort_custom(func(first_entry: Dictionary, second_entry: Dictionary) -> bool: return first_entry.score > second_entry.score)
+	top_entries.resize(mini(top_entries.size(), Configs.Leaderboard.top_count))
 	Signals.ranks_fetched.emit(true, top_entries)

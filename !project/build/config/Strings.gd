@@ -58,6 +58,12 @@ const SCORE_SAVED_MESSAGE: String = "РЕЗУЛТАТ %d ЈЕ САЧУВАН"
 const SCORE_HIGHER_MESSAGE: String = "РЕЗУЛТАТ %d - ТВОЈ НАЈБОЉИ РЕЗУЛТАТ НА РАНГ ЛИСТИ ЈЕ ВЕЋИ"
 const FAILED_MESSAGE: String = "РЕЗУЛТАТ %d НИЈЕ ПОСЛАТ"
 
+#leaderboard day strip captions for the two latest days; older days show their date
+const TODAY_DAY_CAPTION: String = "ДАНАС"
+const YESTERDAY_CAPTION: String = "ЈУЧЕ"
+#leaderboard week strip caption, filled with the week's first and last date
+const WEEK_CAPTION: String = "%s–%s"
+
 #leaderboard username form status; usernames stay latin, as the database rules allow only A-Z
 const USERNAME_SAVED_MESSAGE: String = "ИМЕ ЈЕ САЧУВАНО"
 const USERNAME_CHECK_MESSAGE: String = "ПРОВЕРАВАМ ИМЕ..."

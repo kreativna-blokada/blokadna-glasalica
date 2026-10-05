@@ -353,7 +353,7 @@ offset_left = -164.0
 offset_right = -20.0
 grow_vertical = 2
 
-[node name="Bg" type="NinePatchRect" parent="MenuOptionButton/LeftArrow" unique_id=2121555182]
+[node name="Background" type="NinePatchRect" parent="MenuOptionButton/LeftArrow" unique_id=2121555182]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.125
@@ -394,7 +394,7 @@ offset_right = 164.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Bg" type="NinePatchRect" parent="MenuOptionButton/RightArrow" unique_id=1172778271]
+[node name="Background" type="NinePatchRect" parent="MenuOptionButton/RightArrow" unique_id=1172778271]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.125
