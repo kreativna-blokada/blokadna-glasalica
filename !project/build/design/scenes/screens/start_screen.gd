@@ -178,7 +178,7 @@ func _on_menu_option_button_pressed() -> void:
 	_show_button_caption()
 	_jump_slogan(1.0)
 	if _click_count >= Configs.Shake["click_count"]:
-		#clicks stop counting now, the last 3 stays in sight a moment before the start sequence
+		#clicks stop counting, the last 3 stays in sight a moment before the start sequence
 		_is_starting = true
 		_hide_start_screen_choices()
 		await get_tree().create_timer(Configs.Shake["click_pause"]).timeout

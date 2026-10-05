@@ -176,7 +176,7 @@ func _select_period(period_offset: int) -> void:
 	_period_scroll.ensure_control_visible.call_deferred(_period_tabs.get_child(period_offset))
 	_show_selected_board()
 
-#empties the board and fetches the selected tab and period; the rewards tab stays blank for now
+#empties the board and fetches the selected tab and period; the rewards tab shows an upcoming message
 func _show_selected_board() -> void:
 	if not LeaderboardManager.is_enabled():
 		return
@@ -184,7 +184,7 @@ func _show_selected_board() -> void:
 	_top_entries = []
 	_populate_leaderboard()
 	if _selected_board == Globals.ScoreBoard.Rewards:
-		_board_status_label.text = ""
+		_board_status_label.text = Literals.REWARDS_UPCOMING_MESSAGE
 		return
 
 	_is_board_loaded = false

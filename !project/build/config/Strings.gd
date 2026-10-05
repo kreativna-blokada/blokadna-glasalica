@@ -50,6 +50,8 @@ const BOARD_LOADING_MESSAGE: String = "УЧИТАВАЊЕ..."
 const BOARD_OFFLINE_MESSAGE: String = "РАНГ ЛИСТА НИЈЕ ДОСТУПНА"
 const BOARD_FAILED_MESSAGE: String = "РАНГ ЛИСТА НИЈЕ УЧИТАНА"
 const EMPTY_BOARD_MESSAGE: String = "ЈОШ НЕМА РЕЗУЛТАТА"
+#leaderboard rewards tab placeholder until rewards are added
+const REWARDS_UPCOMING_MESSAGE: String = "НАГРАДЕ СТИЖУ УСКОРО!\nНАЈБОЉИ ИГРАЧИ ДАНА, НЕДЕЉЕ И ИЗБОРА БИЋЕ НАГРАЂЕНИ"
 
 #leaderboard screen run score status; %d is the run score
 const MISSING_USERNAME_MESSAGE: String = "УНЕСИ ИМЕ ДА ПРИЈАВИШ РЕЗУЛТАТ %d"
