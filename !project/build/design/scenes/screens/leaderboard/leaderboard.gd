@@ -9,15 +9,6 @@
 class_name LeaderboardScreen
 extends Control
 
-const MISSING_USERNAME_MESSAGE: String = "Enter a name to submit your score of %d"
-const SUBMIT_MESSAGE: String = "Submitting your score of %d..."
-const SCORE_SAVED_MESSAGE: String = "Score of %d saved"
-const SCORE_HIGHER_MESSAGE: String = "Score %d - your best score on the leaderboard is higher"
-const FAILED_MESSAGE: String = "Could not submit your score of %d"
-const BOARD_LOADING_MESSAGE: String = "Loading..."
-const BOARD_OFFLINE_MESSAGE: String = "Leaderboard is offline"
-const BOARD_FAILED_MESSAGE: String = "Could not load the leaderboard"
-const EMPTY_BOARD_MESSAGE: String = "No scores yet"
 const ROW_FONT_SIZE: int = 52
 const ROW_RANK_WIDTH: float = 110.0
 const ROW_SCORE_WIDTH: float = 220.0
@@ -53,7 +44,7 @@ func _ready() -> void:
 	_back_button.gui_input.connect(_on_back_button)
 	_run_points = LeaderboardManager.get_run_points()
 	if not LeaderboardManager.is_enabled():
-		_board_status_label.text = BOARD_OFFLINE_MESSAGE
+		_board_status_label.text = Literals.BOARD_OFFLINE_MESSAGE
 		return
 
 	Signals.ranks_fetched.connect(_on_top_scores_received)
@@ -67,7 +58,7 @@ func _ready() -> void:
 	if LeaderboardManager.is_valid_username(LeaderboardManager.get_username()):
 		_submit_points()
 	else:
-		_submit_status_label.text = MISSING_USERNAME_MESSAGE % _run_points
+		_submit_status_label.text = Literals.MISSING_USERNAME_MESSAGE % _run_points
 		_username_form.prompt_username()
 
 #FUNCTIONS
@@ -86,7 +77,7 @@ func _top_scores_refresh() -> void:
 		return
 	_is_fetching = true
 	if not _is_board_loaded:
-		_board_status_label.text = BOARD_LOADING_MESSAGE
+		_board_status_label.text = Literals.BOARD_LOADING_MESSAGE
 	LeaderboardManager.fetch_rankings()
 
 #rebuilds the score rows, highlighting the row stored under this install's player id
@@ -97,7 +88,7 @@ func _populate_leaderboard() -> void:
 	for entry_index in _top_entries.size():
 		var top_entry: Dictionary = _top_entries[entry_index]
 		_score_rows.add_child(_create_player_standing(entry_index + 1, top_entry.username, top_entry.score, top_entry.player_id == player_id))
-	_board_status_label.text = EMPTY_BOARD_MESSAGE if _top_entries.is_empty() else ""
+	_board_status_label.text = Literals.EMPTY_BOARD_MESSAGE if _top_entries.is_empty() else ""
 
 #builds one rank / username / score row; the player's row gets a tinted background
 func _create_player_standing(entry_rank: int, entry_username: String, entry_score: int, is_own_standing: bool) -> PanelContainer:
@@ -136,7 +127,7 @@ func _create_column_content(cell_text: String, cell_alignment: HorizontalAlignme
 #sends the run score under this player's id and shows that it is on its way
 func _submit_points() -> void:
 	_is_submitting = true
-	_submit_status_label.text = SUBMIT_MESSAGE % _run_points
+	_submit_status_label.text = Literals.SUBMIT_MESSAGE % _run_points
 	LeaderboardManager.submit_score(_run_points)
 
 #signal Signals.score_submitted => shows the outcome; a higher stored score is not an error
@@ -148,14 +139,14 @@ func _on_score_submitted(submit_result: Globals.ScoreSubmit) -> void:
 		Globals.ScoreSubmit.Accepted:
 			_is_score_settled = true
 			LeaderboardManager.clear_stored_points()
-			_submit_status_label.text = SCORE_SAVED_MESSAGE % _run_points
+			_submit_status_label.text = Literals.SCORE_SAVED_MESSAGE % _run_points
 			_top_scores_refresh()
 		Globals.ScoreSubmit.Stored:
 			_is_score_settled = true
 			LeaderboardManager.clear_stored_points()
-			_submit_status_label.text = SCORE_HIGHER_MESSAGE % _run_points
+			_submit_status_label.text = Literals.SCORE_HIGHER_MESSAGE % _run_points
 		Globals.ScoreSubmit.Failed:
-			_submit_status_label.text = FAILED_MESSAGE % _run_points
+			_submit_status_label.text = Literals.FAILED_MESSAGE % _run_points
 
 #signal Signals.ranks_fetched => shows the best scores, or why there are none
 func _on_top_scores_received(fetch_succeeded: bool, top_entries: Array[Dictionary]) -> void:
@@ -165,7 +156,7 @@ func _on_top_scores_received(fetch_succeeded: bool, top_entries: Array[Dictionar
 		_top_entries = top_entries
 		_populate_leaderboard()
 	elif not _is_board_loaded:
-		_board_status_label.text = BOARD_FAILED_MESSAGE
+		_board_status_label.text = Literals.BOARD_FAILED_MESSAGE
 	if _is_refetch_pending:
 		_is_refetch_pending = false
 		_top_scores_refresh()

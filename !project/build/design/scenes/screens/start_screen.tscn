@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://fixpnof4cpbb"]
+[gd_scene format=3 uid="uid://bykge2aiu0sfd"]
 
-[ext_resource type="Script" uid="uid://cnp6n88pxtc0u" path="res://!project/build/design/scenes/screens/start_screen.gd" id="1_start_screen"]
+[ext_resource type="Script" path="res://!project/build/design/scenes/screens/start_screen.gd" id="1_start_screen"]
 [ext_resource type="FontFile" uid="uid://bdaf012h5ofyp" path="res://!project/assets/fonts/LiberationSans-Bold.ttf" id="2_font"]
 [ext_resource type="AudioStream" uid="uid://dj353siuj13e2" path="res://!project/audio/zoki skace.mp3" id="3_jump_sound"]
 [ext_resource type="Shader" uid="uid://c81c1mbuewqk4" path="res://!project/art/shaders/matrix_rain.gdshader" id="7_matrix_rain"]

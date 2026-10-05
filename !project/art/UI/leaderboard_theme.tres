@@ -1,0 +1,8 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontFile" uid="uid://bdaf012h5ofyp" path="res://!project/assets/fonts/LiberationSans-Bold.ttf" id="1_font"]
+
+[resource]
+LineEdit/fonts/font = ExtResource("1_font")
+RichTextLabel/colors/default_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+RichTextLabel/fonts/normal_font = ExtResource("1_font")

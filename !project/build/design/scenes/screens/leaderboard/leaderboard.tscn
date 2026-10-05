@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cy1e6a5yoiidk"]
 
-[ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="1_m6o2n"]
+[ext_resource type="Theme" path="res://!project/art/UI/leaderboard_theme.tres" id="1_m6o2n"]
 [ext_resource type="PackedScene" uid="uid://eo6df3d4o15k" path="res://!project/build/design/scenes/screens/leaderboard/username_form.tscn" id="2_ufrm"]
 [ext_resource type="Script" uid="uid://oh5ob6ifyq0v" path="res://!project/build/design/scenes/screens/leaderboard/leaderboard.gd" id="3_ldbrd"]
 [ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="4_ldbrd"]
@@ -12,6 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_m6o2n")
 script = ExtResource("3_ldbrd")
 
 [node name="Board" type="Control" parent="." unique_id=1739204518]
@@ -26,7 +27,6 @@ offset_right = 560.0
 offset_bottom = -160.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_m6o2n")
 
 [node name="Bg" type="NinePatchRect" parent="Board" unique_id=904417362]
 layout_mode = 1
@@ -110,9 +110,8 @@ anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme = ExtResource("1_m6o2n")
 theme_override_font_sizes/normal_font_size = 31
-text = "BACK"
+text = "НАЗАД"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -138,7 +137,6 @@ offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-theme = ExtResource("1_m6o2n")
 theme_override_font_sizes/normal_font_size = 31
 horizontal_alignment = 1
 vertical_alignment = 1

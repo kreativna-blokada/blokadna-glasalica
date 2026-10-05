@@ -44,3 +44,25 @@ const CONTROLLER_DESCRIPTIONS: Dictionary[Globals.ControllerType, String] = {
 	Globals.ControllerType.Classic: "КЛАСИЧНЕ",
 	Globals.ControllerType.Screen: "ЕКРАНСКЕ",
 }
+
+#leaderboard screen board status
+const BOARD_LOADING_MESSAGE: String = "УЧИТАВАЊЕ..."
+const BOARD_OFFLINE_MESSAGE: String = "РАНГ ЛИСТА НИЈЕ ДОСТУПНА"
+const BOARD_FAILED_MESSAGE: String = "РАНГ ЛИСТА НИЈЕ УЧИТАНА"
+const EMPTY_BOARD_MESSAGE: String = "ЈОШ НЕМА РЕЗУЛТАТА"
+
+#leaderboard screen run score status; %d is the run score
+const MISSING_USERNAME_MESSAGE: String = "УНЕСИ ИМЕ ДА ПРИЈАВИШ РЕЗУЛТАТ %d"
+const SUBMIT_MESSAGE: String = "ШАЉЕМ РЕЗУЛТАТ %d..."
+const SCORE_SAVED_MESSAGE: String = "РЕЗУЛТАТ %d ЈЕ САЧУВАН"
+const SCORE_HIGHER_MESSAGE: String = "РЕЗУЛТАТ %d - ТВОЈ НАЈБОЉИ РЕЗУЛТАТ НА РАНГ ЛИСТИ ЈЕ ВЕЋИ"
+const FAILED_MESSAGE: String = "РЕЗУЛТАТ %d НИЈЕ ПОСЛАТ"
+
+#leaderboard username form status; usernames stay latin, as the database rules allow only A-Z
+const USERNAME_SAVED_MESSAGE: String = "ИМЕ ЈЕ САЧУВАНО"
+const USERNAME_CHECK_MESSAGE: String = "ПРОВЕРАВАМ ИМЕ..."
+const USERNAME_TAKEN_MESSAGE: String = "ИМЕ ЈЕ ЗАУЗЕТО"
+const USERNAME_EMPTY_MESSAGE: String = "ИМЕ НЕ МОЖЕ ДА БУДЕ ПРАЗНО"
+const USERNAME_TOO_LONG_MESSAGE: String = "ИМЕ МОЖЕ ДА ИМА НАЈВИШЕ %d ЗНАКОВА"
+const USERNAME_INVALID_CHARACTER_MESSAGE: String = "ИМЕ СМЕ ДА САДРЖИ САМО ЛАТИНИЧНА СЛОВА A-Z, ЦИФРЕ, РАЗМАК, _ И -"
+const USERNAME_NOT_SAVED_MESSAGE: String = "ИМЕ НИЈЕ САЧУВАНО"
