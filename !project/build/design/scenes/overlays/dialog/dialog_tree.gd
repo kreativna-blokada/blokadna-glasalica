@@ -107,7 +107,7 @@ func _deserialize(data: Dictionary) -> void:
 			dependencies.push_back("")
 		
 		var descriptor: DialogDescriptor = DialogDescriptor.new(
-				data[id].text,
+				_strip_mood_marker(data[id].text),
 				speaker,
 				choiceDescriptors
 		)
@@ -126,5 +126,12 @@ func _deserialize(data: Dictionary) -> void:
 	
 	#### commented out 7b64814
 	#### file.close()
-	
+
+#removes a leading mood marking like [POL] so it never shows in the dialogue
+static func _strip_mood_marker(dialogue_text: String) -> String:
+	for mood_marker in Globals.DIALOGUE_MOOD_MARKERS:
+		if dialogue_text.begins_with(mood_marker):
+			return dialogue_text.trim_prefix(mood_marker).strip_edges(true, false)
+	return dialogue_text
+
 var _root: DialogTreeNode

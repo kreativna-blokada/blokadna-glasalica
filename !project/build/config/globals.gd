@@ -84,6 +84,9 @@ enum NameRefuse {
 	Failed
 }
 
+#mood markings at the start of dialogue text, hidden from the player
+const DIALOGUE_MOOD_MARKERS: Array[String] = ["[POL]", "[ANG]"]
+
 #GAMEPLAY
 # ██████╗  █████╗ ███╗   ███╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗
 #██╔════╝ ██╔══██╗████╗ ████║██╔════╝██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝
