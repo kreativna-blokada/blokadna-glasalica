@@ -17,6 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://bftxwhyxn1pkg" path="res://!project/audio/stops/finger_spray.ogg" id="18_oany1"]
 [ext_resource type="AudioStream" uid="uid://bn1a4rubp00s7" path="res://!project/audio/stops/ballot_stamp.ogg" id="20_sjbew"]
 [ext_resource type="AudioStream" uid="uid://csptbqajleivs" path="res://!project/audio/stops/ballot_box.ogg" id="24_kmrnq"]
+[ext_resource type="AudioStream" uid="uid://ctxdwbxluslgm" path="res://!project/audio/stops/ballot_mark.ogg" id="22_tekev"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hcqac"]
 radius = 25.333313
@@ -229,6 +230,8 @@ walk_animation = 4
 [node name="Booth" parent="VoterStops" unique_id=1315984266 instance=ExtResource("12_ugfii")]
 position = Vector2(1266, 860)
 is_stop = true
+stop_sound = ExtResource("22_tekev")
+sound_volume = -3.0
 walk_animation = 3
 wait_animation = 1
 
