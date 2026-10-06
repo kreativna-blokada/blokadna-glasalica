@@ -30,6 +30,12 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 		background.modulate = DialogColors.get_default_color()
 	reset_unveil()
 
+	# full text is laid out once so words never jump lines while unveiling
+	_unveiledText = ""
+	text.text = _requestedText
+	text.visible_characters = 0
+	warn_if_text_overflows(text)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if _touch_debounce_timer > 0:
@@ -39,7 +45,8 @@ func _process(delta: float) -> void:
 		return
 
 	_unveiledText = get_unveiled(_requestedText, delta)
-	text.text = _unveiledText
+	#### text.text = _unveiledText
+	text.visible_characters = _unveiledText.length()
 
 func _initialize_placement():
 	panel.size = textboxScalePx

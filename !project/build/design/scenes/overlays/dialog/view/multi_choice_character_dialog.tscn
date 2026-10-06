@@ -79,8 +79,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("3_fi7f4")
-theme_override_font_sizes/normal_font_size = 29
 text = "Lorem ipšum ćolor"
 scroll_active = false
+visible_characters_behavior = 1
 
 [connection signal="gui_input" from="PanelContainer/TextContainer" to="." method="_on_text_container_gui_input"]

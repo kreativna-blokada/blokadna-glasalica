@@ -69,14 +69,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 24.0
 offset_top = 24.0
-offset_right = 24.0
-offset_bottom = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_mdnoa")
-theme_override_font_sizes/normal_font_size = 29
 text = "Lorem ipšum ćolor"
 scroll_active = false
+visible_characters_behavior = 1
 
 [node name="ClickDetector" type="Control" parent="." unique_id=527813580]
 layout_mode = 1

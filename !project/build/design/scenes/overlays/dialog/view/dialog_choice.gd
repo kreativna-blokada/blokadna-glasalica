@@ -12,11 +12,12 @@ func set_text(text: String) -> void:
 	_text.text = text
 
 
-# clamp returned value to 2
+# number of wrapped lines the choice text takes, at least 1
 func get_num_lines() -> int:
-	if _text.get_line_count() > 1:
-		return 2
-	return 1
+	#### if _text.get_line_count() > 1:
+	#### 	return 2
+	#### return 1
+	return maxi(1, _text.get_line_count())
 
 
 # Called when the node enters the scene tree for the first time.

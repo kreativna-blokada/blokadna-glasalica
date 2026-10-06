@@ -43,3 +43,9 @@ func get_unveiled(text: String, delta: float) -> String:
 func apply_margins(node: Control, margin: Vector2) -> void:
 	node.position += margin
 	node.size -= margin * 2
+
+
+# warn in debug builds when dialogue text is taller than its label and gets cut off
+func warn_if_text_overflows(text_label: RichTextLabel) -> void:
+	if OS.is_debug_build() and text_label.get_content_height() > text_label.size.y:
+		push_warning("Dialogue text is cut off at the bottom: %s" % text_label.text)

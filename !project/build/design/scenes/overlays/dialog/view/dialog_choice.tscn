@@ -42,7 +42,6 @@ offset_right = -50.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_gqu4x")
-theme_override_font_sizes/normal_font_size = 29
 scroll_active = false
 vertical_alignment = 1
 

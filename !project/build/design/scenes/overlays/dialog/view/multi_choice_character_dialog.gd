@@ -41,9 +41,14 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 		background.modulate = _tint
 	else:
 		background.modulate = DialogColors.get_default_color()
-	
+
 	reset_unveil()
 	_touch_debounce_timer = TOUCH_DEBOUNCE_TIME
+
+	# full text is laid out once so words never jump lines while unveiling
+	_unveiledText = ""
+	text.text = _requestedText
+	text.visible_characters = 0
 
 func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> void:
 	var numChoices: int = len(choices)
@@ -67,8 +72,9 @@ func _initialize_placement(num_choices: int) -> void:
 	
 	var total_offset: float = 0
 	for i in range(num_choices):
-		# force height to be a single line
-		_choices[i].size = Vector2(textboxScalePx.x, _choiceHeight)
+		# force height to be a single line, at the final width so the line count matches
+		#### _choices[i].size = Vector2(textboxScalePx.x, _choiceHeight)
+		_choices[i].size = Vector2(textboxScalePx.x - choiceMargin.x * 2, _choiceHeight)
 
 	# frame wait is needed for the text to actually process itself :/
 	await get_tree().process_frame
@@ -87,8 +93,10 @@ func _initialize_placement(num_choices: int) -> void:
 
 	# Scale the main textbox down to accomodate choices
 	text_container.position = Vector2(0,0)
-	text_container.size = panel_container.size - Vector2(0, _choiceHeight * num_choices)
+	#### text_container.size = panel_container.size - Vector2(0, _choiceHeight * num_choices)
+	text_container.size = panel_container.size - Vector2(0, total_offset)
 	apply_margins(text_container, textMargin)
+	warn_if_text_overflows(text)
 
 	# place timer to the right of the dialog box
 	timer_vfx.position = panel_container.position + Vector2(panel_container.size.x + 24, 0)
@@ -121,7 +129,8 @@ func _process(delta: float) -> void:
 		return
 
 	_unveiledText = get_unveiled(_requestedText, delta)
-	text.text = _unveiledText
+	#### text.text = _unveiledText
+	text.visible_characters = _unveiledText.length()
 
 
 func _on_text_container_gui_input(event: InputEvent) -> void:

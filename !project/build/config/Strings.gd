@@ -38,8 +38,8 @@ const ID_CAPTION: String = "ИНДЕКС: %s"
 
 #MenuOptionButton text for each difficulty while the difficulty row is ticked
 const DIFFICULTY_DESCRIPTIONS: Dictionary[GameDescriptor.Difficulty, String] = {
-	GameDescriptor.Difficulty.EASY: "ЖЕЛИМ ДА УЧИМ",
-	GameDescriptor.Difficulty.NORMAL: "ХОЋУ ИЗАЗОВ",
+	GameDescriptor.Difficulty.EASY: "УЧЕЊЕ",
+	GameDescriptor.Difficulty.NORMAL: "ИЗАЗОВ",
 }
 
 #MenuOptionButton text for each controls choice while the controls row is ticked
