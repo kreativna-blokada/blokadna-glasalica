@@ -84,6 +84,44 @@ enum NameRefuse {
 	Failed
 }
 
+#music loops, one plays at a time; the start screen has none, its jump sound plays there
+enum Music {
+	Gameplay,
+	Dialogue,
+	Hurry,
+	Summary
+}
+
+var MusicLoops: Dictionary[Variant, Variant] = {
+	Music.Gameplay: "res://!project/audio/music/gameplay_loop.ogg",
+	Music.Dialogue: "res://!project/audio/music/dialogue_loop.ogg",
+	Music.Hurry: "res://!project/audio/music/hurry_loop.ogg",
+	Music.Summary: "res://!project/audio/music/summary_loop.ogg",
+}
+
+#one-shot jingles and stingers
+enum Sound {
+	RoundStart,
+	RoundWin,
+	RoundLose,
+	ChoiceRight,
+	ChoiceWrong,
+	Points,
+	MenuSelect,
+	VoteCast
+}
+
+var SoundClips: Dictionary[Variant, Variant] = {
+	Sound.RoundStart: "res://!project/audio/jingles/game_start.ogg",
+	Sound.RoundWin: "res://!project/audio/jingles/round_win.ogg",
+	Sound.RoundLose: "res://!project/audio/jingles/round_lose.ogg",
+	Sound.ChoiceRight: "res://!project/audio/stingers/choice_right.ogg",
+	Sound.ChoiceWrong: "res://!project/audio/stingers/choice_wrong.ogg",
+	Sound.Points: "res://!project/audio/stingers/points.ogg",
+	Sound.MenuSelect: "res://!project/audio/stingers/ui_select.ogg",
+	Sound.VoteCast: "res://!project/audio/stingers/vote_cast.ogg",
+}
+
 #GAMEPLAY
 # ██████╗  █████╗ ███╗   ███╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗
 #██╔════╝ ██╔══██╗████╗ ████║██╔════╝██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝
