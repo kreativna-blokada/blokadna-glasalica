@@ -16,6 +16,7 @@ var _touch_debounce_timer: float = 0
 
 func _ready() -> void:
 	_initialize_placement()
+	get_viewport().size_changed.connect(_initialize_placement)
 
 func set_tint(tint: Color) -> void:
 	_tint = tint

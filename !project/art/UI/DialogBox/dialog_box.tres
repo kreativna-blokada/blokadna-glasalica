@@ -1,8 +1,8 @@
 [gd_resource type="Theme" format=3 uid="uid://duic02i5k0kb4"]
 
-[ext_resource type="FontFile" uid="uid://w8p5mlgowyma" path="res://!project/art/UI/DejaVuLGCSansMono.ttf" id="1_2sf17"]
+[ext_resource type="FontFile" uid="uid://b7wgk25vccvfr" path="res://!project/art/UI/DejaVuLGCSansMono-Bold.ttf" id="1_2sf17"]
 
 [resource]
 RichTextLabel/colors/default_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
-RichTextLabel/font_sizes/normal_font_size = 38
+RichTextLabel/font_sizes/normal_font_size = 48
 RichTextLabel/fonts/normal_font = ExtResource("1_2sf17")

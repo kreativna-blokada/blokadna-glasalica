@@ -12,6 +12,7 @@ var choiceOriginal: PackedScene = preload("res://!project/build/design/scenes/ov
 @onready var timer_vfx: DialogTimerVfx = $DialogTimerVfx
 
 var _choices: Array[DialogChoice] = []
+var _num_choices: int = 0
 var _requestedText: String = ""
 var _unveiledText: String = ""
 var _tint: Color
@@ -52,7 +53,8 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 
 func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> void:
 	var numChoices: int = len(choices)
-	
+	_num_choices = numChoices
+
 	for i in range(numChoices):
 		_choices[i].set_text(choices[i].text)
 		_choices[i].show()
@@ -109,6 +111,13 @@ func _ready() -> void:
 		choiceInstance.choice_clicked.connect(_on_choice_clicked)
 		_choices.append(choiceInstance)
 		add_child(choiceInstance)
+
+	get_viewport().size_changed.connect(_on_viewport_size_changed)
+
+
+# re-centers the dialog and its choices after the window is resized
+func _on_viewport_size_changed() -> void:
+	_initialize_placement(_num_choices)
 
 func _on_choice_clicked(sender: DialogChoice) -> void:
 	if _unveiledText == _requestedText:

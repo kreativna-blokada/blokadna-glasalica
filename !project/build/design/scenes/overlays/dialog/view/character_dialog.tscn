@@ -39,7 +39,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Background" type="NinePatchRect" parent="PanelContainer/BackgroundContainer" unique_id=1357298290]
-modulate = Color(0.9647059, 0.9372549, 0.8627451, 1)
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 1
 anchors_preset = -1
