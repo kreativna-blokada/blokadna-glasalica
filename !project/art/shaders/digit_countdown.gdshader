@@ -24,30 +24,79 @@ float hash(vec2 seed) {
 	return fract(sin(dot(seed, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-float box_distance(vec2 point, vec2 center, vec2 half_size) {
-	vec2 edge_distance = abs(point - center) - half_size;
-	return length(max(edge_distance, 0.0)) + min(max(edge_distance.x, edge_distance.y), 0.0);
+//distance from the point to the straight stroke line between line_start and line_end
+float line_distance(vec2 point, vec2 line_start, vec2 line_end) {
+	vec2 start_to_point = point - line_start;
+	vec2 start_to_end = line_end - line_start;
+	float along_line = clamp(dot(start_to_point, start_to_end) / dot(start_to_end, start_to_end), 0.0, 1.0);
+	return length(start_to_point - start_to_end * along_line);
 }
 
-//true where the seven-segment digit covers the point, point in screen heights around the screen center
+//distance from the point to the stroke arc drawn clockwise on screen from start_angle to end_angle, angles in radians, 0 = right, PI / 2 = down
+float arc_distance(vec2 point, vec2 arc_center, float arc_radius, float start_angle, float end_angle) {
+	vec2 center_to_point = point - arc_center;
+	float middle_angle = (start_angle + end_angle) * 0.5;
+	float half_sweep = (end_angle - start_angle) * 0.5;
+	float angle_from_middle = mod(atan(center_to_point.y, center_to_point.x) - middle_angle + PI, TAU) - PI;
+	if (abs(angle_from_middle) <= half_sweep) {
+		return abs(length(center_to_point) - arc_radius);
+	}
+
+	vec2 arc_start = arc_center + arc_radius * vec2(cos(start_angle), sin(start_angle));
+	vec2 arc_end = arc_center + arc_radius * vec2(cos(end_angle), sin(end_angle));
+	return min(length(point - arc_start), length(point - arc_end));
+}
+
+//half the stroke thickness, in screen heights
+float stroke_radius() {
+	return digit_height * 0.07;
+}
+
+//half the digit height measured to the stroke middle line, in screen heights
+float inner_half_height() {
+	return digit_height * 0.5 - stroke_radius();
+}
+
+//point where the upper and lower bowls of 3 meet, 3 spreads around it
+vec2 three_join() {
+	return vec2(0.0, -inner_half_height() * 0.125);
+}
+
+//true where the digit stroke covers the point, point in screen heights around the screen center
 bool digit_covers(vec2 point) {
-	float half_height = digit_height * 0.5;
-	float stroke = digit_height * 0.14;
-	float digit_width = digit_height * 0.55;
-	vec2 bar_size = vec2(digit_width * 0.5, stroke * 0.5);
-	vec2 stem_size = vec2(stroke * 0.5, half_height * 0.5);
-	float right_x = digit_width * 0.5 - stroke * 0.5;
+	float inner_height = inner_half_height();
+	float inner_width = digit_height * 0.275 - stroke_radius();
+	float stroke_distance;
 
 	if (digit == 1) {
-		return box_distance(point, vec2(0.0), vec2(stroke * 0.5, half_height)) <= 0.0;
+		//stem with a slanted flag on top and a base bar
+		float stem_x = inner_width * 0.15;
+		vec2 stem_top = vec2(stem_x, -inner_height);
+		stroke_distance = min(min(
+			line_distance(point, stem_top, vec2(stem_x, inner_height)),
+			line_distance(point, stem_top, vec2(-inner_width * 0.7, -inner_height * 0.55))),
+			line_distance(point, vec2(-inner_width * 0.7, inner_height), vec2(inner_width, inner_height)));
+	} else if (digit == 2) {
+		//round top bowl flowing into a diagonal down to the base bar
+		vec2 bowl_center = vec2(0.0, -inner_height + inner_width);
+		float bowl_end_angle = radians(35.0);
+		vec2 bowl_end = bowl_center + inner_width * vec2(cos(bowl_end_angle), sin(bowl_end_angle));
+		vec2 bottom_left = vec2(-inner_width, inner_height);
+		stroke_distance = min(min(
+			arc_distance(point, bowl_center, inner_width, radians(-165.0), bowl_end_angle),
+			line_distance(point, bowl_end, bottom_left)),
+			line_distance(point, bottom_left, vec2(inner_width, inner_height)));
+	} else {
+		//smaller upper bowl over a larger lower bowl, both open to the left, with a short tongue at the join
+		vec2 join = three_join();
+		float upper_radius = (join.y + inner_height) * 0.5;
+		float lower_radius = (inner_height - join.y) * 0.5;
+		stroke_distance = min(min(
+			arc_distance(point, join - vec2(0.0, upper_radius), upper_radius, radians(-155.0), radians(90.0)),
+			arc_distance(point, join + vec2(0.0, lower_radius), lower_radius, radians(-90.0), radians(155.0))),
+			line_distance(point, join - vec2(inner_width * 0.4, 0.0), join));
 	}
-	float shape_distance = min(
-		min(box_distance(point, vec2(0.0, -half_height + stroke * 0.5), bar_size), box_distance(point, vec2(0.0), bar_size)),
-		min(box_distance(point, vec2(0.0, half_height - stroke * 0.5), bar_size), box_distance(point, vec2(right_x, -half_height * 0.5), stem_size)));
-	//2 has the lower stem on the left, 3 on the right
-	float lower_x = digit == 2 ? -right_x : right_x;
-	shape_distance = min(shape_distance, box_distance(point, vec2(lower_x, half_height * 0.5), stem_size));
-	return shape_distance <= 0.0;
+	return stroke_distance <= stroke_radius();
 }
 
 //where a pixel starting at start_position is at break_progress, 1 flies out from the center, 2 falls down
@@ -74,9 +123,10 @@ void fragment() {
 	float alpha = opacity;
 
 	if (digit == 3) {
-		//cubic growth, slow start then rushes over the screen through the middle bar
+		//cubic growth, slow start then rushes over the screen through the bowls join, which slides to the screen center
 		float spread = 1.0 + pow(progress, 3.0) * (spread_scale - 1.0);
-		coverage = float(digit_covers((fragment_position - screen_center) / (screen_size.y * spread)));
+		vec2 digit_point = (fragment_position - screen_center) / (screen_size.y * spread) + three_join() * (1.0 - 1.0 / spread);
+		coverage = float(digit_covers(digit_point));
 		alpha = mix(opacity, 1.0, smoothstep(0.6, 1.0, progress));
 	} else {
 		float break_progress = clamp((progress - hold_fraction) / (1.0 - hold_fraction), 0.0, 1.0);
