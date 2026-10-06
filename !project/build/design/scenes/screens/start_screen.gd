@@ -29,6 +29,10 @@ const _SEARCH_MOMENT_ITERATIONS: int = 16
 #rows on the card, ticked one after another as the ballot goes down the slot
 const _ROW_COUNT: int = 5
 
+#exported vars
+#game opens right away without intro
+@export var skip_intro: bool = false
+
 #private vars
 var _is_starting: bool = false
 var _chosen_difficulty: GameDescriptor.Difficulty = GameDescriptor.Difficulty.NORMAL
@@ -366,6 +370,11 @@ func _count_phone_shake(direction: float) -> void:
 
 #stops counting shakes and clicks; game starts once the sound finishes this last loop
 func _finish_start_sequence() -> void:
+	#debug builds with skip_intro ticked go straight to the game
+	if skip_intro and OS.is_debug_build():
+		_start_game()
+		return
+
 	_shake_done = true
 	_is_starting = true
 	menu_option_button.disabled = true

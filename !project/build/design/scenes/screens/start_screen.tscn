@@ -251,6 +251,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_start_screen")
+skip_intro = true
 
 [node name="Background" type="ColorRect" parent="." unique_id=1496084363]
 layout_mode = 1
@@ -928,7 +929,7 @@ alignment = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.496, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 30
 text = "ПОГЛЕДАЈТЕ WEB ВЕРЗИЈУ ЈЕР ЈЕ НАЈАЖУРНИЈА,
 ПОШТО ПЛАТФОРМЕ НАМЕЋУ ОГРАНИЧЕЊА (КАО ШТО ТО РАДИ И ОН)"
 horizontal_alignment = 1
@@ -943,7 +944,7 @@ theme_override_colors/font_pressed_color = Color(0.18431373, 0.43529412, 0.87843
 theme_override_colors/font_hover_color = Color(0.18431373, 0.43529412, 0.8784314, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.18431373, 0.43529412, 0.8784314, 1)
 theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 40
 text = "https://kreativna-blokada.itch.io/glasalica"
 uri = "https://kreativna-blokada.itch.io/glasalica"
 
