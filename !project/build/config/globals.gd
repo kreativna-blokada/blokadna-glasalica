@@ -83,20 +83,20 @@ enum Direction {
 
 #music loops, one plays at a time; the start screen has none, its jump sound plays there
 enum Music {
-	Gameplay,
-	Dialogue,
-	Hurry,
+	Round,
+	Challenge,
 	Summary
 }
 
 var MusicLoops: Dictionary[Variant, Variant] = {
-	Music.Gameplay: "res://!project/audio/music/gameplay_loop.ogg",
-	Music.Dialogue: "res://!project/audio/music/dialogue_loop.ogg",
-	Music.Hurry: "res://!project/audio/music/hurry_loop.ogg",
+	#95 bpm, builds slowly over the 5 minute round
+	Music.Round: "res://!project/audio/music/round_loop.ogg",
+	#130 bpm, for timed dialogues and the last seconds of the round
+	Music.Challenge: "res://!project/audio/music/challenge_loop.ogg",
 	Music.Summary: "res://!project/audio/music/summary_loop.ogg",
 }
 
-#one-shot jingles and stingers
+#one-shot jingles and stingers; the polling station steps play their own sounds, set on each voting stop
 enum Sound {
 	RoundStart,
 	RoundWin,
@@ -105,7 +105,8 @@ enum Sound {
 	ChoiceWrong,
 	Points,
 	MenuSelect,
-	VoteCast
+	DialoguePolite,
+	DialogueHostile
 }
 
 var SoundClips: Dictionary[Variant, Variant] = {
@@ -116,7 +117,14 @@ var SoundClips: Dictionary[Variant, Variant] = {
 	Sound.ChoiceWrong: "res://!project/audio/stingers/choice_wrong.ogg",
 	Sound.Points: "res://!project/audio/stingers/points.ogg",
 	Sound.MenuSelect: "res://!project/audio/stingers/ui_select.ogg",
-	Sound.VoteCast: "res://!project/audio/stingers/vote_cast.ogg",
+	Sound.DialoguePolite: "res://!project/audio/stingers/dialogue_polite.ogg",
+	Sound.DialogueHostile: "res://!project/audio/stingers/dialogue_hostile.ogg",
+}
+
+#stinger opening a dialogue, by the voter personality from the dialogue file names
+var DialogueMoodSounds: Dictionary[String, Variant] = {
+	"polite": Sound.DialoguePolite,
+	"angry": Sound.DialogueHostile,
 }
 
 #outcome of a leaderboard score submission

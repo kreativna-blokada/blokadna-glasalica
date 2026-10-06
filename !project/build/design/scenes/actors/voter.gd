@@ -77,6 +77,10 @@ func get_dialog_path(stop_name: String) -> String:
 #returns the id of the dialogue this voter has at the given stop
 func get_dialog_id(stop_name: String) -> String:
 	return _descriptor.get_dialog_id(stop_name)
+
+#returns this voter's personality, like polite or angry, shared by all its dialogues
+func get_personality() -> String:
+	return _descriptor.get_personality()
 	
 #handle interaction with voters
 func handle_input() -> void:

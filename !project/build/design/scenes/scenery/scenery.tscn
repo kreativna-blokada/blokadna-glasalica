@@ -3,22 +3,21 @@
 [ext_resource type="Texture2D" uid="uid://cdx6n220g3udv" path="res://!project/art/background.png" id="1_hcqac"]
 [ext_resource type="Texture2D" uid="uid://dtq2mbiupcaix" path="res://!project/art/room.png" id="1_room"]
 [ext_resource type="Texture2D" uid="uid://bnbwm40jaltgt" path="res://!project/art/plant.png" id="2_plant"]
-[ext_resource type="AudioStream" uid="uid://cns2gdgtdo0rb" path="res://!project/audio/freesound_community-people-talking-20327.mp3" id="2_qpjah"]
 [ext_resource type="Texture2D" uid="uid://cf55eeua2caey" path="res://!project/art/voting_table.png" id="3_vtable"]
 [ext_resource type="Texture2D" uid="uid://dv8afp8brclto" path="res://!project/art/door.png" id="4_door"]
 [ext_resource type="Texture2D" uid="uid://d2qginyfevwft" path="res://!project/art/door-right.png" id="5_doorr"]
 [ext_resource type="Texture2D" uid="uid://1t3vagxag6xt" path="res://!project/art/voting_box.png" id="6_vbox"]
 [ext_resource type="Texture2D" uid="uid://bbx61xsoc0hs0" path="res://!project/art/table1.png" id="7_t1"]
 [ext_resource type="Texture2D" uid="uid://bh0tina8uva5e" path="res://!project/art/table2.png" id="8_t2"]
-[ext_resource type="AudioStream" uid="uid://bl1a5beu2w3jt" path="res://!project/audio/alexzavesa-double-woosh-1-463575.mp3" id="12_2sfpg"]
+[ext_resource type="AudioStream" uid="uid://dw0g8qc0qfcwv" path="res://!project/audio/stops/uv_lamp.ogg" id="12_2sfpg"]
 [ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/scenery/voting_stop.tscn" id="12_ugfii"]
 [ext_resource type="Script" uid="uid://bw25mgovar025" path="res://!project/build/design/scenes/scenery/scenery.gd" id="13_scnry"]
-[ext_resource type="AudioStream" uid="uid://bj2cd8bqmqy0j" path="res://!project/audio/alexzavesa-electric-boom-1-463651.mp3" id="14_jvw4y"]
-[ext_resource type="AudioStream" uid="uid://j72j7b0ry78b" path="res://!project/audio/alexzavesa-electronic-impact-stomps-4-463657.mp3" id="16_fupqg"]
-[ext_resource type="AudioStream" uid="uid://dyrmyiclcspgo" path="res://!project/audio/alexzavesa-future-game-glitch-1-463641.mp3" id="18_oany1"]
-[ext_resource type="AudioStream" uid="uid://cvxvdl45p0a0" path="res://!project/audio/alexzavesa-future-game-glitch-2-463631.mp3" id="20_sjbew"]
-[ext_resource type="AudioStream" uid="uid://ctpx1jbnsuiag" path="res://!project/audio/alexzavesa-future-game-glitch-10-463642.mp3" id="22_tekev"]
-[ext_resource type="AudioStream" uid="uid://2iencenuu38j" path="res://!project/audio/alexzavesa-glitch-3-463646.mp3" id="24_kmrnq"]
+[ext_resource type="AudioStream" uid="uid://cdhdwuwiw653" path="res://!project/audio/stops/id_check.ogg" id="14_jvw4y"]
+[ext_resource type="AudioStream" uid="uid://0u47euxdqvan" path="res://!project/audio/stops/voter_list.ogg" id="16_fupqg"]
+[ext_resource type="AudioStream" uid="uid://bftxwhyxn1pkg" path="res://!project/audio/stops/finger_spray.ogg" id="18_oany1"]
+[ext_resource type="AudioStream" uid="uid://bn1a4rubp00s7" path="res://!project/audio/stops/ballot_stamp.ogg" id="20_sjbew"]
+[ext_resource type="AudioStream" uid="uid://csptbqajleivs" path="res://!project/audio/stops/ballot_box.ogg" id="24_kmrnq"]
+[ext_resource type="AudioStream" uid="uid://ctxdwbxluslgm" path="res://!project/audio/stops/ballot_mark.ogg" id="22_tekev"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hcqac"]
 radius = 25.333313
@@ -26,7 +25,6 @@ height = 117.333374
 
 [node name="Scenery" type="Node2D" unique_id=2093316346]
 script = ExtResource("13_scnry")
-loop_sound = ExtResource("2_qpjah")
 
 [node name="Ambiente" type="AudioStreamPlayer" parent="." unique_id=2093316347]
 autoplay = true
@@ -189,7 +187,7 @@ walk_animation = 2
 position = Vector2(525, 650)
 is_stop = true
 stop_sound = ExtResource("12_2sfpg")
-sound_volume = 16.0
+sound_volume = -3.0
 walk_animation = 1
 wait_animation = 1
 
@@ -197,7 +195,7 @@ wait_animation = 1
 position = Vector2(714, 547)
 is_stop = true
 stop_sound = ExtResource("14_jvw4y")
-sound_volume = 16.0
+sound_volume = -3.0
 walk_animation = 2
 wait_animation = 1
 
@@ -205,7 +203,7 @@ wait_animation = 1
 position = Vector2(854, 492)
 is_stop = true
 stop_sound = ExtResource("16_fupqg")
-sound_volume = 16.0
+sound_volume = -3.0
 walk_animation = 2
 wait_animation = 1
 
@@ -213,7 +211,7 @@ wait_animation = 1
 position = Vector2(1173, 554)
 is_stop = true
 stop_sound = ExtResource("18_oany1")
-sound_volume = 16.0
+sound_volume = -3.0
 walk_animation = 4
 wait_animation = 2
 
@@ -221,7 +219,7 @@ wait_animation = 2
 position = Vector2(1411, 661)
 is_stop = true
 stop_sound = ExtResource("20_sjbew")
-sound_volume = 16.0
+sound_volume = -3.0
 walk_animation = 4
 wait_animation = 2
 
@@ -233,7 +231,7 @@ walk_animation = 4
 position = Vector2(1266, 860)
 is_stop = true
 stop_sound = ExtResource("22_tekev")
-sound_volume = 16.0
+sound_volume = -3.0
 walk_animation = 3
 wait_animation = 1
 
@@ -249,7 +247,7 @@ walk_animation = 1
 position = Vector2(976, 754)
 is_stop = true
 stop_sound = ExtResource("24_kmrnq")
-sound_volume = 16.0
+sound_volume = -3.0
 walk_animation = 2
 wait_animation = 1
 

@@ -88,8 +88,8 @@ var MenuDifficulty: Dictionary[String, Variant] = {
 var Round: Dictionary[String, Variant] = {
 	#s a run lasts before the score is submitted and the leaderboard opens
 	"duration": 300.0,
-	#s left on the round timer when the hurry music takes over
-	"hurry_time": 30.0,
+	#s left on the round timer when the challenge music takes over for good
+	"challenge_time": 30.0,
 }
 
 var Sound: Dictionary[String, Variant] = {

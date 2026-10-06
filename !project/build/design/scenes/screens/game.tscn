@@ -9,7 +9,6 @@
 
 [node name="Game" type="Node" unique_id=1771661075]
 script = ExtResource("1_egxfs")
-stop_sounds = false
 
 [node name="Progress Flow" parent="." unique_id=598334440 instance=ExtResource("1_icv6h")]
 

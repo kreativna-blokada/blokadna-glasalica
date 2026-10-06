@@ -21,6 +21,8 @@ var _loaded_streams: Dictionary[String, AudioStream] = {}
 var _music_path: String = ""
 #path of the music loop starting once the jingle ends, empty when none
 var _music_after_jingle_path: String = ""
+#where each music loop left off, so every loop picks up there when it comes back; cleared when the music stops
+var _music_positions: Dictionary[String, float] = {}
 var _music_fading_animation: Tween
 
 #loads every stream and creates the music, jingle and stinger players
@@ -58,6 +60,7 @@ func stop_music() -> void:
 	if _music_fading_animation: _music_fading_animation.kill()
 	_music_player.stop()
 	_music_path = ""
+	_music_positions.clear()
 
 #fades the music out, plays the jingle, then starts the music loop once the jingle ends
 func play_jingle(jingle_sound: Globals.Sound, following_music: Globals.Music) -> void:
@@ -96,11 +99,16 @@ func _switch_music(next_music_path: String) -> void:
 	if not next_music_path.is_empty():
 		_music_fading_animation.tween_property(_music_player, "volume_db", Configs.Sound["music_volume"], fade_duration)
 
-#stops the faded out loop and starts the next one silent, for the fade in; an empty path leaves it stopped
+#stops the faded out loop where it is, then starts the next one silent from where it left off, for the fade in; an empty path leaves it stopped
 func _start_music(next_music_path: String) -> void:
+	#the same loop coming back before it stopped keeps playing, only fading back in
+	if _music_player.playing and _music_player.stream.resource_path == next_music_path: return
+
+	if _music_player.playing:
+		_music_positions[_music_player.stream.resource_path] = _music_player.get_playback_position()
 	_music_player.stop()
 	if next_music_path.is_empty(): return
 
 	_music_player.stream = _loaded_streams[next_music_path]
 	_music_player.volume_db = Configs.Sound["silent_volume"]
-	_music_player.play()
+	_music_player.play(_music_positions.get(next_music_path, 0.0))

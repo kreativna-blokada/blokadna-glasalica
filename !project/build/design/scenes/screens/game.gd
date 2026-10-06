@@ -30,7 +30,8 @@ const ROUND_TIMER_SCENE: PackedScene = preload(
 
 const DIALOG_SIZE: Vector2i = Vector2i(1200, 900)
 
-@export_group("Debugging")
+@export_group("Gameplay")
+#voting stop sounds play while true; false once the round timer ends
 @export var stop_sounds: bool = true
 
 #private vars
@@ -41,7 +42,7 @@ var _popup: TextPopup = null
 var _round_timer: Timer
 var _round_timer_display: RoundTimerDisplay
 #music loop the round plays right now
-var _round_music: Globals.Music = Globals.Music.Gameplay
+var _round_music: Globals.Music = Globals.Music.Round
 
 #onready vars
 @onready var stage: Stage = $Stage
@@ -77,7 +78,7 @@ func _start_popup_closed() -> void:
 	
 	stage.start_spawning()
 	_start_round_timer()
-	_round_music = Globals.Music.Gameplay
+	_round_music = Globals.Music.Round
 	SoundManager.play_jingle(Globals.Sound.RoundStart, _round_music)
 
 #starts the one-shot timer that ends the run
@@ -92,7 +93,8 @@ func _start_round_timer() -> void:
 
 #signal Timer.timeout => the round is over, submit the score on the leaderboard
 func _on_round_timer_timeout() -> void:
-	stage.finish_round()
+	#voters still walking the course no longer play their stop sounds over the round jingle and summary
+	stop_sounds = false
 	var round_jingle: Globals.Sound = Globals.Sound.RoundWin if _game_descriptor.get_points() > 0 else Globals.Sound.RoundLose
 	SoundManager.play_jingle(round_jingle, Globals.Music.Summary)
 	_show_game_summary()
@@ -113,15 +115,14 @@ func _on_game_close_requested() -> void:
 func _process(_delta: float) -> void:
 	_update_round_music()
 
-#switches the music while the round runs: hurry for its last seconds, dialogue while one is open, gameplay otherwise
+#switches the music while the round runs: challenge for its last seconds and while a timed dialogue is open, the round music otherwise
 func _update_round_music() -> void:
 	if not _round_timer or _round_timer.is_stopped(): return
 
-	var fitting_music: Globals.Music = Globals.Music.Gameplay
-	if _round_timer.time_left <= Configs.Round["hurry_time"]:
-		fitting_music = Globals.Music.Hurry
-	elif _dialog_controller != null:
-		fitting_music = Globals.Music.Dialogue
+	var is_timed_dialogue_open: bool = _dialog_controller != null and _game_descriptor.are_timers_enabled()
+	var fitting_music: Globals.Music = Globals.Music.Round
+	if _round_timer.time_left <= Configs.Round["challenge_time"] or is_timed_dialogue_open:
+		fitting_music = Globals.Music.Challenge
 	if fitting_music != _round_music:
 		_round_music = fitting_music
 		SoundManager.play_music(_round_music)
@@ -153,6 +154,10 @@ func _on_stop_button_pressed(stop_name: String, stop_index: int) -> void:
 	_dialog_controller.finished.connect(_on_dialog_finished)
 	_dialog_controller.choice_made.connect(_on_dialog_choice_made)
 	dialog_layer.add_child(_dialog_controller)
+
+	var voter_personality: String = _dialog_voter.get_personality()
+	if Globals.DialogueMoodSounds.has(voter_personality):
+		SoundManager.play_stinger(Globals.DialogueMoodSounds[voter_personality])
 
 func _on_dialog_finished() -> void:
 	var voter: Voter = _dialog_voter
