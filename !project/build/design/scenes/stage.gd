@@ -23,8 +23,6 @@ var _max_voter_queue: int = 8
 var _voter_factory_indices: Array[int] = []
 var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
 var _is_queue_consolidating: bool = false
-#true from the first spawn until the round timer ends; ballots cast after it make no sound
-var _is_round_running: bool = false
 var _mission_descriptor: MissionDescriptor = GameManager.get_mission_descriptor()
 
 
@@ -54,7 +52,6 @@ func _ready() -> void:
 
 #starts loading voters, the first one immediately, the rest on timer
 func start_spawning() -> void:
-	_is_round_running = true
 	#loads first voter
 	_get_voter(0)
 	timer.start()
@@ -343,16 +340,10 @@ func _on_voter_queued(voter: Voter) -> void:
 	queue_count_updated.emit(queued_voters.size())
 	next_voter_availability_updated.emit(is_next_voter_available())
 
-#unlocks the next voter when the current voter reaches the room exit; a ballot dropped in the box plays the vote sound while the round runs
+#unlocks the next voter when the current voter reaches the room exit
 func _on_voter_course_point_reached(point_name: StringName, voter: Voter) -> void:
 	if point_name == &"Exit":
 		_release_room_voter(voter)
-	elif point_name == &"Box" and _is_round_running:
-		SoundManager.play_stinger(Globals.Sound.VoteCast)
-
-#round timer ended: ballots still being cast no longer play over the round jingle and summary
-func finish_round() -> void:
-	_is_round_running = false
 
 #fallback for a room voter removed before reaching Exit
 func _on_room_voter_exited(voter: Voter) -> void:
