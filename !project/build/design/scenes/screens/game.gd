@@ -40,6 +40,8 @@ var _game_descriptor: GameDescriptor = null
 var _popup: TextPopup = null
 var _round_timer: Timer
 var _round_timer_display: RoundTimerDisplay
+#music loop the round plays right now
+var _round_music: Globals.Music = Globals.Music.Gameplay
 
 #onready vars
 @onready var stage: Stage = $Stage
@@ -75,6 +77,8 @@ func _start_popup_closed() -> void:
 	
 	stage.start_spawning()
 	_start_round_timer()
+	_round_music = Globals.Music.Gameplay
+	SoundManager.play_jingle(Globals.Sound.RoundStart, _round_music)
 
 #starts the one-shot timer that ends the run
 func _start_round_timer() -> void:
@@ -88,6 +92,9 @@ func _start_round_timer() -> void:
 
 #signal Timer.timeout => the round is over, submit the score on the leaderboard
 func _on_round_timer_timeout() -> void:
+	stage.finish_round()
+	var round_jingle: Globals.Sound = Globals.Sound.RoundWin if _game_descriptor.get_points() > 0 else Globals.Sound.RoundLose
+	SoundManager.play_jingle(round_jingle, Globals.Music.Summary)
 	_show_game_summary()
 	
 
@@ -104,7 +111,20 @@ func _on_game_close_requested() -> void:
 
 # called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	pass
+	_update_round_music()
+
+#switches the music while the round runs: hurry for its last seconds, dialogue while one is open, gameplay otherwise
+func _update_round_music() -> void:
+	if not _round_timer or _round_timer.is_stopped(): return
+
+	var fitting_music: Globals.Music = Globals.Music.Gameplay
+	if _round_timer.time_left <= Configs.Round["hurry_time"]:
+		fitting_music = Globals.Music.Hurry
+	elif _dialog_controller != null:
+		fitting_music = Globals.Music.Dialogue
+	if fitting_music != _round_music:
+		_round_music = fitting_music
+		SoundManager.play_music(_round_music)
 
 func _on_stop_button_pressed(stop_name: String, stop_index: int) -> void:
 	if _dialog_controller != null:
@@ -153,9 +173,12 @@ func _on_dialog_choice_made(dialog_text: String, choice_descriptor: DialogDescri
 	popup.global_position = _dialog_controller.global_position + _dialog_controller.size / 2
 	var points_str: String = "+%.0f" % actual_score
 	var points_color: Color = Color.GREEN
+	var choice_stinger: Globals.Sound = Globals.Sound.ChoiceRight
 	if choice_descriptor.score < 0:
 		points_str = "%.0f" % actual_score
 		points_color = Color.RED
+		choice_stinger = Globals.Sound.ChoiceWrong
+	SoundManager.play_stinger(choice_stinger)
 		
 	popup.setup(points_str, points_color)
 	popup.play()

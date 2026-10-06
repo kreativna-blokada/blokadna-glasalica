@@ -207,6 +207,7 @@ func _on_arrow_input(event: InputEvent) -> void:
 	if current_moment - _arrow_switch_moment < Configs.MenuDifficulty["tap_debounce"] * 1000.0: return
 
 	_arrow_switch_moment = current_moment
+	SoundManager.play_stinger(Globals.Sound.MenuSelect)
 	if _menu_choice == Globals.MainMenu.Controls:
 		_chosen_controller = Globals.ControllerType.Screen if _chosen_controller == Globals.ControllerType.Classic else Globals.ControllerType.Classic
 	else:
@@ -224,6 +225,8 @@ func _on_menu_option_button_input(event: InputEvent) -> void:
 
 #signal Signals.menu_option_selected => shows the hint for the menu option the ballot card has ticked; the team hint shows higher up in place of the hidden MenuOptionButton
 func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
+	#letting the card go on the row already chosen picks nothing new
+	if menu_option != _menu_choice: SoundManager.play_stinger(Globals.Sound.MenuSelect)
 	_menu_choice = menu_option
 	#clicks count only on the starting row, leaving it starts them over
 	if menu_option != Globals.MainMenu.Starting: _click_count = 0
@@ -279,6 +282,7 @@ func _take_card_control() -> void:
 
 #user understood the hint: hides it, reveals the box side words, stops the vote and swiftly moves the card from where it is until the starting row is ticked
 func _snap_card_toward_starting() -> void:
+	if hand_hint.visible: SoundManager.play_stinger(Globals.Sound.MenuSelect)
 	hand_hint.hide()
 	_show_side_words(true)
 	#vote already stopped: the card stays where it rests

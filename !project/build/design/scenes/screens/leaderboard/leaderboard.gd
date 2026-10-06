@@ -270,6 +270,7 @@ func _on_score_submitted(submit_result: Globals.ScoreSubmit) -> void:
 			_is_score_settled = true
 			LeaderboardManager.clear_stored_points()
 			_submit_status_label.text = Literals.SCORE_SAVED_MESSAGE % _run_points
+			SoundManager.play_stinger(Globals.Sound.Points)
 			_top_scores_refresh()
 		Globals.ScoreSubmit.Stored:
 			_is_score_settled = true
@@ -306,16 +307,19 @@ func _on_user_saved(_saved_username: String) -> void:
 #signal Control.gui_input => a tap on a score tab selects it
 func _on_board_tab(input_event: InputEvent, score_board: Globals.ScoreBoard) -> void:
 	if input_event is InputEventScreenTouch and input_event.pressed:
+		SoundManager.play_stinger(Globals.Sound.MenuSelect)
 		_select_board(score_board)
 
 #signal Control.gui_input => a tap on a day or week tab selects it
 func _on_period_tab(input_event: InputEvent, period_offset: int) -> void:
 	if input_event is InputEventScreenTouch and input_event.pressed:
+		SoundManager.play_stinger(Globals.Sound.MenuSelect)
 		_select_period(period_offset)
 
 #signal Control.gui_input => a tap on an arrow scrolls the period strip by one tab; -1 towards the latest, 1 towards older periods
 func _on_period_arrow(input_event: InputEvent, scroll_direction: int) -> void:
 	if input_event is InputEventScreenTouch and input_event.pressed:
+		SoundManager.play_stinger(Globals.Sound.MenuSelect)
 		var day_tab_step: float = _period_tab_template.size.x + _period_tabs.get_theme_constant("separation")
 		_period_scroll.scroll_horizontal += roundi(scroll_direction * day_tab_step)
 

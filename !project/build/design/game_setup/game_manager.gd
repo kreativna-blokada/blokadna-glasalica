@@ -46,8 +46,12 @@ func switch_screen(game_screen: GameScreen, is_switch_transient: bool = false) -
 	_current_screen = game_screen
 	match game_screen:
 		GameScreen.START:
+			#the start screen plays only its own jump sound
+			SoundManager.stop_music()
 			ScreenManager.switch_scene(Globals.Scenes[Globals.Scene.Start]["path"], is_switch_transient)
 		GameScreen.MAIN:
+			SoundManager.stop_music()
 			ScreenManager.switch_scene(Globals.Scenes[Globals.Scene.Game]["path"], is_switch_transient)
 		GameScreen.LEADERBOARD:
+			SoundManager.play_music(Globals.Music.Summary)
 			ScreenManager.switch_scene(Globals.Scenes[Globals.Scene.Leaderboard]["path"], is_switch_transient)

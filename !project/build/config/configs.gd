@@ -30,7 +30,7 @@ var EntityProperties: Dictionary[Variant, Variant] = {
 
 var Shake: Dictionary[String, Variant] = {
 	#up/down movements required to start the game
-	"shake_count": 6,
+	"shake_count": 3,
 	#play button clicks required to start the game, fallback when the phone can't be shaken
 	"click_count": 3,
 	#ms w/o a shake before the counter resets
@@ -88,6 +88,19 @@ var MenuDifficulty: Dictionary[String, Variant] = {
 var Round: Dictionary[String, Variant] = {
 	#s a run lasts before the score is submitted and the leaderboard opens
 	"duration": 300.0,
+	#s left on the round timer when the hurry music takes over
+	"hurry_time": 30.0,
+}
+
+var Sound: Dictionary[String, Variant] = {
+	#dB of the music loops
+	"music_volume": -6.0,
+	#dB of the jingles and stingers
+	"clip_volume": -3.0,
+	#s one music loop fades out, and the next one fades in again
+	"music_fade": 0.4,
+	#dB a fading music loop starts from or ends at
+	"silent_volume": -40.0,
 }
 
 var Leaderboard: Dictionary[String, Variant] = {

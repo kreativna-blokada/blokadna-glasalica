@@ -28,6 +28,7 @@ ScreenManager="*uid://lrhmjicg5tti"
 GameManager="*uid://bjfmu6oaoxk6g"
 DialogueRepository="*res://!project/build/design/game_setup/dialogue_repository.gd"
 LeaderboardManager="*res://!project/build/design/scenes/screens/leaderboard/leaderboard_manager.gd"
+SoundManager="*res://!project/build/design/audio/sound_manager.gd"
 
 [dialogues]
 
