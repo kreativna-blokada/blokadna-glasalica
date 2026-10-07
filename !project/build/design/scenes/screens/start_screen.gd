@@ -30,13 +30,19 @@ const _SEARCH_MOMENT_ITERATIONS: int = 16
 const _ROW_COUNT: int = 5
 
 #exported vars
+@export_group("Main Menu")
+#controls the start screen opens with; the controls row switches it at runtime
+@export var controller_type: Globals.ControllerType = Globals.ControllerType.Classic
+#difficulty the start screen opens with; the difficulty row switches it at runtime
+@export var difficulty_type: GameDescriptor.Difficulty = GameDescriptor.Difficulty.NORMAL
+
+@export_group("Debug Settings")
 #game opens right away without intro
 @export var skip_intro: bool = false
+@export_group("")
 
 #private vars
 var _is_starting: bool = false
-var _chosen_difficulty: GameDescriptor.Difficulty = GameDescriptor.Difficulty.NORMAL
-var _chosen_controller: Globals.ControllerType = Globals.ControllerType.Classic
 var _shake_done: bool = false
 var _shake_count: int = 0
 var _click_count: int = 0
@@ -208,9 +214,9 @@ func _on_arrow_input(event: InputEvent) -> void:
 	_arrow_switch_moment = current_moment
 	SoundManager.play_stinger(Globals.Sound.MenuSelect)
 	if _menu_choice == Globals.MainMenu.Controls:
-		_chosen_controller = Globals.ControllerType.Screen if _chosen_controller == Globals.ControllerType.Classic else Globals.ControllerType.Classic
+		controller_type = Globals.ControllerType.Screen if controller_type == Globals.ControllerType.Classic else Globals.ControllerType.Classic
 	else:
-		_chosen_difficulty = GameDescriptor.Difficulty.NORMAL if _chosen_difficulty == GameDescriptor.Difficulty.EASY else GameDescriptor.Difficulty.EASY
+		difficulty_type = GameDescriptor.Difficulty.NORMAL if difficulty_type == GameDescriptor.Difficulty.EASY else GameDescriptor.Difficulty.EASY
 	_show_button_caption()
 	accept_event()
 
@@ -408,10 +414,10 @@ func _hide_start_screen_choices() -> void:
 #shows on ClickCounterLabel the chosen difficulty or controls while their row is ticked, otherwise the click count; every click shows the 3, never the running count, growing with each click
 func _show_button_caption() -> void:
 	if _menu_choice == Globals.MainMenu.Difficulty:
-		click_counter_label.text = Literals.DIFFICULTY_DESCRIPTIONS[_chosen_difficulty]
+		click_counter_label.text = Literals.DIFFICULTY_DESCRIPTIONS[difficulty_type]
 		click_counter_label.add_theme_font_size_override(&"font_size", Configs.MenuDifficulty["font_size"])
 	elif _menu_choice == Globals.MainMenu.Controls:
-		click_counter_label.text = Literals.CONTROLLER_DESCRIPTIONS[_chosen_controller]
+		click_counter_label.text = Literals.CONTROLLER_DESCRIPTIONS[controller_type]
 		click_counter_label.add_theme_font_size_override(&"font_size", Configs.MenuDifficulty["font_size"])
 	elif _click_count == 0:
 		click_counter_label.text = _rest_click_caption
@@ -491,4 +497,4 @@ func _start_game() -> void:
 	_game_start_count += 1
 	_save_game_start_count()
 
-	GameManager.start_game(_chosen_controller, _chosen_difficulty, MissionDescriptor.new())
+	GameManager.start_game(controller_type, difficulty_type, MissionDescriptor.new())
