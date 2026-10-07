@@ -36,7 +36,6 @@ const _ROW_COUNT: int = 5
 #private vars
 var _is_starting: bool = false
 var _chosen_difficulty: GameDescriptor.Difficulty = GameDescriptor.Difficulty.NORMAL
-#controls picked on the controls row, not used by the game yet
 var _chosen_controller: Globals.ControllerType = Globals.ControllerType.Classic
 var _shake_done: bool = false
 var _shake_count: int = 0
@@ -148,7 +147,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _is_starting: return
 
 	if event.is_action_pressed("start"):
-		_start_game()
+		#ControllerType.Classic has no game yet, the jump sound plays over from its beginning
+		if _chosen_controller == Globals.ControllerType.Classic: jump_sound.play()
+		else: _start_game()
 		#input consumed, no tree propagation
 		get_viewport().set_input_as_handled()
 
@@ -182,6 +183,10 @@ func _gui_input(event: InputEvent) -> void:
 #signal MenuOptionButton.pressed => counts clicks, jumps the text; starts the game on enough of them; the leaderboard row only opens the leaderboard, the difficulty and controls rows only show their choice
 func _on_menu_option_button_pressed() -> void:
 	if _is_starting or _menu_choice in [Globals.MainMenu.Leaderboard, Globals.MainMenu.Difficulty, Globals.MainMenu.Controls]: return
+
+	if _chosen_controller == Globals.ControllerType.Classic:
+		jump_sound.play()
+		return
 
 	_click_count += 1
 	_show_button_caption()
@@ -362,6 +367,11 @@ func _find_ticked_choice() -> int:
 
 #counts one up/down movement, jumps the text; starts the game on enough of them within the timeout
 func _count_phone_shake(direction: float) -> void:
+
+	if _chosen_controller == Globals.ControllerType.Classic:
+		jump_sound.play()
+		return
+
 	var current_time: int = Time.get_ticks_msec()
 	if current_time - _last_shake_time > Configs.Shake["timeout"]:
 		_shake_count = 0
