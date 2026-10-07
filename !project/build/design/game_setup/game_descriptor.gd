@@ -1,3 +1,10 @@
+##
+# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+##
+#description     : Preserves the session's difficulty, controls, score and choices
+#maintainer      : Nemanja, Zeljko
+#version         : 1.1
+#===============================================================================
 class_name GameDescriptor
 
 class TrackedChoice:
@@ -13,6 +20,7 @@ enum Difficulty {EASY, NORMAL}
 var _difficulty: Difficulty = Difficulty.EASY
 var _points: float = 0.0
 var _timers_enabled: bool = false
+var _controller_type: Globals.ControllerType = Globals.ControllerType.Classic
 var _choices_made: Array[TrackedChoice] = []
 
 func set_difficulty(difficulty: Difficulty) -> void:
@@ -21,6 +29,14 @@ func set_difficulty(difficulty: Difficulty) -> void:
 
 func are_timers_enabled() -> bool:
 	return _timers_enabled
+
+#keeps the controls picked on the start screen
+func set_controller_type(controller_type: Globals.ControllerType) -> void:
+	_controller_type = controller_type
+
+#returns the controls picked on the start screen
+func get_controller_type() -> Globals.ControllerType:
+	return _controller_type
 
 func update_points(points: float) -> void:
 	_points += points

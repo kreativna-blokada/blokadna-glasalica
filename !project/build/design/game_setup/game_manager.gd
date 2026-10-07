@@ -3,7 +3,7 @@
 ##
 #description     : Game Manager, Game Descriptor, Mission Descriptor stubs
 #maintainer      : Nemanja, Zeljko
-#version         : 1.1
+#version         : 1.2
 #===============================================================================
 extends Node
 
@@ -21,9 +21,10 @@ func get_game_descriptor() -> GameDescriptor:
 func get_mission_descriptor() -> MissionDescriptor:
 	return _mission_descriptor
 
-func start_game(difficulty: GameDescriptor.Difficulty, mission_descriptor: MissionDescriptor) -> void:
+func start_game(controller_type: Globals.ControllerType, difficulty: GameDescriptor.Difficulty, mission_descriptor: MissionDescriptor) -> void:
 	_game_descriptor = GameDescriptor.new()
 	_set_difficulty(difficulty)
+	_set_controller_type(controller_type)
 	_set_mission_descriptor(mission_descriptor)
 	switch_screen(GameScreen.MAIN)
 	
@@ -38,6 +39,9 @@ func end_run() -> void:
 func _set_difficulty(difficulty: GameDescriptor.Difficulty) -> void:
 	_game_descriptor.set_difficulty(difficulty)
 
+func _set_controller_type(controller_type: Globals.ControllerType) -> void:
+	_game_descriptor.set_controller_type(controller_type)
+
 func _set_mission_descriptor(mission_descriptor: MissionDescriptor) -> void:
 	_mission_descriptor = mission_descriptor
 
@@ -46,7 +50,6 @@ func switch_screen(game_screen: GameScreen, is_switch_transient: bool = false) -
 	_current_screen = game_screen
 	match game_screen:
 		GameScreen.START:
-			#the start screen plays only its own jump sound
 			SoundManager.stop_music()
 			ScreenManager.switch_scene(Globals.Scenes[Globals.Scene.Start]["path"], is_switch_transient)
 		GameScreen.MAIN:

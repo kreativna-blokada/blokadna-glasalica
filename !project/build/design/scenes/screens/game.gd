@@ -52,12 +52,13 @@ var _round_music: Globals.Music = Globals.Music.Round
 
 # called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	progress_flow.init(stage)
+	_game_descriptor = GameManager.get_game_descriptor()
+	progress_flow.init(stage, _game_descriptor.get_controller_type())
 	progress_flow.stop_button_pressed.connect(_on_stop_button_pressed)
-	controls.init(stage)
+
+	controls.init(stage, _game_descriptor.get_controller_type())
 	Signals.game_close_requested.connect(_on_game_close_requested)
 
-	_game_descriptor = GameManager.get_game_descriptor()
 	_round_timer_display = ROUND_TIMER_SCENE.instantiate() as RoundTimerDisplay
 	dialog_layer.add_child(_round_timer_display)
 	
