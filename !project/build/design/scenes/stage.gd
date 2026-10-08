@@ -12,6 +12,7 @@ extends Node2D
 signal queue_count_updated(count: int)
 signal stops_occupancy_updated(stops_occupancy_flags: Array)
 signal next_voter_availability_updated(is_available: bool)
+signal dialogue_requested(voter: Voter, stop_name: String)
 
 #broadcast vars
 var queued_voters: Array = []
@@ -23,6 +24,10 @@ var _max_voter_queue: int = 8
 var _voter_factory_indices: Array[int] = []
 var _rand: RandomNumberGenerator = RandomNumberGenerator.new()
 var _is_queue_consolidating: bool = false
+#false while a dialog is open, so Select and Initiate neither outline nor move voters
+var _is_voter_control_enabled: bool = true
+#voter Initiate was pressed on just before it stopped; its dialog opens once it stops
+var _voter_awaiting_dialogue: Voter = null
 var _mission_descriptor: MissionDescriptor = GameManager.get_mission_descriptor()
 
 
@@ -61,9 +66,9 @@ func _process(_delta: float) -> void:
 
 #built-in callback, called authomatically
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("start"):
+	if _is_voter_control_enabled and event.is_action_pressed("initiate"):
 		_handle_start_action()
-	elif event.is_action_pressed("select"):
+	elif _is_voter_control_enabled and event.is_action_pressed("select"):
 		_handle_select_action()
 	elif event.is_action_pressed("next"):
 		# print_debug("next")
@@ -88,13 +93,17 @@ func _init_nodes() -> void:
 func _init_game() -> void:
 	pass
 
-#release a queueing voter or continue a waiting voter
+#release a queueing voter, or open the dialog of a stopped voter
 func _handle_start_action() -> void:
 	var selected_voter: Voter = _get_active_selected_voter()
 	if not selected_voter: return
 
 	if selected_voter.is_stopping:
-		selected_voter.can_continue_voting_course()
+		# selected_voter.can_continue_voting_course()
+		var stop_name: String = str(selected_voter.voting_course[selected_voter.voting_course_pointer].name)
+		dialogue_requested.emit(selected_voter, stop_name)
+	elif selected_voter.is_arriving(Configs.ClassicalControllers["dialog_opening_buffer"]):
+		_voter_awaiting_dialogue = selected_voter
 	elif selected_voter.is_queueing and queued_voters.has(selected_voter):
 		_handle_next_action()
 
@@ -104,6 +113,9 @@ func _handle_next_action() -> void:
 
 	_dequeue_voter(_get_front_queue_voter())
 
+#turns Select and Initiate off while a dialog is open, back on when it closes
+func set_voter_control_enabled(is_enabled: bool) -> void:
+	_is_voter_control_enabled = is_enabled
 
 #cycles (outlines) through voters
 func _handle_select_action() -> void:
@@ -159,7 +171,7 @@ func _get_voter(index: int) -> Voter:
 	#connects signal for syncing the queue count
 	voter.voter_queued.connect(_on_voter_queued.bind(voter))
 	voter.course_point_reached.connect(_on_voter_course_point_reached.bind(voter))
-	
+	voter.voter_stopped.connect(_on_voter_stopped.bind(voter))
 	voter.init(_mission_descriptor.get_voter_descriptor(index))
 
 	return voter
@@ -344,6 +356,13 @@ func _on_voter_queued(voter: Voter) -> void:
 func _on_voter_course_point_reached(point_name: StringName, voter: Voter) -> void:
 	if point_name == &"Exit":
 		_release_room_voter(voter)
+
+#opens the dialog asked for while the voter was about to stop
+func _on_voter_stopped(stop_name: String, voter: Voter) -> void:
+	if voter != _voter_awaiting_dialogue:
+		return
+	_voter_awaiting_dialogue = null
+	dialogue_requested.emit(voter, stop_name)
 
 #fallback for a room voter removed before reaching Exit
 func _on_room_voter_exited(voter: Voter) -> void:

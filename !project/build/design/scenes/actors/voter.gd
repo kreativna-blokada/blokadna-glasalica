@@ -106,7 +106,6 @@ func handle_movement() -> void:
 	if _state != state_check:
 		_state_entered = false
 
-	
 #updates animations based on state
 func handle_animations() -> void:
 	if _state == State.WAIT:
@@ -208,6 +207,17 @@ func voter_movement() -> void:
 	else:
 		var movement_direction: Vector2 = (target_position - feet_position).normalized()
 		velocity = movement_direction * movement_speed
+
+#reports whether the voter walks to a stop with a dialog and reaches it within dialog_opening_buffer
+func is_arriving(arrival_window: float) -> bool:
+	if is_queueing or is_stopping or _is_course_finished or voting_course_pointer <= 1:
+		return false
+	if not _course_target is VotingStop or not _course_target.is_stop:
+		return false
+
+	var feet_position: Vector2 = global_position + footstep_collider.position * _feet_offset_enhancer
+	var arrival_distance: float = feet_position.distance_to(_course_target.global_position)
+	return arrival_distance <= movement_speed * arrival_window
 
 #stops voter, dispatches handler
 func _on_stop_reach() -> void:
