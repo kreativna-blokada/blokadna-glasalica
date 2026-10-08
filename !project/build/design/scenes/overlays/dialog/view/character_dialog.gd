@@ -6,6 +6,7 @@ signal finished()
 @onready var panel: Control = $PanelContainer
 @onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel
 @onready var background: CanvasItem = $PanelContainer/BackgroundContainer
+@onready var continue_hint: RichTextLabel = $PanelContainer/TextContainer/ContinueHint
 
 var _requestedText: String = ""
 var _unveiledText: String = ""
@@ -28,6 +29,8 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_unveiledText = ""
 	text.text = _requestedText
 	text.visible_characters = 0
+	# only shown once the text is complete, which is when a click moves on
+	continue_hint.hide()
 	warn_if_text_overflows(text)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -41,6 +44,7 @@ func _process(delta: float) -> void:
 	_unveiledText = get_unveiled(_requestedText, delta)
 	#### text.text = _unveiledText
 	text.visible_characters = _unveiledText.length()
+	continue_hint.visible = _unveiledText == _requestedText
 
 func _initialize_placement():
 	panel.size = textboxScalePx

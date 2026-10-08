@@ -85,4 +85,24 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="ContinueHint" type="RichTextLabel" parent="PanelContainer/TextContainer" unique_id=1730042103]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -72.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme = ExtResource("3_mdnoa")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "[center]Klikni da nastaviš[/center]"
+scroll_active = false
+
 [connection signal="gui_input" from="ClickDetector" to="." method="_on_gui_input"]
