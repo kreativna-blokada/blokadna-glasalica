@@ -14,9 +14,6 @@ const textMargin: Vector2 = Vector2(24, 24)
 func initialize(textboxScale: Vector2i) -> void:
 	textboxScalePx = textboxScale
 
-func set_tint(_tint: Color) -> void:
-	pass
-
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	pass
 

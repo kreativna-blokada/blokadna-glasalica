@@ -9,7 +9,6 @@ signal finished()
 
 var _requestedText: String = ""
 var _unveiledText: String = ""
-var _tint: Color
 
 const TOUCH_DEBOUNCE_TIME: float = 0.1
 var _touch_debounce_timer: float = 0
@@ -18,17 +17,11 @@ func _ready() -> void:
 	_initialize_placement()
 	get_viewport().size_changed.connect(_initialize_placement)
 
-func set_tint(tint: Color) -> void:
-	_tint = tint
-
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_requestedText = dialog_descriptor.text
 	_touch_debounce_timer = TOUCH_DEBOUNCE_TIME
 
-	if dialog_descriptor.speaker == DialogDescriptor.Speaker.RIGHT:
-		background.modulate = _tint
-	else:
-		background.modulate = DialogColors.get_default_color()
+	background.modulate = DialogColors.get_default_color()
 	reset_unveil()
 
 	# full text is laid out once so words never jump lines while unveiling

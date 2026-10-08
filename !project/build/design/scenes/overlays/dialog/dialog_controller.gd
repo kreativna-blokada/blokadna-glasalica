@@ -15,18 +15,16 @@ var _dialog_speakers: DialogSpeakers
 var _dialog_tree: DialogTree
 var _current_node: DialogTreeNode
 var _dialog_size: Vector2i
-var _dialog_color: Color
 
 var _timers_enabled: bool = false
 var _dialog_timer: DialogTimer = DialogTimer.new()
 
-func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog_color: Color, dialog_size: Vector2i) -> void:
+func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog_size: Vector2i) -> void:
 	#### dialog_path should be renamed to dialog_data
 	_timers_enabled = game_descriptor.are_timers_enabled()
 	_dialog_tree = DialogTree.new(dialog_path)
 	_current_node = _dialog_tree.get_root()
 	_dialog_size = dialog_size
-	_dialog_color = dialog_color
 	add_child(_dialog_timer)
 	_start_timer_if_needed()
 
@@ -52,10 +50,8 @@ func _create_view() -> void:
 	add_child(_dialog_speakers)
 	
 	_dialog_box.initialize(_dialog_size)
-	_dialog_box.set_tint(_dialog_color)
 	_multi_choice_dialog_box.initialize( _dialog_size)
 	_multi_choice_dialog_box.show_timer_vfx(_timers_enabled)
-	_multi_choice_dialog_box.set_tint(_dialog_color)
 	
 	_dialog_speakers.initialize(_current_node.get_dialog_descriptor().speaker)
 

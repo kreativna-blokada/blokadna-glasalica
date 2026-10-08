@@ -15,7 +15,6 @@ var _choices: Array[DialogChoice] = []
 var _num_choices: int = 0
 var _requestedText: String = ""
 var _unveiledText: String = ""
-var _tint: Color
 
 const MAX_NUM_CHOICES: int = 3
 @export var _choiceHeight: int = 120
@@ -24,9 +23,6 @@ const TOUCH_DEBOUNCE_TIME: float = 0.1
 var _touch_debounce_timer: float = 0
 
 const choiceMargin: Vector2 = Vector2(24,8)
-
-func set_tint(tint: Color) -> void:
-	_tint = tint
 
 func show_timer_vfx(show: bool) -> void:
 	if show:
@@ -38,10 +34,7 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_initialize_choices(dialog_descriptor.choices)
 	_requestedText = dialog_descriptor.text
 
-	if dialog_descriptor.speaker == DialogDescriptor.Speaker.RIGHT:
-		background.modulate = _tint
-	else:
-		background.modulate = DialogColors.get_default_color()
+	background.modulate = DialogColors.get_default_color()
 
 	reset_unveil()
 	_touch_debounce_timer = TOUCH_DEBOUNCE_TIME
