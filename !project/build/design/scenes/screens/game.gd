@@ -173,6 +173,8 @@ func _open_dialogue(voter: Voter, stop_name: String) -> void:
 	_dialog_controller = DIALOG_CONTROLLER_SCENE.instantiate() as DialogController
 	#### commented out 7b64814055ee6b6eb9d15d2b811ccde201717f87
 	#### _dialog_controller.initialize(dialog_path, DIALOG_SIZE)
+	#### commented out c770ead365403da70d39409270695334d5a4f445
+	#### _dialog_controller.initialize(_game_descriptor, DialoguesManager.get_dialogue(dialog_id), DIALOG_SIZE)
 	var dialog_color: Color = DialogColors.get_color(_dialog_voter.name)
 	_dialog_controller.initialize(_game_descriptor, DialoguesManager.get_dialogue(dialog_id), dialog_color, DIALOG_SIZE)
 	_dialog_controller.set_spotlights(controls.get_button_spotlights())

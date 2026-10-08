@@ -26,6 +26,8 @@ var _is_zoomed_dialogue: bool = true
 #buttons the dim leaves uncovered, canvas centre and radius each
 var _spotlights: PackedVector3Array = []
 
+#### commented out c770ead365403da70d39409270695334d5a4f445
+#### func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog_size: Vector2i) -> void:
 func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog_color: Color, dialog_size: Vector2i) -> void:
 	_is_answered_by_controls = game_descriptor.get_controller_type() == Globals.ControllerType.Classic
 	_is_zoomed_dialogue = game_descriptor.is_zoomed_dialogue()

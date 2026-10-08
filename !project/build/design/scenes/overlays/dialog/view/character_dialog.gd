@@ -43,6 +43,8 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_requestedText = dialog_descriptor.text
 	_touch_debounce_timer = TOUCH_DEBOUNCE_TIME
 
+	#### commented out c770ead365403da70d39409270695334d5a4f445
+	#### background.modulate = DialogColors.get_default_color()
 	if dialog_descriptor.speaker == DialogDescriptor.Speaker.RIGHT:
 		background.modulate = _tint
 	else:
