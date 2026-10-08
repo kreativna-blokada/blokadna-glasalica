@@ -1,11 +1,6 @@
 ﻿{
   "root": {
-    "text": "[POL] Molim Vas, ličnu kartu radi provere identiteta.",
-    "speaker": "LEFT",
-    "next": "voter_reply"
-  },
-  "voter_reply": {
-    "text": "Neću da dajem, znate me, dolazim svake godine.",
+    "text": "[POL] - Molim Vas, ličnu kartu radi provere identiteta.\n- Neću da dajem, znate me, dolazim svake godine.",
     "speaker": "RIGHT",
     "choices": [
       {
