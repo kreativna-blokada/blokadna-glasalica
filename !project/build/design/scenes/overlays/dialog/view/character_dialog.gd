@@ -7,6 +7,7 @@ signal finished()
 @onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel
 @onready var background: CanvasItem = $PanelContainer/BackgroundContainer
 @onready var box_background: NinePatchRect = $PanelContainer/BackgroundContainer/Background
+@onready var continue_hint: RichTextLabel = $PanelContainer/TextContainer/ContinueHint
 
 var _requestedText: String = ""
 var _unveiledText: String = ""
@@ -57,6 +58,8 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_unveiledText = ""
 	text.text = _requestedText
 	text.visible_characters = 0
+	# only shown once the text is complete, which is when a click moves on
+	continue_hint.hide()
 	warn_if_text_overflows(text)
 
 	#### pre-zoom typing grows the text from an empty label, re-using 153f7a2 - 60e239c
@@ -80,6 +83,7 @@ func _process(delta: float) -> void:
 	else:
 		#pre-zoom typing, words may jump to the next line while unveiling
 		text.text = _unveiledText
+	continue_hint.visible = _unveiledText == _requestedText
 
 func _initialize_placement():
 	panel.size = textboxScalePx
