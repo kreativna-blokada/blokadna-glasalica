@@ -6,6 +6,9 @@ extends Control
 @onready var left_speaker: TextureRect = $LeftSpeaker
 @onready var right_speaker: TextureRect = $RightSpeaker
 
+# one running tween per speaker, so a new transition replaces the previous one instead of fighting it
+var _tweens: Dictionary[Control, Tween] = {}
+
 func initialize(speaker: DialogDescriptor.Speaker) -> void:
 	match speaker:
 		DialogDescriptor.Speaker.LEFT:
@@ -26,7 +29,10 @@ func set_active_speaker(speaker: DialogDescriptor.Speaker) -> void:
 			_transition(right_speaker, anim_duration, true)
 
 func _transition(speaker: Control, duration: float, state: bool) -> void:
+	if _tweens.has(speaker) and _tweens[speaker].is_valid():
+		_tweens[speaker].kill()
 	var tween := create_tween()
+	_tweens[speaker] = tween
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_trans(Tween.TRANS_LINEAR)
 	
@@ -42,6 +48,8 @@ func _transition(speaker: Control, duration: float, state: bool) -> void:
 	tween.tween_property(speaker, "scale", target_scale, duration).from_current()
 
 func _change_instant(speaker: Control, state: bool) -> void:
+	if _tweens.has(speaker) and _tweens[speaker].is_valid():
+		_tweens[speaker].kill()
 	var color: Color = Color.DIM_GRAY
 	var target_scale := Vector2(0.85, 0.85)
 	if state:
