@@ -1,11 +1,6 @@
 ﻿{
   "root": {
-    "text": "[ANG] Dajte dokument, brzo!",
-    "speaker": "LEFT",
-    "next": "voter_reply"
-  },
-  "voter_reply": {
-    "text": "Evo, ovo je od mog brata, isti smo.",
+    "text": "[ANG] - Dajte dokument, brzo!\n- Evo, ovo je od mog brata, isti smo.",
     "speaker": "RIGHT",
     "choices": [
       {

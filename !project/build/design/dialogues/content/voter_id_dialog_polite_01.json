@@ -1,11 +1,6 @@
 ﻿{
   "root": {
-    "text": "[POL] Dobar dan, možete li mi dati ličnu kartu?",
-    "speaker": "LEFT",
-    "next": "voter_reply"
-  },
-  "voter_reply": {
-    "text": "Izvolite.",
+    "text": "[POL] - Dobar dan, možete li mi dati ličnu kartu?\n- Izvolite.",
     "speaker": "RIGHT",
     "choices": [
       {

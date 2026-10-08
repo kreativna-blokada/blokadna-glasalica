@@ -1,11 +1,6 @@
 ﻿{
   "root": {
-    "text": "[ANG] Dajte ličnu kartu odmah, nemamo ceo dan!",
-    "speaker": "LEFT",
-    "next": "voter_reply"
-  },
-  "voter_reply": {
-    "text": "Nemam ličnu kartu kod sebe, može vozačka?",
+    "text": "[ANG] - Dajte ličnu kartu odmah, nemamo ceo dan!\n- Nemam ličnu kartu kod sebe, može vozačka?",
     "speaker": "RIGHT",
     "choices": [
       {
