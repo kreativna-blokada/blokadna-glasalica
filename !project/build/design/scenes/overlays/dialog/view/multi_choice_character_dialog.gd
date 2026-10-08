@@ -10,11 +10,14 @@ var choiceOriginal: PackedScene = preload("res://!project/build/design/scenes/ov
 @onready var text_container: Control = $PanelContainer/TextContainer
 @onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel
 @onready var timer_vfx: DialogTimerVfx = $DialogTimerVfx
+@onready var left_avatar: TextureRect = $LeftAvatar
+@onready var right_avatar: TextureRect = $RightAvatar
 
 var _choices: Array[DialogChoice] = []
 var _num_choices: int = 0
 var _requestedText: String = ""
 var _unveiledText: String = ""
+var _speaker: DialogDescriptor.Speaker = DialogDescriptor.Speaker.LEFT
 
 const MAX_NUM_CHOICES: int = 3
 @export var _choiceHeight: int = 120
@@ -23,6 +26,7 @@ const TOUCH_DEBOUNCE_TIME: float = 0.1
 var _touch_debounce_timer: float = 0
 
 const choiceMargin: Vector2 = Vector2(24,8)
+const AVATAR_SIZE: Vector2 = Vector2(200, 200)
 
 func show_timer_vfx(show: bool) -> void:
 	if show:
@@ -31,6 +35,7 @@ func show_timer_vfx(show: bool) -> void:
 		timer_vfx.hide()
 
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
+	_speaker = dialog_descriptor.speaker
 	_initialize_choices(dialog_descriptor.choices)
 	_requestedText = dialog_descriptor.text
 
@@ -93,8 +98,21 @@ func _initialize_placement(num_choices: int) -> void:
 	apply_margins(text_container, textMargin)
 	warn_if_text_overflows(text)
 
+	_place_avatar(panel_container.position.y + textboxScalePx.y - textMargin.y - total_offset)
+
 	# place timer to the right of the dialog box
 	timer_vfx.position = panel_container.position + Vector2(panel_container.size.x + 24, 0)
+
+# shows the avatar of whoever answers just above the answers: the staff (answering the voter's RIGHT line) at the left corner,
+# the voter (answering the staff's LEFT line) at the right one. The answerer is always the one not speaking the line.
+func _place_avatar(choices_top: float) -> void:
+	var avatar_top: float = choices_top - choiceMargin.y - AVATAR_SIZE.y
+	left_avatar.size = AVATAR_SIZE
+	right_avatar.size = AVATAR_SIZE
+	left_avatar.position = Vector2(panel_container.position.x + choiceMargin.x, avatar_top)
+	right_avatar.position = Vector2(panel_container.position.x + textboxScalePx.x - choiceMargin.x - AVATAR_SIZE.x, avatar_top)
+	left_avatar.visible = _speaker == DialogDescriptor.Speaker.RIGHT
+	right_avatar.visible = _speaker == DialogDescriptor.Speaker.LEFT
 
 func _ready() -> void:
 	# pre-allocate the choices and hide them, to avoid dynamic instantiation

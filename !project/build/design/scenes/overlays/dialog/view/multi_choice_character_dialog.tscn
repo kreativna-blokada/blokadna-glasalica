@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="2_028c8"]
 [ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="3_fi7f4"]
 [ext_resource type="PackedScene" uid="uid://royxhud7ipib" path="res://!project/build/design/scenes/overlays/dialog/view/dialog_timer_vfx.tscn" id="4_oepv8"]
+[ext_resource type="Texture2D" uid="uid://cyx5qdqscjukw" path="res://!project/art/UI/DialogBox/speakerLeftExample.png" id="5_avatarl"]
+[ext_resource type="Texture2D" uid="uid://sniui7gd765k" path="res://!project/art/UI/DialogBox/speakerRightExample.png" id="6_avatarr"]
 
 [node name="MultiChoiceCharacterDialog" type="Control" unique_id=1292698811]
 layout_mode = 3
@@ -81,5 +83,25 @@ theme = ExtResource("3_fi7f4")
 text = "Lorem ipšum ćolor"
 scroll_active = false
 visible_characters_behavior = 1
+
+[node name="LeftAvatar" type="TextureRect" parent="." unique_id=1730042101]
+visible = false
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 200.0
+mouse_filter = 2
+texture = ExtResource("5_avatarl")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RightAvatar" type="TextureRect" parent="." unique_id=1730042102]
+visible = false
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 200.0
+mouse_filter = 2
+texture = ExtResource("6_avatarr")
+expand_mode = 1
+stretch_mode = 5
 
 [connection signal="gui_input" from="PanelContainer/TextContainer" to="." method="_on_text_container_gui_input"]
