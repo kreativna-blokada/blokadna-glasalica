@@ -117,6 +117,9 @@ func _start_round_timer() -> void:
 func _on_round_timer_timeout() -> void:
 	#voters still walking the course no longer play their stop sounds over the round jingle and summary
 	stop_sounds = false
+	#a dialogue still open at the end of the round would stay on the dialogue layer, dimming the summary
+	if _dialog_controller != null:
+		_on_dialog_finished()
 	var round_jingle: Globals.Sound = Globals.Sound.RoundWin if _game_descriptor.get_points() > 0 else Globals.Sound.RoundLose
 	SoundManager.play_jingle(round_jingle, Globals.Music.Summary)
 	_show_game_summary()

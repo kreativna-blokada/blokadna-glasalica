@@ -103,6 +103,9 @@ func _autosize_speaker_name(name_plate: PanelContainer, name_label: Label) -> vo
 		fitted_font_size -= 1
 	name_label.add_theme_font_size_override("font_size", fitted_font_size)
 
+# one running tween per speaker, so a new transition replaces the previous one instead of fighting it
+var _tweens: Dictionary[Control, Tween] = {}
+
 func initialize(speaker: DialogDescriptor.Speaker) -> void:
 	match speaker:
 		DialogDescriptor.Speaker.LEFT:
@@ -123,7 +126,10 @@ func set_active_speaker(speaker: DialogDescriptor.Speaker) -> void:
 
 #grows or shrinks the speaker at full brightness, scanlining the one answering, while its name plate stays lit, outlining the plate of the one answering
 func _transition(speaker: Control, name_plate: PanelContainer, duration: float, is_talking: bool) -> void:
+	if _tweens.has(speaker) and _tweens[speaker].is_valid():
+		_tweens[speaker].kill()
 	var tween := create_tween()
+	_tweens[speaker] = tween
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_trans(Tween.TRANS_LINEAR)
 
@@ -140,6 +146,8 @@ func _transition(speaker: Control, name_plate: PanelContainer, duration: float, 
 
 #shows the speaker at once at full brightness, scanlining the one answering, while its name plate stays lit, outlining the plate of the one answering
 func _change_instant(speaker: Control, name_plate: PanelContainer, is_talking: bool) -> void:
+	if _tweens.has(speaker) and _tweens[speaker].is_valid():
+		_tweens[speaker].kill()
 	var target_scale := Vector2(0.85, 0.85)
 	if is_talking:
 		target_scale = Vector2(1,1)
