@@ -16,6 +16,9 @@ var _num_choices: int = 0
 var _requestedText: String = ""
 var _unveiledText: String = ""
 var _tint: Color
+#answer the Confirm button submits, moved by the Highlight button
+var _highlighted_choice_index: int = 0
+var _is_answered_by_controls: bool = false
 
 const MAX_NUM_CHOICES: int = 3
 @export var _choiceHeight: int = 120
@@ -65,6 +68,9 @@ func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> v
 
 	_initialize_placement(numChoices)
 	timer_vfx.start_anim()
+
+	_highlighted_choice_index = 0
+	_refresh_choice_highlight()
 
 func _initialize_placement(num_choices: int) -> void:
 	panel_container.size = textboxScalePx
@@ -118,6 +124,28 @@ func _ready() -> void:
 # re-centers the dialog and its choices after the window is resized
 func _on_viewport_size_changed() -> void:
 	_initialize_placement(_num_choices)
+
+#highlights the answers only with classic controls, where Confirm and Highlight pick them
+func show_choice_highlight(is_shown: bool) -> void:
+	_is_answered_by_controls = is_shown
+
+#Highlight button: moves the highlight to the next answer, from the last back to the first
+func highlight_next_choice() -> void:
+	if _num_choices == 0: return
+	_highlighted_choice_index = (_highlighted_choice_index + 1) % _num_choices
+	_refresh_choice_highlight()
+
+#Confirm button: shows the whole line if it is still unveiling, otherwise submits the highlighted answer
+func submit_highlighted_choice() -> void:
+	if _unveiledText == _requestedText:
+		finished.emit(_highlighted_choice_index)
+	else:
+		unveil_full_text(_requestedText)
+
+#tints the highlighted answer, the others keep their scene look
+func _refresh_choice_highlight() -> void:
+	for choice_index in range(_num_choices):
+		_choices[choice_index].set_highlighted(_is_answered_by_controls and choice_index == _highlighted_choice_index)
 
 func _on_choice_clicked(sender: DialogChoice) -> void:
 	if _unveiledText == _requestedText:

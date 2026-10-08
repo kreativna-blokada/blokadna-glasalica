@@ -19,8 +19,12 @@ var _dialog_color: Color
 
 var _timers_enabled: bool = false
 var _dialog_timer: DialogTimer = DialogTimer.new()
+#true with classic controls, Confirm / Highlight
+var _is_answered_by_controls: bool = false
 
 func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog_color: Color, dialog_size: Vector2i) -> void:
+	_is_answered_by_controls = game_descriptor.get_controller_type() == Globals.ControllerType.Classic
+
 	#### dialog_path should be renamed to dialog_data
 	_timers_enabled = game_descriptor.are_timers_enabled()
 	_dialog_tree = DialogTree.new(dialog_path)
@@ -33,7 +37,6 @@ func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog
 func _start_timer_if_needed() -> void:
 	if _timers_enabled and _current_node.get_num_choices() > 0:
 		_dialog_timer.restart()
-		
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -46,17 +49,18 @@ func _create_view() -> void:
 	_dialog_box = _dialog_box_scene.instantiate()
 	_multi_choice_dialog_box = _multi_choice_dialog_box_scene.instantiate()
 	_dialog_speakers = _dialog_speakers_scene.instantiate()
-	
+
 	add_child(_dialog_box)
 	add_child(_multi_choice_dialog_box)
 	add_child(_dialog_speakers)
-	
+
 	_dialog_box.initialize(_dialog_size)
 	_dialog_box.set_tint(_dialog_color)
 	_multi_choice_dialog_box.initialize( _dialog_size)
 	_multi_choice_dialog_box.show_timer_vfx(_timers_enabled)
 	_multi_choice_dialog_box.set_tint(_dialog_color)
-	
+	_multi_choice_dialog_box.show_choice_highlight(_is_answered_by_controls)
+
 	_dialog_speakers.initialize(_current_node.get_dialog_descriptor().speaker)
 
 func _connect_events() -> void:
@@ -77,11 +81,26 @@ func _update_view() -> void:
 	view_element.set_text(_current_node.get_dialog_descriptor())
 	_dialog_speakers.set_active_speaker(_current_node.get_dialog_descriptor().speaker)
 
+#Confirm submits the highlighted answer or goes to the next line; Highlight highlights
+func _unhandled_input(event: InputEvent) -> void:
+	if not _is_answered_by_controls or _current_node == null: return
+
+	var has_choices: bool = _current_node.get_num_choices() > 0
+	if event.is_action_pressed("confirm"):
+		if has_choices:
+			_multi_choice_dialog_box.submit_highlighted_choice()
+		else:
+			_dialog_box.confirm_line()
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("highlight"):
+		if has_choices:
+			_multi_choice_dialog_box.highlight_next_choice()
+		get_viewport().set_input_as_handled()
+
 func _finish_dialog() -> void:
 	_multi_choice_dialog_box.hide()
 	_dialog_box.hide()
-	
-	
+
 func _advance(choice: int) -> void:
 	_current_node = _current_node.get_child(choice)
 	if _current_node == null:
@@ -90,11 +109,9 @@ func _advance(choice: int) -> void:
 	else:
 		_update_view()
 		_start_timer_if_needed()
-	
 
 func _on_simple_dialog_finish() -> void:
 	_advance(0)
-	
 
 func _on_multi_choice_dialog_finish(choice: int) -> void:
 	var dialog_descriptor := _current_node.get_dialog_descriptor()
