@@ -148,11 +148,11 @@ func _process(_delta: float) -> void:
 		_count_phone_shake(current_direction)
 	_shake_direction = current_direction
 
-#starts game on "start" press as well
+#starts game on "initiate" press as well
 func _unhandled_input(event: InputEvent) -> void:
 	if _is_starting: return
 
-	if event.is_action_pressed("start"):
+	if event.is_action_pressed("initiate"):
 		_start_game()
 		#input consumed, no tree propagation
 		get_viewport().set_input_as_handled()

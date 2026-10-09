@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://trtlhsve38j3"
-path="res://.godot/imported/input-right-active.png-33205a9b4b1aceb277b7336f097b62f5.ctex"
+uid="uid://wob18fu18wm7"
+path="res://.godot/imported/input-confirm-default.png-b9d5eb2d8b6ecc1e0962c98e2f70a91e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://!project/art/UI/Buttons/input-right-active.png"
-dest_files=["res://.godot/imported/input-right-active.png-33205a9b4b1aceb277b7336f097b62f5.ctex"]
+source_file="res://!project/art/UI/Buttons/input-confirm-default.png"
+dest_files=["res://.godot/imported/input-confirm-default.png-b9d5eb2d8b6ecc1e0962c98e2f70a91e.ctex"]
 
 [params]
 

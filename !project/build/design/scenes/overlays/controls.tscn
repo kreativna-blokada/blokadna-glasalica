@@ -1,55 +1,52 @@
 [gd_scene format=3 uid="uid://bvusekekschrb"]
 
-[ext_resource type="Texture2D" uid="uid://wob18fu18wm7" path="res://!project/art/UI/Buttons/input-right-default.png" id="1_4h5hc"]
-[ext_resource type="Texture2D" uid="uid://trtlhsve38j3" path="res://!project/art/UI/Buttons/input-right-active.png" id="2_ial34"]
-[ext_resource type="Texture2D" uid="uid://nhfp3g4hnx61" path="res://!project/art/UI/Buttons/input-wrong-default.png" id="2_jxo6d"]
+[ext_resource type="Texture2D" uid="uid://wob18fu18wm7" path="res://!project/art/UI/Buttons/input-confirm-default.png" id="1_4h5hc"]
+[ext_resource type="Texture2D" uid="uid://trtlhsve38j3" path="res://!project/art/UI/Buttons/input-confirm-active.png" id="2_ial34"]
 [ext_resource type="Texture2D" uid="uid://djjebkaf6dd7d" path="res://!project/art/UI/Buttons/input-select-default.png" id="3_ial34"]
-[ext_resource type="Texture2D" uid="uid://cews7367w6i6j" path="res://!project/art/UI/Buttons/input-start-default.png" id="4_eaahr"]
-[ext_resource type="Texture2D" uid="uid://buvdxuyq6y88s" path="res://!project/art/UI/Buttons/input-wrong-active.png" id="4_ial34"]
+[ext_resource type="Texture2D" uid="uid://cw5mu6delmx47" path="res://!project/art/UI/Buttons/input-initiate-default.png" id="4_eaahr"]
 [ext_resource type="Texture2D" uid="uid://dd6mrsxeupov" path="res://!project/art/UI/Buttons/input-select-active.png" id="6_eaahr"]
-[ext_resource type="Texture2D" uid="uid://deht4nyl20k5t" path="res://!project/art/UI/Buttons/input-start-active.png" id="8_0hb4n"]
+[ext_resource type="Texture2D" uid="uid://c650drbdu3mdx" path="res://!project/art/UI/Buttons/input-initiate-active.png" id="8_0hb4n"]
+[ext_resource type="Texture2D" uid="uid://cgrjan06rrdsh" path="res://!project/art/UI/Buttons/input-highlight-active.png" id="8_dtdly"]
 [ext_resource type="Texture2D" uid="uid://cbdxc56qr4g0g" path="res://!project/art/UI/Buttons/input-play-active.png" id="9_10x56"]
+[ext_resource type="Texture2D" uid="uid://cdoxjifk8h1e8" path="res://!project/art/UI/Buttons/input-highlight-default.png" id="9_aau3c"]
 [ext_resource type="Texture2D" uid="uid://c2jnfolhndkyi" path="res://!project/art/UI/Buttons/input-play-inactive.png" id="10_dtdly"]
 [ext_resource type="Script" uid="uid://dukeudf631kni" path="res://!project/build/design/scenes/overlays/controls.gd" id="11_controls"]
 
 [node name="Controls" type="CanvasLayer" unique_id=1497570896]
 script = ExtResource("11_controls")
 
-[node name="Validation" type="Node" parent="." unique_id=373289907]
-
-[node name="Correct" type="TouchScreenButton" parent="Validation" unique_id=1023365775]
-visible = false
-position = Vector2(1703, 723)
-texture_normal = ExtResource("2_ial34")
-texture_pressed = ExtResource("1_4h5hc")
-action = "right"
-
-[node name="Incorrect" type="TouchScreenButton" parent="Validation" unique_id=1381538608]
-visible = false
-position = Vector2(1528, 896)
-texture_normal = ExtResource("4_ial34")
-texture_pressed = ExtResource("2_jxo6d")
-action = "wrong"
-
 [node name="Selection" type="Node" parent="." unique_id=1948632298]
 
 [node name="Select" type="TouchScreenButton" parent="Selection" unique_id=1121920787]
-visible = false
-position = Vector2(39, 723)
+position = Vector2(40, 800)
 texture_normal = ExtResource("6_eaahr")
 texture_pressed = ExtResource("3_ial34")
 action = "select"
 
 [node name="Initiate" type="TouchScreenButton" parent="Selection" unique_id=1003241037]
-visible = false
-position = Vector2(205, 896)
+position = Vector2(250, 900)
 texture_normal = ExtResource("8_0hb4n")
 texture_pressed = ExtResource("4_eaahr")
-action = "start"
+action = "initiate"
+
+[node name="Validation" type="Node" parent="." unique_id=373289907]
+
+[node name="Confirm" type="TouchScreenButton" parent="Validation" unique_id=1023365775]
+position = Vector2(1542, 900)
+texture_normal = ExtResource("2_ial34")
+texture_pressed = ExtResource("1_4h5hc")
+action = "confirm"
+
+[node name="Highlight" type="TouchScreenButton" parent="Validation" unique_id=1381538608]
+position = Vector2(1752, 800)
+texture_normal = ExtResource("8_dtdly")
+texture_pressed = ExtResource("9_aau3c")
+action = "highlight"
 
 [node name="Node" type="Node" parent="." unique_id=228220347]
 
 [node name="Next" type="TouchScreenButton" parent="Node" unique_id=391491167]
+visible = false
 position = Vector2(316, 907)
 texture_normal = ExtResource("9_10x56")
 texture_pressed = ExtResource("10_dtdly")
