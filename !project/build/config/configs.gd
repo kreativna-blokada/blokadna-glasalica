@@ -2,31 +2,18 @@
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
 #description     : Gameplay configuration settings
-#author          : Zeljko Vulovic
-#date            : 20260110
-#version         : 1.0
+#maintainer      : Zeljko
+#version         : 1.1
 #===============================================================================
 extends Node
 
-
-#ENTITY
-#███████╗███╗   ██╗████████╗██╗████████╗██╗   ██╗
-#██╔════╝████╗  ██║╚══██╔══╝██║╚══██╔══╝╚██╗ ██╔╝
-#█████╗  ██╔██╗ ██║   ██║   ██║   ██║    ╚████╔╝
-#██╔══╝  ██║╚██╗██║   ██║   ██║   ██║     ╚██╔╝
-#███████╗██║ ╚████║   ██║   ██║   ██║      ██║
-#╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝   ╚═╝      ╚═╝
-
-enum Entity {
-	Voter
-}
-
-var EntityProperties: Dictionary[Variant, Variant] = {
-	Entity.Voter: {
-		"speed": 200,
-		"lives": 0
-	}
-}
+#GAMEPLAY
+# ██████╗  █████╗ ███╗   ███╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗
+#██╔════╝ ██╔══██╗████╗ ████║██╔════╝██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝
+#██║  ███╗███████║██╔████╔██║█████╗  ██████╔╝██║     ███████║ ╚████╔╝
+#██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ██╔═══╝ ██║     ██╔══██║  ╚██╔╝
+#╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██║     ███████╗██║  ██║   ██║
+# ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝
 
 var Shake: Dictionary[String, Variant] = {
 	#up/down movements required to start the game
@@ -103,6 +90,15 @@ var Sound: Dictionary[String, Variant] = {
 	"silent_volume": -40.0,
 }
 
+var ClassicalControllers: Dictionary[String, Variant] = {
+	#on-screen buttons opacity for the inactive state
+	"inactive_buttons_opacity": 0.35,
+	#dialog answer background tint on Confirm submit
+	"highlighted_answer_tint": Color(1.0, 0.85, 0.3, 1.0),
+	#dialog opening grace period before the voter stops
+	"dialog_opening_buffer": 0.5,
+}
+
 var Leaderboard: Dictionary[String, Variant] = {
 	#debug firebase database endpoint, public on purpose; its rules get locked once the game is public
 	"debug_endpoint": "https://glasalica-default-rtdb.europe-west1.firebasedatabase.app/",
@@ -119,4 +115,23 @@ var Leaderboard: Dictionary[String, Variant] = {
 	#h added to UTC to pick the day a run's daily leaderboard is stored under; fixed, so in summer time the day
 	#turns at 01:00 local; must match the 3600000 ms in the database rules
 	"day_utc_offset": 1,
+}
+
+#ENTITY
+#███████╗███╗   ██╗████████╗██╗████████╗██╗   ██╗
+#██╔════╝████╗  ██║╚══██╔══╝██║╚══██╔══╝╚██╗ ██╔╝
+#█████╗  ██╔██╗ ██║   ██║   ██║   ██║    ╚████╔╝
+#██╔══╝  ██║╚██╗██║   ██║   ██║   ██║     ╚██╔╝
+#███████╗██║ ╚████║   ██║   ██║   ██║      ██║
+#╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝   ╚═╝      ╚═╝
+
+enum Entity {
+	Voter
+}
+
+var EntityProperties: Dictionary[Variant, Variant] = {
+	Entity.Voter: {
+		"speed": 200,
+		"lives": 0
+	}
 }

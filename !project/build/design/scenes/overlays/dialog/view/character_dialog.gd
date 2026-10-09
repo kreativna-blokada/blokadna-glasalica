@@ -59,10 +59,12 @@ func _on_gui_input(event: InputEvent) -> void:
 	if _touch_debounce_timer > 0: return
 	
 	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
-		# if text hasn't finished unveiling, do that, otherwise emit that the panel is done
-		if _unveiledText == _requestedText:
-			finished.emit()
-		else:
-			unveil_full_text(_requestedText)
-		
+		confirm_line()
 		_touch_debounce_timer = TOUCH_DEBOUNCE_TIME
+
+#Confirm button or tap: shows the whole line if it is still unveiling, otherwise goes to the next line
+func confirm_line() -> void:
+	if _unveiledText == _requestedText:
+		finished.emit()
+	else:
+		unveil_full_text(_requestedText)

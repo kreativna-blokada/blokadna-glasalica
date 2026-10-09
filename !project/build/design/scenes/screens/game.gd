@@ -52,12 +52,14 @@ var _round_music: Globals.Music = Globals.Music.Round
 
 # called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	progress_flow.init(stage)
+	_game_descriptor = GameManager.get_game_descriptor()
+	progress_flow.init(stage, _game_descriptor.get_controller_type())
 	progress_flow.stop_button_pressed.connect(_on_stop_button_pressed)
-	controls.init(stage)
+	stage.dialogue_requested.connect(_open_dialogue)
+
+	controls.init(stage, _game_descriptor.get_controller_type())
 	Signals.game_close_requested.connect(_on_game_close_requested)
 
-	_game_descriptor = GameManager.get_game_descriptor()
 	_round_timer_display = ROUND_TIMER_SCENE.instantiate() as RoundTimerDisplay
 	dialog_layer.add_child(_round_timer_display)
 	
@@ -135,11 +137,13 @@ func _on_stop_button_pressed(stop_name: String, stop_index: int) -> void:
 	if voter == null:
 		return
 
-	#### commented out 7b64814055ee6b6eb9d15d2b811ccde201717f87
-	#### var dialog_path: String = voter.get_dialog_path(stop_name)
-	#### if not FileAccess.file_exists(dialog_path):
-	#### 	voter.can_continue_voting_course()
-	#### 	return
+	_open_dialogue(voter, stop_name)
+
+#opens the voter's dialog for the stop it stands at, or lets it walk on when it has none there
+func _open_dialogue(voter: Voter, stop_name: String) -> void:
+	if _dialog_controller != null:
+		return
+
 	var dialog_id: String = voter.get_dialog_id(stop_name)
 	if not DialoguesManager.has_dialogue(dialog_id):
 		voter.can_continue_voting_course()
@@ -155,6 +159,9 @@ func _on_stop_button_pressed(stop_name: String, stop_index: int) -> void:
 	_dialog_controller.choice_made.connect(_on_dialog_choice_made)
 	dialog_layer.add_child(_dialog_controller)
 
+	controls.set_dialog_open(true)
+	stage.set_voter_control_enabled(false)
+
 	var voter_personality: String = _dialog_voter.get_personality()
 	if Globals.DialogueMoodSounds.has(voter_personality):
 		SoundManager.play_stinger(Globals.DialogueMoodSounds[voter_personality])
@@ -164,6 +171,9 @@ func _on_dialog_finished() -> void:
 	var controller: DialogController = _dialog_controller
 	_dialog_voter = null
 	_dialog_controller = null
+
+	controls.set_dialog_open(false)
+	stage.set_voter_control_enabled(true)
 
 	if controller and is_instance_valid(controller):
 		controller.queue_free()

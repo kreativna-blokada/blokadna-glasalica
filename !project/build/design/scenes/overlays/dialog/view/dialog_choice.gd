@@ -2,6 +2,10 @@ class_name DialogChoice
 extends Control
 
 @onready var _text: RichTextLabel = $ChoiceText
+@onready var _background: NinePatchRect = $NinePatchRect
+
+#background look from the scene, restored when the highlight leaves
+var _original_background_modulate: Color
 
 signal choice_clicked(sender: DialogChoice);
 
@@ -22,8 +26,11 @@ func get_num_lines() -> int:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	_original_background_modulate = _background.modulate
 
+#tints the background while the Confirm button would submit this answer
+func set_highlighted(is_highlighted: bool) -> void:
+	_background.modulate = Configs.ClassicalControllers["highlighted_answer_tint"] if is_highlighted else _original_background_modulate
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -33,7 +40,7 @@ func _process(delta: float) -> void:
 
 func _on_click_detector_gui_input(event: InputEvent) -> void:
 	if _touch_debounce_timer > 0: return
-	
+
 	# forward the event upwards
 	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
 		choice_clicked.emit(self)
