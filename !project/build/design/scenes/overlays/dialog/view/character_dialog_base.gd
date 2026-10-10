@@ -12,6 +12,8 @@ var _is_zoomed_dialogue: bool = true
 # 16 pixel padding for the actual borders of the dialog box
 # and then some :D
 const textMargin: Vector2 = Vector2(24, 24)
+#hole count the dim shader's spotlights array holds
+const DIM_SPOTLIGHTS_LIMIT: int = 8
 
 func initialize(textboxScale: Vector2i, is_zoomed_dialogue: bool) -> void:
 	textboxScalePx = textboxScale
@@ -47,13 +49,20 @@ func apply_compact_look(text_label: RichTextLabel, box_background: CanvasItem) -
 	text_label.theme = load(Configs.DialogueZoom["compact_theme"])
 	box_background.modulate = Configs.DialogueZoom["compact_box_tint"]
 
-#dimming behind the dialog box, lifted while the player peeks at the buttons
-func get_dim_background() -> ColorRect:
-	return $DimBackground
+#leaves soft round holes in the dim over the buttons, each given as canvas centre and radius
+func set_dim_spotlights(button_spotlights: PackedVector3Array) -> void:
+	var dim_background: ColorRect = $DimBackground
+	var canvas_to_dim: Transform2D = dim_background.get_global_transform().affine_inverse()
+	var dim_spotlights: PackedVector3Array = []
+	for button_spotlight in button_spotlights:
+		var dim_centre: Vector2 = canvas_to_dim * Vector2(button_spotlight.x, button_spotlight.y)
+		dim_spotlights.append(Vector3(dim_centre.x, dim_centre.y, button_spotlight.z))
+	dim_spotlights.resize(DIM_SPOTLIGHTS_LIMIT)
 
-#screen area of the dialog box, holding there never lifts the dimming
-func get_box_rect() -> Rect2:
-	return ($PanelContainer as Control).get_global_rect()
+	var dim_material: ShaderMaterial = dim_background.material
+	dim_material.set_shader_parameter("spotlights", dim_spotlights)
+	dim_material.set_shader_parameter("spotlight_count", mini(button_spotlights.size(), DIM_SPOTLIGHTS_LIMIT))
+	dim_material.set_shader_parameter("edge_softness", Configs.DialogueDim["spotlight_softness"])
 
 func apply_margins(node: Control, margin: Vector2) -> void:
 	node.position += margin

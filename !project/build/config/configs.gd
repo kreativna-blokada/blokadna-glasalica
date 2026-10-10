@@ -99,16 +99,15 @@ var ClassicalControllers: Dictionary[String, Variant] = {
 	"dialog_opening_buffer": 0.5,
 }
 
-#dialogue without zoom, re-using 153f7a2 - 60e239c
-var DialoguePeek: Dictionary[String, Variant] = {
-	#seconds a finger rests beside the dialog box before the dimming lifts
-	"hold_time": 0.3,
-	#seconds the dimming and speakers take to fade out and back
-	"fade_time": 0.15,
-	#speakers opacity while the dimming is lifted
-	"speakers_opacity": 0.0,
+#round holes the dialog dim leaves over the on-screen buttons
+var DialogueDim: Dictionary[String, Variant] = {
+	#px a hole reaches past its button's edge
+	"spotlight_padding": 16.0,
+	#px over which a hole's edge fades into the full dim
+	"spotlight_softness": 40.0,
 }
 
+#dialogue without zoom, re-using 153f7a2 - 60e239c
 var DialogueZoom: Dictionary[String, Variant] = {
 	#regular font at 29 for the dialogue and answer text
 	"compact_theme": "res://!project/art/UI/DialogBox/dialog_box_compact.tres",

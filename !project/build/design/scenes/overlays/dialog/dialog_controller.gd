@@ -23,13 +23,8 @@ var _dialog_timer: DialogTimer = DialogTimer.new()
 var _is_answered_by_controls: bool = false
 #false shows the smaller pre-zoom dialogues
 var _is_zoomed_dialogue: bool = true
-
-#a finger held beside the dialog box lifts the dimming so the buttons below show
-var _peek_hold_timer: Timer = Timer.new()
-var _peek_tween: Tween
-var _is_peeking: bool = false
-#release ending a peek is swallowed, so it does not also answer the dialog
-var _is_release_swallowed: bool = false
+#buttons the dim leaves uncovered, canvas centre and radius each
+var _dim_spotlights: PackedVector3Array = []
 
 func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog_color: Color, dialog_size: Vector2i) -> void:
 	_is_answered_by_controls = game_descriptor.get_controller_type() == Globals.ControllerType.Classic
@@ -44,6 +39,10 @@ func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog
 	add_child(_dialog_timer)
 	_start_timer_if_needed()
 
+#keeps the given buttons visible through the dialog dim, called before the dialog enters the tree
+func set_dim_spotlights(button_spotlights: PackedVector3Array) -> void:
+	_dim_spotlights = button_spotlights
+
 func _start_timer_if_needed() -> void:
 	if _timers_enabled and _current_node.get_num_choices() > 0:
 		_dialog_timer.restart()
@@ -52,12 +51,6 @@ func _start_timer_if_needed() -> void:
 func _ready() -> void:
 	_create_view()
 	_connect_events()
-
-	_peek_hold_timer.one_shot = true
-	_peek_hold_timer.wait_time = Configs.DialoguePeek["hold_time"]
-	_peek_hold_timer.timeout.connect(_set_peeking.bind(true))
-	add_child(_peek_hold_timer)
-
 	_update_view()
 
 
@@ -76,6 +69,8 @@ func _create_view() -> void:
 	_multi_choice_dialog_box.show_timer_vfx(_timers_enabled)
 	_multi_choice_dialog_box.set_tint(_dialog_color)
 	_multi_choice_dialog_box.show_choice_highlight(_is_answered_by_controls)
+	_dialog_box.set_dim_spotlights(_dim_spotlights)
+	_multi_choice_dialog_box.set_dim_spotlights(_dim_spotlights)
 
 	_dialog_speakers.initialize(_current_node.get_dialog_descriptor().speaker)
 	_dialog_speakers.set_dialogue_width(_dialog_size.x)
@@ -97,44 +92,6 @@ func _update_view() -> void:
 
 	view_element.set_text(_current_node.get_dialog_descriptor())
 	_dialog_speakers.set_active_speaker(_current_node.get_dialog_descriptor().speaker)
-
-#holding beside the dialog box lifts the dimming, letting go brings it back
-func _input(event: InputEvent) -> void:
-	var is_screen_touch: bool = event is InputEventScreenTouch and event.index == 0
-	var is_left_click: bool = event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT
-	if not (is_screen_touch or is_left_click) or _current_node == null: return
-
-	if event.pressed:
-		#touch and its emulated click both arrive, the second press is ignored
-		if _is_peeking or not _peek_hold_timer.is_stopped(): return
-		_is_release_swallowed = false
-		if not _get_shown_dialog_box().get_box_rect().has_point(event.position):
-			_peek_hold_timer.start()
-		return
-
-	_peek_hold_timer.stop()
-	if _is_peeking:
-		_set_peeking(false)
-		_is_release_swallowed = true
-	if _is_release_swallowed:
-		get_viewport().set_input_as_handled()
-
-#fades the dimming and speakers out while peeking, back in afterwards
-func _set_peeking(is_peeking: bool) -> void:
-	_is_peeking = is_peeking
-	var dim_opacity: float = 0.0 if is_peeking else 1.0
-	var speakers_opacity: float = Configs.DialoguePeek["speakers_opacity"] if is_peeking else 1.0
-	var fade_time: float = Configs.DialoguePeek["fade_time"]
-
-	if _peek_tween: _peek_tween.kill()
-	_peek_tween = create_tween().set_parallel(true)
-	for dialog_box: CharacterDialogBase in [_dialog_box, _multi_choice_dialog_box]:
-		_peek_tween.tween_property(dialog_box.get_dim_background(), "modulate:a", dim_opacity, fade_time)
-	_peek_tween.tween_property(_dialog_speakers, "modulate:a", speakers_opacity, fade_time)
-
-#dialog box currently on screen, the one with answers or the plain one
-func _get_shown_dialog_box() -> CharacterDialogBase:
-	return _multi_choice_dialog_box if _multi_choice_dialog_box.visible else _dialog_box
 
 #Confirm submits the highlighted answer or goes to the next line; Highlight highlights
 func _unhandled_input(event: InputEvent) -> void:

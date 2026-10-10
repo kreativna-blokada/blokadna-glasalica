@@ -78,8 +78,7 @@ func _initialize_placement():
 func _on_gui_input(event: InputEvent) -> void:
 	if _touch_debounce_timer > 0: return
 	
-	#line goes on at release, so a hold that lifts the dimming can swallow it
-	if (event is InputEventScreenTouch or event is InputEventMouseButton) and not event.pressed:
+	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
 		confirm_line()
 		_touch_debounce_timer = TOUCH_DEBOUNCE_TIME
 
