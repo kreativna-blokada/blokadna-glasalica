@@ -11,6 +11,8 @@ var _next_disabled_texture: Texture2D
 
 #action each button fires while its state is played, kept while the button is inactive
 var _classic_button_actions: Dictionary[TouchScreenButton, String] = {}
+#layer the controls go back to once a dialog closes
+var _default_layer: int
 
 func _ready() -> void:
 	_next_enabled_texture = _next_button.texture_normal
@@ -19,6 +21,7 @@ func _ready() -> void:
 
 	for classic_button in _classic_buttons:
 		_classic_button_actions[classic_button] = classic_button.action
+	_default_layer = layer
 	set_dialog_open(false)
 
 #scene shows the classic on-screen buttons by default; screen controls swap them for the next button
@@ -36,7 +39,13 @@ func set_next_enabled(is_enabled: bool) -> void:
 	_next_button.texture_pressed = _next_disabled_texture
 
 #Select and Initiate work outside a dialog, Confirm and Highlight inside it; the other pair is dimmed and fires nothing
+#while a dialog is open the buttons are drawn muted over its dimming
 func set_dialog_open(is_dialog_open: bool) -> void:
+	layer = Configs.ClassicalControllers["dialog_open_layer"] if is_dialog_open else _default_layer
+	var buttons_tint: Color = Configs.ClassicalControllers["dialog_open_buttons_tint"] if is_dialog_open else Color.WHITE
+	for controls_button in _classic_buttons + [_next_button]:
+		controls_button.modulate = Color(buttons_tint, controls_button.modulate.a)
+
 	for course_button in _course_buttons:
 		_set_classic_button_active(course_button, not is_dialog_open)
 	for dialog_button in _dialogue_buttons:
