@@ -50,7 +50,7 @@ func get_button_spotlights() -> PackedVector3Array:
 
 		var button_size: Vector2 = shown_button.texture_normal.get_size() * shown_button.global_scale
 		var button_centre: Vector2 = shown_button.global_position + button_size / 2.0
-		var spotlight_radius: float = maxf(button_size.x, button_size.y) / 2.0 + Configs.DialogueDim["spotlight_padding"]
+		var spotlight_radius: float = maxf(button_size.x, button_size.y) / 2.0 + Configs.Spotlights["spotlight_padding"]
 		button_spotlights.append(Vector3(button_centre.x, button_centre.y, spotlight_radius))
 	return button_spotlights
 

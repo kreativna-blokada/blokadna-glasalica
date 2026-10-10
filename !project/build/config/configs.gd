@@ -100,7 +100,7 @@ var ClassicalControllers: Dictionary[String, Variant] = {
 }
 
 #round holes the dialog dim leaves over the on-screen buttons
-var DialogueDim: Dictionary[String, Variant] = {
+var Spotlights: Dictionary[String, Variant] = {
 	#px a hole reaches past its button's edge
 	"spotlight_padding": 16.0,
 	#px over which a hole's edge fades into the full dim
