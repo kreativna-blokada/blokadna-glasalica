@@ -47,6 +47,14 @@ func apply_compact_look(text_label: RichTextLabel, box_background: CanvasItem) -
 	text_label.theme = load(Configs.DialogueZoom["compact_theme"])
 	box_background.modulate = Configs.DialogueZoom["compact_box_tint"]
 
+#dimming behind the dialog box, lifted while the player peeks at the buttons
+func get_dim_background() -> ColorRect:
+	return $DimBackground
+
+#screen area of the dialog box, holding there never lifts the dimming
+func get_box_rect() -> Rect2:
+	return ($PanelContainer as Control).get_global_rect()
+
 func apply_margins(node: Control, margin: Vector2) -> void:
 	node.position += margin
 	node.size -= margin * 2

@@ -97,15 +97,18 @@ var ClassicalControllers: Dictionary[String, Variant] = {
 	"highlighted_answer_tint": Color(1.0, 0.85, 0.3, 1.0),
 	#dialog opening grace period before the voter stops
 	"dialog_opening_buffer": 0.5,
-	#canvas layer the buttons move to while a dialog is open, above the dialog layer and its dimming
-	"dialogue_silhouette_layer": 11,
-	#light colour of the button silhouettes drawn over the dialog dimming
-	"dialogue_silhouette_color": Color(0.95, 0.92, 0.85, 1.0),
-	#brightness up to which a button pixel is kept as a silhouette line; 0 dark only, 1 everything
-	"dialogue_silhouette_line_brightness": 0.5,
 }
 
 #dialogue without zoom, re-using 153f7a2 - 60e239c
+var DialoguePeek: Dictionary[String, Variant] = {
+	#seconds a finger rests beside the dialog box before the dimming lifts
+	"hold_time": 0.3,
+	#seconds the dimming and speakers take to fade out and back
+	"fade_time": 0.15,
+	#speakers opacity while the dimming is lifted
+	"speakers_opacity": 0.0,
+}
+
 var DialogueZoom: Dictionary[String, Variant] = {
 	#regular font at 29 for the dialogue and answer text
 	"compact_theme": "res://!project/art/UI/DialogBox/dialog_box_compact.tres",
