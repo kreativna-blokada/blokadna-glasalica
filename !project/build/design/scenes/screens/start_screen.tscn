@@ -933,8 +933,8 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.496, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 30
-text = "ПОГЛЕДАЈТЕ WEB ВЕРЗИЈУ ЈЕР ЈЕ НАЈАЖУРНИЈА,
-ПОШТО ПЛАТФОРМЕ НАМЕЋУ ОГРАНИЧЕЊА (КАО ШТО ТО РАДИ И ОН)"
+text = "ПОГЛЕДАЈТЕ ИНТЕРНЕТ ВЕРЗИЈА ЈЕР ЈЕ НАЈАЖУРНИЈА,
+ПОШТО ПЛАТФОРМЕ ЗА ДИСТРИБУЦИЈУ НАМЕЋУ ОГРАНИЧЕЊА:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -947,7 +947,7 @@ theme_override_colors/font_pressed_color = Color(0.18431373, 0.43529412, 0.87843
 theme_override_colors/font_hover_color = Color(0.18431373, 0.43529412, 0.8784314, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.18431373, 0.43529412, 0.8784314, 1)
 theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 44
 text = "https://kreativna-blokada.itch.io/glasalica"
 uri = "https://kreativna-blokada.itch.io/glasalica"
 

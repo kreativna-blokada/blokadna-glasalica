@@ -42,6 +42,18 @@ func set_dialog_open(is_dialog_open: bool) -> void:
 	for dialog_button in _dialogue_buttons:
 		_set_classic_button_active(dialog_button, is_dialog_open)
 
+#centre and radius of every shown button in canvas pixels, for the dialog dim to leave uncovered
+func get_button_spotlights() -> PackedVector3Array:
+	var button_spotlights: PackedVector3Array = []
+	for shown_button: TouchScreenButton in _classic_buttons + [_next_button]:
+		if not shown_button.visible: continue
+
+		var button_size: Vector2 = shown_button.texture_normal.get_size() * shown_button.global_scale
+		var button_centre: Vector2 = shown_button.global_position + button_size / 2.0
+		var spotlight_radius: float = maxf(button_size.x, button_size.y) / 2.0 + Configs.Spotlights["spotlight_padding"]
+		button_spotlights.append(Vector3(button_centre.x, button_centre.y, spotlight_radius))
+	return button_spotlights
+
 #an inactive button is see-through and has no action to fire
 func _set_classic_button_active(classic_button: TouchScreenButton, is_active: bool) -> void:
 	classic_button.modulate.a = 1.0 if is_active else Configs.ClassicalControllers["inactive_buttons_opacity"]

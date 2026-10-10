@@ -24,7 +24,7 @@ texture_pressed = ExtResource("3_ial34")
 action = "select"
 
 [node name="Initiate" type="TouchScreenButton" parent="Selection" unique_id=1003241037]
-position = Vector2(250, 900)
+position = Vector2(200, 906)
 texture_normal = ExtResource("8_0hb4n")
 texture_pressed = ExtResource("4_eaahr")
 action = "initiate"
@@ -32,7 +32,7 @@ action = "initiate"
 [node name="Validation" type="Node" parent="." unique_id=373289907]
 
 [node name="Confirm" type="TouchScreenButton" parent="Validation" unique_id=1023365775]
-position = Vector2(1542, 900)
+position = Vector2(1592, 906)
 texture_normal = ExtResource("2_ial34")
 texture_pressed = ExtResource("1_4h5hc")
 action = "confirm"
@@ -47,7 +47,7 @@ action = "highlight"
 
 [node name="Next" type="TouchScreenButton" parent="Node" unique_id=391491167]
 visible = false
-position = Vector2(316, 907)
+position = Vector2(266, 913)
 texture_normal = ExtResource("9_10x56")
 texture_pressed = ExtResource("10_dtdly")
 action = "next"

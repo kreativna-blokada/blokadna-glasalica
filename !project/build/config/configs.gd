@@ -99,6 +99,14 @@ var ClassicalControllers: Dictionary[String, Variant] = {
 	"dialog_opening_buffer": 0.5,
 }
 
+#round holes the dialog dim leaves over the on-screen buttons
+var Spotlights: Dictionary[String, Variant] = {
+	#px a hole reaches past its button's edge
+	"spotlight_padding": 16.0,
+	#px over which a hole's edge fades into the full dim
+	"spotlight_softness": 16.0,
+}
+
 #dialogue without zoom, re-using 153f7a2 - 60e239c
 var DialogueZoom: Dictionary[String, Variant] = {
 	#regular font at 29 for the dialogue and answer text

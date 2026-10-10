@@ -4,6 +4,25 @@
 [ext_resource type="Texture2D" uid="uid://cyx5qdqscjukw" path="res://!project/art/UI/DialogBox/speakerLeftExample.png" id="2_dhfdv"]
 [ext_resource type="Texture2D" uid="uid://sniui7gd765k" path="res://!project/art/UI/DialogBox/speakerRightExample.png" id="3_aats4"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_name_plate"]
+content_margin_left = 16.0
+content_margin_top = 14.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.06, 0.06, 0.12, 0.95)
+border_width_left = 4
+border_width_top = 8
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.72, 0.62, 0.32, 0.8)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 24
+shadow_offset = Vector2(0, 6)
+
 [node name="DialogSpeakers" type="Control" unique_id=1449434788]
 layout_mode = 3
 anchors_preset = 15
@@ -16,25 +35,72 @@ script = ExtResource("1_ofvoe")
 
 [node name="LeftSpeaker" type="TextureRect" parent="." unique_id=718175500]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -420.0
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -320.0
 offset_right = 420.0
-grow_vertical = 0
-pivot_offset = Vector2(0, 420)
+offset_bottom = 100.0
+grow_vertical = 2
+pivot_offset = Vector2(0, 210)
 texture = ExtResource("2_dhfdv")
 
 [node name="RightSpeaker" type="TextureRect" parent="." unique_id=1528912421]
 layout_mode = 1
-anchors_preset = 3
+anchors_preset = 6
 anchor_left = 1.0
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.5
 offset_left = -420.0
-offset_top = -420.0
+offset_top = -320.0
+offset_bottom = 100.0
 grow_horizontal = 0
-grow_vertical = 0
-pivot_offset = Vector2(420, 420)
+grow_vertical = 2
+pivot_offset = Vector2(420, 210)
 texture = ExtResource("3_aats4")
+
+[node name="RightNamePlate" type="PanelContainer" parent="." unique_id=1190367254]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 600.0
+offset_top = 112.0
+offset_bottom = 191.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_name_plate")
+
+[node name="Name" type="Label" parent="RightNamePlate" unique_id=761045593]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.83, 0.55, 1)
+theme_override_colors/font_outline_color = Color(0.2, 0.15, 0.05, 0.5)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 40
+text = "BIRAČ"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="LeftNamePlate" type="PanelContainer" parent="." unique_id=1873520461]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = 112.0
+offset_right = -600.0
+offset_bottom = 112.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_name_plate")
+
+[node name="Name" type="Label" parent="LeftNamePlate" unique_id=402918377]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.83, 0.55, 1)
+theme_override_colors/font_outline_color = Color(0.2, 0.15, 0.05, 0.5)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 40
+text = "KONTROLOR"
+horizontal_alignment = 1
+clip_text = true
