@@ -155,7 +155,6 @@ func _open_dialogue(voter: Voter, stop_name: String) -> void:
 	#### _dialog_controller.initialize(dialog_path, DIALOG_SIZE)
 	var dialog_color: Color = DialogColors.get_color(_dialog_voter.name)
 	_dialog_controller.initialize(_game_descriptor, DialoguesManager.get_dialogue(dialog_id), dialog_color, DIALOG_SIZE)
-	_dialog_controller.set_dim_spotlights(controls.get_button_spotlights())
 	_dialog_controller.finished.connect(_on_dialog_finished)
 	_dialog_controller.choice_made.connect(_on_dialog_choice_made)
 	dialog_layer.add_child(_dialog_controller)

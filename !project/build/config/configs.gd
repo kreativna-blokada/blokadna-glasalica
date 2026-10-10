@@ -97,14 +97,20 @@ var ClassicalControllers: Dictionary[String, Variant] = {
 	"highlighted_answer_tint": Color(1.0, 0.85, 0.3, 1.0),
 	#dialog opening grace period before the voter stops
 	"dialog_opening_buffer": 0.5,
-}
-
-#round holes the dialog dim leaves over the on-screen buttons
-var DialogueDim: Dictionary[String, Variant] = {
-	#px a hole reaches past its button's edge
-	"spotlight_padding": 16.0,
-	#px over which a hole's edge fades into the full dim
-	"spotlight_softness": 40.0,
+	#canvas layer of the dialogue button borders, above the dialog layer and its dimming
+	"dialogue_border_layer": 11,
+	#gold of the dialogue button borders, same as the name plate border
+	"dialogue_border_color": Color(0.72, 0.62, 0.32, 1.0),
+	#px width of the dialogue button borders
+	"dialogue_border_width": 4,
+	#px gap between a dialogue button and its border
+	"dialogue_border_gap": 6,
+	#px rounding of the dialogue button border corners
+	"dialogue_border_radius": 12,
+	#seconds of one dialogue border pulse, fading out and back in; 0 keeps the border still
+	"dialogue_border_pulse": 1.6,
+	#lowest dialogue border opacity reached while pulsing
+	"dialogue_border_faded_opacity": 0.35,
 }
 
 #dialogue without zoom, re-using 153f7a2 - 60e239c
