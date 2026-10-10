@@ -104,7 +104,7 @@ var Spotlights: Dictionary[String, Variant] = {
 	#px a hole reaches past its button's edge
 	"spotlight_padding": 16.0,
 	#px over which a hole's edge fades into the full dim
-	"spotlight_softness": 40.0,
+	"spotlight_softness": 16.0,
 }
 
 #dialogue without zoom, re-using 153f7a2 - 60e239c
