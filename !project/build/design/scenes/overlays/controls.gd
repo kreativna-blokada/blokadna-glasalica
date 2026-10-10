@@ -12,10 +12,9 @@ var _next_disabled_texture: Texture2D
 #action each button fires while its state is played, kept while the button is inactive
 var _classic_button_actions: Dictionary[TouchScreenButton, String] = {}
 
-#gold borders drawn over the dialog dimming around Confirm and Highlight, while a dialog is open
-var _dialogue_border_layer: CanvasLayer
-var _dialogue_borders: Control
-var _dialogue_border_pulse: Tween
+#buttons are drawn as light line silhouettes above the dialog dimming while a dialog is open
+var _regular_layer: int
+var _silhouette_material: ShaderMaterial
 
 func _ready() -> void:
 	_next_enabled_texture = _next_button.texture_normal
@@ -24,7 +23,9 @@ func _ready() -> void:
 
 	for classic_button in _classic_buttons:
 		_classic_button_actions[classic_button] = classic_button.action
-	_create_dialogue_borders()
+
+	_regular_layer = layer
+	_silhouette_material = _create_silhouette_material()
 	set_dialog_open(false)
 
 #scene shows the classic on-screen buttons by default; screen controls swap them for the next button
@@ -47,53 +48,23 @@ func set_dialog_open(is_dialog_open: bool) -> void:
 		_set_classic_button_active(course_button, not is_dialog_open)
 	for dialog_button in _dialogue_buttons:
 		_set_classic_button_active(dialog_button, is_dialog_open)
-	_show_dialogue_borders(is_dialog_open)
+	_show_silhouettes(is_dialog_open)
 
 #an inactive button is see-through and has no action to fire
 func _set_classic_button_active(classic_button: TouchScreenButton, is_active: bool) -> void:
 	classic_button.modulate.a = 1.0 if is_active else Configs.ClassicalControllers["inactive_buttons_opacity"]
 	classic_button.action = _classic_button_actions[classic_button] if is_active else ""
 
+#material keeping only the dark lines of a button, drawn in a light colour
+func _create_silhouette_material() -> ShaderMaterial:
+	var silhouette_material := ShaderMaterial.new()
+	silhouette_material.shader = load("res://!project/art/shaders/silhouette.gdshader")
+	silhouette_material.set_shader_parameter("silhouette_color", Configs.ClassicalControllers["dialogue_silhouette_color"])
+	silhouette_material.set_shader_parameter("line_brightness_limit", Configs.ClassicalControllers["dialogue_silhouette_line_brightness"])
+	return silhouette_material
 
-#builds a gold border around each dialogue button, on a layer above the dialog dimming
-func _create_dialogue_borders() -> void:
-	_dialogue_border_layer = CanvasLayer.new()
-	_dialogue_border_layer.layer = Configs.ClassicalControllers["dialogue_border_layer"]
-	add_child(_dialogue_border_layer)
-
-	_dialogue_borders = Control.new()
-	_dialogue_borders.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_dialogue_border_layer.add_child(_dialogue_borders)
-
-	var border_style := StyleBoxFlat.new()
-	border_style.draw_center = false
-	border_style.border_color = Configs.ClassicalControllers["dialogue_border_color"]
-	border_style.set_border_width_all(Configs.ClassicalControllers["dialogue_border_width"])
-	border_style.set_corner_radius_all(Configs.ClassicalControllers["dialogue_border_radius"])
-
-	var border_gap: float = Configs.ClassicalControllers["dialogue_border_gap"]
-	for dialog_button in _dialogue_buttons:
-		var button_border := Panel.new()
-		button_border.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		button_border.add_theme_stylebox_override("panel", border_style)
-		button_border.position = dialog_button.position - Vector2(border_gap, border_gap)
-		button_border.size = dialog_button.texture_normal.get_size() * dialog_button.scale + Vector2(border_gap, border_gap) * 2
-		_dialogue_borders.add_child(button_border)
-
-#shows the dialogue button borders only for visible classic buttons, pulsing while shown
-func _show_dialogue_borders(is_shown: bool) -> void:
-	if _dialogue_border_pulse:
-		_dialogue_border_pulse.kill()
-	_dialogue_borders.modulate.a = 1.0
-
-	var border_index: int = 0
-	for dialog_button in _dialogue_buttons:
-		_dialogue_borders.get_child(border_index).visible = is_shown and dialog_button.visible
-		border_index += 1
-
-	var pulse_duration: float = Configs.ClassicalControllers["dialogue_border_pulse"]
-	if not is_shown or pulse_duration <= 0.0: return
-
-	_dialogue_border_pulse = create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_dialogue_border_pulse.tween_property(_dialogue_borders, "modulate:a", Configs.ClassicalControllers["dialogue_border_faded_opacity"], pulse_duration / 2.0)
-	_dialogue_border_pulse.tween_property(_dialogue_borders, "modulate:a", 1.0, pulse_duration / 2.0)
+#lifts the buttons above the dialog dimming as silhouettes, or puts them back to their regular look
+func _show_silhouettes(is_shown: bool) -> void:
+	layer = Configs.ClassicalControllers["dialogue_silhouette_layer"] if is_shown else _regular_layer
+	for any_button in _classic_buttons + [_next_button]:
+		any_button.material = _silhouette_material if is_shown else null

@@ -97,20 +97,12 @@ var ClassicalControllers: Dictionary[String, Variant] = {
 	"highlighted_answer_tint": Color(1.0, 0.85, 0.3, 1.0),
 	#dialog opening grace period before the voter stops
 	"dialog_opening_buffer": 0.5,
-	#canvas layer of the dialogue button borders, above the dialog layer and its dimming
-	"dialogue_border_layer": 11,
-	#gold of the dialogue button borders, same as the name plate border
-	"dialogue_border_color": Color(0.72, 0.62, 0.32, 1.0),
-	#px width of the dialogue button borders
-	"dialogue_border_width": 4,
-	#px gap between a dialogue button and its border
-	"dialogue_border_gap": 6,
-	#px rounding of the dialogue button border corners
-	"dialogue_border_radius": 12,
-	#seconds of one dialogue border pulse, fading out and back in; 0 keeps the border still
-	"dialogue_border_pulse": 1.6,
-	#lowest dialogue border opacity reached while pulsing
-	"dialogue_border_faded_opacity": 0.35,
+	#canvas layer the buttons move to while a dialog is open, above the dialog layer and its dimming
+	"dialogue_silhouette_layer": 11,
+	#light colour of the button silhouettes drawn over the dialog dimming
+	"dialogue_silhouette_color": Color(0.95, 0.92, 0.85, 1.0),
+	#brightness up to which a button pixel is kept as a silhouette line; 0 dark only, 1 everything
+	"dialogue_silhouette_line_brightness": 0.5,
 }
 
 #dialogue without zoom, re-using 153f7a2 - 60e239c
