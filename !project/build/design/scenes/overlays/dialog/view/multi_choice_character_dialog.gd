@@ -7,6 +7,7 @@ var choiceOriginal: PackedScene = preload("res://!project/build/design/scenes/ov
 
 @onready var panel_container: Control = $PanelContainer
 @onready var background: Control = $PanelContainer/BackgroundContainer
+@onready var box_background: NinePatchRect = $PanelContainer/BackgroundContainer/Background
 @onready var text_container: Control = $PanelContainer/TextContainer
 @onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel
 @onready var timer_vfx: DialogTimerVfx = $DialogTimerVfx
@@ -27,6 +28,15 @@ const TOUCH_DEBOUNCE_TIME: float = 0.1
 var _touch_debounce_timer: float = 0
 
 const choiceMargin: Vector2 = Vector2(24,8)
+
+#### usage of pre-zoom font, tint and text area re-uses 153f7a2 - 60e239c
+func initialize(textboxScale: Vector2i, is_zoomed_dialogue: bool) -> void:
+	super.initialize(textboxScale, is_zoomed_dialogue)
+	if is_zoomed_dialogue: return
+
+	apply_compact_look(text, box_background)
+	for choice in _choices:
+		choice.use_compact_look()
 
 func set_tint(tint: Color) -> void:
 	_tint = tint
@@ -53,6 +63,11 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_unveiledText = ""
 	text.text = _requestedText
 	text.visible_characters = 0
+
+	#### pre-zoom typing grows the text from an empty label, re-using 153f7a2 - 60e239c
+	if not _is_zoomed_dialogue:
+		text.text = ""
+		text.visible_characters = -1
 
 func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> void:
 	var numChoices: int = len(choices)
@@ -82,7 +97,9 @@ func _initialize_placement(num_choices: int) -> void:
 	for i in range(num_choices):
 		# force height to be a single line, at the final width so the line count matches
 		#### _choices[i].size = Vector2(textboxScalePx.x, _choiceHeight)
-		_choices[i].size = Vector2(textboxScalePx.x - choiceMargin.x * 2, _choiceHeight)
+		#### pre-zoom answers are measured at the full dialog width, apprach re-uses 153f7a2 - 60e239c implementation
+		var choice_measure_width: float = textboxScalePx.x - choiceMargin.x * 2 if _is_zoomed_dialogue else textboxScalePx.x
+		_choices[i].size = Vector2(choice_measure_width, _choiceHeight)
 
 	# frame wait is needed for the text to actually process itself :/
 	await get_tree().process_frame
@@ -102,7 +119,9 @@ func _initialize_placement(num_choices: int) -> void:
 	# Scale the main textbox down to accomodate choices
 	text_container.position = Vector2(0,0)
 	#### text_container.size = panel_container.size - Vector2(0, _choiceHeight * num_choices)
-	text_container.size = panel_container.size - Vector2(0, total_offset)
+	#### pre-zoom text area leaves a single answer height for each answer, re-using 153f7a2 - 60e239c
+	var choices_height: float = total_offset if _is_zoomed_dialogue else _choiceHeight * num_choices
+	text_container.size = panel_container.size - Vector2(0, choices_height)
 	apply_margins(text_container, textMargin)
 	warn_if_text_overflows(text)
 
@@ -166,8 +185,13 @@ func _process(delta: float) -> void:
 		return
 
 	_unveiledText = get_unveiled(_requestedText, delta)
+	#### re-using 153f7a2 - 60e239c
 	#### text.text = _unveiledText
-	text.visible_characters = _unveiledText.length()
+	if _is_zoomed_dialogue:
+		text.visible_characters = _unveiledText.length()
+	else:
+		#pre-zoom typing, words may jump to the next line while unveiling
+		text.text = _unveiledText
 
 
 func _on_text_container_gui_input(event: InputEvent) -> void:

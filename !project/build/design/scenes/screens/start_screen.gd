@@ -101,6 +101,7 @@ var _arrow_switch_moment: int = 0
 @onready var id_label: Label = %IdLabel
 @onready var web_version_box: VBoxContainer = %WebVersionBox
 @onready var music_controller: TextureButton = %MusicController
+@onready var zoom_controller: TextureButton = %ZoomController
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -506,4 +507,5 @@ func _start_game() -> void:
 	_game_start_count += 1
 	_save_game_start_count()
 
-	GameManager.start_game(controller_type, difficulty_type, MissionDescriptor.new())
+	#### zoom_controller.button_pressed re-introduces 153f7a2 - 60e239c implementation
+	GameManager.start_game(controller_type, difficulty_type, MissionDescriptor.new(), not zoom_controller.button_pressed)
