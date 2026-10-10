@@ -97,10 +97,14 @@ var ClassicalControllers: Dictionary[String, Variant] = {
 	"highlighted_answer_tint": Color(1.0, 0.85, 0.3, 1.0),
 	#dialog opening grace period before the voter stops
 	"dialog_opening_buffer": 0.5,
-	#controls layer while a dialog is open, above the dialog layer (10) so the buttons show through the dimming
-	"dialog_open_layer": 11,
-	#on-screen buttons tint while they show through the dialog dimming
-	"dialog_open_buttons_tint": Color(0.8, 0.8, 0.8, 1.0),
+}
+
+#round holes the dialog dim leaves over the on-screen buttons
+var DialogueDim: Dictionary[String, Variant] = {
+	#px a hole reaches past its button's edge
+	"spotlight_padding": 16.0,
+	#px over which a hole's edge fades into the full dim
+	"spotlight_softness": 40.0,
 }
 
 #dialogue without zoom, re-using 153f7a2 - 60e239c

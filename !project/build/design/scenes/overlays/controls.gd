@@ -11,8 +11,6 @@ var _next_disabled_texture: Texture2D
 
 #action each button fires while its state is played, kept while the button is inactive
 var _classic_button_actions: Dictionary[TouchScreenButton, String] = {}
-#layer the controls go back to once a dialog closes
-var _default_layer: int
 
 func _ready() -> void:
 	_next_enabled_texture = _next_button.texture_normal
@@ -21,7 +19,6 @@ func _ready() -> void:
 
 	for classic_button in _classic_buttons:
 		_classic_button_actions[classic_button] = classic_button.action
-	_default_layer = layer
 	set_dialog_open(false)
 
 #scene shows the classic on-screen buttons by default; screen controls swap them for the next button
@@ -39,17 +36,23 @@ func set_next_enabled(is_enabled: bool) -> void:
 	_next_button.texture_pressed = _next_disabled_texture
 
 #Select and Initiate work outside a dialog, Confirm and Highlight inside it; the other pair is dimmed and fires nothing
-#while a dialog is open the buttons are drawn muted over its dimming
 func set_dialog_open(is_dialog_open: bool) -> void:
-	layer = Configs.ClassicalControllers["dialog_open_layer"] if is_dialog_open else _default_layer
-	var buttons_tint: Color = Configs.ClassicalControllers["dialog_open_buttons_tint"] if is_dialog_open else Color.WHITE
-	for controls_button in _classic_buttons + [_next_button]:
-		controls_button.modulate = Color(buttons_tint, controls_button.modulate.a)
-
 	for course_button in _course_buttons:
 		_set_classic_button_active(course_button, not is_dialog_open)
 	for dialog_button in _dialogue_buttons:
 		_set_classic_button_active(dialog_button, is_dialog_open)
+
+#centre and radius of every shown button in canvas pixels, for the dialog dim to leave uncovered
+func get_button_spotlights() -> PackedVector3Array:
+	var button_spotlights: PackedVector3Array = []
+	for shown_button: TouchScreenButton in _classic_buttons + [_next_button]:
+		if not shown_button.visible: continue
+
+		var button_size: Vector2 = shown_button.texture_normal.get_size() * shown_button.global_scale
+		var button_centre: Vector2 = shown_button.global_position + button_size / 2.0
+		var spotlight_radius: float = maxf(button_size.x, button_size.y) / 2.0 + Configs.DialogueDim["spotlight_padding"]
+		button_spotlights.append(Vector3(button_centre.x, button_centre.y, spotlight_radius))
+	return button_spotlights
 
 #an inactive button is see-through and has no action to fire
 func _set_classic_button_active(classic_button: TouchScreenButton, is_active: bool) -> void:

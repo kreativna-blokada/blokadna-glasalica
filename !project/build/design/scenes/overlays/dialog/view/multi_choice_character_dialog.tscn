@@ -4,6 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="2_028c8"]
 [ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="3_fi7f4"]
 [ext_resource type="PackedScene" uid="uid://royxhud7ipib" path="res://!project/build/design/scenes/overlays/dialog/view/dialog_timer_vfx.tscn" id="4_oepv8"]
+[ext_resource type="Shader" path="res://!project/art/shaders/dim_spotlights.gdshader" id="5_dimsp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dim_spotlights"]
+shader = ExtResource("5_dimsp")
 
 [node name="MultiChoiceCharacterDialog" type="Control" unique_id=1292698811]
 layout_mode = 3
@@ -17,6 +21,7 @@ metadata/_edit_vertical_guides_ = [960.0]
 metadata/_edit_horizontal_guides_ = [540.0]
 
 [node name="DimBackground" type="ColorRect" parent="." unique_id=1792635627]
+material = SubResource("ShaderMaterial_dim_spotlights")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

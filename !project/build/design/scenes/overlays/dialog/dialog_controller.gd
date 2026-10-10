@@ -23,6 +23,8 @@ var _dialog_timer: DialogTimer = DialogTimer.new()
 var _is_answered_by_controls: bool = false
 #false shows the smaller pre-zoom dialogues
 var _is_zoomed_dialogue: bool = true
+#buttons the dim leaves uncovered, canvas centre and radius each
+var _dim_spotlights: PackedVector3Array = []
 
 func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog_color: Color, dialog_size: Vector2i) -> void:
 	_is_answered_by_controls = game_descriptor.get_controller_type() == Globals.ControllerType.Classic
@@ -36,6 +38,10 @@ func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog
 	_dialog_color = dialog_color
 	add_child(_dialog_timer)
 	_start_timer_if_needed()
+
+#keeps the given buttons visible through the dialog dim, called before the dialog enters the tree
+func set_dim_spotlights(button_spotlights: PackedVector3Array) -> void:
+	_dim_spotlights = button_spotlights
 
 func _start_timer_if_needed() -> void:
 	if _timers_enabled and _current_node.get_num_choices() > 0:
@@ -63,6 +69,8 @@ func _create_view() -> void:
 	_multi_choice_dialog_box.show_timer_vfx(_timers_enabled)
 	_multi_choice_dialog_box.set_tint(_dialog_color)
 	_multi_choice_dialog_box.show_choice_highlight(_is_answered_by_controls)
+	_dialog_box.set_dim_spotlights(_dim_spotlights)
+	_multi_choice_dialog_box.set_dim_spotlights(_dim_spotlights)
 
 	_dialog_speakers.initialize(_current_node.get_dialog_descriptor().speaker)
 	_dialog_speakers.set_dialogue_width(_dialog_size.x)
