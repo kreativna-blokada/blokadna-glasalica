@@ -21,10 +21,11 @@ func get_game_descriptor() -> GameDescriptor:
 func get_mission_descriptor() -> MissionDescriptor:
 	return _mission_descriptor
 
-func start_game(controller_type: Globals.ControllerType, difficulty: GameDescriptor.Difficulty, mission_descriptor: MissionDescriptor) -> void:
+func start_game(controller_type: Globals.ControllerType, difficulty: GameDescriptor.Difficulty, mission_descriptor: MissionDescriptor, is_zoomed_dialogue: bool) -> void:
 	_game_descriptor = GameDescriptor.new()
 	_set_difficulty(difficulty)
 	_set_controller_type(controller_type)
+	_set_zoomed_dialogue(is_zoomed_dialogue)
 	_set_mission_descriptor(mission_descriptor)
 	switch_screen(GameScreen.MAIN)
 	
@@ -41,6 +42,10 @@ func _set_difficulty(difficulty: GameDescriptor.Difficulty) -> void:
 
 func _set_controller_type(controller_type: Globals.ControllerType) -> void:
 	_game_descriptor.set_controller_type(controller_type)
+
+#### dialogues toggles text zoom, re-using 153f7a2 - 60e239c
+func _set_zoomed_dialogue(is_zoomed_dialogue: bool) -> void:
+	_game_descriptor.set_zoomed_dialogue(is_zoomed_dialogue)
 
 func _set_mission_descriptor(mission_descriptor: MissionDescriptor) -> void:
 	_mission_descriptor = mission_descriptor

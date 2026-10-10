@@ -99,6 +99,18 @@ var ClassicalControllers: Dictionary[String, Variant] = {
 	"dialog_opening_buffer": 0.5,
 }
 
+#dialogue without zoom, re-using 153f7a2 - 60e239c
+var DialogueZoom: Dictionary[String, Variant] = {
+	#regular font at 29 for the dialogue and answer text
+	"compact_theme": "res://!project/art/UI/DialogBox/dialog_box_compact.tres",
+	#dialog box background tint darkening it
+	"compact_box_tint": Color(0.9647059, 0.9372549, 0.8627451, 1),
+	#px the single line dialogue text runs past the box on the right and bottom
+	"compact_text_overhang": 24.0,
+	#answer box height limit in text lines
+	"compact_answer_max_lines": 2,
+}
+
 var Leaderboard: Dictionary[String, Variant] = {
 	#debug firebase database endpoint, public on purpose; its rules get locked once the game is public
 	"debug_endpoint": "https://glasalica-default-rtdb.europe-west1.firebasedatabase.app/",

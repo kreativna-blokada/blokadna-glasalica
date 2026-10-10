@@ -1,0 +1,8 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontFile" uid="uid://w8p5mlgowyma" path="res://!project/art/UI/DejaVuLGCSansMono.ttf" id="1_compact"]
+
+[resource]
+RichTextLabel/colors/default_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+RichTextLabel/font_sizes/normal_font_size = 29
+RichTextLabel/fonts/normal_font = ExtResource("1_compact")

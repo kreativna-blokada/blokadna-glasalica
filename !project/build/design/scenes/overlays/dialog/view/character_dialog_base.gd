@@ -6,13 +6,16 @@ extends Node
 
 var _unveilTimer: float = 1.0 / unveilSpeed
 var _lastUnveiledCharIndex: int = 0
+#false shows the smaller pre-zoom dialogue
+var _is_zoomed_dialogue: bool = true
 
 # 16 pixel padding for the actual borders of the dialog box
 # and then some :D
 const textMargin: Vector2 = Vector2(24, 24)
 
-func initialize(textboxScale: Vector2i) -> void:
+func initialize(textboxScale: Vector2i, is_zoomed_dialogue: bool) -> void:
 	textboxScalePx = textboxScale
+	_is_zoomed_dialogue = is_zoomed_dialogue
 
 func set_tint(_tint: Color) -> void:
 	pass
@@ -39,11 +42,14 @@ func get_unveiled(text: String, delta: float) -> String:
 			
 	return text.substr(0, _lastUnveiledCharIndex)
 
+#### gives the dialogue the pre-zoom font and darkens the box, re-using 153f7a2 - 60e239c
+func apply_compact_look(text_label: RichTextLabel, box_background: CanvasItem) -> void:
+	text_label.theme = load(Configs.DialogueZoom["compact_theme"])
+	box_background.modulate = Configs.DialogueZoom["compact_box_tint"]
 
 func apply_margins(node: Control, margin: Vector2) -> void:
 	node.position += margin
 	node.size -= margin * 2
-
 
 # warn in debug builds when dialogue text is taller than its label and gets cut off
 func warn_if_text_overflows(text_label: RichTextLabel) -> void:

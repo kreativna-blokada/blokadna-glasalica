@@ -21,9 +21,12 @@ var _timers_enabled: bool = false
 var _dialog_timer: DialogTimer = DialogTimer.new()
 #true with classic controls, Confirm / Highlight
 var _is_answered_by_controls: bool = false
+#false shows the smaller pre-zoom dialogues
+var _is_zoomed_dialogue: bool = true
 
 func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog_color: Color, dialog_size: Vector2i) -> void:
 	_is_answered_by_controls = game_descriptor.get_controller_type() == Globals.ControllerType.Classic
+	_is_zoomed_dialogue = game_descriptor.is_zoomed_dialogue()
 
 	#### dialog_path should be renamed to dialog_data
 	_timers_enabled = game_descriptor.are_timers_enabled()
@@ -54,9 +57,9 @@ func _create_view() -> void:
 	add_child(_multi_choice_dialog_box)
 	add_child(_dialog_speakers)
 
-	_dialog_box.initialize(_dialog_size)
+	_dialog_box.initialize(_dialog_size, _is_zoomed_dialogue)
 	_dialog_box.set_tint(_dialog_color)
-	_multi_choice_dialog_box.initialize( _dialog_size)
+	_multi_choice_dialog_box.initialize(_dialog_size, _is_zoomed_dialogue)
 	_multi_choice_dialog_box.show_timer_vfx(_timers_enabled)
 	_multi_choice_dialog_box.set_tint(_dialog_color)
 	_multi_choice_dialog_box.show_choice_highlight(_is_answered_by_controls)

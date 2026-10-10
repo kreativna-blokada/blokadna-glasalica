@@ -100,6 +100,8 @@ var _arrow_switch_moment: int = 0
 @onready var info_label: Label = %InfoLabel
 @onready var id_label: Label = %IdLabel
 @onready var web_version_box: VBoxContainer = %WebVersionBox
+@onready var music_controller: TextureButton = %MusicController
+@onready var zoom_controller: TextureButton = %ZoomController
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -132,6 +134,10 @@ func _ready() -> void:
 	left_arrow.gui_input.connect(_on_arrow_input)
 	right_arrow.gui_input.connect(_on_arrow_input)
 	Signals.menu_option_selected.connect(_on_menu_option_selected)
+
+	#the button shows whether sound was switched off before the menu loaded
+	music_controller.set_pressed_no_signal(AudioServer.is_bus_mute(AudioServer.get_bus_index(&"Master")))
+	music_controller.toggled.connect(_on_music_controller_switched)
 
 #counts up/down phone movements via accelerometer, starts game on enough shakes
 func _process(_delta: float) -> void:
@@ -201,6 +207,10 @@ func _on_menu_option_button_pressed() -> void:
 ####signal Difficulty.difficulty_changed => keeps the difficulty the game starts with
 ####func _on_difficulty_changed(difficulty: GameDescriptor.Difficulty) -> void:
 ####	_chosen_difficulty = difficulty
+
+#signal MusicController.toggled => mutes every sound in the game while pressed, unmutes it when released
+func _on_music_controller_switched(is_sound_off: bool) -> void:
+	AudioServer.set_bus_mute(AudioServer.get_bus_index(&"Master"), is_sound_off)
 
 #signal LeftArrow.gui_input, RightArrow.gui_input => switches the difficulty or the controls of the ticked row and shows it on the MenuOptionButton; touch only, mouse clicks arrive as emulated touch; taps right after a switch are ignored
 func _on_arrow_input(event: InputEvent) -> void:
@@ -497,4 +507,5 @@ func _start_game() -> void:
 	_game_start_count += 1
 	_save_game_start_count()
 
-	GameManager.start_game(controller_type, difficulty_type, MissionDescriptor.new())
+	#### zoom_controller.button_pressed re-introduces 153f7a2 - 60e239c implementation
+	GameManager.start_game(controller_type, difficulty_type, MissionDescriptor.new(), not zoom_controller.button_pressed)
