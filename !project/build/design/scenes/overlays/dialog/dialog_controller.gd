@@ -65,6 +65,7 @@ func _create_view() -> void:
 	_multi_choice_dialog_box.show_choice_highlight(_is_answered_by_controls)
 
 	_dialog_speakers.initialize(_current_node.get_dialog_descriptor().speaker)
+	_dialog_speakers.set_dialogue_width(_dialog_size.x)
 
 func _connect_events() -> void:
 	_dialog_box.finished.connect(_on_simple_dialog_finish)
