@@ -41,6 +41,8 @@ var _game_descriptor: GameDescriptor = null
 var _popup: TextPopup = null
 var _round_timer: Timer
 var _round_timer_display: RoundTimerDisplay
+#stations still to guide Initiate at, each the first time the room voter stops there
+var _initiate_guide_stations: Array = Configs.ClassicalControllers["initiate_guide_stations"].duplicate()
 #music loop the round plays right now
 var _round_music: Globals.Music = Globals.Music.Round
 
@@ -56,6 +58,7 @@ func _ready() -> void:
 	progress_flow.init(stage, _game_descriptor.get_controller_type())
 	progress_flow.stop_button_pressed.connect(_on_stop_button_pressed)
 	stage.dialogue_requested.connect(_open_dialogue)
+	stage.room_voter_stopped.connect(_on_room_voter_stopped)
 
 	controls.init(stage, _game_descriptor.get_controller_type())
 	Signals.game_close_requested.connect(_on_game_close_requested)
@@ -69,6 +72,9 @@ func _ready() -> void:
 func _show_start_popup() -> void:
 	_popup = TEXT_POPUP_SCENE.instantiate() as TextPopup
 	dialog_layer.add_child(_popup)
+	_popup.init(_game_descriptor.get_controller_type())
+	#on-screen controls stay hidden while the start popup is open, whatever the controller type
+	controls.hide()
 	#### tentatively commented out
 	#### _popup.set_text(GameManager.get_mission_descriptor().get_mission_description())
 	_popup.finished.connect(_start_popup_closed)
@@ -77,11 +83,25 @@ func _show_start_popup() -> void:
 func _start_popup_closed() -> void:
 	_popup.hide()
 	_popup.queue_free()
+	controls.show()
 	
 	stage.start_spawning()
-	_start_round_timer()
+	#the round time counts from the first voter waiting in the queue
+	stage.queue_count_updated.connect(_on_first_voter_queued, CONNECT_ONE_SHOT)
 	_round_music = Globals.Music.Round
 	SoundManager.play_jingle(Globals.Sound.RoundStart, _round_music)
+
+#signal Stage.queue_count_updated => the first voter stopped in the queue, the round timer starts
+func _on_first_voter_queued(_count: int) -> void:
+	_start_round_timer()
+	controls.show_guide_border()
+
+#signal Stage.room_voter_stopped => the first stop at a guided station pulses Initiate
+func _on_room_voter_stopped(station_number: int) -> void:
+	if not _initiate_guide_stations.has(station_number): return
+
+	_initiate_guide_stations.erase(station_number)
+	controls.show_initiate_guide_border()
 
 #starts the one-shot timer that ends the run
 func _start_round_timer() -> void:

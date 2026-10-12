@@ -77,6 +77,8 @@ var Round: Dictionary[String, Variant] = {
 	"duration": 300.0,
 	#s left on the round timer when the challenge music takes over for good
 	"challenge_time": 30.0,
+	#station number (Lamp is 1) from which the room voter brings in a new voter while nobody waits in the queue
+	"queue_refill_station": 5,
 }
 
 var Sound: Dictionary[String, Variant] = {
@@ -97,6 +99,20 @@ var ClassicalControllers: Dictionary[String, Variant] = {
 	"highlighted_answer_tint": Color(1.0, 0.85, 0.3, 1.0),
 	#dialog opening grace period before the voter stops
 	"dialog_opening_buffer": 0.5,
+	#gold of the guide border shown around Select, then Initiate, until the first start, same as the name plate border
+	"guide_border_color": Color(0.72, 0.62, 0.32, 1.0),
+	#px width of the guide border
+	"guide_border_width": 32,
+	#px gap between the guided button and the guide border
+	"guide_border_gap": 6,
+	#px rounding of the guide border corners
+	"guide_border_radius": 12,
+	#seconds of one guide border pulse, fading out and back in; 0 keeps the border still
+	"guide_border_pulse": 1.0,
+	#lowest guide border opacity reached while pulsing
+	"guide_border_faded_opacity": 0.05,
+	#stations where the guide border pulses around Initiate the first time the room voter stops there
+	"initiate_guide_stations": [1, 2],
 }
 
 #round holes the dialog dim leaves over the on-screen buttons

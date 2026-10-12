@@ -25,7 +25,7 @@ script = ExtResource("1_whd4d")
 script = ExtResource("3_whd4d")
 
 [node name="Timer" type="Timer" parent="Stage" unique_id=126925033]
-wait_time = 7.5
+wait_time = 15.0
 one_shot = true
 
 [node name="Controls" parent="." unique_id=1497789483 instance=ExtResource("5_ywe5c")]

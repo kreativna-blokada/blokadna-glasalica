@@ -13,6 +13,7 @@ signal queue_count_updated(count: int)
 signal stops_occupancy_updated(stops_occupancy_flags: Array)
 signal next_voter_availability_updated(is_available: bool)
 signal dialogue_requested(voter: Voter, stop_name: String)
+signal room_voter_stopped(station_number: int)
 
 #broadcast vars
 var queued_voters: Array = []
@@ -201,6 +202,24 @@ func _find_first_queue_spot() -> Node2D:
 		if spot.is_free(): return spot
 	return null
 
+#spawns a voter at once when the room voter is far along the course and nobody waits or walks to the queue
+func _refill_empty_queue(stopped_voter: Voter) -> void:
+	if stopped_voter != _voter_in_room or _has_incoming_voter() or not _any_free_queue_spots():
+		return
+	if _get_station_number(stopped_voter) >= Configs.Round["queue_refill_station"]:
+		_spawn_voters()
+
+#reports whether any voter is queueing or still walking to the queue
+func _has_incoming_voter() -> bool:
+	return voters_factory.get_children().any(
+		func(voter): return voter is Voter and voter.voting_course_pointer <= 1
+	)
+
+#counts the stations the voter has reached, its current one included
+func _get_station_number(voter: Voter) -> int:
+	var reached_course: Array = voter.voting_course.slice(0, voter.voting_course_pointer + 1)
+	return reached_course.filter(func(stop): return stop is VotingStop and stop.is_stop).size()
+
 #returns (validates) currently selected voter
 func _get_active_selected_voter() -> Voter:
 	if _selected_voter and is_instance_valid(_selected_voter):
@@ -357,9 +376,12 @@ func _on_voter_course_point_reached(point_name: StringName, voter: Voter) -> voi
 	if point_name == &"Exit":
 		_release_room_voter(voter)
 
-#opens the dialog asked for while the voter was about to stop
+#opens the dialog asked for while the voter was about to stop, otherwise reports the room voter's station
 func _on_voter_stopped(stop_name: String, voter: Voter) -> void:
+	_refill_empty_queue(voter)
 	if voter != _voter_awaiting_dialogue:
+		if voter == _voter_in_room:
+			room_voter_stopped.emit(_get_station_number(voter))
 		return
 	_voter_awaiting_dialogue = null
 	dialogue_requested.emit(voter, stop_name)
