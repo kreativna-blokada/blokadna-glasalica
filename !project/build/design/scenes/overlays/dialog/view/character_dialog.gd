@@ -11,6 +11,9 @@ signal finished()
 var _requestedText: String = ""
 var _unveiledText: String = ""
 var _tint: Color
+#text colours of the left and right speakers
+var _left_text_color: Color
+var _right_text_color: Color
 
 const TOUCH_DEBOUNCE_TIME: float = 0.1
 var _touch_debounce_timer: float = 0
@@ -31,6 +34,11 @@ func initialize(textboxScale: Vector2i, is_zoomed_dialogue: bool) -> void:
 func set_tint(tint: Color) -> void:
 	_tint = tint
 
+#deep text colours the left and right speakers talk in for this dialogue
+func set_text_colors(left_text_color: Color, right_text_color: Color) -> void:
+	_left_text_color = left_text_color
+	_right_text_color = right_text_color
+
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	_requestedText = dialog_descriptor.text
 	_touch_debounce_timer = TOUCH_DEBOUNCE_TIME
@@ -39,6 +47,8 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 		background.modulate = _tint
 	else:
 		background.modulate = DialogColors.get_default_color()
+	var line_text_color: Color = _right_text_color if dialog_descriptor.speaker == DialogDescriptor.Speaker.RIGHT else _left_text_color
+	DialogColors.apply_text_colors(text, line_text_color, background.modulate * box_background.modulate)
 	reset_unveil()
 
 	# full text is laid out once so words never jump lines while unveiling

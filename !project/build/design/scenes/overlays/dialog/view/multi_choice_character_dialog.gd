@@ -17,6 +17,9 @@ var _num_choices: int = 0
 var _requestedText: String = ""
 var _unveiledText: String = ""
 var _tint: Color
+#text colours of the left and right speakers
+var _left_text_color: Color
+var _right_text_color: Color
 #answer the Confirm button submits, moved by the Highlight button
 var _highlighted_choice_index: int = 0
 var _is_answered_by_controls: bool = false
@@ -41,6 +44,11 @@ func initialize(textboxScale: Vector2i, is_zoomed_dialogue: bool) -> void:
 func set_tint(tint: Color) -> void:
 	_tint = tint
 
+#deep text colours the left and right speakers talk in for this dialogue
+func set_text_colors(left_text_color: Color, right_text_color: Color) -> void:
+	_left_text_color = left_text_color
+	_right_text_color = right_text_color
+
 func show_timer_vfx(show: bool) -> void:
 	if show:
 		timer_vfx.show()
@@ -55,6 +63,9 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 		background.modulate = _tint
 	else:
 		background.modulate = DialogColors.get_default_color()
+	var line_text_color: Color = _right_text_color if dialog_descriptor.speaker == DialogDescriptor.Speaker.RIGHT else _left_text_color
+	DialogColors.apply_text_colors(text, line_text_color, background.modulate * box_background.modulate)
+	_color_choices(dialog_descriptor.speaker)
 
 	reset_unveil()
 	_touch_debounce_timer = TOUCH_DEBOUNCE_TIME
@@ -68,6 +79,12 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	if not _is_zoomed_dialogue:
 		text.text = ""
 		text.visible_characters = -1
+
+#prints the answers in the text colour of the speaker answering, the one not saying the line, over the sentence box
+func _color_choices(line_speaker: DialogDescriptor.Speaker) -> void:
+	var answer_text_color: Color = _left_text_color if line_speaker == DialogDescriptor.Speaker.RIGHT else _right_text_color
+	for choice in _choices:
+		choice.set_text_colors(answer_text_color, background.modulate * box_background.modulate)
 
 func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> void:
 	var numChoices: int = len(choices)

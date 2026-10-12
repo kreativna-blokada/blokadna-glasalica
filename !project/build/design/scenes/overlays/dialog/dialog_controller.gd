@@ -65,6 +65,9 @@ func _create_view() -> void:
 
 	_dialog_box.initialize(_dialog_size, _is_zoomed_dialogue)
 	_dialog_box.set_tint(_dialog_color)
+	var speaker_text_colors: Array[Color] = DialogColors.draw_speaker_text_colors()
+	_dialog_box.set_text_colors(speaker_text_colors[0], speaker_text_colors[1])
+	_multi_choice_dialog_box.set_text_colors(speaker_text_colors[0], speaker_text_colors[1])
 	_multi_choice_dialog_box.initialize(_dialog_size, _is_zoomed_dialogue)
 	_multi_choice_dialog_box.show_timer_vfx(_timers_enabled)
 	_multi_choice_dialog_box.set_tint(_dialog_color)
@@ -74,6 +77,10 @@ func _create_view() -> void:
 
 	_dialog_speakers.initialize(_current_node.get_dialog_descriptor().speaker)
 	_dialog_speakers.set_dialogue_width(_dialog_size.x)
+
+	var box_tint: Color = Color.WHITE if _is_zoomed_dialogue else Configs.DialogueZoom["compact_box_tint"]
+	_dialog_speakers.set_name_plate_colors(DialogColors.get_default_color(), _dialog_color, box_tint)
+	_dialog_speakers.set_name_colors(speaker_text_colors[0], speaker_text_colors[1])
 
 func _connect_events() -> void:
 	_dialog_box.finished.connect(_on_simple_dialog_finish)

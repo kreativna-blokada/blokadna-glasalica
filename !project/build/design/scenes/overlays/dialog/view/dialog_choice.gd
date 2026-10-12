@@ -6,6 +6,11 @@ extends Control
 
 #background look from the scene, restored when the highlight leaves
 var _original_background_modulate: Color
+#colour and opacity of the answer nine-slice texture inside its border
+const BACKGROUND_TEXTURE_COLOR: Color = Color8(189, 180, 168, 137)
+#text colour of the speaker answering and the sentence box showing through the answer
+var _answer_text_color: Color = DialogColors.get_default_color()
+var _sentence_box_color: Color = DialogColors.get_default_color()
 #pre-zoom answers are at most two lines tall
 var _is_compact: bool = false
 
@@ -40,6 +45,19 @@ func _ready() -> void:
 #tints the background while the Confirm button would submit this answer
 func set_highlighted(is_highlighted: bool) -> void:
 	_background.modulate = Configs.ClassicalControllers["highlighted_answer_tint"] if is_highlighted else _original_background_modulate
+	_show_text_colors()
+
+#prints the answer in the text colour of the speaker answering, shaded for the sentence box under it
+func set_text_colors(answer_text_color: Color, sentence_box_color: Color) -> void:
+	_answer_text_color = answer_text_color
+	_sentence_box_color = sentence_box_color
+	_show_text_colors()
+
+#shades the text against the answer background as drawn, the tinted texture blended over the sentence box
+func _show_text_colors() -> void:
+	var answer_fill: Color = BACKGROUND_TEXTURE_COLOR * _background.modulate
+	var answer_background: Color = _sentence_box_color.lerp(Color(answer_fill, 1.0), answer_fill.a)
+	DialogColors.apply_text_colors(_text, _answer_text_color, answer_background)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
