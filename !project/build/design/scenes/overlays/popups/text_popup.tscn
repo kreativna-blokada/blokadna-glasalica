@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://cnn7b7nl8olpg" path="res://!project/art/UI/Buttons/stop-ballot.png" id="8_ballot"]
 [ext_resource type="Texture2D" uid="uid://bxqeglmbirscv" path="res://!project/art/UI/Buttons/stop-booth.png" id="9_booth"]
 [ext_resource type="Texture2D" uid="uid://pcilj6pcgqi8" path="res://!project/art/UI/Buttons/stop-box.png" id="10_box"]
+[ext_resource type="Texture2D" uid="uid://drvshxrdvhmnu" path="res://!project/art/UI/Buttons/stop-lamp-disabled.png" id="11_lampd"]
+[ext_resource type="Texture2D" uid="uid://buvdxuyq6y88s" path="res://!project/art/UI/Buttons/input-wrong-active.png" id="12_close"]
 [ext_resource type="FontFile" uid="uid://w8p5mlgowyma" path="res://!project/art/UI/DejaVuLGCSansMono.ttf" id="13_font"]
 [ext_resource type="Texture2D" uid="uid://dd6mrsxeupov" path="res://!project/art/UI/Buttons/input-select-active.png" id="14_select"]
 [ext_resource type="Texture2D" uid="uid://c650drbdu3mdx" path="res://!project/art/UI/Buttons/input-initiate-active.png" id="15_initiate"]
@@ -343,6 +345,56 @@ theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
 theme_override_fonts/font = ExtResource("13_font")
 theme_override_font_sizes/font_size = 29
 text = "Pozicija svetli i dobija zeleni okvir kad birač čeka. Klikni za početak razgovora."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="DisabledStationExplanation" type="HBoxContainer" parent="Container/Legend" unique_id=1551175468]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Icon" type="TextureRect" parent="Container/Legend/DisabledStationExplanation" unique_id=943664604]
+texture_filter = 1
+custom_minimum_size = Vector2(90, 84)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("11_lampd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Container/Legend/DisabledStationExplanation" unique_id=840216806]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("13_font")
+theme_override_font_sizes/font_size = 29
+text = "Siva stanica: nema nikoga, ne može se kliknuti."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="CloseExplanation" type="HBoxContainer" parent="Container/Legend" unique_id=2073122825]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Icon" type="TextureRect" parent="Container/Legend/CloseExplanation" unique_id=548558703]
+texture_filter = 1
+custom_minimum_size = Vector2(90, 60)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("12_close")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Container/Legend/CloseExplanation" unique_id=592619832]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("13_font")
+theme_override_font_sizes/font_size = 29
+text = "Gore desno: izlaz iz igre."
 vertical_alignment = 1
 autowrap_mode = 3
 
