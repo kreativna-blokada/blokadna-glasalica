@@ -3,7 +3,7 @@ extends Control
 
 @export var anim_duration: float = 0.15
 
-#outline brought around the plate of the active speaker, drawn in the colour of its name at full brightness
+#outline brought around the plate of the answering speaker, drawn in the colour of its name at full brightness
 const NAME_PLATE_OUTLINE_WIDTH: int = 4
 #glow fading out beyond the outline, in rings of the ring width, starting at the glow strength
 const NAME_PLATE_GLOW_RINGS: int = 8
@@ -18,7 +18,7 @@ const NAME_PLATE_GLOW_STRENGTH: float = 0.5
 @onready var right_name_label: Label = $RightNamePlate/Name
 @onready var name_font_size: int = left_name_label.get_theme_font_size("font_size")
 
-#outline around each name plate and how visible it is, from 0 for the silent speaker to 1 for the one talking
+#outline around each name plate and how visible it is, from 0 for the one talking to 1 for the one answering
 var _name_plate_outline_style: StyleBoxFlat
 var _name_plate_outline_alphas: Dictionary[PanelContainer, float] = {}
 
@@ -39,7 +39,7 @@ func _create_name_plate_outline_style() -> StyleBoxFlat:
 	outline_style.draw_center = false
 	return outline_style
 
-#draws the glow and then the outline around the plate in the bright name colour, as visible as its speaker is talking
+#draws the glow and then the outline around the plate in the bright name colour, as visible as its speaker is answering
 func _draw_name_plate_outline(name_plate: PanelContainer, name_label: Label) -> void:
 	var outline_alpha: float = _name_plate_outline_alphas.get(name_plate, 0.0)
 	if outline_alpha <= 0.0:
@@ -116,7 +116,7 @@ func set_active_speaker(speaker: DialogDescriptor.Speaker) -> void:
 			_transition(left_speaker, left_name_plate, anim_duration, false)
 			_transition(right_speaker, right_name_plate, anim_duration, true)
 
-#fades the speaker and its name plate in or out, outlining the plate of the one talking
+#fades the speaker in or out while its name plate stays lit, outlining the plate of the one answering
 func _transition(speaker: Control, name_plate: PanelContainer, duration: float, is_talking: bool) -> void:
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT)
@@ -131,10 +131,9 @@ func _transition(speaker: Control, name_plate: PanelContainer, duration: float, 
 	tween.set_parallel(true)
 	tween.tween_property(speaker, "modulate", color, duration).from_current()
 	tween.tween_property(speaker, "scale", target_scale, duration).from_current()
-	tween.tween_property(name_plate, "modulate", color, duration).from_current()
-	tween.tween_method(_set_name_plate_outline_alpha.bind(name_plate), _name_plate_outline_alphas.get(name_plate, 0.0), 1.0 if is_talking else 0.0, duration)
+	tween.tween_method(_set_name_plate_outline_alpha.bind(name_plate), _name_plate_outline_alphas.get(name_plate, 0.0), 0.0 if is_talking else 1.0, duration)
 
-#shows the speaker and its name plate at once, outlining the plate of the one talking
+#shows the speaker at once while its name plate stays lit, outlining the plate of the one answering
 func _change_instant(speaker: Control, name_plate: PanelContainer, is_talking: bool) -> void:
 	var color: Color = Color.DIM_GRAY
 	var target_scale := Vector2(0.85, 0.85)
@@ -144,5 +143,4 @@ func _change_instant(speaker: Control, name_plate: PanelContainer, is_talking: b
 
 	speaker.modulate = color
 	speaker.scale = target_scale
-	name_plate.modulate = color
-	_set_name_plate_outline_alpha(1.0 if is_talking else 0.0, name_plate)
+	_set_name_plate_outline_alpha(0.0 if is_talking else 1.0, name_plate)
