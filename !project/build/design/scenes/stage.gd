@@ -13,6 +13,7 @@ signal queue_count_updated(count: int)
 signal stops_occupancy_updated(stops_occupancy_flags: Array)
 signal next_voter_availability_updated(is_available: bool)
 signal dialogue_requested(voter: Voter, stop_name: String)
+signal room_voter_stopped(station_number: int)
 
 #broadcast vars
 var queued_voters: Array = []
@@ -375,10 +376,12 @@ func _on_voter_course_point_reached(point_name: StringName, voter: Voter) -> voi
 	if point_name == &"Exit":
 		_release_room_voter(voter)
 
-#opens the dialog asked for while the voter was about to stop
+#opens the dialog asked for while the voter was about to stop, otherwise reports the room voter's station
 func _on_voter_stopped(stop_name: String, voter: Voter) -> void:
 	_refill_empty_queue(voter)
 	if voter != _voter_awaiting_dialogue:
+		if voter == _voter_in_room:
+			room_voter_stopped.emit(_get_station_number(voter))
 		return
 	_voter_awaiting_dialogue = null
 	dialogue_requested.emit(voter, stop_name)

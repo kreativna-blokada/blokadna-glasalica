@@ -41,6 +41,8 @@ var _game_descriptor: GameDescriptor = null
 var _popup: TextPopup = null
 var _round_timer: Timer
 var _round_timer_display: RoundTimerDisplay
+#stations still to guide Initiate at, each the first time the room voter stops there
+var _initiate_guide_stations: Array = Configs.ClassicalControllers["initiate_guide_stations"].duplicate()
 #music loop the round plays right now
 var _round_music: Globals.Music = Globals.Music.Round
 
@@ -56,6 +58,7 @@ func _ready() -> void:
 	progress_flow.init(stage, _game_descriptor.get_controller_type())
 	progress_flow.stop_button_pressed.connect(_on_stop_button_pressed)
 	stage.dialogue_requested.connect(_open_dialogue)
+	stage.room_voter_stopped.connect(_on_room_voter_stopped)
 
 	controls.init(stage, _game_descriptor.get_controller_type())
 	Signals.game_close_requested.connect(_on_game_close_requested)
@@ -91,6 +94,14 @@ func _start_popup_closed() -> void:
 #signal Stage.queue_count_updated => the first voter stopped in the queue, the round timer starts
 func _on_first_voter_queued(_count: int) -> void:
 	_start_round_timer()
+	controls.show_guide_border()
+
+#signal Stage.room_voter_stopped => the first stop at a guided station pulses Initiate
+func _on_room_voter_stopped(station_number: int) -> void:
+	if not _initiate_guide_stations.has(station_number): return
+
+	_initiate_guide_stations.erase(station_number)
+	controls.show_initiate_guide_border()
 
 #starts the one-shot timer that ends the run
 func _start_round_timer() -> void:
