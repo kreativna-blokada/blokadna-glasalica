@@ -83,9 +83,14 @@ func _start_popup_closed() -> void:
 	controls.show()
 	
 	stage.start_spawning()
-	_start_round_timer()
+	#the round time counts from the first voter waiting in the queue
+	stage.queue_count_updated.connect(_on_first_voter_queued, CONNECT_ONE_SHOT)
 	_round_music = Globals.Music.Round
 	SoundManager.play_jingle(Globals.Sound.RoundStart, _round_music)
+
+#signal Stage.queue_count_updated => the first voter stopped in the queue, the round timer starts
+func _on_first_voter_queued(_count: int) -> void:
+	_start_round_timer()
 
 #starts the one-shot timer that ends the run
 func _start_round_timer() -> void:
