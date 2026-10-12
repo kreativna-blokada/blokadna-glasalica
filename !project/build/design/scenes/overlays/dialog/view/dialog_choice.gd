@@ -4,9 +4,13 @@ extends Control
 @onready var _text: RichTextLabel = $ChoiceText
 @onready var _background: NinePatchRect = $NinePatchRect
 
-#colour of the speaker answering, the highlight is a shade of it
-var _fill_color: Color = DialogColors.get_default_color()
-var _is_highlighted: bool = false
+#background look from the scene, restored when the highlight leaves
+var _original_background_modulate: Color
+#colour and opacity of the answer nine-slice texture inside its border
+const BACKGROUND_TEXTURE_COLOR: Color = Color8(189, 180, 168, 137)
+#text colour of the speaker answering and the sentence box showing through the answer
+var _answer_text_color: Color = DialogColors.get_default_color()
+var _sentence_box_color: Color = DialogColors.get_default_color()
 #pre-zoom answers are at most two lines tall
 var _is_compact: bool = false
 
@@ -34,21 +38,26 @@ func use_compact_look() -> void:
 	_is_compact = true
 	_text.theme = load(Configs.DialogueZoom["compact_theme"])
 
-#fills the answer with the answering speaker colour, text contrasting it
-func set_fill(fill_color: Color) -> void:
-	_fill_color = fill_color
-	_show_fill()
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	_original_background_modulate = _background.modulate
 
-#shades the answer within its speaker colours while the Confirm button would submit it
+#tints the background while the Confirm button would submit this answer
 func set_highlighted(is_highlighted: bool) -> void:
-	_is_highlighted = is_highlighted
-	_show_fill()
+	_background.modulate = Configs.ClassicalControllers["highlighted_answer_tint"] if is_highlighted else _original_background_modulate
+	_show_text_colors()
 
-#paints the background in the speaker colour or its highlight shade, with contrasting text
-func _show_fill() -> void:
-	var shown_fill: Color = DialogColors.get_highlight_color(_fill_color) if _is_highlighted else _fill_color
-	_background.modulate = shown_fill
-	DialogColors.apply_text_colors(_text, shown_fill)
+#prints the answer in the text colour of the speaker answering, shaded for the sentence box under it
+func set_text_colors(answer_text_color: Color, sentence_box_color: Color) -> void:
+	_answer_text_color = answer_text_color
+	_sentence_box_color = sentence_box_color
+	_show_text_colors()
+
+#shades the text against the answer background as drawn, the tinted texture blended over the sentence box
+func _show_text_colors() -> void:
+	var answer_fill: Color = BACKGROUND_TEXTURE_COLOR * _background.modulate
+	var answer_background: Color = _sentence_box_color.lerp(Color(answer_fill, 1.0), answer_fill.a)
+	DialogColors.apply_text_colors(_text, _answer_text_color, answer_background)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

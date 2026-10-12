@@ -93,6 +93,8 @@ var Sound: Dictionary[String, Variant] = {
 var ClassicalControllers: Dictionary[String, Variant] = {
 	#on-screen buttons opacity for the inactive state
 	"inactive_buttons_opacity": 0.35,
+	#dialog answer background tint on Confirm submit
+	"highlighted_answer_tint": Color(1.0, 0.85, 0.3, 1.0),
 	#dialog opening grace period before the voter stops
 	"dialog_opening_buffer": 0.5,
 }

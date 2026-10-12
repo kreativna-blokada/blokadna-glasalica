@@ -24,17 +24,20 @@ func set_dialogue_width(dialog_width: float) -> void:
 	right_name_plate.offset_left = dialog_width / 2.0
 
 #fills each name plate with the dialogue colour its speaker talks in
-func set_name_plate_colors(left_plate_color: Color, right_plate_color: Color) -> void:
-	_fill_name_plate(left_name_plate, left_name_label, left_plate_color)
-	_fill_name_plate(right_name_plate, right_name_label, right_plate_color)
+func set_name_plate_colors(left_speaker_color: Color, right_speaker_color: Color, box_tint: Color) -> void:
+	_fill_name_plate(left_name_plate, left_speaker_color, box_tint)
+	_fill_name_plate(right_name_plate, right_speaker_color, box_tint)
 
-#gives the plate its own copy of the shared style, filled with the colour, and the same text colours as its dialogue
-func _fill_name_plate(name_plate: PanelContainer, name_label: Label, plate_color: Color) -> void:
+#gives the plate its own copy of the shared style, filled like the sentence box
+func _fill_name_plate(name_plate: PanelContainer, speaker_color: Color, box_tint: Color) -> void:
 	var name_plate_style: StyleBoxFlat = name_plate.get_theme_stylebox("panel").duplicate()
-	name_plate_style.bg_color = plate_color
+	name_plate_style.bg_color = speaker_color * box_tint
 	name_plate.add_theme_stylebox_override("panel", name_plate_style)
 
-	DialogColors.apply_text_colors(name_label, plate_color)
+#prints each name in the text colour of its speaker, shaded for its plate like the sentence for its box
+func set_name_colors(left_text_color: Color, right_text_color: Color) -> void:
+	DialogColors.apply_text_colors(left_name_label, left_text_color, left_name_plate.get_theme_stylebox("panel").bg_color)
+	DialogColors.apply_text_colors(right_name_label, right_text_color, right_name_plate.get_theme_stylebox("panel").bg_color)
 
 #shrinks the name font until the name fits inside its plate
 func _autosize_speaker_name(name_plate: PanelContainer, name_label: Label) -> void:
