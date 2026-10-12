@@ -77,6 +77,8 @@ var Round: Dictionary[String, Variant] = {
 	"duration": 300.0,
 	#s left on the round timer when the challenge music takes over for good
 	"challenge_time": 30.0,
+	#station number (Lamp is 1) from which the room voter brings in a new voter while nobody waits in the queue
+	"queue_refill_station": 5,
 }
 
 var Sound: Dictionary[String, Variant] = {
