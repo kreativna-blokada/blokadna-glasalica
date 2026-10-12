@@ -39,6 +39,7 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 		background.modulate = _tint
 	else:
 		background.modulate = DialogColors.get_default_color()
+	DialogColors.apply_text_colors(text, background.modulate * box_background.modulate)
 	reset_unveil()
 
 	# full text is laid out once so words never jump lines while unveiling

@@ -4,8 +4,9 @@ extends Control
 @onready var _text: RichTextLabel = $ChoiceText
 @onready var _background: NinePatchRect = $NinePatchRect
 
-#background look from the scene, restored when the highlight leaves
-var _original_background_modulate: Color
+#colour of the speaker answering, the highlight is a shade of it
+var _fill_color: Color = DialogColors.get_default_color()
+var _is_highlighted: bool = false
 #pre-zoom answers are at most two lines tall
 var _is_compact: bool = false
 
@@ -33,13 +34,21 @@ func use_compact_look() -> void:
 	_is_compact = true
 	_text.theme = load(Configs.DialogueZoom["compact_theme"])
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	_original_background_modulate = _background.modulate
+#fills the answer with the answering speaker colour, text contrasting it
+func set_fill(fill_color: Color) -> void:
+	_fill_color = fill_color
+	_show_fill()
 
-#tints the background while the Confirm button would submit this answer
+#shades the answer within its speaker colours while the Confirm button would submit it
 func set_highlighted(is_highlighted: bool) -> void:
-	_background.modulate = Configs.ClassicalControllers["highlighted_answer_tint"] if is_highlighted else _original_background_modulate
+	_is_highlighted = is_highlighted
+	_show_fill()
+
+#paints the background in the speaker colour or its highlight shade, with contrasting text
+func _show_fill() -> void:
+	var shown_fill: Color = DialogColors.get_highlight_color(_fill_color) if _is_highlighted else _fill_color
+	_background.modulate = shown_fill
+	DialogColors.apply_text_colors(_text, shown_fill)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

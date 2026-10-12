@@ -48,6 +48,7 @@ func show_timer_vfx(show: bool) -> void:
 		timer_vfx.hide()
 
 func set_text(dialog_descriptor: DialogDescriptor) -> void:
+	_fill_choices(dialog_descriptor.speaker)
 	_initialize_choices(dialog_descriptor.choices)
 	_requestedText = dialog_descriptor.text
 
@@ -55,6 +56,7 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 		background.modulate = _tint
 	else:
 		background.modulate = DialogColors.get_default_color()
+	DialogColors.apply_text_colors(text, background.modulate * box_background.modulate)
 
 	reset_unveil()
 	_touch_debounce_timer = TOUCH_DEBOUNCE_TIME
@@ -68,6 +70,12 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	if not _is_zoomed_dialogue:
 		text.text = ""
 		text.visible_characters = -1
+
+#fills the answers with the colour of the speaker answering, the one not saying the line
+func _fill_choices(line_speaker: DialogDescriptor.Speaker) -> void:
+	var answer_speaker_color: Color = DialogColors.get_default_color() if line_speaker == DialogDescriptor.Speaker.RIGHT else _tint
+	for choice in _choices:
+		choice.set_fill(answer_speaker_color * box_background.modulate)
 
 func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> void:
 	var numChoices: int = len(choices)
