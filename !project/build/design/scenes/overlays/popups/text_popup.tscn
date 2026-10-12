@@ -404,7 +404,7 @@ size_flags_vertical = 10
 theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
 theme_override_fonts/font = ExtResource("13_font")
 theme_override_font_sizes/font_size = 38
-text = "Klikni bilo gde za početak"
+text = "Klikni bilo gde u ovom prozoru za početak"
 horizontal_alignment = 1
 
 [connection signal="gui_input" from="Container" to="." method="_on_container_gui_input"]

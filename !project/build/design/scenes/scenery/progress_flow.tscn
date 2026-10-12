@@ -17,6 +17,8 @@
 [ext_resource type="Texture2D" uid="uid://csoduog5354mj" path="res://!project/art/UI/Buttons/stop-ballot-disabled.png" id="13_ballotd"]
 [ext_resource type="Texture2D" uid="uid://da0ly0j8w5jyv" path="res://!project/art/UI/Buttons/stop-booth-disabled.png" id="14_boothd"]
 [ext_resource type="Texture2D" uid="uid://d1dikdkjqgbi5" path="res://!project/art/UI/Buttons/stop-box-disabled.png" id="15_boxd"]
+[ext_resource type="Texture2D" uid="uid://cxhvq4u2iff33" path="res://!project/art/UI/Buttons/flow-help-active.png" id="16_help_a"]
+[ext_resource type="Texture2D" uid="uid://cwkl5hkyj2h2w" path="res://!project/art/UI/Buttons/flow-help-default.png" id="17_help_d"]
 
 [node name="Progress Flow" type="CanvasLayer" unique_id=598334440]
 script = ExtResource("1_6p1ld")
@@ -34,6 +36,21 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 30
 alignment = 1
+
+[node name="HelpSlot" type="Control" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1630587214]
+custom_minimum_size = Vector2(186, 195)
+layout_mode = 2
+
+[node name="Help" type="TextureButton" parent="CenterContainer/VBoxContainer/HBoxContainer/HelpSlot" unique_id=1093746628]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 1
+offset_right = 93.0
+offset_bottom = 97.0
+texture_normal = ExtResource("16_help_a")
+texture_pressed = ExtResource("17_help_d")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="Scan" type="TextureButton" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1797415257]
 texture_filter = 1
@@ -117,4 +134,5 @@ texture_pressed = ExtResource("10_close_d")
 ignore_texture_size = true
 stretch_mode = 5
 
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/HelpSlot/Help" to="." method="_on_help_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/CloseSlot/Close" to="." method="_on_close_pressed"]

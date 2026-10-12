@@ -39,9 +39,15 @@ var _stops_occupancy: Array = []
 
 func _ready() -> void:
 	_init_buttons()
+	#Help stays clickable while the game is frozen, so it can close the help it opened
+	$CenterContainer/VBoxContainer/HBoxContainer/HelpSlot/Help.process_mode = Node.PROCESS_MODE_ALWAYS
 	#browsers can't close the tab from the game, quit() is a no-op there
 	if OS.has_feature("web"):
 		%Close.hide()
+
+#signal Help.pressed => requests the intro text
+func _on_help_pressed() -> void:
+	Signals.help_requested.emit()
 
 #signal Close.pressed => requests closing the game screen
 func _on_close_pressed() -> void:
@@ -62,7 +68,7 @@ func _init_buttons() -> void:
 		if button == null:
 			continue
 		button.disabled = true
-		button.pressed.connect(_on_stop_button_pressed.bind(idx))
+		button.pressed.connect(_on_stop_button_pressed.bind(_buttons.size()))
 		_buttons.append(button)
 
 #inits stops outline, each stop button gets its own outline material

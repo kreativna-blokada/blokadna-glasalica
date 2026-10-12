@@ -62,6 +62,7 @@ func _ready() -> void:
 
 	controls.init(stage, _game_descriptor.get_controller_type())
 	Signals.game_close_requested.connect(_on_game_close_requested)
+	Signals.help_requested.connect(_on_help_requested)
 
 	_round_timer_display = ROUND_TIMER_SCENE.instantiate() as RoundTimerDisplay
 	dialog_layer.add_child(_round_timer_display)
@@ -70,26 +71,53 @@ func _ready() -> void:
 
 
 func _show_start_popup() -> void:
-	_popup = TEXT_POPUP_SCENE.instantiate() as TextPopup
-	dialog_layer.add_child(_popup)
-	_popup.init(_game_descriptor.get_controller_type())
-	#on-screen controls stay hidden while the start popup is open, whatever the controller type
-	controls.hide()
+	_open_text_popup()
 	#### tentatively commented out
 	#### _popup.set_text(GameManager.get_mission_descriptor().get_mission_description())
 	_popup.finished.connect(_start_popup_closed)
 
 
 func _start_popup_closed() -> void:
-	_popup.hide()
-	_popup.queue_free()
-	controls.show()
+	_close_text_popup()
 	
 	stage.start_spawning()
 	#the round time counts from the first voter waiting in the queue
 	stage.queue_count_updated.connect(_on_first_voter_queued, CONNECT_ONE_SHOT)
 	_round_music = Globals.Music.Round
 	SoundManager.play_jingle(Globals.Sound.RoundStart, _round_music)
+
+#opens the intro text popup with on-screen controls hidden
+func _open_text_popup() -> void:
+	_popup = TEXT_POPUP_SCENE.instantiate() as TextPopup
+	dialog_layer.add_child(_popup)
+	_popup.init(_game_descriptor.get_controller_type())
+	#on-screen controls stay hidden while the popup is open, whatever the controller type
+	controls.hide()
+
+#closes the intro text popup and shows on-screen controls again
+func _close_text_popup() -> void:
+	_popup.hide()
+	_popup.queue_free()
+	_popup = null
+	controls.show()
+	_set_game_frozen(false)
+
+#freezes or resumes the whole game: round time, voter spawning and walking; the popup keeps running
+func _set_game_frozen(is_frozen: bool) -> void:
+	get_tree().paused = is_frozen
+	if _popup:
+		_popup.process_mode = Node.PROCESS_MODE_ALWAYS
+
+#signal Signals.help_requested => toggles the intro text; the start popup is left alone
+func _on_help_requested() -> void:
+	if _popup == null:
+		_open_text_popup()
+		#clicks pass the popup's backdrop, so Help stays clickable to close it
+		_popup.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_popup.finished.connect(_close_text_popup)
+		_set_game_frozen(true)
+	elif _popup.finished.is_connected(_close_text_popup):
+		_close_text_popup()
 
 #signal Stage.queue_count_updated => the first voter stopped in the queue, the round timer starts
 func _on_first_voter_queued(_count: int) -> void:
