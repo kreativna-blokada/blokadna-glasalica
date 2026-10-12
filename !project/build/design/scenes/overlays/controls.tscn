@@ -15,7 +15,7 @@
 [node name="Controls" type="CanvasLayer" unique_id=1497570896]
 script = ExtResource("11_controls")
 
-[node name="Selection" type="Node" parent="." unique_id=1948632298]
+[node name="Selection" type="Node2D" parent="." unique_id=1948632298]
 
 [node name="Select" type="TouchScreenButton" parent="Selection" unique_id=1121920787]
 position = Vector2(40, 800)
@@ -29,7 +29,7 @@ texture_normal = ExtResource("8_0hb4n")
 texture_pressed = ExtResource("4_eaahr")
 action = "initiate"
 
-[node name="Validation" type="Node" parent="." unique_id=373289907]
+[node name="Validation" type="Node2D" parent="." unique_id=373289907]
 
 [node name="Confirm" type="TouchScreenButton" parent="Validation" unique_id=1023365775]
 position = Vector2(1592, 906)
@@ -43,7 +43,7 @@ texture_normal = ExtResource("8_dtdly")
 texture_pressed = ExtResource("9_aau3c")
 action = "highlight"
 
-[node name="Node" type="Node" parent="." unique_id=228220347]
+[node name="Node" type="Node2D" parent="." unique_id=228220347]
 
 [node name="Next" type="TouchScreenButton" parent="Node" unique_id=391491167]
 visible = false
