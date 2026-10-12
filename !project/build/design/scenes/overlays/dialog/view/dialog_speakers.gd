@@ -3,6 +3,12 @@ extends Control
 
 @export var anim_duration: float = 0.15
 
+#name colours contrasting light and dark speaker plates
+const DARK_NAME_COLOR: Color = Color(0.08, 0.08, 0.12)
+const LIGHT_NAME_COLOR: Color = Color.WHITE
+#brightness from which a plate counts as light
+const LIGHT_PLATE_LUMINANCE: float = 0.5
+
 @onready var left_speaker: TextureRect = $LeftSpeaker
 @onready var right_speaker: TextureRect = $RightSpeaker
 @onready var left_name_plate: PanelContainer = $LeftNamePlate
@@ -22,6 +28,21 @@ func _ready() -> void:
 func set_dialogue_width(dialog_width: float) -> void:
 	left_name_plate.offset_right = -dialog_width / 2.0
 	right_name_plate.offset_left = dialog_width / 2.0
+
+#fills each name plate with the dialogue colour its speaker talks in
+func set_name_plate_colors(left_plate_color: Color, right_plate_color: Color) -> void:
+	_fill_name_plate(left_name_plate, left_name_label, left_plate_color)
+	_fill_name_plate(right_name_plate, right_name_label, right_plate_color)
+
+#gives the plate its own copy of the shared style, filled with the colour, and a name colour contrasting it
+func _fill_name_plate(name_plate: PanelContainer, name_label: Label, plate_color: Color) -> void:
+	var name_plate_style: StyleBoxFlat = name_plate.get_theme_stylebox("panel").duplicate()
+	name_plate_style.bg_color = plate_color
+	name_plate.add_theme_stylebox_override("panel", name_plate_style)
+
+	var is_light_plate: bool = plate_color.get_luminance() > LIGHT_PLATE_LUMINANCE
+	name_label.add_theme_color_override("font_color", DARK_NAME_COLOR if is_light_plate else LIGHT_NAME_COLOR)
+	name_label.add_theme_color_override("font_outline_color", plate_color)
 
 #shrinks the name font until the name fits inside its plate
 func _autosize_speaker_name(name_plate: PanelContainer, name_label: Label) -> void:
