@@ -9,6 +9,8 @@ const NAME_PLATE_OUTLINE_WIDTH: int = 4
 const NAME_PLATE_GLOW_RINGS: int = 8
 const NAME_PLATE_GLOW_RING_WIDTH: int = 2
 const NAME_PLATE_GLOW_STRENGTH: float = 0.5
+#sliding scanlines drawn over the speaker answering
+const SCANLINE_SHADER: VisualShader = preload("res://!project/art/shaders/scanline.tres")
 
 @onready var left_speaker: TextureRect = $LeftSpeaker
 @onready var right_speaker: TextureRect = $RightSpeaker
@@ -21,6 +23,7 @@ const NAME_PLATE_GLOW_STRENGTH: float = 0.5
 #outline around each name plate and how visible it is, from 0 for the one talking to 1 for the one answering
 var _name_plate_outline_style: StyleBoxFlat
 var _name_plate_outline_alphas: Dictionary[PanelContainer, float] = {}
+var _scanline_material: ShaderMaterial
 
 func _ready() -> void:
 	left_name_plate.resized.connect(_autosize_speaker_name.bind(left_name_plate, left_name_label))
@@ -30,6 +33,8 @@ func _ready() -> void:
 	_autosize_speaker_name(right_name_plate, right_name_label)
 
 	_name_plate_outline_style = _create_name_plate_outline_style()
+	_scanline_material = ShaderMaterial.new()
+	_scanline_material.shader = SCANLINE_SHADER
 	left_name_plate.draw.connect(_draw_name_plate_outline.bind(left_name_plate, left_name_label))
 	right_name_plate.draw.connect(_draw_name_plate_outline.bind(right_name_plate, right_name_label))
 
@@ -116,31 +121,30 @@ func set_active_speaker(speaker: DialogDescriptor.Speaker) -> void:
 			_transition(left_speaker, left_name_plate, anim_duration, false)
 			_transition(right_speaker, right_name_plate, anim_duration, true)
 
-#fades the speaker in or out while its name plate stays lit, outlining the plate of the one answering
+#grows or shrinks the speaker at full brightness, scanlining the one answering, while its name plate stays lit, outlining the plate of the one answering
 func _transition(speaker: Control, name_plate: PanelContainer, duration: float, is_talking: bool) -> void:
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_trans(Tween.TRANS_LINEAR)
 
-	var color: Color = Color.DIM_GRAY
 	var target_scale := Vector2(0.85, 0.85)
 	if is_talking:
-		color = Color.WHITE
 		target_scale = Vector2(1,1)
 
+	speaker.material = null if is_talking else _scanline_material
+
 	tween.set_parallel(true)
-	tween.tween_property(speaker, "modulate", color, duration).from_current()
+	tween.tween_property(speaker, "modulate", Color.WHITE, duration).from_current()
 	tween.tween_property(speaker, "scale", target_scale, duration).from_current()
 	tween.tween_method(_set_name_plate_outline_alpha.bind(name_plate), _name_plate_outline_alphas.get(name_plate, 0.0), 0.0 if is_talking else 1.0, duration)
 
-#shows the speaker at once while its name plate stays lit, outlining the plate of the one answering
+#shows the speaker at once at full brightness, scanlining the one answering, while its name plate stays lit, outlining the plate of the one answering
 func _change_instant(speaker: Control, name_plate: PanelContainer, is_talking: bool) -> void:
-	var color: Color = Color.DIM_GRAY
 	var target_scale := Vector2(0.85, 0.85)
 	if is_talking:
-		color = Color.WHITE
 		target_scale = Vector2(1,1)
 
-	speaker.modulate = color
+	speaker.modulate = Color.WHITE
 	speaker.scale = target_scale
+	speaker.material = null if is_talking else _scanline_material
 	_set_name_plate_outline_alpha(0.0 if is_talking else 1.0, name_plate)
