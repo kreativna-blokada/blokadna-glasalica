@@ -9,6 +9,8 @@ const TEXT_SHADE_STEP: float = 0.02
 const MAX_TEXT_DARKENING: float = 0.5
 #smallest hue distance, from 0 to 0.5, between the two speakers of one dialogue so their colours never mix
 const SPEAKER_HUE_GAP: float = 0.1
+#how far the voter colour is lightened towards white before it tints the dialogue background
+const VOTER_BACKGROUND_LIGHTENING: float = 0.5
 
 #deep text colours each dialogue draws its two speakers from: maroon, burgundy, rust, ochre, olive, forest, pine, teal, petrol, cobalt, navy, indigo, purple, plum
 static var _speaker_text_colors: Array[Color] = [
@@ -41,8 +43,8 @@ static var _colors: Dictionary[String, Color] = {
 static func get_color(voter_name: String) -> Color:
 	var name_token := voter_name.split('_')[0]
 	if _colors.has(name_token):
-		return _colors[name_token]
-	
+		return _colors[name_token].lightened(VOTER_BACKGROUND_LIGHTENING)
+
 	push_error("Failed to find color for name %s" % voter_name)
 	return _fallback_color
 
