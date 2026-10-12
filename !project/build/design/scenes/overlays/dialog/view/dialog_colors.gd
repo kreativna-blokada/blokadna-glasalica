@@ -77,10 +77,10 @@ static func _refill_undrawn_text_colors(drawn_text_colors: Array[Color]) -> void
 		if not text_color in _previous_dialogue_text_colors and not text_color in drawn_text_colors:
 			_undrawn_text_colors.append(text_color)
 
-#true when the colour hue is far enough from each drawn colour hue
+#true when the colour hue, as seen by the eye, is far enough from each drawn colour hue
 static func _is_hue_apart(text_color: Color, drawn_text_colors: Array[Color]) -> bool:
 	for drawn_text_color in drawn_text_colors:
-		var hue_distance: float = absf(text_color.h - drawn_text_color.h)
+		var hue_distance: float = absf(text_color.ok_hsl_h - drawn_text_color.ok_hsl_h)
 		if minf(hue_distance, 1.0 - hue_distance) < SPEAKER_HUE_GAP:
 			return false
 	return true
