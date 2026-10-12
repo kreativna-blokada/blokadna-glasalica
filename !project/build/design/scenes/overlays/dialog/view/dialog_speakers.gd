@@ -3,6 +3,13 @@ extends Control
 
 @export var anim_duration: float = 0.15
 
+#outline brought around the plate of the active speaker, drawn in the colour of its name at full brightness
+const NAME_PLATE_OUTLINE_WIDTH: int = 4
+#glow fading out beyond the outline, in rings of the ring width, starting at the glow strength
+const NAME_PLATE_GLOW_RINGS: int = 8
+const NAME_PLATE_GLOW_RING_WIDTH: int = 2
+const NAME_PLATE_GLOW_STRENGTH: float = 0.5
+
 @onready var left_speaker: TextureRect = $LeftSpeaker
 @onready var right_speaker: TextureRect = $RightSpeaker
 @onready var left_name_plate: PanelContainer = $LeftNamePlate
@@ -11,12 +18,52 @@ extends Control
 @onready var right_name_label: Label = $RightNamePlate/Name
 @onready var name_font_size: int = left_name_label.get_theme_font_size("font_size")
 
+#outline around each name plate and how visible it is, from 0 for the silent speaker to 1 for the one talking
+var _name_plate_outline_style: StyleBoxFlat
+var _name_plate_outline_alphas: Dictionary[PanelContainer, float] = {}
+
 func _ready() -> void:
 	left_name_plate.resized.connect(_autosize_speaker_name.bind(left_name_plate, left_name_label))
 	right_name_plate.resized.connect(_autosize_speaker_name.bind(right_name_plate, right_name_label))
 
 	_autosize_speaker_name(left_name_plate, left_name_label)
 	_autosize_speaker_name(right_name_plate, right_name_label)
+
+	_name_plate_outline_style = _create_name_plate_outline_style()
+	left_name_plate.draw.connect(_draw_name_plate_outline.bind(left_name_plate, left_name_label))
+	right_name_plate.draw.connect(_draw_name_plate_outline.bind(right_name_plate, right_name_label))
+
+#hollow rounded frame following the plate corners, reshaped for the outline and each glow ring
+func _create_name_plate_outline_style() -> StyleBoxFlat:
+	var outline_style := StyleBoxFlat.new()
+	outline_style.draw_center = false
+	return outline_style
+
+#draws the glow and then the outline around the plate in the bright name colour, as visible as its speaker is talking
+func _draw_name_plate_outline(name_plate: PanelContainer, name_label: Label) -> void:
+	var outline_alpha: float = _name_plate_outline_alphas.get(name_plate, 0.0)
+	if outline_alpha <= 0.0:
+		return
+	var name_color: Color = name_label.get_theme_color("font_color")
+	var outline_color := Color.from_hsv(name_color.h, name_color.s, 1.0)
+
+	for glow_ring in range(NAME_PLATE_GLOW_RINGS, 0, -1):
+		var glow_alpha: float = NAME_PLATE_GLOW_STRENGTH * (1.0 - float(glow_ring - 1) / NAME_PLATE_GLOW_RINGS)
+		_draw_name_plate_ring(name_plate, NAME_PLATE_OUTLINE_WIDTH + glow_ring * NAME_PLATE_GLOW_RING_WIDTH, NAME_PLATE_GLOW_RING_WIDTH, Color(outline_color, glow_alpha * outline_alpha))
+	_draw_name_plate_ring(name_plate, NAME_PLATE_OUTLINE_WIDTH, NAME_PLATE_OUTLINE_WIDTH, Color(outline_color, outline_alpha))
+
+#draws one rounded ring of the given width, its outer edge the given distance outside the plate
+func _draw_name_plate_ring(name_plate: PanelContainer, ring_distance: int, ring_width: int, ring_color: Color) -> void:
+	var name_plate_style: StyleBoxFlat = name_plate.get_theme_stylebox("panel")
+	_name_plate_outline_style.set_border_width_all(ring_width)
+	_name_plate_outline_style.set_corner_radius_all(name_plate_style.corner_radius_top_left + ring_distance)
+	_name_plate_outline_style.border_color = ring_color
+	name_plate.draw_style_box(_name_plate_outline_style, Rect2(Vector2.ZERO, name_plate.size).grow(ring_distance))
+
+#sets how visible the plate outline is and redraws the plate
+func _set_name_plate_outline_alpha(outline_alpha: float, name_plate: PanelContainer) -> void:
+	_name_plate_outline_alphas[name_plate] = outline_alpha
+	name_plate.queue_redraw()
 
 #stretches name plates from the screen edges up to the dialog box sides
 func set_dialogue_width(dialog_width: float) -> void:
@@ -69,7 +116,8 @@ func set_active_speaker(speaker: DialogDescriptor.Speaker) -> void:
 			_transition(left_speaker, left_name_plate, anim_duration, false)
 			_transition(right_speaker, right_name_plate, anim_duration, true)
 
-func _transition(speaker: Control, name_plate: Control, duration: float, is_talking: bool) -> void:
+#fades the speaker and its name plate in or out, outlining the plate of the one talking
+func _transition(speaker: Control, name_plate: PanelContainer, duration: float, is_talking: bool) -> void:
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_trans(Tween.TRANS_LINEAR)
@@ -84,8 +132,10 @@ func _transition(speaker: Control, name_plate: Control, duration: float, is_talk
 	tween.tween_property(speaker, "modulate", color, duration).from_current()
 	tween.tween_property(speaker, "scale", target_scale, duration).from_current()
 	tween.tween_property(name_plate, "modulate", color, duration).from_current()
+	tween.tween_method(_set_name_plate_outline_alpha.bind(name_plate), _name_plate_outline_alphas.get(name_plate, 0.0), 1.0 if is_talking else 0.0, duration)
 
-func _change_instant(speaker: Control, name_plate: Control, is_talking: bool) -> void:
+#shows the speaker and its name plate at once, outlining the plate of the one talking
+func _change_instant(speaker: Control, name_plate: PanelContainer, is_talking: bool) -> void:
 	var color: Color = Color.DIM_GRAY
 	var target_scale := Vector2(0.85, 0.85)
 	if is_talking:
@@ -95,3 +145,4 @@ func _change_instant(speaker: Control, name_plate: Control, is_talking: bool) ->
 	speaker.modulate = color
 	speaker.scale = target_scale
 	name_plate.modulate = color
+	_set_name_plate_outline_alpha(1.0 if is_talking else 0.0, name_plate)
