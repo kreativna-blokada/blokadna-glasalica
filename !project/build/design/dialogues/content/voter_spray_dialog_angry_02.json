@@ -6,12 +6,12 @@
       {
         "text": "Ne, tražim da mi obeležite prst sprejem, tako je po pravilima!",
         "explanation": "Ispravno – birač ima pravo da zahteva sprovođenje svih propisanih mera.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Super, brže ćemo završiti.",
         "explanation": "Nepravilno – birač ne sme pristati na preskakanje obavezne procedure.",
-        "score": -100
+        "score": -26000
       }
     ]
   }

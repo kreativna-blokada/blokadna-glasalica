@@ -5,7 +5,7 @@ extends Control
 @onready var _multi_choice_dialog_box_scene: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/multi_choice_character_dialog.tscn")
 @onready var _dialog_speakers_scene: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/dialog_speakers.tscn")
 
-signal choice_made(dialog_text: String, choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float)
+signal choice_made(dialog_text: String, choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float, is_best_choice: bool)
 signal finished()
 
 var _dialog_box: CharacterDialog
@@ -19,6 +19,8 @@ var _dialog_color: Color
 
 var _timers_enabled: bool = false
 var _dialog_timer: DialogTimer = DialogTimer.new()
+#counts on every answer screen, whatever the difficulty, so picks stay locked for the answer lock time
+var _answer_lock_timer: DialogTimer = DialogTimer.new()
 #true with classic controls, Confirm / Highlight
 var _is_answered_by_controls: bool = false
 #false shows the smaller pre-zoom dialogues
@@ -37,14 +39,19 @@ func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog
 	_dialog_size = dialog_size
 	_dialog_color = dialog_color
 	add_child(_dialog_timer)
+	add_child(_answer_lock_timer)
 	_start_timer_if_needed()
 
 #keeps the given buttons visible through the dialog dim, called before the dialog enters the tree
 func set_spotlights(button_spotlights: PackedVector3Array) -> void:
 	_spotlights = button_spotlights
 
+#restarts the answer timers when the screen shows answers
 func _start_timer_if_needed() -> void:
-	if _timers_enabled and _current_node.get_num_choices() > 0:
+	if _current_node.get_num_choices() == 0: return
+
+	_answer_lock_timer.restart()
+	if _timers_enabled:
 		_dialog_timer.restart()
 
 # Called when the node enters the scene tree for the first time.
@@ -132,7 +139,12 @@ func _advance(choice: int) -> void:
 func _on_simple_dialog_finish() -> void:
 	_advance(0)
 
+#ignores the pick while the answer screen is locked, otherwise reports it and moves on
 func _on_multi_choice_dialog_finish(choice: int) -> void:
+	if _answer_lock_timer.get_elapsed_seconds() < Configs.DialogueScore["answer_lock_time"]: return
+
 	var dialog_descriptor := _current_node.get_dialog_descriptor()
-	choice_made.emit(dialog_descriptor.text, dialog_descriptor.choices[choice], _dialog_timer.get_elapsed_seconds())
+	var best_score: int = dialog_descriptor.choices.map(func(choice_descriptor): return choice_descriptor.score).max()
+	var is_best_choice: bool = dialog_descriptor.choices[choice].score == best_score
+	choice_made.emit(dialog_descriptor.text, dialog_descriptor.choices[choice], _dialog_timer.get_elapsed_seconds(), is_best_choice)
 	_advance(choice)

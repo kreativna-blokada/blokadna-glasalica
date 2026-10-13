@@ -6,19 +6,19 @@
       {
         "text": "Naravno, izvolite.",
         "explanation": "Birač poštuje proceduru.",
-        "score": 100,
+        "score": 131000,
         "next": "check_passed"
       },
       {
         "text": "Zašto to radite?",
         "explanation": "Birač traži objašnjenje, što je dozvoljeno.",
-        "score": 50,
+        "score": 66000,
         "next": "procedure_explained"
       },
       {
         "text": "Neću, žurim.",
         "explanation": "Birač odbija proveru, što je prekršaj.",
-        "score": -200,
+        "score": -52000,
         "next": "check_refused"
       }
     ]
@@ -30,7 +30,7 @@
       {
         "text": "Hvala i vama, prijatan dan.",
         "explanation": "Korektna komunikacija.",
-        "score": 100
+        "score": 131000
       }
     ]
   },
@@ -41,12 +41,12 @@
       {
         "text": "Razumem, izvolite ruku.",
         "explanation": "Birač prihvata objašnjenje.",
-        "score": 80
+        "score": 105000
       },
       {
         "text": "I dalje mi nije jasno, ali ajde.",
         "explanation": "Birač je nepoverljiv, ali ne pravi problem.",
-        "score": 50
+        "score": 66000
       }
     ]
   },
@@ -57,12 +57,12 @@
       {
         "text": "Dobro, evo ruka.",
         "explanation": "Birač se vraća proceduri.",
-        "score": 50
+        "score": 66000
       },
       {
         "text": "Onda neću ni da glasam!",
         "explanation": "Birač odustaje, što je njegovo pravo, ali nije preporučljivo.",
-        "score": -50
+        "score": -13000
       }
     ]
   }

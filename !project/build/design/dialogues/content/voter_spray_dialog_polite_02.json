@@ -6,12 +6,12 @@
       {
         "text": "Molim Vas, prvo obeležite prst sprejem, pa tek onda listić.",
         "explanation": "Ispravno – birač insistira na poštovanju procedure.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Nema veze, može i bez toga.",
         "explanation": "Nepravilno – birač ne sme prihvatiti listić bez obeležavanja sprejem.",
-        "score": -100
+        "score": -26000
       }
     ]
   }

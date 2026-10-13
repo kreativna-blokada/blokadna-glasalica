@@ -6,18 +6,18 @@
       {
         "text": "Zamolićemo posmatrača da se udalji. Posmatrači ne smeju da utiču na birača niti narušavaju tajnost glasanja.",
         "explanation": "Ispravno, posmatrači mogu pratiti proces, ali ne smeju ugrožavati tajnost glasanja.",
-        "score": 100,
+        "score": 131000,
         "next": "observer_moves"
       },
       {
         "text": "On je posmatrač, ima pravo da stoji gde hoće.",
         "explanation": "Pogrešno, posmatrač ne sme narušavati tajnost glasanja ili uticati na birača.",
-        "score": -100
+        "score": -26000
       },
       {
         "text": "Ako vam smeta, pokažite mu listić pa nastavite.",
         "explanation": "Pokazivanje listića posmatraču narušava tajnost glasanja.",
-        "score": -150
+        "score": -39000
       }
     ]
   },
@@ -28,12 +28,12 @@
       {
         "text": "Hvala, sada nastavljam iza paravana.",
         "explanation": "Problem je rešen bez konflikta, uz zaštitu tajnosti glasanja.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Molim vas da se ovo zabeleži ako se ponovi.",
         "explanation": "Traženje evidencije za ponovljenu nepravilnost je razumno.",
-        "score": 80
+        "score": 105000
       }
     ]
   }

@@ -6,19 +6,19 @@
       {
         "text": "Naravno. Samo me zanima zašto se to radi pre provere dokumenta.",
         "explanation": "Birač sme da traži objašnjenje procedure.",
-        "score": 50,
+        "score": 66000,
         "next": "explanation"
       },
       {
         "text": "Izvolite, spreman sam.",
         "explanation": "Ispravno, birač poštuje prvi korak postupka.",
-        "score": 100,
+        "score": 131000,
         "next": "clear"
       },
       {
         "text": "Radije bih prvo dao dokument, lampu možemo posle.",
         "explanation": "Redosled postupka treba poštovati; UV provera se obavlja pre nastavka glasanja.",
-        "score": -50,
+        "score": -13000,
         "next": "order_explained"
       }
     ]
@@ -30,12 +30,12 @@
       {
         "text": "Hvala na objašnjenju, izvolite.",
         "explanation": "Birač prihvata objašnjenje i nastavlja postupak.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Razumem, ali voleo bih da svi u redu čuju isto objašnjenje.",
         "explanation": "Traženje jasnog objašnjenja može pomoći pravilnom sprovođenju postupka.",
-        "score": 80
+        "score": 105000
       }
     ]
   },
@@ -46,7 +46,7 @@
       {
         "text": "Hvala, nastavljam dalje.",
         "explanation": "Korektno sprovedena procedura i mirna komunikacija.",
-        "score": 100
+        "score": 131000
       }
     ]
   },
@@ -57,12 +57,12 @@
       {
         "text": "U redu, poštovaću redosled.",
         "explanation": "Birač se vraća propisanoj proceduri.",
-        "score": 80
+        "score": 105000
       },
       {
         "text": "Ako nije po mom redosledu, odustajem.",
         "explanation": "Odustajanje je izbor birača, ali odbijanje procedure sprečava nastavak glasanja.",
-        "score": -50
+        "score": -13000
       }
     ]
   }

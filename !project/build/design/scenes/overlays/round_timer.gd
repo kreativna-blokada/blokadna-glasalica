@@ -18,6 +18,10 @@ func set_round_timer(timer: Timer) -> void:
 	_round_timer = timer
 	_update_display()
 
+#centre of the time text on screen, where the bonus time popup shows
+func get_time_center() -> Vector2:
+	return _label.get_global_rect().get_center()
+
 func _update_display() -> void:
 	if not is_instance_valid(_label):
 		return

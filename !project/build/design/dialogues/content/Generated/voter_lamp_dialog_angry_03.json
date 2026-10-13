@@ -6,18 +6,18 @@
       {
         "text": "Ne, prvo proverite UV lampom. Neću da učestvujem u preskakanju procedure.",
         "explanation": "Ispravno, UV provera je obavezan prvi korak i ne sme se preskakati zbog gužve.",
-        "score": 100,
+        "score": 131000,
         "next": "controller_corrects"
       },
       {
         "text": "Konačno neko normalan. Idem dalje.",
         "explanation": "Prihvatanje preskakanja UV provere ugrožava pravilnost postupka.",
-        "score": -100
+        "score": -26000
       },
       {
         "text": "Ako već žurite, samo recite da sam prošao.",
         "explanation": "Birač ne sme tražiti da se upiše da je procedura sprovedena ako nije.",
-        "score": -150,
+        "score": -39000,
         "next": "controller_warns"
       }
     ]
@@ -29,12 +29,12 @@
       {
         "text": "Evo ruke. Važno je da svi prođemo isto.",
         "explanation": "Birač insistira na jednakoj primeni procedure bez konflikta.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Eto, kad moram ja da vas učim poslu.",
         "explanation": "Procedura je ispravljena, ali nepotrebno vređanje narušava komunikaciju.",
-        "score": 50
+        "score": 66000
       }
     ]
   },
@@ -45,12 +45,12 @@
       {
         "text": "Dobro, onda uradite proveru kako treba.",
         "explanation": "Birač se vraća ispravnoj proceduri.",
-        "score": 80
+        "score": 105000
       },
       {
         "text": "Onda ste vi krivi što sve traje.",
         "explanation": "Pritisak na odbor da radi brže ne opravdava kršenje procedure.",
-        "score": -50
+        "score": -13000
       }
     ]
   }

@@ -18,11 +18,12 @@ const MAIN_MENU_DESCRIPTIONS: Dictionary[Globals.MainMenu, String] = {
 ИЛИ КЛИКНИ ДУГМЕ 3 ПУТА""",
 	Globals.MainMenu.Controls: """КЛИКНИ НА СЕЛЕКТОР
 ДА ОДАБЕРЕШ КОНТРОЛЕ""",
-	Globals.MainMenu.Team: """КРЕАТИВНА БЛОКАДА
+	Globals.MainMenu.Team: """КРЕАТИВНА (ИТ?) БЛОКАДА
 
 Марија М., Игор И.,
 Немања М., Ђорђе Ђ.,
 Александар Љ., Андреј О.,
+Бојан В., Ивана Б.,
 Давор В., Марко М.,
 Милош С., Немања Л.,
 Милош П., Владимир А.,
@@ -33,8 +34,12 @@ const MAIN_MENU_DESCRIPTIONS: Dictionary[Globals.MainMenu, String] = {
 #starting hint on web, where the phone can not be shaken
 const WEB_MENU_START_DESCRIPTION: String = "КЛИКНИ ДУГМЕ 3 ПУТА"
 
-#PlayerIdLabel text under the ballot box, filled with the leaderboard player id
+#IdLabel text under the ballot box before IdRevealButton is tapped
+const ID_WORD: String = "ИНДЕКС"
+#IdLabel text under the ballot box once IdRevealButton is tapped, filled with the leaderboard player id
 const ID_CAPTION: String = "ИНДЕКС: %s"
+#IdFooter text under the TextPopup footer, in latin, filled with the leaderboard player id
+const ID_LATIN_CAPTION: String = "(INDEKS: %s)"
 
 #MenuOptionButton text for each difficulty while the difficulty row is ticked
 const DIFFICULTY_DESCRIPTIONS: Dictionary[GameDescriptor.Difficulty, String] = {
@@ -57,11 +62,11 @@ const EMPTY_BOARD_MESSAGE: String = "ЈОШ НЕМА РЕЗУЛТАТА"
 const REWARDS_UPCOMING_MESSAGE: String = "НАГРАДЕ СТИЖУ УСКОРО!\nНАЈБОЉИ ИГРАЧИ ДАНА, НЕДЕЉЕ И ИЗБОРА БИЋЕ НАГРАЂЕНИ"
 
 #leaderboard screen run score status; %d is the run score
-const MISSING_USERNAME_MESSAGE: String = "УНЕСИ ИМЕ ДА ПРИЈАВИШ РЕЗУЛТАТ %d"
-const SUBMIT_MESSAGE: String = "ШАЉЕМ РЕЗУЛТАТ %d..."
-const SCORE_SAVED_MESSAGE: String = "РЕЗУЛТАТ %d ЈЕ САЧУВАН"
-const SCORE_HIGHER_MESSAGE: String = "РЕЗУЛТАТ %d - ТВОЈ НАЈБОЉИ РЕЗУЛТАТ НА РАНГ ЛИСТИ ЈЕ ВЕЋИ"
-const FAILED_MESSAGE: String = "РЕЗУЛТАТ %d НИЈЕ ПОСЛАТ"
+const MISSING_USERNAME_MESSAGE: String = "УНЕСИ ИМЕ ДА ПРИЈАВИШ РЕЗУЛТАТ %s"
+const SUBMIT_MESSAGE: String = "ШАЉЕМ РЕЗУЛТАТ %s..."
+const SCORE_SAVED_MESSAGE: String = "РЕЗУЛТАТ %s ЈЕ САЧУВАН"
+const SCORE_HIGHER_MESSAGE: String = "РЕЗУЛТАТ %s - ТВОЈ НАЈБОЉИ РЕЗУЛТАТ НА РАНГ ЛИСТИ ЈЕ ВЕЋИ"
+const FAILED_MESSAGE: String = "РЕЗУЛТАТ %s НИЈЕ ПОСЛАТ"
 
 #leaderboard day strip captions for the two latest days; older days show their date
 const TODAY_DAY_CAPTION: String = "ДАНАС"

@@ -6,18 +6,18 @@
       {
         "text": "Zaustavićemo se i obavestiti predsednika odbora pre izdavanja zamenskog listića.",
         "explanation": "Ispravno, oštećen listić treba odmah prijaviti i rešiti kroz proceduru biračkog odbora.",
-        "score": 100,
+        "score": 131000,
         "next": "chair_checks"
       },
       {
         "text": "Samo uzmite drugi iz gomile, ovaj bacite.",
         "explanation": "Nepravilno rukovanje listićima može ugroziti evidenciju i kontrolu izdatih listića.",
-        "score": -150
+        "score": -39000
       },
       {
         "text": "Nema veze, glasajte tim pocepanim listićem.",
         "explanation": "Ako je listić oštećen pre glasanja, problem treba rešiti odmah, a ne ignorisati.",
-        "score": -100,
+        "score": -26000,
         "next": "voter_objects"
       }
     ]
@@ -29,12 +29,12 @@
       {
         "text": "U redu, sačekaću da se evidentira i dobijem ispravan listić.",
         "explanation": "Birač omogućava da se problem reši pravilno.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Neću da čekam, uzeću sam drugi listić.",
         "explanation": "Birač ne sme sam uzimati glasačke listiće.",
-        "score": -200
+        "score": -52000
       }
     ]
   },
@@ -45,12 +45,12 @@
       {
         "text": "U pravu ste, pozvaćemo predsednika odbora.",
         "explanation": "Član odbora ispravlja grešku i vraća se proceduri.",
-        "score": 80
+        "score": 105000
       },
       {
         "text": "Ako nećete taj listić, odustanite.",
         "explanation": "Odbijanje da se proveri oštećen listić može nepravilno uskratiti biraču glasanje.",
-        "score": -150
+        "score": -39000
       }
     ]
   }

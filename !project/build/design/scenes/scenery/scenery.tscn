@@ -16,8 +16,8 @@
 [ext_resource type="AudioStream" uid="uid://0u47euxdqvan" path="res://!project/audio/stops/voter_list.ogg" id="16_fupqg"]
 [ext_resource type="AudioStream" uid="uid://bftxwhyxn1pkg" path="res://!project/audio/stops/finger_spray.ogg" id="18_oany1"]
 [ext_resource type="AudioStream" uid="uid://bn1a4rubp00s7" path="res://!project/audio/stops/ballot_stamp.ogg" id="20_sjbew"]
-[ext_resource type="AudioStream" uid="uid://csptbqajleivs" path="res://!project/audio/stops/ballot_box.ogg" id="24_kmrnq"]
 [ext_resource type="AudioStream" uid="uid://ctxdwbxluslgm" path="res://!project/audio/stops/ballot_mark.ogg" id="22_tekev"]
+[ext_resource type="AudioStream" uid="uid://csptbqajleivs" path="res://!project/audio/stops/ballot_box.ogg" id="24_kmrnq"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hcqac"]
 radius = 25.333313

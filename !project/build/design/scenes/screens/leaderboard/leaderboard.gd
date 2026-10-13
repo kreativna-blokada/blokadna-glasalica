@@ -83,7 +83,7 @@ func _ready() -> void:
 	if LeaderboardManager.is_valid_username(LeaderboardManager.get_username()):
 		_submit_points()
 	else:
-		_submit_status_label.text = Literals.MISSING_USERNAME_MESSAGE % _run_points
+		_submit_status_label.text = Literals.MISSING_USERNAME_MESSAGE % DialogScoreCalculator.format_points(_run_points)
 		_username_form.prompt_username()
 
 #FUNCTIONS
@@ -238,8 +238,17 @@ func _create_player_standing(entry_rank: int, entry_username: String, entry_scor
 	username_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	username_label.clip_contents = true
 	row_columns.add_child(username_label)
-	row_columns.add_child(_create_column_content(str(entry_score), HORIZONTAL_ALIGNMENT_RIGHT, ROW_SCORE_WIDTH))
+	row_columns.add_child(_create_column_content(_group_score_digits(entry_score), HORIZONTAL_ALIGNMENT_RIGHT, ROW_SCORE_WIDTH))
 	return score_row
+
+#writes the full score with a dot between each group of three digits
+func _group_score_digits(entry_score: int) -> String:
+	var score_digits: String = str(absi(entry_score))
+	var grouped_digits: String = ""
+	while score_digits.length() > 3:
+		grouped_digits = "." + score_digits.right(3) + grouped_digits
+		score_digits = score_digits.left(-3)
+	return ("-" if entry_score < 0 else "") + score_digits + grouped_digits
 
 #builds one single-line row cell styled by the board theme
 func _create_column_content(cell_text: String, cell_alignment: HorizontalAlignment, cell_width: float) -> RichTextLabel:
@@ -257,7 +266,7 @@ func _create_column_content(cell_text: String, cell_alignment: HorizontalAlignme
 #sends the run score under this player's id and shows that it is on its way
 func _submit_points() -> void:
 	_is_submitting = true
-	_submit_status_label.text = Literals.SUBMIT_MESSAGE % _run_points
+	_submit_status_label.text = Literals.SUBMIT_MESSAGE % DialogScoreCalculator.format_points(_run_points)
 	LeaderboardManager.submit_score(_run_points)
 
 #signal Signals.score_submitted => shows the outcome; a higher stored score is not an error
@@ -269,15 +278,15 @@ func _on_score_submitted(submit_result: Globals.ScoreSubmit) -> void:
 		Globals.ScoreSubmit.Accepted:
 			_is_score_settled = true
 			LeaderboardManager.clear_stored_points()
-			_submit_status_label.text = Literals.SCORE_SAVED_MESSAGE % _run_points
+			_submit_status_label.text = Literals.SCORE_SAVED_MESSAGE % DialogScoreCalculator.format_points(_run_points)
 			SoundManager.play_stinger(Globals.Sound.Points)
 			_top_scores_refresh()
 		Globals.ScoreSubmit.Stored:
 			_is_score_settled = true
 			LeaderboardManager.clear_stored_points()
-			_submit_status_label.text = Literals.SCORE_HIGHER_MESSAGE % _run_points
+			_submit_status_label.text = Literals.SCORE_HIGHER_MESSAGE % DialogScoreCalculator.format_points(_run_points)
 		Globals.ScoreSubmit.Failed:
-			_submit_status_label.text = Literals.FAILED_MESSAGE % _run_points
+			_submit_status_label.text = Literals.FAILED_MESSAGE % DialogScoreCalculator.format_points(_run_points)
 
 #signal Signals.ranks_fetched => shows the best scores, or why there are none;
 #an answer outdated by a queued fetch, e.g. for a tab selected meanwhile, is dropped, as is any answer on the rewards tab

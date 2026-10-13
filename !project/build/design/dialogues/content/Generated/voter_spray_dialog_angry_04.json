@@ -6,18 +6,18 @@
       {
         "text": "Ne, neću dalje dok me ne obeležite sprejem.",
         "explanation": "Ispravno, birač ne sme prihvatiti preskakanje obavezne procedure.",
-        "score": 100,
+        "score": 131000,
         "next": "replacement_spray"
       },
       {
         "text": "Odlično, ionako me nervira taj sprej.",
         "explanation": "Prihvatanje preskakanja spreja je nepravilno.",
-        "score": -100
+        "score": -26000
       },
       {
         "text": "Zabeležite da spreja nema i pozovite predsednika odbora.",
         "explanation": "Ispravno je ukazati na proceduralni problem i tražiti da se reši kroz birački odbor.",
-        "score": 100,
+        "score": 131000,
         "next": "chair_organizes"
       }
     ]
@@ -29,12 +29,12 @@
       {
         "text": "Evo prsta. Tako je trebalo odmah.",
         "explanation": "Procedura je sprovedena, iako birač ostaje nestrpljiv.",
-        "score": 80
+        "score": 105000
       },
       {
         "text": "Sad više neću, namerno ste me zadržavali.",
         "explanation": "Odbijanje nakon što je problem rešen ponovo sprečava nastavak glasanja.",
-        "score": -100
+        "score": -26000
       }
     ]
   },
@@ -45,12 +45,12 @@
       {
         "text": "U redu, sačekaću da se obeležavanje obavi.",
         "explanation": "Birač podržava pravilno rešenje problema.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Ako čekam, tražim da svi vide da ste pogrešili.",
         "explanation": "Ukazivanje na propust je opravdano, ali javno zaoštravanje može nepotrebno ometati rad.",
-        "score": 30
+        "score": 39000
       }
     ]
   }

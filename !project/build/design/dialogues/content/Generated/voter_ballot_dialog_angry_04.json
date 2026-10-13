@@ -6,18 +6,18 @@
       {
         "text": "Ne mogu vam dati drugi listić. Svaki birač glasa lično, osim posebnih procedura koje se ne rešavaju ovde ovako.",
         "explanation": "Ispravno, jedan birač ne sme preuzeti listić i glasati umesto druge osobe.",
-        "score": 100,
+        "score": 131000,
         "next": "voter_pushes"
       },
       {
         "text": "U redu, evo još jedan listić, samo nemojte da pravite gužvu.",
         "explanation": "Težak prekršaj, izdavanje dodatnog listića omogućava glasanje u tuđe ime.",
-        "score": -200
+        "score": -52000
       },
       {
         "text": "Potpišite se za njega u spisku pa ću vam dati listić.",
         "explanation": "Još teži prekršaj, potpisivanje i glasanje za drugu osobu nije dozvoljeno.",
-        "score": -250
+        "score": -66000
       }
     ]
   },
@@ -28,12 +28,12 @@
       {
         "text": "Razumem, ali ne smem da izdam listić osobi koja nije prošla postupak.",
         "explanation": "Ispravno, listić se izdaje samo biraču koji lično prođe propisane korake.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Dobro, ali neka ostane između nas.",
         "explanation": "Dogovor o kršenju procedure ugrožava zakonitost glasanja.",
-        "score": -200
+        "score": -52000
       }
     ]
   }

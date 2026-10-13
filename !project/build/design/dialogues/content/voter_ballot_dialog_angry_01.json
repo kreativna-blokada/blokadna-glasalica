@@ -6,12 +6,12 @@
       {
         "text": "Ne možete dobiti listić dok ne prođete sve korake.",
         "explanation": "Ispravno – birački odbor mora da proveri identitet i upiše birača u izvod iz biračkog spiska pre izdavanja listića.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Evo vam listić, ali sledeći put poštujte pravila.",
         "explanation": "Ovo je prekršaj člana biračkog odbora – listić se ne može izdati bez prethodne provere identiteta i upisa u spisak.",
-        "score": -100
+        "score": -26000
       }
     ]
   }

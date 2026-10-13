@@ -11,13 +11,13 @@
       {
         "text": "Samo je prebacite, ne moram da gledam.",
         "explanation": "Greška – kontrolor mora pažljivo proveriti identitet.",
-        "score": -50,
+        "score": -13000,
         "next": "voter_objects"
       },
       {
         "text": "Hvala, proveriću podatke.",
         "explanation": "Ispravno – svaki birač mora biti identifikovan.",
-        "score": 100,
+        "score": 131000,
         "next": "voter_passes"
       }
     ]

@@ -6,13 +6,13 @@
       {
         "text": "Izvinite, ali to nije moje ime. Molim vas da proverite još jednom.",
         "explanation": "Birač mora biti potpisan isključivo pored svog imena.",
-        "score": 100,
+        "score": 131000,
         "next": "controller_apologizes"
       },
       {
         "text": "U redu, potpisujem se gde ste rekli.",
         "explanation": "Potpisivanje na pogrešnom mestu može omogućiti zloupotrebe.",
-        "score": -100
+        "score": -26000
       }
     ]
   },

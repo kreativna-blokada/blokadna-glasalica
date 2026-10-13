@@ -6,18 +6,18 @@
       {
         "text": "Hvala, ali listić ću popuniti iza paravana, zbog tajnosti glasanja.",
         "explanation": "Ispravno, birač treba da glasa iza paravana kako bi tajnost glasanja bila zaštićena.",
-        "score": 100,
+        "score": 131000,
         "next": "controller_accepts"
       },
       {
         "text": "Može, samo da završim brže.",
         "explanation": "Popunjavanje listića za stolom može ugroziti tajnost glasanja.",
-        "score": -100
+        "score": -26000
       },
       {
         "text": "Da li je obavezno da idem iza paravana?",
         "explanation": "Birač sme da traži objašnjenje zašto se glasa iza paravana.",
-        "score": 50,
+        "score": 66000,
         "next": "privacy_explained"
       }
     ]
@@ -29,7 +29,7 @@
       {
         "text": "Hvala, idem iza paravana.",
         "explanation": "Birač pravilno nastavlja postupak.",
-        "score": 100
+        "score": 131000
       }
     ]
   },
@@ -40,12 +40,12 @@
       {
         "text": "Razumem, popuniću ga iza paravana.",
         "explanation": "Birač prihvata objašnjenje i štiti tajnost glasanja.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Svejedno mi je da drugi vide.",
         "explanation": "Tajnost glasanja se štiti procedurom čak i kada birač misli da mu nije važno.",
-        "score": -50
+        "score": -13000
       }
     ]
   }

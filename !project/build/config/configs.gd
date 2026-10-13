@@ -79,6 +79,15 @@ var Round: Dictionary[String, Variant] = {
 	"challenge_time": 30.0,
 	#station number (Lamp is 1) from which the room voter brings in a new voter while nobody waits in the queue
 	"queue_refill_station": 5,
+	#s added to the round for every voter answered only with best answers at all stations
+	"flawless_voter_bonus": 5.0,
+	#s of flawless voter bonus a round can gain at most, so the round always ends
+	"bonus_time_limit": 25.0,
+}
+
+var DialogueScore: Dictionary[String, Variant] = {
+	#s an answer screen ignores picks after it opens, so no answer can be given faster
+	"answer_lock_time": 3.0,
 }
 
 var Sound: Dictionary[String, Variant] = {
@@ -151,6 +160,11 @@ var Leaderboard: Dictionary[String, Variant] = {
 	#h added to UTC to pick the day a run's daily leaderboard is stored under; fixed, so in summer time the day
 	#turns at 01:00 local; must match the 3600000 ms in the database rules
 	"day_utc_offset": 1,
+}
+
+var IdReveal: Dictionary[String, Variant] = {
+	#letters per second the player id unveils at, same as the dialogue unveilSpeed
+	"unveil_speed": 30.0,
 }
 
 #ENTITY

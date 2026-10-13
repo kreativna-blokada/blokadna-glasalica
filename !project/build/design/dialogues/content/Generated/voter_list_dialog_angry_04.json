@@ -6,19 +6,19 @@
       {
         "text": "Kako me nema? Proverite još jednom pre nego što me odbijete.",
         "explanation": "Birač opravdano traži pažljivu proveru spiska pre donošenja odluke.",
-        "score": 50,
+        "score": 66000,
         "next": "second_search"
       },
       {
         "text": "Upišite me rukom negde na kraj, neću da idem bez glasanja.",
         "explanation": "Birač ne sme biti dopisan mimo propisane evidencije.",
-        "score": -200,
+        "score": -52000,
         "next": "manual_entry_refused"
       },
       {
         "text": "Ako nisam u spisku, tražim da mi objasnite kome da se obratim.",
         "explanation": "Ispravno, birač može tražiti objašnjenje i dalje korake bez ometanja rada.",
-        "score": 100
+        "score": 131000
       }
     ]
   },
@@ -29,12 +29,12 @@
       {
         "text": "U redu, zabeležite da sam došao i recite mi kome da se obratim.",
         "explanation": "Mirno traženje informacije je pravilno ponašanje u spornoj situaciji.",
-        "score": 80
+        "score": 105000
       },
       {
         "text": "Onda ću se potpisati kod nekog ko se nije pojavio.",
         "explanation": "Potpisivanje na tuđem mestu je ozbiljan prekršaj.",
-        "score": -200
+        "score": -52000
       }
     ]
   },
@@ -45,12 +45,12 @@
       {
         "text": "Dobro, onda tražim uputstvo šta mogu dalje.",
         "explanation": "Birač odustaje od nepravilnog zahteva i traži proceduralno rešenje.",
-        "score": 80
+        "score": 105000
       },
       {
         "text": "Ako me ne upišete, prekidam vam glasanje.",
         "explanation": "Pretnja prekidom rada biračkog mesta je ozbiljno ometanje postupka.",
-        "score": -300
+        "score": -79000
       }
     ]
   }

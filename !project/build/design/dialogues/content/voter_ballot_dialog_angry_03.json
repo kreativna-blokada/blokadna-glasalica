@@ -6,12 +6,12 @@
       {
         "text": "Zabranjeno je fotografisanje listića na biračkom mestu.",
         "explanation": "Ispravno – fotografisanje narušava tajnost glasanja.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Slikajte, ali brzo.",
         "explanation": "Prekršaj – član biračkog odbora ne sme dozvoliti fotografisanje.",
-        "score": -100
+        "score": -26000
       }
     ]
   }

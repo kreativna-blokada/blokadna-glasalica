@@ -11,13 +11,13 @@
       {
         "text": "Nažalost, bez dokumenta ne možete glasati.",
         "explanation": "Ispravno – bez identifikacije nije dozvoljeno glasanje.",
-        "score": 100,
+        "score": 131000,
         "next": "voter_leaves"
       },
       {
         "text": "Ma nema veze, prođite.",
         "explanation": "Prekršaj – glasanje bez provere identiteta.",
-        "score": -100,
+        "score": -26000,
         "next": "voter_passes"
       }
     ]

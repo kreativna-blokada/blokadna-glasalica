@@ -19,6 +19,8 @@
 [ext_resource type="Texture2D" uid="uid://cgrjan06rrdsh" path="res://!project/art/UI/Buttons/input-highlight-active.png" id="16_highlight"]
 [ext_resource type="Texture2D" uid="uid://trtlhsve38j3" path="res://!project/art/UI/Buttons/input-confirm-active.png" id="17_confirm"]
 [ext_resource type="FontFile" uid="uid://b7wgk25vccvfr" path="res://!project/art/UI/DejaVuLGCSansMono-Bold.ttf" id="18_bold"]
+[ext_resource type="Texture2D" uid="uid://2imaosldxwu4" path="res://!project/art/UI/Buttons/help-home-active.png" id="19_home_a"]
+[ext_resource type="Texture2D" uid="uid://cyv45davybmd5" path="res://!project/art/UI/Buttons/help-home-default.png" id="20_home_d"]
 
 [node name="TextPopup" type="Control" unique_id=193475490]
 layout_mode = 3
@@ -85,7 +87,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 40.0
 offset_right = -40.0
-offset_bottom = -32.0
+offset_bottom = -100.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -404,7 +406,41 @@ size_flags_vertical = 10
 theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
 theme_override_fonts/font = ExtResource("13_font")
 theme_override_font_sizes/font_size = 38
-text = "Klikni bilo gde za početak"
+text = "Klikni bilo gde u ovom prozoru za početak"
 horizontal_alignment = 1
 
+[node name="IdFooter" type="Label" parent="Container/Legend/Footer" unique_id=1925153940]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 6.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("13_font")
+theme_override_font_sizes/font_size = 24
+text = "(INDEKS: )"
+horizontal_alignment = 1
+
+[node name="Home" type="TextureButton" parent="Container" unique_id=1925153941]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -137.0
+offset_top = 40.0
+offset_right = -40.0
+offset_bottom = 137.0
+grow_horizontal = 0
+texture_normal = ExtResource("19_home_a")
+texture_pressed = ExtResource("20_home_d")
+ignore_texture_size = true
+stretch_mode = 5
+
 [connection signal="gui_input" from="Container" to="." method="_on_container_gui_input"]
+[connection signal="pressed" from="Container/Home" to="." method="_on_home_pressed"]

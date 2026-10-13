@@ -11,19 +11,19 @@
       {
         "text": "Prihvatićemo potvrdu MUP-a i proveriti podatke pažljivo.",
         "explanation": "Ispravno, potvrda MUP-a o promeni lične karte može služiti za ostvarivanje prava glasa.",
-        "score": 100,
+        "score": 131000,
         "next": "data_checked"
       },
       {
         "text": "Bez nove lične karte ne možete glasati.",
         "explanation": "Pogrešno, potvrda MUP-a je predviđena za ovu situaciju.",
-        "score": -100,
+        "score": -26000,
         "next": "voter_explains"
       },
       {
         "text": "Ne treba ništa da proveravamo, dovoljno je što imate papir.",
         "explanation": "Pogrešno, i uz potvrdu MUP-a identitet mora biti proveren.",
-        "score": -50
+        "score": -13000
       }
     ]
   },
@@ -34,12 +34,12 @@
       {
         "text": "U pravu ste, proveriću podatke na potvrdi.",
         "explanation": "Greška je ispravljena i postupak se nastavlja pravilno.",
-        "score": 80
+        "score": 105000
       },
       {
         "text": "Ne prihvatam potvrdu, morate otići.",
         "explanation": "Odbijanje važeće potvrde može neopravdano sprečiti birača da glasa.",
-        "score": -150
+        "score": -39000
       }
     ]
   },
@@ -50,7 +50,7 @@
       {
         "text": "Hvala, nastavljam dalje.",
         "explanation": "Procedura je sprovedena mirno i pravilno.",
-        "score": 100
+        "score": 131000
       }
     ]
   }
