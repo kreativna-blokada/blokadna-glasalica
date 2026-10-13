@@ -162,6 +162,11 @@ var Leaderboard: Dictionary[String, Variant] = {
 	"day_utc_offset": 1,
 }
 
+var IdReveal: Dictionary[String, Variant] = {
+	#letters per second the player id unveils at, same as the dialogue unveilSpeed
+	"unveil_speed": 30.0,
+}
+
 #ENTITY
 #███████╗███╗   ██╗████████╗██╗████████╗██╗   ██╗
 #██╔════╝████╗  ██║╚══██╔══╝██║╚══██╔══╝╚██╗ ██╔╝

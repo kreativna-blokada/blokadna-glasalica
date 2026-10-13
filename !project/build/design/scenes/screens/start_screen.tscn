@@ -256,6 +256,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_start_screen")
+skip_intro = true
 
 [node name="Background" type="ColorRect" parent="." unique_id=1496084363]
 layout_mode = 1
@@ -900,8 +901,7 @@ texture = SubResource("AtlasTexture_pointing_hand")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="IdLabel" type="Label" parent="." unique_id=1530624417]
-unique_name_in_owner = true
+[node name="IdBox" type="HBoxContainer" parent="." unique_id=1530624501]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.8125
@@ -914,11 +914,30 @@ offset_right = 233.0
 offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
+alignment = 1
+
+[node name="IdLabel" type="Label" parent="IdBox" unique_id=1530624417]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_colors/font_color = Color(0.496, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 20
-horizontal_alignment = 1
+text = "ИНДЕКС"
 vertical_alignment = 1
+visible_characters_behavior = 1
+
+[node name="IdRevealButton" type="Button" parent="IdBox" unique_id=1530624502]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.496, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0.496, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.496, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0.496, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 20
+text = "►"
+flat = true
 
 [node name="WebVersionBox" type="VBoxContainer" parent="." unique_id=1530624418]
 unique_name_in_owner = true

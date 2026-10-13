@@ -76,6 +76,9 @@ var _rest_click_caption: String
 var _rest_click_fontsize: int
 #ms tick of the latest difficulty switch, arrow taps closer than Configs.MenuDifficulty["tap_debounce"] to it are ignored
 var _arrow_switch_moment: int = 0
+#player id shown after the ИНДЕКС word, fully or still unveiling
+var _is_player_id_shown: bool = false
+var _player_id_unveiling_animation: Tween
 
 #onready vars
 @onready var jumper: CenterContainer = %JumperContainer
@@ -99,6 +102,7 @@ var _arrow_switch_moment: int = 0
 @onready var right_side_mask: TextureRect = $BallotBoxSelection/RightSideMask
 @onready var info_label: Label = %InfoLabel
 @onready var id_label: Label = %IdLabel
+@onready var id_reveal_button: Button = %IdRevealButton
 @onready var web_version_box: VBoxContainer = %WebVersionBox
 @onready var music_controller: TextureButton = %MusicController
 @onready var zoom_controller: TextureButton = %ZoomController
@@ -119,7 +123,7 @@ func _ready() -> void:
 	_rest_click_caption = click_counter_label.text
 	_rest_click_fontsize = click_counter_label.get_theme_font_size(&"font_size")
 	info_label.text = _get_menu_description(_menu_choice)
-	id_label.text = Literals.ID_CAPTION % LeaderboardManager.get_player_id()
+	id_label.text = Literals.ID_WORD
 	#the web build is the version the box points to, so it has nothing to point to there
 	web_version_box.visible = not OS.has_feature("web")
 	_load_game_start_count()
@@ -138,6 +142,10 @@ func _ready() -> void:
 	#the button shows whether sound was switched off before the menu loaded
 	music_controller.set_pressed_no_signal(AudioServer.is_bus_mute(AudioServer.get_bus_index(&"Master")))
 	music_controller.toggled.connect(_on_music_controller_switched)
+	id_reveal_button.pressed.connect(_switch_player_id)
+	#a Label ignores taps by default, the ИНДЕКС word has to catch them to switch the player id
+	id_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	id_label.gui_input.connect(_on_id_label_input)
 
 #counts up/down phone movements via accelerometer, starts game on enough shakes
 func _process(_delta: float) -> void:
@@ -211,6 +219,42 @@ func _on_menu_option_button_pressed() -> void:
 #signal MusicController.toggled => mutes every sound in the game while pressed, unmutes it when released
 func _on_music_controller_switched(is_sound_off: bool) -> void:
 	AudioServer.set_bus_mute(AudioServer.get_bus_index(&"Master"), is_sound_off)
+
+#signal IdLabel.gui_input => a tap on the ИНДЕКС word switches the player id the same as IdRevealButton; touch only, mouse clicks arrive as emulated touch
+func _on_id_label_input(event: InputEvent) -> void:
+	var touch_event: InputEventScreenTouch = event as InputEventScreenTouch
+	if not touch_event or not touch_event.pressed: return
+
+	_switch_player_id()
+	accept_event()
+
+#signal IdRevealButton.pressed => unveils the player id when hidden, otherwise brings back the lone ИНДЕКС word
+func _switch_player_id() -> void:
+	if _is_player_id_shown:
+		_hide_player_id()
+	else:
+		_reveal_player_id()
+
+#hides the glyph and unveils the player id letter by letter after the ИНДЕКС word, at the dialogue speed
+func _reveal_player_id() -> void:
+	_is_player_id_shown = true
+	id_reveal_button.hide()
+	id_label.text = Literals.ID_CAPTION % LeaderboardManager.get_player_id()
+
+	var shown_letter_count: int = Literals.ID_WORD.length()
+	var total_letter_count: int = id_label.text.length()
+	id_label.visible_characters = shown_letter_count
+	var unveil_duration: float = (total_letter_count - shown_letter_count) / Configs.IdReveal["unveil_speed"]
+	_player_id_unveiling_animation = create_tween()
+	_player_id_unveiling_animation.tween_property(id_label, "visible_characters", total_letter_count, unveil_duration)
+
+#stops any unveiling and shows the lone ИНДЕКС word and the glyph again, as before the first tap
+func _hide_player_id() -> void:
+	_is_player_id_shown = false
+	id_reveal_button.show()
+	if _player_id_unveiling_animation: _player_id_unveiling_animation.kill()
+	id_label.text = Literals.ID_WORD
+	id_label.visible_characters = -1
 
 #signal LeftArrow.gui_input, RightArrow.gui_input => switches the difficulty or the controls of the ticked row and shows it on the MenuOptionButton; touch only, mouse clicks arrive as emulated touch; taps right after a switch are ignored
 func _on_arrow_input(event: InputEvent) -> void:

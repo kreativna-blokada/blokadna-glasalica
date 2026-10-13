@@ -34,8 +34,12 @@ const MAIN_MENU_DESCRIPTIONS: Dictionary[Globals.MainMenu, String] = {
 #starting hint on web, where the phone can not be shaken
 const WEB_MENU_START_DESCRIPTION: String = "КЛИКНИ ДУГМЕ 3 ПУТА"
 
-#PlayerIdLabel text under the ballot box, filled with the leaderboard player id
+#IdLabel text under the ballot box before IdRevealButton is tapped
+const ID_WORD: String = "ИНДЕКС"
+#IdLabel text under the ballot box once IdRevealButton is tapped, filled with the leaderboard player id
 const ID_CAPTION: String = "ИНДЕКС: %s"
+#IdFooter text under the TextPopup footer, in latin, filled with the leaderboard player id
+const ID_LATIN_CAPTION: String = "(INDEKS: %s)"
 
 #MenuOptionButton text for each difficulty while the difficulty row is ticked
 const DIFFICULTY_DESCRIPTIONS: Dictionary[GameDescriptor.Difficulty, String] = {
