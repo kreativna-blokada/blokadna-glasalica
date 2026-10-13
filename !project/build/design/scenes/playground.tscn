@@ -1,9 +1,6 @@
 [gd_scene format=3 uid="uid://fqi4sbecij1g"]
 
-[ext_resource type="Script" uid="uid://bbqbi7b7sbxcg" path="res://!project/build/design/scenes/playground.gd" id="1_0lvdn"]
-[ext_resource type="PackedScene" uid="uid://dr4n6i0f64c0h" path="res://!project/build/design/scenes/actors/voter.tscn" id="2_15nu1"]
 [ext_resource type="Texture2D" uid="uid://dtq2mbiupcaix" path="res://!project/art/room.png" id="2_kd7wv"]
-[ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/scenery/voting_stop.tscn" id="4_0lvdn"]
 [ext_resource type="Texture2D" uid="uid://dv8afp8brclto" path="res://!project/art/door.png" id="4_4snjr"]
 [ext_resource type="Texture2D" uid="uid://bnbwm40jaltgt" path="res://!project/art/plant.png" id="7_lx4dv"]
 [ext_resource type="Texture2D" uid="uid://cf55eeua2caey" path="res://!project/art/voting_table.png" id="8_ub0ki"]
@@ -15,7 +12,6 @@
 [ext_resource type="Texture2D" uid="uid://cqpi048ceudyq" path="res://!project/art/table5.png" id="14_5hnyl"]
 
 [node name="Playground" type="Node2D" unique_id=1489686815]
-script = ExtResource("1_0lvdn")
 
 [node name="Room" type="Sprite2D" parent="." unique_id=1647902958]
 modulate = Color(1.0116422, 1.0116422, 1.0116422, 1)
@@ -24,47 +20,11 @@ position = Vector2(960, 540)
 scale = Vector2(1.55, 1.55)
 texture = ExtResource("2_kd7wv")
 
-[node name="VotingStops" type="Node2D" parent="." unique_id=1004715077]
-
-[node name="Entry" parent="VotingStops" unique_id=330516695 instance=ExtResource("4_0lvdn")]
-position = Vector2(520, 966)
-
-[node name="Check" parent="VotingStops" unique_id=154735745 instance=ExtResource("4_0lvdn")]
-position = Vector2(804, 861)
-
-[node name="Spray" parent="VotingStops" unique_id=2039787629 instance=ExtResource("4_0lvdn")]
-position = Vector2(903, 822)
-
-[node name="ID" parent="VotingStops" unique_id=21093571 instance=ExtResource("4_0lvdn")]
-position = Vector2(1105, 734)
-
-[node name="Ballot" parent="VotingStops" unique_id=561221041 instance=ExtResource("4_0lvdn")]
-position = Vector2(1405, 687)
-
-[node name="Booth" parent="VotingStops" unique_id=816603679 instance=ExtResource("4_0lvdn")]
-position = Vector2(1058, 546)
-
-[node name="Box" parent="VotingStops" unique_id=25472905 instance=ExtResource("4_0lvdn")]
-position = Vector2(726, 640)
-
-[node name="Exit" parent="VotingStops" unique_id=1412793287 instance=ExtResource("4_0lvdn")]
-position = Vector2(470, 763)
-
-[node name="Out" parent="VotingStops" unique_id=118482608 instance=ExtResource("4_0lvdn")]
-position = Vector2(-228, 354)
-
 [node name="Door" type="Sprite2D" parent="." unique_id=923288625]
 z_index = 1
 position = Vector2(735, 842)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_4snjr")
-
-[node name="Voter" parent="." unique_id=1417136144 instance=ExtResource("2_15nu1")]
-z_index = 1
-position = Vector2(383, 768)
-scale = Vector2(0.99999994, 0.99999994)
-
-[node name="VotersLine" type="Node2D" parent="." unique_id=1160409060]
 
 [node name="objects" type="Node2D" parent="." unique_id=222655132]
 
@@ -120,9 +80,3 @@ z_index = -2
 position = Vector2(1439, 583.00006)
 scale = Vector2(1.55, 1.55)
 texture = ExtResource("14_5hnyl")
-
-[node name="ColorRect" type="ColorRect" parent="." unique_id=704657051]
-z_index = -3
-offset_right = 1915.0
-offset_bottom = 1088.0
-color = Color(0.5764706, 0.654902, 0.6784314, 1)
