@@ -77,3 +77,22 @@ const USERNAME_EMPTY_MESSAGE: String = "ИМЕ НЕ МОЖЕ ДА БУДЕ ПР�
 const USERNAME_TOO_LONG_MESSAGE: String = "ИМЕ МОЖЕ ДА ИМА НАЈВИШЕ %d ЗНАКОВА"
 const USERNAME_INVALID_CHARACTER_MESSAGE: String = "ИМЕ СМЕ ДА САДРЖИ САМО ЛАТИНИЧНА СЛОВА A-Z, ЦИФРЕ, РАЗМАК, _ И -"
 const USERNAME_NOT_SAVED_MESSAGE: String = "ИМЕ НИЈЕ САЧУВАНО"
+
+#game summary texts, latin like the dialogues they review
+const SUMMARY_TITLE: String = "ODGOVORI"
+const SUMMARY_CORRECT: String = "TAČNO"
+const SUMMARY_WRONG: String = "GREŠKA"
+const SUMMARY_YOUR_ANSWER: String = "TVOJ\nODGOVOR"
+const SUMMARY_RIGHT_ANSWER: String = "ISPRAVAN\nODGOVOR"
+const SUMMARY_WHY: String = "ZAŠTO:"
+const SUMMARY_CONTINUE: String = "DALJE"
+#game summary station chip for each voting stop name
+const SUMMARY_STATION_LABELS: Dictionary[String, String] = {
+	"Lamp": "UV LAMPA",
+	"ID": "DOKUMENT",
+	"List": "POTPIS",
+	"Spray": "SPREJ",
+	"Ballot": "LISTIĆ",
+	"Booth": "PARAVAN",
+	"Box": "KUTIJA",
+}

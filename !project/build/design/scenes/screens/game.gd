@@ -121,6 +121,9 @@ func _on_round_timer_timeout() -> void:
 	stop_sounds = false
 	var round_jingle: Globals.Sound = Globals.Sound.RoundWin if _game_descriptor.get_points() > 0 else Globals.Sound.RoundLose
 	SoundManager.play_jingle(round_jingle, Globals.Music.Summary)
+	#a dialogue left open would still take answers under the summary
+	if _dialog_controller != null:
+		_on_dialog_finished()
 	_show_game_summary()
 	
 
