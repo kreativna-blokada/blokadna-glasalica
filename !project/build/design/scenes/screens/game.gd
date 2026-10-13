@@ -37,6 +37,8 @@ const DIALOG_SIZE: Vector2i = Vector2i(1200, 900)
 #private vars
 var _dialog_controller: DialogController = null
 var _dialog_voter: Voter = null
+#voting stop the open dialog belongs to
+var _dialog_stop_name: String = ""
 var _game_descriptor: GameDescriptor = null
 var _popup: TextPopup = null
 var _round_timer: Timer
@@ -170,6 +172,7 @@ func _open_dialogue(voter: Voter, stop_name: String) -> void:
 		return
 
 	_dialog_voter = voter
+	_dialog_stop_name = stop_name
 	_dialog_controller = DIALOG_CONTROLLER_SCENE.instantiate() as DialogController
 	#### commented out 7b64814055ee6b6eb9d15d2b811ccde201717f87
 	#### _dialog_controller.initialize(dialog_path, DIALOG_SIZE)
@@ -201,16 +204,16 @@ func _on_dialog_finished() -> void:
 	if voter and is_instance_valid(voter) and voter.is_stopping:
 		voter.can_continue_voting_course()
 
-func _on_dialog_choice_made(dialog_text: String, choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float) -> void:
+func _on_dialog_choice_made(dialog_descriptor: DialogDescriptor, choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float) -> void:
 	var actual_score := DialogScoreCalculator.calculate_score(choice_descriptor, answer_time)
-	_game_descriptor.track_choice(dialog_text, choice_descriptor, actual_score)
+	_game_descriptor.track_choice(_dialog_stop_name, dialog_descriptor, choice_descriptor, actual_score)
 	var popup: Node = POINTS_VFX_SCENE.instantiate()
 	dialog_layer.add_child(popup)  # or a dedicated "VFXLayer" node
 	popup.global_position = _dialog_controller.global_position + _dialog_controller.size / 2
 	var points_str: String = "+%.0f" % actual_score
 	var points_color: Color = Color.GREEN
 	var choice_stinger: Globals.Sound = Globals.Sound.ChoiceRight
-	if choice_descriptor.score < 0:
+	if not choice_descriptor.is_correct():
 		points_str = "%.0f" % actual_score
 		points_color = Color.RED
 		choice_stinger = Globals.Sound.ChoiceWrong
