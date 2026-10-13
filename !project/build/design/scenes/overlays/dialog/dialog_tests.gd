@@ -23,7 +23,7 @@ func _create_dialog_controller() -> void:
 	dialog_controller.finished.connect(_on_dialog_finished)
 	add_child(dialog_controller)
 
-func _on_dialog_choice(_dialog_descriptor: DialogDescriptor, choice_desc: DialogDescriptor.ChoiceDescriptor, _answer_time: float) -> void:
+func _on_dialog_choice(_dialog_descriptor: DialogDescriptor, choice_desc: DialogDescriptor.ChoiceDescriptor, _answer_time: float, _is_best_choice: bool) -> void:
 	print("Score changed by %d" % choice_desc.score)
 
 func _on_dialog_finished() -> void:

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cyx5qdqscjukw"
-path="res://.godot/imported/speakerLeftExample.png-1cb50b4b23e8eec35f225f5d12dadfe2.ctex"
+uid="uid://l8ltg6igooq2"
+path="res://.godot/imported/table_ballot.png-2cd436bb5e1f5c6e9911fc645c052c9d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://!project/art/UI/DialogBox/speakerLeftExample.png"
-dest_files=["res://.godot/imported/speakerLeftExample.png-1cb50b4b23e8eec35f225f5d12dadfe2.ctex"]
+source_file="res://!project/art/table_ballot.png"
+dest_files=["res://.godot/imported/table_ballot.png-2cd436bb5e1f5c6e9911fc645c052c9d.ctex"]
 
 [params]
 

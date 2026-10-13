@@ -6,12 +6,12 @@
       {
         "text": "Nije dozvoljeno glasati u tuđe ime, svaki birač glasa lično.",
         "explanation": "Ispravno – glasanje u tuđe ime je zabranjeno.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "U redu, evo vam još jedan listić.",
         "explanation": "Težak prekršaj – izdavanje više listića jednom biraču nije dozvoljeno.",
-        "score": -200
+        "score": -52000
       }
     ]
   }

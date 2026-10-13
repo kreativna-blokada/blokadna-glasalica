@@ -6,18 +6,18 @@
       {
         "text": "Hvala što ste rekli. Zaustavićemo trenutak i namestiti paravan da se zaštiti tajnost glasanja.",
         "explanation": "Ispravno, birački odbor treba da obezbedi uslove za tajno glasanje.",
-        "score": 100,
+        "score": 131000,
         "next": "booth_adjusted"
       },
       {
         "text": "Nema veze, niko ne gleda.",
         "explanation": "Pogrešno, tajnost glasanja mora biti obezbeđena, a ne prepuštena pretpostavci.",
-        "score": -100
+        "score": -26000
       },
       {
         "text": "Stanite telom da zaklonite listić, to je dovoljno.",
         "explanation": "Privremeno zaklanjanje nije dobro rešenje ako paravan ne obezbeđuje tajnost.",
-        "score": -50
+        "score": -13000
       }
     ]
   },
@@ -28,12 +28,12 @@
       {
         "text": "Hvala, sada mogu da glasam tajno.",
         "explanation": "Tajnost glasanja je zaštićena pre popunjavanja listića.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Dobro je da smo ovo rešili pre glasanja.",
         "explanation": "Birač je ukazao na nepravilnost na vreme.",
-        "score": 100
+        "score": 131000
       }
     ]
   }

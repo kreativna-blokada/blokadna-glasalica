@@ -9,6 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://1t3vagxag6xt" path="res://!project/art/voting_box.png" id="6_vbox"]
 [ext_resource type="Texture2D" uid="uid://bbx61xsoc0hs0" path="res://!project/art/table1.png" id="7_t1"]
 [ext_resource type="Texture2D" uid="uid://bh0tina8uva5e" path="res://!project/art/table2.png" id="8_t2"]
+[ext_resource type="Texture2D" uid="uid://bp6i3uaes4smh" path="res://!project/art/table_list.png" id="9_tlist"]
+[ext_resource type="Texture2D" uid="uid://p4w1j0g6vj8f" path="res://!project/art/table_spray.png" id="10_tspray"]
+[ext_resource type="Texture2D" uid="uid://l8ltg6igooq2" path="res://!project/art/table_ballot.png" id="11_tballot"]
 [ext_resource type="AudioStream" uid="uid://dw0g8qc0qfcwv" path="res://!project/audio/stops/uv_lamp.ogg" id="12_2sfpg"]
 [ext_resource type="PackedScene" uid="uid://dn4isvcgxdmwk" path="res://!project/build/design/scenes/scenery/voting_stop.tscn" id="12_ugfii"]
 [ext_resource type="Script" uid="uid://bw25mgovar025" path="res://!project/build/design/scenes/scenery/scenery.gd" id="13_scnry"]
@@ -16,8 +19,8 @@
 [ext_resource type="AudioStream" uid="uid://0u47euxdqvan" path="res://!project/audio/stops/voter_list.ogg" id="16_fupqg"]
 [ext_resource type="AudioStream" uid="uid://bftxwhyxn1pkg" path="res://!project/audio/stops/finger_spray.ogg" id="18_oany1"]
 [ext_resource type="AudioStream" uid="uid://bn1a4rubp00s7" path="res://!project/audio/stops/ballot_stamp.ogg" id="20_sjbew"]
-[ext_resource type="AudioStream" uid="uid://csptbqajleivs" path="res://!project/audio/stops/ballot_box.ogg" id="24_kmrnq"]
 [ext_resource type="AudioStream" uid="uid://ctxdwbxluslgm" path="res://!project/audio/stops/ballot_mark.ogg" id="22_tekev"]
+[ext_resource type="AudioStream" uid="uid://csptbqajleivs" path="res://!project/audio/stops/ballot_box.ogg" id="24_kmrnq"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hcqac"]
 radius = 25.333313
@@ -84,20 +87,20 @@ texture = ExtResource("8_t2")
 z_index = -3
 position = Vector2(830.99994, 377)
 scale = Vector2(1.7, 1.7)
-texture = ExtResource("7_t1")
+texture = ExtResource("9_tlist")
 
 [node name="Ballot" type="Sprite2D" parent="Setup" unique_id=831766924]
 z_index = -2
-position = Vector2(1212, 456)
+position = Vector2(1204, 450)
 scale = Vector2(1.55, 1.55)
-texture = ExtResource("7_t1")
+texture = ExtResource("10_tspray")
 flip_h = true
 
 [node name="Voting" type="Sprite2D" parent="Setup" unique_id=163396145]
 z_index = -2
-position = Vector2(1464.0001, 559)
+position = Vector2(1472, 565)
 scale = Vector2(1.55, 1.55)
-texture = ExtResource("8_t2")
+texture = ExtResource("11_tballot")
 flip_h = true
 
 [node name="Entry" type="Sprite2D" parent="Setup" unique_id=546491139]

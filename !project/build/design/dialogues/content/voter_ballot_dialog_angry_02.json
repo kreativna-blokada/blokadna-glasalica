@@ -6,12 +6,12 @@
       {
         "text": "Moramo da proverimo vaš identitet pre izdavanja listića.",
         "explanation": "Ispravno – identitet i upis u spisak su obavezni pre izdavanja listića.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "U redu, evo listić, požurite.",
         "explanation": "Prekršaj – preskakanje procedure je zabranjeno.",
-        "score": -100
+        "score": -26000
       }
     ]
   }

@@ -11,6 +11,10 @@ extends Node
 @warning_ignore("unused_signal")
 signal game_close_requested
 
+#emitted when the intro text should be opened again during the game
+@warning_ignore("unused_signal")
+signal help_requested
+
 #emitted when the leaderboard fetch finishes; entries are {player_id, username, score}, best first
 @warning_ignore("unused_signal")
 signal ranks_fetched(fetch_succeeded: bool, top_entries: Array[Dictionary])

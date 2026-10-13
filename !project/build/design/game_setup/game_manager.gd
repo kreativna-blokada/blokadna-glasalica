@@ -12,6 +12,8 @@ enum GameScreen {START, MAIN, LEADERBOARD}
 var _game_descriptor: GameDescriptor = GameDescriptor.new()
 var _mission_descriptor: MissionDescriptor = MissionDescriptor.new()
 var _current_screen: GameScreen = GameScreen.START
+#true while the start screen is opened by the help popup Home button, the ballot then rests on the leaderboard row
+var _is_returning_home: bool = false
 
 func get_game_descriptor() -> GameDescriptor:
 	if _current_screen == GameScreen.START:
@@ -21,8 +23,13 @@ func get_game_descriptor() -> GameDescriptor:
 func get_mission_descriptor() -> MissionDescriptor:
 	return _mission_descriptor
 
+#true when the start screen was opened by the help popup Home button
+func is_returning_home() -> bool:
+	return _is_returning_home
+
 func start_game(controller_type: Globals.ControllerType, difficulty: GameDescriptor.Difficulty, mission_descriptor: MissionDescriptor, is_zoomed_dialogue: bool) -> void:
 	_game_descriptor = GameDescriptor.new()
+	_is_returning_home = false
 	_set_difficulty(difficulty)
 	_set_controller_type(controller_type)
 	_set_zoomed_dialogue(is_zoomed_dialogue)
@@ -31,6 +38,11 @@ func start_game(controller_type: Globals.ControllerType, difficulty: GameDescrip
 	
 func go_to_leaderboard() -> void:
 	switch_screen(GameScreen.LEADERBOARD, _current_screen == GameScreen.START)
+
+#leaves the game for the start screen, where the ballot rests on the leaderboard row
+func return_home() -> void:
+	_is_returning_home = true
+	switch_screen(GameScreen.START)
 
 #keeps the run score for the leaderboard screen to submit, then opens it
 func end_run() -> void:

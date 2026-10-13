@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://sniui7gd765k"
-path="res://.godot/imported/speakerRightExample.png-9363396606d3834284476cd6c2676cad.ctex"
+uid="uid://bp6i3uaes4smh"
+path="res://.godot/imported/table_list.png-70ae6ea3e5f08d9b114599ef0623a0b1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://!project/art/UI/DialogBox/speakerRightExample.png"
-dest_files=["res://.godot/imported/speakerRightExample.png-9363396606d3834284476cd6c2676cad.ctex"]
+source_file="res://!project/art/table_list.png"
+dest_files=["res://.godot/imported/table_list.png-70ae6ea3e5f08d9b114599ef0623a0b1.ctex"]
 
 [params]
 

@@ -6,18 +6,18 @@
       {
         "text": "Naravno. Da li možete samo da mi kažete čemu služi sprej?",
         "explanation": "Birač sme da traži objašnjenje svrhe obeležavanja.",
-        "score": 50,
+        "score": 66000,
         "next": "spray_explained"
       },
       {
         "text": "Izvolite prst.",
         "explanation": "Ispravno, birač prihvata obavezno obeležavanje.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Radije ne bih, ali bih ipak želeo listić.",
         "explanation": "Birač ne može dobiti glasački listić ako odbije obavezno obeležavanje sprejem.",
-        "score": -100,
+        "score": -26000,
         "next": "refusal_explained"
       }
     ]
@@ -29,12 +29,12 @@
       {
         "text": "Razumem, izvolite.",
         "explanation": "Birač prihvata objašnjenje i nastavlja postupak.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Hvala. Voleo bih da se ovo objasni i ljudima koji nisu sigurni.",
         "explanation": "Jasno objašnjenje procedure doprinosi poverenju u postupak.",
-        "score": 80
+        "score": 105000
       }
     ]
   },
@@ -45,12 +45,12 @@
       {
         "text": "U redu, prihvatam obeležavanje.",
         "explanation": "Birač se vraća pravilnoj proceduri.",
-        "score": 80
+        "score": 105000
       },
       {
         "text": "Onda odustajem od glasanja.",
         "explanation": "Birač može odustati, ali odbijanje spreja znači da postupak ne može biti nastavljen.",
-        "score": -50
+        "score": -13000
       }
     ]
   }
