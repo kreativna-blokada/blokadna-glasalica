@@ -6,18 +6,18 @@
       {
         "text": "Molim vas, potpisao bih se sada pored svog imena, kako procedura nalaže.",
         "explanation": "Ispravno, birač se mora potpisati u izvod pre nastavka postupka.",
-        "score": 100,
+        "score": 131000,
         "next": "signature_done"
       },
       {
         "text": "Ako je vama tako lakše, nastaviću bez potpisa.",
         "explanation": "Nastavak bez potpisa u biračkom spisku je nepravilnost.",
-        "score": -100
+        "score": -26000
       },
       {
         "text": "Možete li proveriti da li je ovo za sve nivoe izbora na kojima glasam?",
         "explanation": "Razumno je proveriti odgovarajuće izvode kada postoji više nivoa izbora.",
-        "score": 80,
+        "score": 105000,
         "next": "all_lists_checked"
       }
     ]
@@ -29,12 +29,12 @@
       {
         "text": "Hvala, potpisujem se.",
         "explanation": "Procedura je ispravljena i birač nastavlja pravilno.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Dobro je da smo proverili pre nego što sam otišao dalje.",
         "explanation": "Birač je sprečio proceduralni propust bez sukoba.",
-        "score": 100
+        "score": 131000
       }
     ]
   },
@@ -45,12 +45,12 @@
       {
         "text": "Hvala, potpisaću se tamo gde treba.",
         "explanation": "Birač poštuje evidenciju za svaki relevantan izvod.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Nema potrebe, dovoljan je jedan potpis bilo gde.",
         "explanation": "Potpisivanje mora pratiti propisanu evidenciju, ne proizvoljno mesto.",
-        "score": -100
+        "score": -26000
       }
     ]
   }

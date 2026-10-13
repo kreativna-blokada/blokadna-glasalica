@@ -57,11 +57,11 @@ const EMPTY_BOARD_MESSAGE: String = "ЈОШ НЕМА РЕЗУЛТАТА"
 const REWARDS_UPCOMING_MESSAGE: String = "НАГРАДЕ СТИЖУ УСКОРО!\nНАЈБОЉИ ИГРАЧИ ДАНА, НЕДЕЉЕ И ИЗБОРА БИЋЕ НАГРАЂЕНИ"
 
 #leaderboard screen run score status; %d is the run score
-const MISSING_USERNAME_MESSAGE: String = "УНЕСИ ИМЕ ДА ПРИЈАВИШ РЕЗУЛТАТ %d"
-const SUBMIT_MESSAGE: String = "ШАЉЕМ РЕЗУЛТАТ %d..."
-const SCORE_SAVED_MESSAGE: String = "РЕЗУЛТАТ %d ЈЕ САЧУВАН"
-const SCORE_HIGHER_MESSAGE: String = "РЕЗУЛТАТ %d - ТВОЈ НАЈБОЉИ РЕЗУЛТАТ НА РАНГ ЛИСТИ ЈЕ ВЕЋИ"
-const FAILED_MESSAGE: String = "РЕЗУЛТАТ %d НИЈЕ ПОСЛАТ"
+const MISSING_USERNAME_MESSAGE: String = "УНЕСИ ИМЕ ДА ПРИЈАВИШ РЕЗУЛТАТ %s"
+const SUBMIT_MESSAGE: String = "ШАЉЕМ РЕЗУЛТАТ %s..."
+const SCORE_SAVED_MESSAGE: String = "РЕЗУЛТАТ %s ЈЕ САЧУВАН"
+const SCORE_HIGHER_MESSAGE: String = "РЕЗУЛТАТ %s - ТВОЈ НАЈБОЉИ РЕЗУЛТАТ НА РАНГ ЛИСТИ ЈЕ ВЕЋИ"
+const FAILED_MESSAGE: String = "РЕЗУЛТАТ %s НИЈЕ ПОСЛАТ"
 
 #leaderboard day strip captions for the two latest days; older days show their date
 const TODAY_DAY_CAPTION: String = "ДАНАС"

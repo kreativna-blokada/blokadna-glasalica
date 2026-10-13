@@ -6,18 +6,18 @@
       {
         "text": "Molim vas da prvo obavite obeležavanje, pa tek onda izdate listić.",
         "explanation": "Ispravno, birač ukazuje na propust i traži da se sprej nanese pre izdavanja listića.",
-        "score": 100,
+        "score": 131000,
         "next": "spray_applied"
       },
       {
         "text": "Ako je listić već spreman, nema potrebe da se vraćamo na to.",
         "explanation": "Pogrešno, obeležavanje sprejem mora prethoditi izdavanju listića.",
-        "score": -100
+        "score": -26000
       },
       {
         "text": "Možete li obavestiti predsednika odbora da se propust ne ponavlja?",
         "explanation": "Ispravno je tražiti da se proceduralni propust evidentira ili spreči ubuduće.",
-        "score": 80,
+        "score": 105000,
         "next": "chair_notified"
       }
     ]
@@ -29,7 +29,7 @@
       {
         "text": "Hvala, posle toga preuzimam listić i nastavljam iza paravana.",
         "explanation": "Postupak je ispravljen pre izdavanja listića i nastavka glasanja.",
-        "score": 100
+        "score": 131000
       }
     ]
   },
@@ -40,12 +40,12 @@
       {
         "text": "U redu, izvolite prst za sprej, pa onda mogu da preuzmem listić.",
         "explanation": "Birač kombinuje ukazivanje na propust sa nastavkom pravilne procedure.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Hvala, ali ipak ću otići bez spreja.",
         "explanation": "Odlazak dalje bez obeležavanja ostavlja propust nerešenim.",
-        "score": -100
+        "score": -26000
       }
     ]
   }

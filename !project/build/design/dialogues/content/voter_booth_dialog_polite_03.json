@@ -6,12 +6,12 @@
       {
         "text": "Nije problem, samo ga ubacite tako.",
         "explanation": "To je prekršaj pravila. Listić mora biti presavijen radi zaštite tajnosti glasanja.",
-        "score": -50
+        "score": -13000
       },
       {
         "text": "Molim Vas, presavijte listić pre ubacivanja.",
         "explanation": "Ispravno postupate. Listić mora biti presavijen tako da se ne vidi način glasanja.",
-        "score": 100
+        "score": 131000
       }
     ]
   }

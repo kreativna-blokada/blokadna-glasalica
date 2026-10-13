@@ -11,13 +11,13 @@
       {
         "text": "Ne možete glasati sa tuđim dokumentom.",
         "explanation": "Glasanje sa tuđim dokumentom je ozbiljan prekršaj.",
-        "score": 100,
+        "score": 131000,
         "next": "voter_leaves"
       },
       {
         "text": "Ma nema veze, prođi.",
         "explanation": "Ozbiljan prekršaj – omogućavanje glasanja sa tuđim dokumentom.",
-        "score": -100,
+        "score": -26000,
         "next": "voter_passes"
       }
     ]

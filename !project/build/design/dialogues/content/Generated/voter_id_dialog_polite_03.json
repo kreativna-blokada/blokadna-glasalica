@@ -11,19 +11,19 @@
       {
         "text": "Nije problem, poziv za glasanje nije uslov. Proverićemo vaš identitet i spisak.",
         "explanation": "Ispravno, birač može da glasa bez poziva za glasanje ako se identitet i upis u spisak pravilno utvrde.",
-        "score": 100,
+        "score": 131000,
         "next": "voter_relief"
       },
       {
         "text": "Bez poziva ne možemo da vas primimo.",
         "explanation": "Pogrešno, poziv za glasanje nije obavezan dokument za ostvarivanje prava glasa.",
-        "score": -100,
+        "score": -26000,
         "next": "voter_questions"
       },
       {
         "text": "Možete dalje i bez provere, čim imate ličnu kartu.",
         "explanation": "Pogrešno, lična karta se mora proveriti i postupak mora ići redom.",
-        "score": -100
+        "score": -26000
       }
     ]
   },
@@ -34,12 +34,12 @@
       {
         "text": "U pravu ste, nastavljamo proveru sa ličnom kartom.",
         "explanation": "Član odbora ispravlja grešku i omogućava nastavak postupka.",
-        "score": 80
+        "score": 105000
       },
       {
         "text": "Neću da proveravam, bez poziva nema glasanja.",
         "explanation": "Neopravdano uslovljavanje pozivom može uskratiti biraču pravo glasa.",
-        "score": -150
+        "score": -39000
       }
     ]
   },

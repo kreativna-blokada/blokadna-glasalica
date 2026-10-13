@@ -6,12 +6,12 @@
       {
         "text": "Slikam listić i šaljem kome hoću.",
         "explanation": "Fotografisanje glasačkog listića je zabranjeno i predstavlja ozbiljan prekršaj. Tajnost glasanja je zagarantovana zakonom.",
-        "score": -100
+        "score": -26000
       },
       {
         "text": "Neću slikati listić, ali ću reći svima za koga sam glasao.",
         "explanation": "Otkrivanje načina glasanja nije zabranjeno ako to birač sam želi, ali je važno da niko ne vrši pritisak na birača.",
-        "score": -10
+        "score": -3000
       }
     ]
   }

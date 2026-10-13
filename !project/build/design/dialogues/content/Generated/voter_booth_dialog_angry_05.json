@@ -6,18 +6,18 @@
       {
         "text": "Molim vas, odmah presavijte listić tako da se ne vidi izbor.",
         "explanation": "Ispravno, listić treba presaviti radi zaštite tajnosti glasanja.",
-        "score": 100,
+        "score": 131000,
         "next": "voter_reacts"
       },
       {
         "text": "Nema veze, ubacite ga tako.",
         "explanation": "Pogrešno, odbor treba da zaštiti tajnost glasanja pre ubacivanja listića.",
-        "score": -50
+        "score": -13000
       },
       {
         "text": "Svi pogledajte, da znamo za koga je glasao.",
         "explanation": "To je direktno narušavanje tajnosti glasanja.",
-        "score": -200
+        "score": -52000
       }
     ]
   },
@@ -28,12 +28,12 @@
       {
         "text": "Vaš izbor je vaša stvar, ali listić se ubacuje presavijen da se zaštiti tajnost postupka.",
         "explanation": "Ispravno, birač može pričati o svom izboru, ali procedura presavijanja štiti tajnost glasanja.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Ako želite da pokažete, pokažite prvo meni.",
         "explanation": "Član odbora ne sme tražiti da vidi kako je birač glasao.",
-        "score": -100
+        "score": -26000
       }
     ]
   }

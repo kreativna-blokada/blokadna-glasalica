@@ -6,18 +6,18 @@
       {
         "text": "Hvala što ste ukazali. Vratićemo se korak nazad i proveriti potpis pre izdavanja listića.",
         "explanation": "Ispravno, listić se izdaje tek nakon prethodnih koraka, uključujući proveru i potpis u spisku.",
-        "score": 100,
+        "score": 131000,
         "next": "procedure_fixed"
       },
       {
         "text": "Nema veze, potpis ćemo kasnije, evo listić.",
         "explanation": "Pogrešno, redosled procedure ne treba preskakati.",
-        "score": -100
+        "score": -26000
       },
       {
         "text": "Ako ste sigurni, možda mogu samo da potpišem posle glasanja.",
         "explanation": "Birač ne treba da predlaže naknadno ispravljanje preskočene procedure.",
-        "score": -50,
+        "score": -13000,
         "next": "order_explained"
       }
     ]
@@ -29,12 +29,12 @@
       {
         "text": "Potpisujem se, pa onda preuzimam listić.",
         "explanation": "Postupak je vraćen u pravilan redosled.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Dobro je da smo proverili pre nego što sam nastavio.",
         "explanation": "Birač je sprečio proceduralni propust.",
-        "score": 100
+        "score": 131000
       }
     ]
   },
@@ -45,12 +45,12 @@
       {
         "text": "U redu, onda prvo potpis.",
         "explanation": "Birač prihvata ispravan redosled.",
-        "score": 80
+        "score": 105000
       },
       {
         "text": "Meni je svejedno, samo mi dajte listić.",
         "explanation": "Insistiranje na preskakanju koraka ugrožava pravilnost postupka.",
-        "score": -100
+        "score": -26000
       }
     ]
   }

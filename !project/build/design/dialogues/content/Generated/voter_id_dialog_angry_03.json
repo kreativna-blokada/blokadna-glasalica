@@ -11,19 +11,19 @@
       {
         "text": "Ne mogu da prihvatim samo nevažeći pasoš. Potrebna je važeća lična karta, važeći pasoš ili potvrda MUP-a o podnetom zahtevu za novi dokument.",
         "explanation": "Ispravno, birač glasa sa važećom ličnom kartom, važećim pasošem ili potvrdom MUP-a ako je lična karta ili pasoš u postupku zamene.",
-        "score": 100,
+        "score": 131000,
         "next": "voter_leaves"
       },
       {
         "text": "Važno je da se vidi slika, možete dalje.",
         "explanation": "Prekršaj, nevažeći dokument nije dovoljan za utvrđivanje prava na glasanje.",
-        "score": -100,
+        "score": -26000,
         "next": "voter_passes"
       },
       {
         "text": "Sačekajte da predsednik odbora potvrdi, meni je ovo sumnjivo.",
         "explanation": "Delimično ispravno, ali osnovno pravilo je jasno: nevažeći dokument se ne prihvata.",
-        "score": 50,
+        "score": 66000,
         "next": "chair_confirms"
       }
     ]
@@ -35,12 +35,12 @@
       {
         "text": "Razumem, bez važećeg dokumenta ne mogu da nastavim.",
         "explanation": "Ispravno zaključivanje nakon provere pravila.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Svejedno ću ga pustiti, čovek se već iznervirao.",
         "explanation": "Pritisak ili nervoza birača ne opravdavaju kršenje pravila identifikacije.",
-        "score": -150
+        "score": -39000
       }
     ]
   },

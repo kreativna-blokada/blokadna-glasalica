@@ -6,13 +6,13 @@
       {
         "text": "Ne možete potpisivati za druge, to je zabranjeno!",
         "explanation": "Ispravno – potpisivanje za drugu osobu je ozbiljan prekršaj i može biti krivično delo.",
-        "score": 100,
+        "score": 131000,
         "next": "voter_backs_down"
       },
       {
         "text": "Ajde, potpišite, niko neće primetiti.",
         "explanation": "Težak prekršaj – član biračkog odbora omogućava potpisivanje za drugu osobu, što je pokušaj izborne prevare.",
-        "score": -200
+        "score": -52000
       }
     ]
   },

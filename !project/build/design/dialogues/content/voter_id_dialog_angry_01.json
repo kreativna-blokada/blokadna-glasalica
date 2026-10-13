@@ -11,13 +11,13 @@
       {
         "text": "Ne može, potrebna je lična karta, pasoš ili potvrda MUP-a.",
         "explanation": "Ispravno – glasa se samo sa važećom ličnom kartom, pasošem ili potvrdom MUP-a o promeni lične karte.",
-        "score": 100,
+        "score": 131000,
         "next": "voter_leaves"
       },
       {
         "text": "Može, samo brzo.",
         "explanation": "Prekršaj – vozačka dozvola nije dokument sa kojim se može glasati.",
-        "score": -100,
+        "score": -26000,
         "next": "voter_passes"
       }
     ]

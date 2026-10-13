@@ -6,13 +6,13 @@
       {
         "text": "Evo ruke, samo polako.",
         "explanation": "Ispravno, birač poštuje proceduru.",
-        "score": 100,
+        "score": 131000,
         "next": "check_passed"
       },
       {
         "text": "Ma pusti me, neću da mi neko sija u facu!",
         "explanation": "Birač odbija proveru, što je ozbiljan prekršaj.",
-        "score": -200,
+        "score": -52000,
         "next": "check_insisted"
       }
     ]
@@ -24,12 +24,12 @@
       {
         "text": "Hvala, prijatno.",
         "explanation": "Korektna komunikacija.",
-        "score": 100
+        "score": 131000
       },
       {
         "text": "Ajde više, gubim vreme zbog vas!",
         "explanation": "Nepristojan odgovor birača ometa rad biračkog odbora.",
-        "score": -100
+        "score": -26000
       }
     ]
   },
@@ -40,12 +40,12 @@
       {
         "text": "Ma ne zanima me, zovi šefa!",
         "explanation": "Birač eskalira situaciju, ometa rad biračkog mesta.",
-        "score": -300
+        "score": -79000
       },
       {
         "text": "Dobro, ajde, proveri brzo.",
         "explanation": "Birač popušta, vraća se proceduri.",
-        "score": 50
+        "score": 66000
       }
     ]
   }

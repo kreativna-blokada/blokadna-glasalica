@@ -45,6 +45,12 @@ var _round_timer_display: RoundTimerDisplay
 var _initiate_guide_stations: Array = Configs.ClassicalControllers["initiate_guide_stations"].duplicate()
 #music loop the round plays right now
 var _round_music: Globals.Music = Globals.Music.Round
+#s of flawless voter bonus this round has gained
+var _granted_bonus_time: float = 0.0
+#voter whose answers decide the next flawless voter bonus
+var _flawless_check_voter: Voter = null
+#true while that voter has only best answers
+var _is_voter_flawless: bool = true
 
 #onready vars
 @onready var stage: Stage = $Stage
@@ -131,6 +137,41 @@ func _on_room_voter_stopped(station_number: int) -> void:
 	_initiate_guide_stations.erase(station_number)
 	controls.show_initiate_guide_border()
 
+#starts checking a voter's answers the first time its dialog opens
+func _track_flawless_voter(voter: Voter) -> void:
+	if voter == _flawless_check_voter: return
+
+	_flawless_check_voter = voter
+	_is_voter_flawless = true
+	voter.course_point_reached.connect(_on_voter_course_point_reached.bind(voter))
+
+#signal Voter.course_point_reached => a voter leaving with only best answers grants the flawless voter bonus
+func _on_voter_course_point_reached(point_name: StringName, voter: Voter) -> void:
+	if point_name != &"Exit" or voter != _flawless_check_voter: return
+
+	_flawless_check_voter = null
+	if _is_voter_flawless:
+		_grant_flawless_voter_bonus()
+
+#adds the flawless voter bonus time to the round, until the bonus limit
+func _grant_flawless_voter_bonus() -> void:
+	if not _round_timer or _round_timer.is_stopped(): return
+
+	var bonus_time: float = minf(Configs.Round["flawless_voter_bonus"], Configs.Round["bonus_time_limit"] - _granted_bonus_time)
+	if bonus_time <= 0.0: return
+
+	_granted_bonus_time += bonus_time
+	_round_timer.start(_round_timer.time_left + bonus_time)
+	_show_bonus_time_popup(bonus_time)
+
+#pops the bonus seconds up over the round timer, the way answer points pop up
+func _show_bonus_time_popup(bonus_time: float) -> void:
+	var popup: PointsVfx = POINTS_VFX_SCENE.instantiate() as PointsVfx
+	dialog_layer.add_child(popup)
+	popup.global_position = _round_timer_display.get_time_center()
+	popup.setup("+%.0f s" % bonus_time, Color.GREEN)
+	popup.play()
+
 #starts the one-shot timer that ends the run
 func _start_round_timer() -> void:
 	_round_timer = Timer.new()
@@ -198,6 +239,7 @@ func _open_dialogue(voter: Voter, stop_name: String) -> void:
 		return
 
 	_dialog_voter = voter
+	_track_flawless_voter(voter)
 	_dialog_controller = DIALOG_CONTROLLER_SCENE.instantiate() as DialogController
 	#### commented out 7b64814055ee6b6eb9d15d2b811ccde201717f87
 	#### _dialog_controller.initialize(dialog_path, DIALOG_SIZE)
@@ -229,17 +271,20 @@ func _on_dialog_finished() -> void:
 	if voter and is_instance_valid(voter) and voter.is_stopping:
 		voter.can_continue_voting_course()
 
-func _on_dialog_choice_made(dialog_text: String, choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float) -> void:
+func _on_dialog_choice_made(dialog_text: String, choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float, is_best_choice: bool) -> void:
+	if not is_best_choice:
+		_is_voter_flawless = false
+
 	var actual_score := DialogScoreCalculator.calculate_score(choice_descriptor, answer_time)
 	_game_descriptor.track_choice(dialog_text, choice_descriptor, actual_score)
 	var popup: Node = POINTS_VFX_SCENE.instantiate()
 	dialog_layer.add_child(popup)  # or a dedicated "VFXLayer" node
 	popup.global_position = _dialog_controller.global_position + _dialog_controller.size / 2
-	var points_str: String = "+%.0f" % actual_score
+	var points_str: String = ("+" if actual_score >= 0.0 else "") + DialogScoreCalculator.format_points(actual_score)
 	var points_color: Color = Color.GREEN
 	var choice_stinger: Globals.Sound = Globals.Sound.ChoiceRight
-	if choice_descriptor.score < 0:
-		points_str = "%.0f" % actual_score
+	#any answer that is not the best counts as wrong, even with points
+	if not is_best_choice:
 		points_color = Color.RED
 		choice_stinger = Globals.Sound.ChoiceWrong
 	SoundManager.play_stinger(choice_stinger)
