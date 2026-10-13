@@ -18,11 +18,12 @@ const MAIN_MENU_DESCRIPTIONS: Dictionary[Globals.MainMenu, String] = {
 ИЛИ КЛИКНИ ДУГМЕ 3 ПУТА""",
 	Globals.MainMenu.Controls: """КЛИКНИ НА СЕЛЕКТОР
 ДА ОДАБЕРЕШ КОНТРОЛЕ""",
-	Globals.MainMenu.Team: """КРЕАТИВНА БЛОКАДА
+	Globals.MainMenu.Team: """КРЕАТИВНА (ИТ?) БЛОКАДА
 
 Марија М., Игор И.,
 Немања М., Ђорђе Ђ.,
 Александар Љ., Андреј О.,
+Бојан В., Ивана Б.,
 Давор В., Марко М.,
 Милош С., Немања Л.,
 Милош П., Владимир А.,

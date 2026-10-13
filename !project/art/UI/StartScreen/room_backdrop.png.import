@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://qslay0fgcfwn"
-path="res://.godot/imported/background_unextended.png-ba86cd75a2258788c09b81a842bf96b6.ctex"
+uid="uid://c7wco8188uhax"
+path="res://.godot/imported/room_backdrop.png-bd07bc7bff222d3f17d1dae3c1ed8ffa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://!project/art/UI/StartScreen/background_unextended.png"
-dest_files=["res://.godot/imported/background_unextended.png-ba86cd75a2258788c09b81a842bf96b6.ctex"]
+source_file="res://!project/art/UI/StartScreen/room_backdrop.png"
+dest_files=["res://.godot/imported/room_backdrop.png-bd07bc7bff222d3f17d1dae3c1ed8ffa.ctex"]
 
 [params]
 

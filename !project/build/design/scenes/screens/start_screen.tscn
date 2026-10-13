@@ -7,13 +7,12 @@
 [ext_resource type="Shader" uid="uid://cjc7pgh0ptfwi" path="res://!project/art/shaders/digit_countdown.gdshader" id="8_digit_countdown"]
 [ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="9_box_slice"]
 [ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="9_dialog_theme"]
-[ext_resource type="Texture2D" uid="uid://qslay0fgcfwn" path="res://!project/art/UI/StartScreen/background_unextended.png" id="11_background_unextended"]
 [ext_resource type="Texture2D" uid="uid://8k7j66xcp84w" path="res://!project/art/UI/StartScreen/ballot_mask.png" id="11_ballot_mask"]
 [ext_resource type="Texture2D" uid="uid://b15l5qimjbg7c" path="res://!project/art/UI/StartScreen/box.png" id="11_box"]
 [ext_resource type="Texture2D" uid="uid://cnpa3a35vilmb" path="res://!project/art/UI/StartScreen/box_front.png" id="11_box_front"]
 [ext_resource type="Texture2D" uid="uid://bckql2n7hrkk7" path="res://!project/art/UI/StartScreen/left_side_label_mask.png" id="11_left_side_label_mask"]
-[ext_resource type="PackedScene" uid="uid://fqi4sbecij1g" path="res://!project/build/design/scenes/playground.tscn" id="11_playground"]
 [ext_resource type="Texture2D" uid="uid://dwovnnrsfijbn" path="res://!project/art/UI/StartScreen/right_side_words_mask.png" id="11_right_side_words_mask"]
+[ext_resource type="Texture2D" uid="uid://c7wco8188uhax" path="res://!project/art/UI/StartScreen/room_backdrop.png" id="11_room_backdrop"]
 [ext_resource type="Texture2D" uid="uid://cswr1e57naoql" path="res://!project/art/UI/StartScreen/slot_shade.png" id="11_slot_shade"]
 [ext_resource type="Texture2D" uid="uid://diwq7abyqmllt" path="res://!project/art/UI/hand gestures.jpeg" id="12_hand_gestures"]
 [ext_resource type="Texture2D" uid="uid://bflu6t87htifh" path="res://!project/art/UI/Buttons/setup-music-active.png" id="13_music_active"]
@@ -267,27 +266,13 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="RoomBackdrop" type="SubViewportContainer" parent="Background" unique_id=1820456731]
+[node name="RoomBackdrop" type="TextureRect" parent="Background" unique_id=1820456731]
 modulate = Color(1, 1, 1, 0.39215687)
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
-
-[node name="RoomViewport" type="SubViewport" parent="Background/RoomBackdrop" unique_id=1820456734]
-transparent_bg = true
-handle_input_locally = false
-gui_disable_input = true
-size = Vector2i(1920, 1080)
-render_target_update_mode = 4
-
-[node name="BackgroundImage" type="Sprite2D" parent="Background/RoomBackdrop/RoomViewport" unique_id=1820456732]
-z_index = -3
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("11_background_unextended")
-centered = false
-
-[node name="Playground" parent="Background/RoomBackdrop/RoomViewport" unique_id=1820456733 instance=ExtResource("11_playground")]
+texture = ExtResource("11_room_backdrop")
 
 [node name="JumperContainer" type="CenterContainer" parent="." unique_id=327250296]
 unique_name_in_owner = true
