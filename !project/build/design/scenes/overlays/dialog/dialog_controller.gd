@@ -27,8 +27,13 @@ var _is_answered_by_controls: bool = false
 var _is_zoomed_dialogue: bool = true
 #buttons the dim leaves uncovered, canvas centre and radius each
 var _spotlights: PackedVector3Array = []
+#busts of the staff member on the left and the voter on the right
+var _staff_portrait: Texture2D
+var _voter_portrait: Texture2D
 
-func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog_color: Color, dialog_size: Vector2i) -> void:
+func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog_color: Color, dialog_size: Vector2i, staff_portrait: Texture2D, voter_portrait: Texture2D) -> void:
+	_staff_portrait = staff_portrait
+	_voter_portrait = voter_portrait
 	_is_answered_by_controls = game_descriptor.get_controller_type() == Globals.ControllerType.Classic
 	_is_zoomed_dialogue = game_descriptor.is_zoomed_dialogue()
 
@@ -84,6 +89,7 @@ func _create_view() -> void:
 
 	_dialog_speakers.initialize(_current_node.get_dialog_descriptor().speaker)
 	_dialog_speakers.set_dialogue_width(_dialog_size.x)
+	_dialog_speakers.set_portraits(_staff_portrait, _voter_portrait)
 
 	var box_tint: Color = Color.WHITE if _is_zoomed_dialogue else Configs.DialogueZoom["compact_box_tint"]
 	_dialog_speakers.set_name_plate_colors(DialogColors.get_default_color(), _dialog_color, box_tint)

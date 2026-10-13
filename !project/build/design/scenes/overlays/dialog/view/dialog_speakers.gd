@@ -70,6 +70,11 @@ func _set_name_plate_outline_alpha(outline_alpha: float, name_plate: PanelContai
 	_name_plate_outline_alphas[name_plate] = outline_alpha
 	name_plate.queue_redraw()
 
+#puts the staff bust on the left and the voter bust on the right, all busts are drawn facing left so the left one is mirrored in the scene
+func set_portraits(left_portrait: Texture2D, right_portrait: Texture2D) -> void:
+	left_speaker.texture = left_portrait
+	right_speaker.texture = right_portrait
+
 #stretches name plates from the screen edges up to the dialog box sides
 func set_dialogue_width(dialog_width: float) -> void:
 	left_name_plate.offset_right = -dialog_width / 2.0

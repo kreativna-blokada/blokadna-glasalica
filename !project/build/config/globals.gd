@@ -198,52 +198,84 @@ enum Voter {
 var VoterFactory: Dictionary[Variant, Variant] = {
 	Voter.MaleCap: {
 		"Texture2D": "res://!project/art/male-cap.png",
+		"Portrait": Vector2i(0, 0),
 	},
 	Voter.MaleBlue: {
 		"Texture2D": "res://!project/art/male-blue.png",
+		"Portrait": Vector2i(1, 0),
 	},
 	Voter.MaleGreen: {
 		"Texture2D": "res://!project/art/male-green.png",
+		"Portrait": Vector2i(2, 0),
 	},
 	Voter.MaleIndigo: {
 		"Texture2D": "res://!project/art/male-indigo.png",
+		"Portrait": Vector2i(3, 0),
 	},
 	Voter.MaleMagenta: {
 		"Texture2D": "res://!project/art/male-magenta.png",
+		"Portrait": Vector2i(4, 0),
 	},
 	Voter.MaleRed: {
 		"Texture2D": "res://!project/art/male-red.png",
+		"Portrait": Vector2i(5, 0),
 	},
 	Voter.MaleViolet: {
 		"Texture2D": "res://!project/art/male-violet.png",
+		"Portrait": Vector2i(0, 1),
 	},
 	Voter.MaleYellow: {
 		"Texture2D": "res://!project/art/male-yellow.png",
+		"Portrait": Vector2i(1, 1),
 	},
 	Voter.FemaleBlondeLilacSkirt: {
 		"Texture2D": "res://!project/art/female_blonde_lilac_skirt.png",
+		"Portrait": Vector2i(2, 1),
 	},
 	Voter.FemaleBlondeRoseSkirt: {
 		"Texture2D": "res://!project/art/female_blonde_rose_skirt.png",
+		"Portrait": Vector2i(3, 1),
 	},
 	Voter.FemaleBlondeWineSkirt: {
 		"Texture2D": "res://!project/art/female_blonde_wine_skirt.png",
+		"Portrait": Vector2i(4, 1),
 	},
 	Voter.FemaleBrunetteLilacSkirt: {
 		"Texture2D": "res://!project/art/female_brunette_lilac_skirt.png",
+		"Portrait": Vector2i(5, 1),
 	},
 	Voter.FemaleBrunetteRoseSkirt:{
 		"Texture2D": "res://!project/art/female_brunette_rose_skirt.png",
+		"Portrait": Vector2i(0, 2),
 	},
 	Voter.FemaleBrunetteWineSkirt: {
 		"Texture2D": "res://!project/art/female_brunette_wine_skirt.png",
+		"Portrait": Vector2i(1, 2),
 	},
 	Voter.FemaleShortHairBlondeLilacPants: {
 		"Texture2D": "res://!project/art/female_shorthair_blonde_lilac_pants.png",
+		"Portrait": Vector2i(2, 2),
 	},
 	Voter.FemaleShortHairBrunetteRosePants: {
 		"Texture2D": "res://!project/art/female_shorthair_brunette_rose_pants.png",
+		"Portrait": Vector2i(3, 2),
 	}
+}
+
+#dialog busts, one cell of the atlas per voter (the "Portrait" of each VoterFactory entry) and per staffed stop
+var Portraits: Dictionary[String, Variant] = {
+	"atlas": "res://!project/art/portraits/portraits.png",
+	"cell_size": 512,
+}
+
+#staff bust cell for each stop, keyed by the snake case stop name
+var StaffPortraits: Dictionary[String, Vector2i] = {
+	"lamp": Vector2i(4, 2),
+	"id": Vector2i(5, 2),
+	"list": Vector2i(0, 3),
+	"spray": Vector2i(1, 3),
+	"ballot": Vector2i(2, 3),
+	"booth": Vector2i(3, 3),
 }
 
 var VoterIdleAnimations: Dictionary = {

@@ -19,14 +19,14 @@ op_type = 2
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_afy3j"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_5odx6"]
-input_name = "uv"
+input_name = "screen_uv"
 
 [sub_resource type="VisualShaderNodeVectorDecompose" id="VisualShaderNodeVectorDecompose_hwouv"]
 default_input_values = [0, Vector2(0, 0)]
 op_type = 0
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_dup4w"]
-default_input_values = [0, 0.0, 1, 300.0]
+default_input_values = [0, 0.0, 1, 771.0]
 operator = 2
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_4tsnc"]
