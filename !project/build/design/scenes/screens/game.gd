@@ -174,7 +174,9 @@ func _open_dialogue(voter: Voter, stop_name: String) -> void:
 	#### commented out 7b64814055ee6b6eb9d15d2b811ccde201717f87
 	#### _dialog_controller.initialize(dialog_path, DIALOG_SIZE)
 	var dialog_color: Color = DialogColors.get_color(_dialog_voter.name)
-	_dialog_controller.initialize(_game_descriptor, DialoguesManager.get_dialogue(dialog_id), dialog_color, DIALOG_SIZE)
+	var staff_portrait: Texture2D = DialogPortraits.get_staff_portrait(stop_name)
+	var voter_portrait: Texture2D = DialogPortraits.get_voter_portrait(voter.voter_factory_index)
+	_dialog_controller.initialize(_game_descriptor, DialoguesManager.get_dialogue(dialog_id), dialog_color, DIALOG_SIZE, staff_portrait, voter_portrait)
 	_dialog_controller.set_spotlights(controls.get_button_spotlights())
 	_dialog_controller.finished.connect(_on_dialog_finished)
 	_dialog_controller.choice_made.connect(_on_dialog_choice_made)
