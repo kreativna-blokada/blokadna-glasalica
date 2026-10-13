@@ -129,6 +129,7 @@ func _ready() -> void:
 	_load_game_start_count()
 	hand_hint.visible = _is_hint_scheduled()
 	_show_side_words(not hand_hint.visible)
+	if GameManager.is_returning_home(): _rest_card_on_leaderboard()
 
 	menu_option_button.pressed.connect(_on_menu_option_button_pressed)
 	menu_option_button.gui_input.connect(_on_menu_option_button_input)
@@ -348,12 +349,28 @@ func _snap_card_toward_starting() -> void:
 	if not vote_animation.is_playing(): return
 
 	vote_animation.pause()
-	#middle of the starting row tick on the downward vote pass
-	var starting_moment: float = _TOP_BALLOT_MOMENT + (Globals.MainMenu.Starting + 0.5) * _ROW_TICK_SPACING
 	_card_snapping_animation = create_tween()
-	_card_snapping_animation.tween_method(_seek_vote_animation, _find_ballot_moment(ballot.position.y), starting_moment, Configs.CardDrag["snap_duration"]) \
+	_card_snapping_animation.tween_method(_seek_vote_animation, _find_ballot_moment(ballot.position.y), _find_choice_moment(Globals.MainMenu.Starting), Configs.CardDrag["snap_duration"]) \
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	_card_snapping_animation.tween_callback(func() -> void: _card_pointer_distance = ballot.position.y - _card_pointer_position)
+
+#stops the vote and leaves the card still where dragging it ticks the leaderboard row, chosen without the select sound
+func _rest_card_on_leaderboard() -> void:
+	vote_animation.pause()
+	var ballot_height: float = _find_choice_height(Globals.MainMenu.Leaderboard)
+	_seek_vote_animation(_find_row_moment(ballot_height))
+	ballot.position = _find_ballot_position(_find_ballot_moment(ballot_height))
+	_menu_choice = Globals.MainMenu.Leaderboard
+	_on_menu_option_selected(Globals.MainMenu.Leaderboard)
+
+#ballot height in the middle of the slot depth share that ticks the menu option's row when dragging
+func _find_choice_height(menu_option: Globals.MainMenu) -> float:
+	var top_height: float = _find_ballot_position(_TOP_BALLOT_MOMENT).y
+	return top_height + (_ROW_COUNT - 1 - menu_option + 0.5) / _ROW_COUNT * Configs.CardDrag["slot_depth"]
+
+#middle of the row tick for the menu option on the downward vote pass
+func _find_choice_moment(menu_option: Globals.MainMenu) -> float:
+	return _TOP_BALLOT_MOMENT + (_ROW_COUNT - 1 - menu_option + 0.5) * _ROW_TICK_SPACING
 
 #card follows the finger up and down the slot once it has snapped to the starting row; equal depth ticks each row
 func _move_card_vertically() -> void:

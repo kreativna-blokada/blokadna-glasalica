@@ -26,3 +26,8 @@ func init(controller_type: Globals.ControllerType) -> void:
 func _on_container_gui_input(event: InputEvent) -> void:
 	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
 		finished.emit()
+
+#signal Home.pressed => resumes the frozen game and returns to the start screen
+func _on_home_pressed() -> void:
+	get_tree().paused = false
+	GameManager.return_home()
