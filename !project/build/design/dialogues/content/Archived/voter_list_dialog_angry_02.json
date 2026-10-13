@@ -1,0 +1,23 @@
+﻿{
+  "root": {
+    "text": "[ANG] Potpišite se odmah, nema vremena za proveru!",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Neću da se potpišem dok ne proverite moj identitet!",
+        "explanation": "Potpis bez provere identiteta je ozbiljan prekršaj i može dovesti do zloupotreba.",
+        "score": 131000,
+        "next": "controller_apologizes"
+      },
+      {
+        "text": "Dobro, potpisujem se bez provere.",
+        "explanation": "Ovo omogućava da neko drugi glasa umesto vas.",
+        "score": -26000
+      }
+    ]
+  },
+  "controller_apologizes": {
+    "text": "U redu, izvinjavam se, proverićemo vaš identitet pre potpisa.",
+    "speaker": "LEFT"
+  }
+}

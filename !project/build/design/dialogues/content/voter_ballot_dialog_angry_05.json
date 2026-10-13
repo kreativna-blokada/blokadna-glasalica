@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Listić koji sam dobio je pocepan na uglu. Dajte drugi odmah, neću da mi propadne glas.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Zaustavićemo se i obavestiti predsednika odbora pre izdavanja zamenskog listića.",
+        "explanation": "Ispravno, oštećen listić treba odmah prijaviti i rešiti kroz proceduru biračkog odbora.",
+        "score": 131000,
+        "next": "chair_checks"
+      },
+      {
+        "text": "Samo uzmite drugi iz gomile, ovaj bacite.",
+        "explanation": "Nepravilno rukovanje listićima može ugroziti evidenciju i kontrolu izdatih listića.",
+        "score": -39000
+      },
+      {
+        "text": "Nema veze, glasajte tim pocepanim listićem.",
+        "explanation": "Ako je listić oštećen pre glasanja, problem treba rešiti odmah, a ne ignorisati.",
+        "score": -26000,
+        "next": "voter_objects"
+      }
+    ]
+  },
+  "chair_checks": {
+    "text": "Predsednik odbora proverava listić i nalaže da se situacija evidentira pre nastavka.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U redu, sačekaću da se evidentira i dobijem ispravan listić.",
+        "explanation": "Birač omogućava da se problem reši pravilno.",
+        "score": 131000
+      },
+      {
+        "text": "Neću da čekam, uzeću sam drugi listić.",
+        "explanation": "Birač ne sme sam uzimati glasačke listiće.",
+        "score": -52000
+      }
+    ]
+  },
+  "voter_objects": {
+    "text": "Neću da glasam listićem za koji se unapred vidi da je oštećen.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "U pravu ste, pozvaćemo predsednika odbora.",
+        "explanation": "Član odbora ispravlja grešku i vraća se proceduri.",
+        "score": 105000
+      },
+      {
+        "text": "Ako nećete taj listić, odustanite.",
+        "explanation": "Odbijanje da se proveri oštećen listić može nepravilno uskratiti biraču glasanje.",
+        "score": -39000
+      }
+    ]
+  }
+}

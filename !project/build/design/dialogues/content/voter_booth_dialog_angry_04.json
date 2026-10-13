@@ -1,0 +1,40 @@
+{
+  "root": {
+    "text": "Za paravanom su dve osobe. Jedna govori drugoj šta da zaokruži.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Prekinite to, glasanje mora biti tajno i bez uticaja na birača.",
+        "explanation": "Ispravno, niko ne sme uticati na birača niti narušavati tajnost glasanja iza paravana.",
+        "score": 131000,
+        "next": "intervention"
+      },
+      {
+        "text": "Pustite ih, sigurno su porodica.",
+        "explanation": "Porodični odnos ne opravdava narušavanje tajnosti glasanja ili pritisak.",
+        "score": -26000
+      },
+      {
+        "text": "Samo viknite da požure, nije važno šta rade unutra.",
+        "explanation": "Odbor mora reagovati na moguće narušavanje tajnosti, ne samo ubrzavati red.",
+        "score": -26000
+      }
+    ]
+  },
+  "intervention": {
+    "text": "Druga osoba izlazi od paravana i tvrdi da je samo pomagala.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Neka birač sam potvrdi da li mu je potrebna pomoć, bez pritiska.",
+        "explanation": "Ispravno, treba zaštititi birača od pritiska i proveriti situaciju mirno.",
+        "score": 131000
+      },
+      {
+        "text": "Ako kaže da pomaže, neka ostane i završi umesto njega.",
+        "explanation": "Druga osoba ne sme preuzeti glasanje umesto birača.",
+        "score": -39000
+      }
+    ]
+  }
+}

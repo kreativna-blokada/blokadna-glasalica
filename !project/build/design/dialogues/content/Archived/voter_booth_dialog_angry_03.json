@@ -1,0 +1,23 @@
+﻿{
+  "root": {
+    "text": "[ANG] Presavijte listić pre ubacivanja, da se ne vidi za koga ste glasali!",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Neću da presavijem, neka svi vide za koga sam glasao!",
+        "explanation": "Nepravilno postupate. Listić mora biti presavijen tako da se ne vidi kako ste glasali.",
+        "score": -13000
+      },
+      {
+        "text": "Presaviću ga, ali ću svima reći za koga sam glasao.",
+        "explanation": "Presavijanje listića je obavezno, ali otkrivanje načina glasanja nije zabranjeno ako to birač sam želi.",
+        "score": -3000
+      },
+      {
+        "text": "Dobro, presaviću ga.",
+        "explanation": "Ispravno postupate. Listić mora biti presavijen radi zaštite tajnosti glasanja.",
+        "score": 131000
+      }
+    ]
+  }
+}

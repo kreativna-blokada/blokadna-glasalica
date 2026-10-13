@@ -1,0 +1,18 @@
+﻿{
+  "root": {
+    "text": "[POL] Izvinite, ali nisam siguran da li sam prošao sve korake pre nego što dobijem listić?",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Hvala što ste pažljivi, proverićemo zajedno.",
+        "explanation": "Ispravno postupanje – birač ima pravo da traži proveru procedure.",
+        "score": 131000
+      },
+      {
+        "text": "Nema veze, evo vam listić odmah.",
+        "explanation": "Prekršaj – listić se ne može izdati bez kompletne procedure.",
+        "score": -26000
+      }
+    ]
+  }
+}
