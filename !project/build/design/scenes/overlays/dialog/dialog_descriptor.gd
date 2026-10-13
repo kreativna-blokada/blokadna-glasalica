@@ -10,6 +10,10 @@ class ChoiceDescriptor:
 		score = _score
 		explanation = _explanation
 
+	#choices scoring below zero are wrong
+	func is_correct() -> bool:
+		return score >= 0
+
 enum Speaker {LEFT = 0, RIGHT = 1}
 
 func _init(_text: String, _speaker: Speaker, _choices: Array[ChoiceDescriptor]):

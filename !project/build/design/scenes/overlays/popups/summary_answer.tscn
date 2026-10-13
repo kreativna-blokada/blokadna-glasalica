@@ -1,0 +1,299 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://!project/build/design/scenes/overlays/popups/summary_answer.gd" id="1_script"]
+[ext_resource type="Script" path="res://!project/build/design/scenes/overlays/popups/pixel_style_box.gd" id="2_pixel_box"]
+[ext_resource type="Script" path="res://!project/build/design/scenes/overlays/popups/summary_icon.gd" id="3_icon"]
+[ext_resource type="FontFile" uid="uid://w8p5mlgowyma" path="res://!project/art/UI/DejaVuLGCSansMono.ttf" id="4_mono"]
+[ext_resource type="FontFile" uid="uid://b7wgk25vccvfr" path="res://!project/art/UI/DejaVuLGCSansMono-Bold.ttf" id="5_mono_bold"]
+[ext_resource type="FontFile" uid="uid://bdaf012h5ofyp" path="res://!project/assets/fonts/LiberationSans-Bold.ttf" id="6_sans"]
+
+[sub_resource type="Theme" id="Theme_answer"]
+default_font = ExtResource("5_mono_bold")
+default_font_size = 33
+Label/colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+
+[sub_resource type="FontVariation" id="FontVariation_sans"]
+base_font = ExtResource("6_sans")
+spacing_glyph = 2
+
+[sub_resource type="StyleBox" id="StyleBox_correct"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.92549, 0.898039, 0.823529, 1)
+border_color = Color(0.823529, 0.788235, 0.698039, 1)
+border_width = 5
+dashed = true
+
+[sub_resource type="StyleBox" id="StyleBox_wrong_line"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.984314, 0.921569, 0.886275, 1)
+border_color = Color(0.556863, 0.164706, 0.101961, 1)
+border_width = 5
+
+[sub_resource type="StyleBox" id="StyleBox_wrong_card"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.984314, 0.921569, 0.886275, 1)
+border_color = Color(0.556863, 0.164706, 0.101961, 1)
+border_width = 5
+shadow_color = Color(0.85098, 0.701961, 0.65098, 1)
+shadow_offset = Vector2(5, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_correct_icon"]
+bg_color = Color(0.862745, 0.909804, 0.721569, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.239216, 0.352941, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wrong_icon"]
+bg_color = Color(0.607843, 0.172549, 0.109804, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+
+[sub_resource type="StyleBox" id="StyleBox_your_answer"]
+content_margin_left = 20.0
+content_margin_top = 12.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.952941, 0.85098, 0.807843, 1)
+border_color = Color(0.788235, 0.443137, 0.360784, 1)
+border_width = 5
+dashed = true
+
+[sub_resource type="StyleBox" id="StyleBox_right_answer"]
+content_margin_left = 20.0
+content_margin_top = 12.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.839216, 0.74902, 0.486275, 1)
+border_color = Color(0.745098, 0.584314, 0.172549, 1)
+border_width = 5
+dashed = true
+
+[node name="SummaryAnswer" type="PanelContainer"]
+size_flags_horizontal = 3
+mouse_filter = 1
+theme = SubResource("Theme_answer")
+script = ExtResource("1_script")
+correct_style = SubResource("StyleBox_correct")
+wrong_line_style = SubResource("StyleBox_wrong_line")
+wrong_card_style = SubResource("StyleBox_wrong_card")
+correct_icon_style = SubResource("StyleBoxFlat_correct_icon")
+wrong_icon_style = SubResource("StyleBoxFlat_wrong_icon")
+caption_font = SubResource("FontVariation_sans")
+
+[node name="Layout" type="VBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 0
+
+[node name="HeaderMargin" type="MarginContainer" parent="Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Header" type="HBoxContainer" parent="Layout/HeaderMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+
+[node name="IconBox" type="PanelContainer" parent="Layout/HeaderMargin/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Icon" type="Control" parent="Layout/HeaderMargin/Header/IconBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("3_icon")
+
+[node name="NumberLabel" type="Label" parent="Layout/HeaderMargin/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.419608, 0.372549, 0.333333, 1)
+theme_override_fonts/font = ExtResource("4_mono")
+text = "#1"
+
+[node name="StationChip" type="PanelContainer" parent="Layout/HeaderMargin/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_chip")
+
+[node name="StationLabel" type="Label" parent="Layout/HeaderMargin/Header/StationChip"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.968627, 0.941176, 0.87451, 1)
+theme_override_fonts/font = SubResource("FontVariation_sans")
+text = "STANICA"
+horizontal_alignment = 1
+
+[node name="ChoiceRow" type="HBoxContainer" parent="Layout/HeaderMargin/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_constants/separation = 0
+
+[node name="ChoiceLabel" type="Label" parent="Layout/HeaderMargin/Header/ChoiceRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Izbor"
+text_overrun_behavior = 3
+
+[node name="ArrowLabel" type="Label" parent="Layout/HeaderMargin/Header/ChoiceRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.419608, 0.372549, 0.333333, 1)
+theme_override_fonts/font = ExtResource("4_mono")
+text = " → "
+
+[node name="RightLabel" type="Label" parent="Layout/HeaderMargin/Header/ChoiceRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.184314, 0.27451, 0, 1)
+text = "Ispravno"
+text_overrun_behavior = 3
+
+[node name="ChoiceRowSpacer" type="Control" parent="Layout/HeaderMargin/Header/ChoiceRow"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="StatusLabel" type="Label" parent="Layout/HeaderMargin/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_sans")
+text = "TAČNO"
+
+[node name="Chevron" type="Control" parent="Layout/HeaderMargin/Header"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("3_icon")
+shape = 2
+color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+stroke_width = 5.0
+
+[node name="Body" type="MarginContainer" parent="Layout"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 22
+
+[node name="BodyLayout" type="VBoxContainer" parent="Layout/Body"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 15
+
+[node name="QuoteLabel" type="Label" parent="Layout/Body/BodyLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.419608, 0.0392157, 0.368627, 1)
+text = "\"Replika\""
+autowrap_mode = 3
+
+[node name="Answers" type="HBoxContainer" parent="Layout/Body/BodyLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 15
+
+[node name="YourAnswer" type="PanelContainer" parent="Layout/Body/BodyLayout/Answers"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBox_your_answer")
+
+[node name="Row" type="HBoxContainer" parent="Layout/Body/BodyLayout/Answers/YourAnswer"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="YourAnswerCaption" type="Label" parent="Layout/Body/BodyLayout/Answers/YourAnswer/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.478431, 0.121569, 0.0705882, 1)
+theme_override_fonts/font = SubResource("FontVariation_sans")
+theme_override_font_sizes/font_size = 22
+text = "TVOJ
+ODGOVOR"
+
+[node name="YourAnswerLabel" type="Label" parent="Layout/Body/BodyLayout/Answers/YourAnswer/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.478431, 0.121569, 0.0705882, 1)
+text = "Izbor"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="RightAnswer" type="PanelContainer" parent="Layout/Body/BodyLayout/Answers"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBox_right_answer")
+
+[node name="Row" type="HBoxContainer" parent="Layout/Body/BodyLayout/Answers/RightAnswer"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="RightAnswerCaption" type="Label" parent="Layout/Body/BodyLayout/Answers/RightAnswer/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.184314, 0.27451, 0, 1)
+theme_override_fonts/font = SubResource("FontVariation_sans")
+theme_override_font_sizes/font_size = 22
+text = "ISPRAVAN
+ODGOVOR"
+
+[node name="RightAnswerLabel" type="Label" parent="Layout/Body/BodyLayout/Answers/RightAnswer/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.184314, 0.27451, 0, 1)
+text = "Ispravno"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="WhyLabel" type="RichTextLabel" parent="Layout/Body/BodyLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_font_sizes/normal_font_size = 32
+fit_content = true
+scroll_active = false

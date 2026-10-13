@@ -8,12 +8,23 @@
 class_name GameDescriptor
 
 class TrackedChoice:
+	#voting stop the dialog was opened at, like Lamp
+	var stop_name: String
 	var dialog_text: String
 	var choice_descriptor: DialogDescriptor.ChoiceDescriptor
+	#best scored correct choice the dialog offered, null when every choice was wrong
+	var correct_choice: DialogDescriptor.ChoiceDescriptor = null
 
-	func _init(_dialog_text: String, _choice_descriptor: DialogDescriptor.ChoiceDescriptor) -> void:
-		dialog_text = _dialog_text
+	func _init(_stop_name: String, dialog_descriptor: DialogDescriptor, _choice_descriptor: DialogDescriptor.ChoiceDescriptor) -> void:
+		stop_name = _stop_name
+		dialog_text = dialog_descriptor.text
 		choice_descriptor = _choice_descriptor
+		for choice in dialog_descriptor.choices:
+			if choice.is_correct() and (correct_choice == null or choice.score > correct_choice.score):
+				correct_choice = choice
+
+	func is_correct() -> bool:
+		return choice_descriptor.is_correct()
 
 enum Difficulty {EASY, NORMAL}
 	
@@ -55,9 +66,9 @@ func get_points() -> int:
 	return roundi(_points)
 
 #records the choice and adds its timer-dampened score
-func track_choice(dialog_text: String, choice_descriptor: DialogDescriptor.ChoiceDescriptor, dampened_score: float) -> void:
+func track_choice(stop_name: String, dialog_descriptor: DialogDescriptor, choice_descriptor: DialogDescriptor.ChoiceDescriptor, dampened_score: float) -> void:
 	update_points(dampened_score)
-	_choices_made.append(TrackedChoice.new(dialog_text, choice_descriptor))
+	_choices_made.append(TrackedChoice.new(stop_name, dialog_descriptor, choice_descriptor))
 
 func get_choice_history() -> Array[TrackedChoice]:
 	return _choices_made
