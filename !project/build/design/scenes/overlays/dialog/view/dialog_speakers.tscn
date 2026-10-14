@@ -30,14 +30,18 @@ script = ExtResource("1_ofvoe")
 
 [node name="LeftSpeaker" type="TextureRect" parent="." unique_id=718175500]
 layout_mode = 1
-anchors_preset = 4
+anchors_preset = -1
+anchor_left = 0.25
 anchor_top = 0.5
+anchor_right = 0.25
 anchor_bottom = 0.5
+offset_left = -510.0
 offset_top = -280.0
-offset_right = 420.0
+offset_right = -90.0
 offset_bottom = 140.0
+grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(0, 210)
+pivot_offset = Vector2(210, 210)
 texture_filter = 4
 expand_mode = 1
 stretch_mode = 5
@@ -45,17 +49,18 @@ flip_h = true
 
 [node name="RightSpeaker" type="TextureRect" parent="." unique_id=1528912421]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = -1
+anchor_left = 0.75
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.75
 anchor_bottom = 0.5
-offset_left = -420.0
+offset_left = 90.0
 offset_top = -280.0
+offset_right = 510.0
 offset_bottom = 140.0
-grow_horizontal = 0
+grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(420, 210)
+pivot_offset = Vector2(210, 210)
 texture_filter = 4
 expand_mode = 1
 stretch_mode = 5

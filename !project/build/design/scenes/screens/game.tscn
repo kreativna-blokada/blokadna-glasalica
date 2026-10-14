@@ -28,7 +28,7 @@ script = ExtResource("3_whd4d")
 position = Vector2(960, 540)
 
 [node name="Timer" type="Timer" parent="Stage" unique_id=126925033]
-wait_time = 15.0
+wait_time = 20.0
 one_shot = true
 
 [node name="Controls" parent="." unique_id=1497789483 instance=ExtResource("5_ywe5c")]
