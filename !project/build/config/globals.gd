@@ -263,9 +263,11 @@ var VoterFactory: Dictionary[Variant, Variant] = {
 }
 
 #dialog busts, one cell of the atlas per voter (the "Portrait" of each VoterFactory entry) and per staffed stop
+#the atlas is a grid of columns by rows, each cell sized from the atlas size so any atlas resolution works
 var Portraits: Dictionary[String, Variant] = {
 	"atlas": "res://!project/art/portraits/portraits.png",
-	"cell_size": 512,
+	"columns": 6,
+	"rows": 4,
 }
 
 #staff bust cell for each stop, keyed by the snake case stop name
