@@ -132,6 +132,14 @@ var Spotlights: Dictionary[String, Variant] = {
 	"spotlight_softness": 16.0,
 }
 
+#HUD stop indicators tinted by the queue waiting before the stop
+var BottleneckIndicators: Dictionary[String, Variant] = {
+	#barely noticeable red tint when the queue reaches the alert threshold
+	"alert_indicator_color": Color(1.0, 0.9, 0.9, 1),
+	#barely noticeable yellow tint when the queue reaches the warning threshold
+	"warning_indicator_color": Color(1.0, 1.0, 0.88, 1),
+}
+
 #dialogue without zoom, re-using 153f7a2 - 60e239c
 var DialogueZoom: Dictionary[String, Variant] = {
 	#regular font at 29 for the dialogue and answer text

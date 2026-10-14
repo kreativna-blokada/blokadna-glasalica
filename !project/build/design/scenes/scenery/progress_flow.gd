@@ -148,9 +148,9 @@ func _highlight_indicators() -> void:
 func _indicate_bottleneck(idx: int) -> void:
 	var voters_waiting: int = _count_voters_waiting(idx)
 	if voters_waiting >= _indicator_alert_threshold:
-		_buttons[idx].material.set_shader_parameter("modulate_color", Color.RED)
+		_buttons[idx].material.set_shader_parameter("modulate_color", Configs.BottleneckIndicators["alert_indicator_color"])
 	elif voters_waiting >= _indicator_warning_threshold:
-		_buttons[idx].material.set_shader_parameter("modulate_color", Color.YELLOW)
+		_buttons[idx].material.set_shader_parameter("modulate_color", Configs.BottleneckIndicators["warning_indicator_color"])
 	else:
 		_buttons[idx].material.set_shader_parameter("modulate_color", Color.WHITE)
 
