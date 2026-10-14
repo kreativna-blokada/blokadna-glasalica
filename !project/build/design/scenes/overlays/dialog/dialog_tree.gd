@@ -87,7 +87,10 @@ func _deserialize(data: Dictionary) -> void:
 		
 		# only if choices actually exist
 		if "choices" in data[id]:
-			for choice in data[id].choices:
+			# shuffled copy so the correct answer is never in a fixed spot; each choice keeps its own next
+			var shuffled_choices: Array = data[id].choices.duplicate()
+			shuffled_choices.shuffle()
+			for choice in shuffled_choices:
 				var choice_descriptor: DialogDescriptor.ChoiceDescriptor = DialogDescriptor.ChoiceDescriptor.new(
 						choice.text, 
 						choice.score,
