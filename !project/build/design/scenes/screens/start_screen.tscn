@@ -268,9 +268,14 @@ mouse_filter = 2
 
 [node name="RoomBackdrop" type="TextureRect" parent="Background" unique_id=1820456731]
 modulate = Color(1, 1, 1, 0.39215687)
-layout_mode = 0
-offset_right = 1920.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -2880.0
+offset_right = 2880.0
 offset_bottom = 1080.0
+grow_horizontal = 2
 mouse_filter = 2
 texture = ExtResource("11_room_backdrop")
 
