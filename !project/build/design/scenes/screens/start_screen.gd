@@ -67,10 +67,6 @@ var _sequence_slowdown: float = 1.0
 var _game_start_count: int = 0
 #menu option whose hint shows under the slogan
 var _menu_choice: Globals.MainMenu = Globals.MainMenu.Starting
-#InfoLabel anchor height from the scene, where every hint but the team one shows
-var _rest_hint_anchor: float
-#InfoLabel font size from the scene, used by every hint but the team one
-var _rest_hint_font_size: int
 #ClickCounterLabel text and font size from the scene, shown before the first click
 var _rest_click_caption: String
 var _rest_click_fontsize: int
@@ -101,6 +97,7 @@ var _player_id_unveiling_animation: Tween
 @onready var left_side_mask: TextureRect = $BallotBoxSelection/LeftSideMask
 @onready var right_side_mask: TextureRect = $BallotBoxSelection/RightSideMask
 @onready var info_label: Label = %InfoLabel
+@onready var team_label: Label = %TeamLabel
 @onready var id_label: Label = %IdLabel
 @onready var id_reveal_button: Button = %IdRevealButton
 @onready var web_version_box: VBoxContainer = %WebVersionBox
@@ -118,8 +115,6 @@ var _player_id_unveiling_animation: Tween
 #starts the jump sound looping as soon as the menu loads
 func _ready() -> void:
 	_rest_slogan_offset = jumper.position.y
-	_rest_hint_anchor = info_label.anchor_top
-	_rest_hint_font_size = info_label.get_theme_font_size(&"font_size")
 	_rest_click_caption = click_counter_label.text
 	_rest_click_fontsize = click_counter_label.get_theme_font_size(&"font_size")
 	info_label.text = _get_menu_description(_menu_choice)
@@ -283,7 +278,7 @@ func _on_menu_option_button_input(event: InputEvent) -> void:
 	if touch_event and touch_event.pressed:
 		GameManager.go_to_leaderboard()
 
-#signal Signals.menu_option_selected => shows the hint for the menu option the ballot card has ticked; the team hint shows higher up in place of the hidden MenuOptionButton
+#signal Signals.menu_option_selected => shows the hint for the menu option the ballot card has ticked; the team row shows TeamLabel in place of the hidden MenuOptionButton and InfoLabel
 func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
 	#letting the card go on the row already chosen picks nothing new
 	if menu_option != _menu_choice: SoundManager.play_stinger(Globals.Sound.MenuSelect)
@@ -296,10 +291,9 @@ func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
 	left_arrow.visible = is_selector_chosen
 	right_arrow.visible = is_selector_chosen
 	_show_button_caption()
-	#text and font first, the label box is sized for them when it moves
-	info_label.add_theme_font_size_override(&"font_size", Configs.MenuHint["team_font_size"] if is_team_chosen else _rest_hint_font_size)
-	info_label.text = _get_menu_description(menu_option)
-	_move_info_label(Configs.MenuHint["team_hint_anchor"] if is_team_chosen else _rest_hint_anchor)
+	team_label.visible = is_team_chosen
+	info_label.visible = not is_team_chosen
+	if not is_team_chosen: info_label.text = _get_menu_description(menu_option)
 
 #hint for the menu option; on web the starting hint leaves out shaking the phone
 func _get_menu_description(menu_option: Globals.MainMenu) -> String:
@@ -426,11 +420,6 @@ func _emit_ticked_choice() -> void:
 	_is_card_dragging = false
 	if _card_snapping_animation and _card_snapping_animation.is_running(): return
 	Signals.menu_option_selected.emit(_find_ticked_choice() as Globals.MainMenu)
-
-#puts InfoLabel at an anchor height on the screen, keeping its size and centering; the top anchor pushes the bottom one along when moving down past it
-func _move_info_label(anchor_height: float) -> void:
-	info_label.set_anchor(SIDE_TOP, anchor_height, true)
-	info_label.set_anchor(SIDE_BOTTOM, anchor_height, true)
 
 #row index under the highlight and tick, 0 = top row
 func _find_ticked_choice() -> int:

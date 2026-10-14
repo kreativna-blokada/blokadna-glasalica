@@ -58,13 +58,6 @@ var CardDrag: Dictionary[String, Variant] = {
 	"slot_depth": 320.0,
 }
 
-var MenuHint: Dictionary[String, Variant] = {
-	#InfoLabel anchor height (0 = screen top, 1 = bottom) while the team row is chosen, centered between the SloganLabel bottom and the WebVersionBox top
-	"team_hint_anchor": 0.589,
-	#InfoLabel font size while the team row is chosen, smaller so the long team text fits
-	"team_font_size": 48,
-}
-
 var MenuDifficulty: Dictionary[String, Variant] = {
 	#ClickCounterLabel font size while the difficulty row is chosen, small enough for the longest difficulty text to fit the MenuOptionButton
 	"font_size": 52,
