@@ -20,8 +20,8 @@ static func get_staff_portrait(stop_name: String) -> AtlasTexture:
 static func _get_cell_texture(cell: Vector2i) -> AtlasTexture:
 	if _atlas == null:
 		_atlas = load(Globals.Portraits["atlas"])
-	var cell_size: int = Globals.Portraits["cell_size"]
+	var cell_size: Vector2 = _atlas.get_size() / Vector2(Globals.Portraits["columns"], Globals.Portraits["rows"])
 	var cell_texture := AtlasTexture.new()
 	cell_texture.atlas = _atlas
-	cell_texture.region = Rect2(cell * cell_size, Vector2(cell_size, cell_size))
+	cell_texture.region = Rect2(Vector2(cell) * cell_size, cell_size)
 	return cell_texture
