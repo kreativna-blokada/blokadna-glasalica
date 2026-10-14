@@ -89,6 +89,9 @@ border_color = Color(0.745098, 0.584314, 0.172549, 1)
 border_width = 5
 dashed = true
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_why"]
+content_margin_top = 8.0
+
 [node name="SummaryAnswer" type="PanelContainer"]
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -295,5 +298,6 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_colors/default_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
 theme_override_font_sizes/normal_font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_why")
 fit_content = true
 scroll_active = false
