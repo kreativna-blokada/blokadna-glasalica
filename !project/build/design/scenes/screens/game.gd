@@ -167,6 +167,13 @@ func _grant_flawless_voter_bonus() -> void:
 	_round_timer.start(_round_timer.time_left + bonus_time)
 	_show_bonus_time_popup(bonus_time)
 
+#signal DialogController.lock_skipped => takes the skip penalty off the round timer
+func _on_dialog_lock_skipped(round_penalty: float) -> void:
+	if not _round_timer or _round_timer.is_stopped(): return
+
+	#a penalty eating the rest of the round ends it on the next frame, as a regular timeout
+	_round_timer.start(maxf(_round_timer.time_left - round_penalty, 0.01))
+
 #pops the bonus seconds up over the round timer, the way answer points pop up
 func _show_bonus_time_popup(bonus_time: float) -> void:
 	var popup: PointsVfx = POINTS_VFX_SCENE.instantiate() as PointsVfx
@@ -257,6 +264,7 @@ func _open_dialogue(voter: Voter, stop_name: String) -> void:
 	_dialog_controller.set_spotlights(controls.get_button_spotlights())
 	_dialog_controller.finished.connect(_on_dialog_finished)
 	_dialog_controller.choice_made.connect(_on_dialog_choice_made)
+	_dialog_controller.lock_skipped.connect(_on_dialog_lock_skipped)
 	dialog_layer.add_child(_dialog_controller)
 
 	controls.set_dialog_open(true)
