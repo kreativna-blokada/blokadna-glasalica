@@ -11,7 +11,7 @@ var _next_disabled_texture: Texture2D
 @onready var _select_button: TouchScreenButton = $Selection/Select
 @onready var _initiate_button: TouchScreenButton = $Selection/Initiate
 @onready var _course_buttons: Array[TouchScreenButton] = [$Selection/Select, $Selection/Initiate]
-@onready var _dialogue_buttons_group: Node2D = $Validation
+@onready var _dialogue_buttons_group: Control = $Validation
 @onready var _dialogue_buttons: Array[TouchScreenButton] = [$Validation/Confirm, $Validation/Highlight]
 @onready var _classic_buttons: Array[TouchScreenButton] = _course_buttons + _dialogue_buttons
 
@@ -36,14 +36,7 @@ func _ready() -> void:
 	_create_guide_border()
 	set_dialog_open(false)
 
-	get_viewport().size_changed.connect(_pin_dialogue_buttons_to_right_edge)
-	_pin_dialogue_buttons_to_right_edge()
-
-#keeps Confirm and Highlight at their design distance from the right edge on screens wider than the design width
-func _pin_dialogue_buttons_to_right_edge() -> void:
-	var design_width: float = ProjectSettings.get_setting("display/window/size/viewport_width")
-	_dialogue_buttons_group.position.x = get_viewport().get_visible_rect().size.x - design_width
-	buttons_moved.emit()
+	_dialogue_buttons_group.item_rect_changed.connect(buttons_moved.emit)
 
 #the first Select press moves the guide border to Initiate, the first Initiate press hides it for good
 func _input(event: InputEvent) -> void:
