@@ -4,15 +4,23 @@ extends Control
 @onready var _label: Label = $TimeLabel
 
 var _round_timer: Timer
-var _update_timer: Timer
+#### redraws on its own 1 s beat, out of step with the round timer, so the shown second lagged up to almost a second
+####var _update_timer: Timer
+#whole seconds the time text shows, redrawn the moment the round timer crosses into another one
+var _shown_seconds_left: int = -1
 
 func _ready() -> void:
-	_update_timer = Timer.new()
-	_update_timer.wait_time = 1.0
-	_update_timer.timeout.connect(_update_display)
-	add_child(_update_timer)
-	_update_timer.start()
+	####_update_timer = Timer.new()
+	####_update_timer.wait_time = 1.0
+	####_update_timer.timeout.connect(_update_display)
+	####add_child(_update_timer)
+	####_update_timer.start()
 	_update_display()
+
+#redraws the time text as soon as the shown whole second changes
+func _process(_delta: float) -> void:
+	if _get_seconds_left() != _shown_seconds_left:
+		_update_display()
 
 func set_round_timer(timer: Timer) -> void:
 	_round_timer = timer
@@ -139,7 +147,12 @@ func _converge_sparks(converge_position: Vector2) -> void:
 func _update_display() -> void:
 	if not is_instance_valid(_label):
 		return
-	var seconds_left: int = ceili(_round_timer.time_left) if is_instance_valid(_round_timer) else ceili(Configs.Round.duration)
+	var seconds_left: int = _get_seconds_left()
+	_shown_seconds_left = seconds_left
 	var minutes: int = seconds_left / 60
 	var seconds: int = seconds_left % 60
 	_label.text = "%02d:%02d" % [minutes, seconds]
+
+#whole seconds left in the round, rounded up, the full round before it starts
+func _get_seconds_left() -> int:
+	return ceili(_round_timer.time_left) if is_instance_valid(_round_timer) else ceili(Configs.Round.duration)
