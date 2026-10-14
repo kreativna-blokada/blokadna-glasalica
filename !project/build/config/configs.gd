@@ -142,6 +142,8 @@ var DialogueZoom: Dictionary[String, Variant] = {
 	"compact_text_overhang": 24.0,
 	#answer box height limit in text lines
 	"compact_answer_max_lines": 2,
+	#px between the zoomed answer text and its box border, above and below
+	"answer_text_padding": 16.0,
 }
 
 var Leaderboard: Dictionary[String, Variant] = {

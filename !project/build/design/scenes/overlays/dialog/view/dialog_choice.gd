@@ -33,6 +33,10 @@ func get_num_lines() -> int:
 		return mini(line_count, Configs.DialogueZoom["compact_answer_max_lines"])
 	return line_count
 
+#height of the wrapped answer text in px
+func get_text_height() -> float:
+	return _text.get_content_height()
+
 #### brings back the pre-zoom answer font and line limit, re-using 153f7a2 - 60e239c
 func use_compact_look() -> void:
 	_is_compact = true

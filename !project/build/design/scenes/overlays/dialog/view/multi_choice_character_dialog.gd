@@ -123,13 +123,17 @@ func _initialize_placement(num_choices: int) -> void:
 	
 	# now, with the assumed height, calculate num lines
 	# extremely finicky but ok...
+	var choice_heights: Array[float] = []
 	for i in range(num_choices):
-		total_offset += _choiceHeight * _choices[i].get_num_lines()
+		#### total_offset += _choiceHeight * _choices[i].get_num_lines()
+		choice_heights.append(_get_choice_height(_choices[i]))
+		total_offset += choice_heights[i]
 	
 	var accum_offset: float = 0
 	for i in range(num_choices):
 		_choices[i].position = panel_container.position + Vector2(0, textboxScalePx.y - textMargin.y - total_offset + accum_offset)
-		_choices[i].size = Vector2(textboxScalePx.x, _choiceHeight * _choices[i].get_num_lines())
+		#### _choices[i].size = Vector2(textboxScalePx.x, _choiceHeight * _choices[i].get_num_lines())
+		_choices[i].size = Vector2(textboxScalePx.x, choice_heights[i])
 		accum_offset += _choices[i].size.y
 		apply_margins(_choices[i], choiceMargin)
 
@@ -144,6 +148,12 @@ func _initialize_placement(num_choices: int) -> void:
 
 	# place timer to the right of the dialog box
 	timer_vfx.position = panel_container.position + Vector2(panel_container.size.x + 24, 0)
+
+#answer box height, the text's own height plus padding in the zoomed dialogue, whole line slots in the pre-zoom one
+func _get_choice_height(choice: DialogChoice) -> float:
+	if not _is_zoomed_dialogue:
+		return _choiceHeight * choice.get_num_lines()
+	return choice.get_text_height() + (Configs.DialogueZoom["answer_text_padding"] + choiceMargin.y) * 2
 
 func _ready() -> void:
 	# pre-allocate the choices and hide them, to avoid dynamic instantiation
