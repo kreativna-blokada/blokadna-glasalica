@@ -75,6 +75,14 @@ var _arrow_switch_moment: int = 0
 #player id shown after the ИНДЕКС word, fully or still unveiling
 var _is_player_id_shown: bool = false
 var _player_id_unveiling_animation: Tween
+#colour sweeping over the play button left to right while it is held
+var _hold_fill_animation: Tween
+#quick colour sweep over the play button up to the share of the counted clicks
+var _click_fill_animation: Tween
+#share of the play button filled so far, kept between holds
+var _hold_fill_share: float = 0.0
+#the current play button press counted up by holding, so its release is no click
+var _is_hold_counted: bool = false
 
 #onready vars
 @onready var jumper: CenterContainer = %JumperContainer
@@ -112,7 +120,7 @@ var _player_id_unveiling_animation: Tween
 #╚██████╗██║  ██║███████╗███████╗██████╔╝██║  ██║╚██████╗██║  ██╗███████║
 # ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
-#starts the jump sound looping as soon as the menu loads
+#sets up the menu; the jump sound stays silent until the first click, hold or shake
 func _ready() -> void:
 	_rest_slogan_offset = jumper.position.y
 	_rest_click_caption = click_counter_label.text
@@ -129,7 +137,6 @@ func _ready() -> void:
 	menu_option_button.pressed.connect(_on_menu_option_button_pressed)
 	menu_option_button.gui_input.connect(_on_menu_option_button_input)
 	jump_sound.finished.connect(_on_jump_sound_finished)
-	jump_sound.play()
 
 	left_arrow.gui_input.connect(_on_arrow_input)
 	right_arrow.gui_input.connect(_on_arrow_input)
@@ -194,13 +201,66 @@ func _gui_input(event: InputEvent) -> void:
 		_take_card_control()
 	accept_event()
 
-#signal MenuOptionButton.pressed => counts clicks, jumps the text; starts the game on enough of them; the leaderboard row only opens the leaderboard, the difficulty and controls rows only show their choice
+#signal MenuOptionButton.pressed => counts clicks, a hold already counted itself; the leaderboard row only opens the leaderboard, the difficulty and controls rows only show their choice
 func _on_menu_option_button_pressed() -> void:
-	if _is_starting or _menu_choice in [Globals.MainMenu.Leaderboard, Globals.MainMenu.Difficulty, Globals.MainMenu.Controls]: return
+	if _is_starting or _is_hold_counted or _menu_choice in [Globals.MainMenu.Leaderboard, Globals.MainMenu.Difficulty, Globals.MainMenu.Controls]: return
 
-	_click_count += 1
+	_count_start_press(_click_count + 1)
+	_sweep_click_fill()
+
+#sweeps the play button fill up to the share of the counted clicks, from wherever it is
+func _sweep_click_fill() -> void:
+	var counted_share: float = minf(float(_click_count) / Configs.Shake["click_count"], 1.0)
+	if counted_share <= _hold_fill_share: return
+
+	if _hold_fill_animation: _hold_fill_animation.kill()
+	if _click_fill_animation: _click_fill_animation.kill()
+	_click_fill_animation = create_tween()
+	_click_fill_animation.tween_method(_set_hold_fill, _hold_fill_share, counted_share, Configs.Shake["click_fill_duration"])
+
+#fills the play button left to right from where the last hold stopped, the whole of it taking the hold duration, counting up like a click each click_count share of it
+func _start_hold_fill() -> void:
+	_is_hold_counted = false
+	if _hold_fill_share >= 1.0: return
+
+	var click_count: int = Configs.Shake["click_count"]
+	var hold_duration: float = Configs.Shake["hold_duration"]
+	var resumed_share: float = _hold_fill_share
+
+	if _hold_fill_animation: _hold_fill_animation.kill()
+	if _click_fill_animation: _click_fill_animation.kill()
+	_hold_fill_animation = create_tween()
+	for held_count: int in range(1, click_count + 1):
+		var share_end: float = float(held_count) / click_count
+		if share_end <= resumed_share: continue
+		var share_begin: float = maxf(resumed_share, float(held_count - 1) / click_count)
+		_hold_fill_animation.tween_method(_set_hold_fill, share_begin, share_end, (share_end - share_begin) * hold_duration)
+		_hold_fill_animation.tween_callback(_count_held_share.bind(held_count))
+
+#stops the play button fill where the hold was let go
+func _stop_hold_fill() -> void:
+	if _hold_fill_animation: _hold_fill_animation.kill()
+
+#one more click_count share of the hold reached: counts up like a click once it is past the clicks before it; only the first count of a hold restarts the jump sound
+func _count_held_share(held_count: int) -> void:
+	if held_count <= _click_count: return
+
+	var is_first_count: bool = not _is_hold_counted
+	_is_hold_counted = true
+	_count_start_press(held_count, is_first_count)
+
+#moves the fill edge over the play button and its caption, which turns white under it
+func _set_hold_fill(fill_share: float) -> void:
+	_hold_fill_share = fill_share
+	var fill_edge: float = menu_option_button.size.x * fill_share
+	(menu_option_button.material as ShaderMaterial).set_shader_parameter(&"fill_edge", fill_edge)
+	(click_counter_label.material as ShaderMaterial).set_shader_parameter(&"fill_edge", fill_edge)
+
+#shows the press count on the button, jumps the text, restarting the jump sound unless told to let it play on; starts the game on enough of them
+func _count_start_press(press_count: int, is_sound_restarted: bool = true) -> void:
+	_click_count = press_count
 	_show_button_caption()
-	_jump_slogan(1.0)
+	_jump_slogan(1.0, is_sound_restarted)
 	if _click_count >= Configs.Shake["click_count"]:
 		#clicks stop counting, the last 3 stays in sight a moment before the start sequence
 		_is_starting = true
@@ -270,21 +330,28 @@ func _on_arrow_input(event: InputEvent) -> void:
 	_show_button_caption()
 	accept_event()
 
-#signal MenuOptionButton.gui_input => opens the leaderboard on touch while the leaderboard row is ticked; touch only, mouse clicks arrive as emulated touch
+#signal MenuOptionButton.gui_input => opens the leaderboard on touch while the leaderboard row is ticked; on the starting row a touch held fills the button and letting go stops the fill; touch only, mouse clicks arrive as emulated touch
 func _on_menu_option_button_input(event: InputEvent) -> void:
-	if _is_starting or _menu_choice != Globals.MainMenu.Leaderboard: return
-
 	var touch_event: InputEventScreenTouch = event as InputEventScreenTouch
-	if touch_event and touch_event.pressed:
+	if _is_starting or not touch_event: return
+
+	if _menu_choice == Globals.MainMenu.Leaderboard and touch_event.pressed:
 		GameManager.go_to_leaderboard()
+	elif _menu_choice == Globals.MainMenu.Starting:
+		if touch_event.pressed:
+			_start_hold_fill()
+		else:
+			_stop_hold_fill()
 
 #signal Signals.menu_option_selected => shows the hint for the menu option the ballot card has ticked; the team row shows TeamLabel in place of the hidden MenuOptionButton and InfoLabel
 func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
 	#letting the card go on the row already chosen picks nothing new
 	if menu_option != _menu_choice: SoundManager.play_stinger(Globals.Sound.MenuSelect)
 	_menu_choice = menu_option
-	#clicks count only on the starting row, leaving it starts them over
-	if menu_option != Globals.MainMenu.Starting: _click_count = 0
+	#clicks and the hold fill count only on the starting row, leaving it starts them over
+	if menu_option != Globals.MainMenu.Starting:
+		_click_count = 0
+		_set_hold_fill(0.0)
 	var is_team_chosen: bool = menu_option == Globals.MainMenu.Team
 	menu_option_button.visible = not is_team_chosen
 	var is_selector_chosen: bool = menu_option in [Globals.MainMenu.Difficulty, Globals.MainMenu.Controls]
@@ -299,12 +366,9 @@ func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
 func _get_menu_description(menu_option: Globals.MainMenu) -> String:
 	return Literals.WEB_MENU_START_DESCRIPTION if menu_option == Globals.MainMenu.Starting and OS.has_feature("web") else Literals.MAIN_MENU_DESCRIPTIONS[menu_option]
 
-#loops the jump sound until the shake sequence is done, then counts down to the game
+#signal JumpSound.finished => counts down to the game once the shake sequence is done; otherwise the sound stays silent until the next click, hold or shake
 func _on_jump_sound_finished() -> void:
-	if _shake_done:
-		_play_countdown()
-	else:
-		jump_sound.play()
+	if _shake_done: _play_countdown()
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -437,7 +501,7 @@ func _count_phone_shake(direction: float) -> void:
 	if _shake_count >= Configs.Shake["shake_count"]:
 		_finish_start_sequence()
 
-#stops counting shakes and clicks; game starts once the sound finishes this last loop
+#stops counting shakes and clicks; game starts once the jump sound finishes this last play, started here if already silent
 func _finish_start_sequence() -> void:
 	#debug builds with skip_intro ticked go straight to the game
 	if skip_intro and OS.is_debug_build():
@@ -454,6 +518,7 @@ func _finish_start_sequence() -> void:
 	if OS.is_debug_build():
 		_sequence_slowdown = Configs.Shake["sequence_slowdown"]
 	jump_sound.pitch_scale = 1.0 / _sequence_slowdown
+	if not jump_sound.playing: jump_sound.play()
 	#ballot stops moving and stays still while the last sound plays out
 	vote_animation.pause()
 	#screen turns to matrix rain until the game loads
@@ -516,11 +581,11 @@ func _simulate_accelerometer_on_pc() -> void:
 	if Input.is_key_pressed(KEY_DOWN): y = -_FAKE_ACCEL
 	Input.set_accelerometer(Vector3(0.0, y, _RESTING_GRAVITY))
 
-#bounces the text along the shake direction (+1 up, -1 down) and back to rest
-func _jump_slogan(direction: float) -> void:
+#bounces the text along the shake direction (+1 up, -1 down) and back to rest, restarting the jump sound unless told to let it play on
+func _jump_slogan(direction: float, is_sound_restarted: bool = true) -> void:
 	if _slogan_jumping_animation: _slogan_jumping_animation.kill()
 
-	jump_sound.play()
+	if is_sound_restarted: jump_sound.play()
 
 	var rest_position: float = _rest_slogan_offset
 	var peak_position: float = rest_position - direction * Configs.Shake["jump_height"]

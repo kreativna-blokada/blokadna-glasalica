@@ -30,6 +30,10 @@ var Shake: Dictionary[String, Variant] = {
 	"jump_duration": 0.5,
 	#s the 3 stays on the button after the last click, before the start sequence
 	"click_pause": 0.5,
+	#s the play button is held to fill it and start the game, counting up like a click each click_count share of it
+	"hold_duration": 1.5,
+	#s a click takes to sweep the play button fill up to its next click_count share
+	"click_fill_duration": 0.15,
 	#px font size of the 3 on the button after the 1st, 2nd and 3rd click
 	"click_font_sizes": [80, 100, 120],
 	#s countdown digits 1, 2 and 3 each stay on screen after the last jump sound, before the game starts
