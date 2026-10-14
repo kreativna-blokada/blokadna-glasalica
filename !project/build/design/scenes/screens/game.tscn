@@ -24,6 +24,9 @@ script = ExtResource("1_whd4d")
 [node name="VoterSlots" type="Node2D" parent="Stage" unique_id=328396471]
 script = ExtResource("3_whd4d")
 
+[node name="Camera2D" type="Camera2D" parent="Stage" unique_id=1406285517]
+position = Vector2(960, 540)
+
 [node name="Timer" type="Timer" parent="Stage" unique_id=126925033]
 wait_time = 15.0
 one_shot = true
