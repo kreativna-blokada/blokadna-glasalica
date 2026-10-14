@@ -34,6 +34,7 @@ autoplay = true
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1072840265]
 z_index = -3
+position = Vector2(-1920, 0)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("1_hcqac")
 centered = false
@@ -173,7 +174,7 @@ rotation = -0.06981317
 [node name="VoterStops" type="Node2D" parent="." unique_id=1040820995]
 
 [node name="Load" parent="VoterStops" unique_id=330516695 instance=ExtResource("12_ugfii")]
-position = Vector2(-100, 700)
+position = Vector2(-400, 573)
 walk_animation = 4
 wait_animation = 4
 
