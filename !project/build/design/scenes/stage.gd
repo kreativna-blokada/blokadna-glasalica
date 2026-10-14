@@ -29,6 +29,8 @@ var _is_queue_consolidating: bool = false
 var _is_voter_control_enabled: bool = true
 #voter Initiate was pressed on just before it stopped; its dialog opens once it stops
 var _voter_awaiting_dialogue: Voter = null
+#true on the challenge difficulty: Initiate releases any selected queued voter, even while others walk the voting room
+var _is_room_shared: bool = false
 var _mission_descriptor: MissionDescriptor = GameManager.get_mission_descriptor()
 
 
@@ -78,6 +80,7 @@ func _unhandled_input(event: InputEvent) -> void:
 #initiallizes variables
 func _init_vars() -> void:
 	_rand.randomize()
+	_is_room_shared = GameManager.get_game_descriptor().is_challenge()
 	for factory_index in Globals.VoterFactory:
 		var texture_path: String = Globals.VoterFactory[factory_index]["Texture2D"]
 		if ResourceLoader.exists(texture_path, "Texture2D"):
@@ -105,6 +108,8 @@ func _handle_start_action() -> void:
 		dialogue_requested.emit(selected_voter, stop_name)
 	elif selected_voter.is_arriving(Configs.ClassicalControllers["dialog_opening_buffer"]):
 		_voter_awaiting_dialogue = selected_voter
+	elif selected_voter.is_queueing and queued_voters.has(selected_voter) and _is_room_shared:
+		_dequeue_voter(selected_voter)
 	elif selected_voter.is_queueing and queued_voters.has(selected_voter):
 		_handle_next_action()
 
@@ -267,17 +272,20 @@ func get_stopped_voter_at_stop(stop_index: int) -> Voter:
 
 #manages voter release and queue consolidation
 func _dequeue_voter(voter: Voter) -> void:
-	if _has_voter_in_room() or voter == null or voter != _get_front_queue_voter():
+	if voter == null: return
+	if not _is_room_shared and (_has_voter_in_room() or voter != _get_front_queue_voter()):
 		return
 
 	#can_leave_queue() clears starting_spot, so retain it before advancing the voter
 	var queue_spot: VotingStop = voter.starting_spot
 	if not voter.can_leave_queue(): return
 
-	_voter_in_room = voter
-	#fallback for voters removed before reaching the normal Exit point
-	voter.tree_exited.connect(_on_room_voter_exited.bind(voter), CONNECT_ONE_SHOT)
-	next_voter_availability_updated.emit(false)
+	#a shared room keeps tracking its earliest voter, the ones following it walk in untracked
+	if not _has_voter_in_room():
+		_voter_in_room = voter
+		#fallback for voters removed before reaching the normal Exit point
+		voter.tree_exited.connect(_on_room_voter_exited.bind(voter), CONNECT_ONE_SHOT)
+		next_voter_availability_updated.emit(false)
 
 	#removes voter from queue
 	queued_voters.erase(voter)
