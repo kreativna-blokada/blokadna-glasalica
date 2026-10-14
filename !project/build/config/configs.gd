@@ -80,7 +80,49 @@ var Round: Dictionary[String, Variant] = {
 
 var DialogueScore: Dictionary[String, Variant] = {
 	#s an answer screen ignores picks after it opens, so no answer can be given faster
-	"answer_lock_time": 3.0,
+	"answer_lock_time": 5.0,
+	#s the answer screen stays locked after the player skips the line unveiling, cutting the lock short
+	"skip_unlock_grace": 1.0,
+	#s taken off the round timer whenever skipping the line cuts the lock short
+	"skip_round_penalty": 1.0,
+}
+
+var SkipPenalty: Dictionary[String, Variant] = {
+	#colour the old last digit of the round timer turns as it explodes, and of its sparks
+	"digit_color": Color(0.9, 0.35, 0.3, 0.8),
+	#old last digit scale at the end of the explosion
+	"digit_peak_scale": 1.3,
+	#s the old last digit grows and fades, and the sparks live
+	"explode_time": 0.3,
+	#sparks bursting from the old last digit
+	"spark_count": 6,
+	#px/s the fastest spark flies out at, the slowest at half
+	"spark_speed": 120.0,
+	#px side of a spark
+	"spark_size": 4.0,
+}
+
+var AnswerLock: Dictionary[String, Variant] = {
+	#wash over the part of a locked answer the colour has not filled yet
+	"locked_wash_color": Color(0.0, 0.0, 0.0, 0.10),
+	#answer background tint of a pick made during the lock, submitted the moment it unlocks
+	"pending_answer_tint": Color(0.55, 0.85, 0.55, 1.0),
+	#opacity of the padlock, drawn in the answer text colour, solid on a pending pick
+	"padlock_opacity": 0.75,
+	#px height of the padlock
+	"padlock_height": 40.0,
+	#px from the answer's right edge to the padlock centre
+	"padlock_right_offset": 28.0,
+	#s the padlock shackle takes to spring open on unlock
+	"padlock_open_time": 0.15,
+	#answer scale at the top of the unlock bounce
+	"unlock_bounce_scale": 1.04,
+	#answer brightness at the top of the unlock flash, 1 is unchanged
+	"unlock_flash_brightness": 1.2,
+	#s the unlock bounce and flash take to rise and settle each
+	"unlock_pop_time": 0.12,
+	#s the opened padlock fades out after the pop
+	"padlock_fade_time": 0.25,
 }
 
 var Sound: Dictionary[String, Variant] = {

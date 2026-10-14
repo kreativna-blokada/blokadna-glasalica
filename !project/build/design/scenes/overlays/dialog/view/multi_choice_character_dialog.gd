@@ -2,6 +2,8 @@ class_name MultiChoiceCharacterDialog
 extends CharacterDialogBase
 
 signal finished(choice: int)
+#the player showed the whole line before it finished unveiling
+signal text_skipped()
 
 var choiceOriginal: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/dialog_choice.tscn")
 
@@ -79,6 +81,21 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 	if not _is_zoomed_dialogue:
 		text.text = ""
 		text.visible_characters = -1
+
+#locks the shown answers for the lock time, each with a padlock and a filling colour
+func lock_choices(lock_time: float) -> void:
+	for choice_index in range(_num_choices):
+		_choices[choice_index].lock(lock_time)
+
+#cuts the answers' lock down to the given seconds left
+func shorten_choices_lock(remaining_lock_time: float) -> void:
+	for choice_index in range(_num_choices):
+		_choices[choice_index].shorten_lock(remaining_lock_time)
+
+#marks the answer picked during the lock as the one going in when it unlocks
+func mark_pending_choice(pending_choice_index: int) -> void:
+	for choice_index in range(_num_choices):
+		_choices[choice_index].set_pending(choice_index == pending_choice_index)
 
 #prints the answers in the text colour of the speaker answering, the one not saying the line, over the sentence box
 func _color_choices(line_speaker: DialogDescriptor.Speaker) -> void:
@@ -181,27 +198,20 @@ func highlight_next_choice() -> void:
 	_highlighted_choice_index = (_highlighted_choice_index + 1) % _num_choices
 	_refresh_choice_highlight()
 
-#Confirm button: shows the whole line if it is still unveiling, otherwise submits the highlighted answer
+#Confirm button: shows the whole line if it is still unveiling and picks the highlighted answer
 func submit_highlighted_choice() -> void:
-	if _unveiledText == _requestedText:
-		finished.emit(_highlighted_choice_index)
-	else:
-		unveil_full_text(_requestedText)
+	_skip_unveil()
+	finished.emit(_highlighted_choice_index)
 
 #tints the highlighted answer, the others keep their scene look
 func _refresh_choice_highlight() -> void:
 	for choice_index in range(_num_choices):
 		_choices[choice_index].set_highlighted(_is_answered_by_controls and choice_index == _highlighted_choice_index)
 
+#a click on an answer shows the whole line if it is still unveiling and picks that answer
 func _on_choice_clicked(sender: DialogChoice) -> void:
-	if _unveiledText == _requestedText:
-		var i: int = 0
-		for choice in _choices:
-			if sender == choice:
-				finished.emit(i)
-			i += 1
-	else:
-		unveil_full_text(_requestedText)
+	_skip_unveil()
+	finished.emit(_choices.find(sender))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -225,4 +235,11 @@ func _on_text_container_gui_input(event: InputEvent) -> void:
 	if _touch_debounce_timer > 0: return
 	
 	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
-		unveil_full_text(_requestedText)
+		_skip_unveil()
+
+#shows the whole line at once and reports the skip, only while it is still unveiling
+func _skip_unveil() -> void:
+	if _unveiledText == _requestedText: return
+
+	unveil_full_text(_requestedText)
+	text_skipped.emit()
