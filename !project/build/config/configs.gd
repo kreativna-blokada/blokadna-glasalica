@@ -68,7 +68,7 @@ var CardDrag: Dictionary[String, Variant] = {
 
 var MenuDifficulty: Dictionary[String, Variant] = {
 	#ClickCounterLabel font size while the difficulty row is chosen, small enough for the longest difficulty text to fit the MenuOptionButton
-	"font_size": 52,
+	"font_size": 80,
 	#s the arrows ignore further taps after switching the difficulty
 	"tap_debounce": 0.1,
 }

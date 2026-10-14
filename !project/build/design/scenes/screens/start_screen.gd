@@ -538,9 +538,12 @@ func _hide_start_screen_choices() -> void:
 	left_arrow.hide()
 	right_arrow.hide()
 
-#shows on ClickCounterLabel the chosen difficulty or controls while their row is ticked, otherwise the click count; every click shows the 3, never the running count, growing with each click
+#shows on ClickCounterLabel the chosen difficulty or controls while their row is ticked, the leaderboard caption on its row, otherwise the click count; every click shows the 3, never the running count, growing with each click
 func _show_button_caption() -> void:
-	if _menu_choice == Globals.MainMenu.Difficulty:
+	if _menu_choice == Globals.MainMenu.Leaderboard:
+		click_counter_label.text = Literals.LEADERBOARD_BUTTON_CAPTION
+		click_counter_label.add_theme_font_size_override(&"font_size", _rest_click_fontsize)
+	elif _menu_choice == Globals.MainMenu.Difficulty:
 		click_counter_label.text = Literals.DIFFICULTY_DESCRIPTIONS[difficulty_type]
 		click_counter_label.add_theme_font_size_override(&"font_size", Configs.MenuDifficulty["font_size"])
 	elif _menu_choice == Globals.MainMenu.Controls:

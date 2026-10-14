@@ -23,6 +23,8 @@ const MAIN_MENU_DESCRIPTIONS: Dictionary[Globals.MainMenu, String] = {
 #starting hint on web, where the phone can not be shaken
 const WEB_MENU_START_DESCRIPTION: String = "КЛИКНИ ДУГМЕ 3 ПУТА"
 
+#ClickCounterLabel text on the button while the leaderboard row is ticked
+const LEADERBOARD_BUTTON_CAPTION: String = "ПОРЕДАК"
 #IdLabel text under the ballot box before IdRevealButton is tapped
 const ID_WORD: String = "ИНДЕКС"
 #IdLabel text under the ballot box once IdRevealButton is tapped, filled with the leaderboard player id
