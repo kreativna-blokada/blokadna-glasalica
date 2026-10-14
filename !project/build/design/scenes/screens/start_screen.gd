@@ -83,6 +83,8 @@ var _click_fill_animation: Tween
 var _hold_fill_share: float = 0.0
 #the current play button press counted up by holding, so its release is no click
 var _is_hold_counted: bool = false
+#swells and dies out the jump sound volume
+var _jump_sound_fading_animation: Tween
 
 #onready vars
 @onready var jumper: CenterContainer = %JumperContainer
@@ -518,7 +520,7 @@ func _finish_start_sequence() -> void:
 	if OS.is_debug_build():
 		_sequence_slowdown = Configs.Shake["sequence_slowdown"]
 	jump_sound.pitch_scale = 1.0 / _sequence_slowdown
-	if not jump_sound.playing: jump_sound.play()
+	_play_jump_sound(not jump_sound.playing)
 	#ballot stops moving and stays still while the last sound plays out
 	vote_animation.pause()
 	#screen turns to matrix rain until the game loads
@@ -585,7 +587,7 @@ func _simulate_accelerometer_on_pc() -> void:
 func _jump_slogan(direction: float, is_sound_restarted: bool = true) -> void:
 	if _slogan_jumping_animation: _slogan_jumping_animation.kill()
 
-	if is_sound_restarted: jump_sound.play()
+	if is_sound_restarted: _play_jump_sound()
 
 	var rest_position: float = _rest_slogan_offset
 	var peak_position: float = rest_position - direction * Configs.Shake["jump_height"]
@@ -596,6 +598,26 @@ func _jump_slogan(direction: float, is_sound_restarted: bool = true) -> void:
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	_slogan_jumping_animation.tween_property(jumper, "position:y", rest_position, jump_duration * 0.6) \
 		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+
+#plays the jump sound from where it is (or the start), swelling in and dying out before its end at the current pitch
+func _play_jump_sound(is_restarted: bool = true) -> void:
+	if _jump_sound_fading_animation: _jump_sound_fading_animation.kill()
+
+	var start_position: float = 0.0 if is_restarted else jump_sound.get_playback_position()
+	var remaining_duration: float = (jump_sound.stream.get_length() - start_position) / jump_sound.pitch_scale
+	var fade_in: float = Configs.Shake["sound_fade_in"] if is_restarted else 0.0
+	var fade_out: float = minf(Configs.Shake["sound_fade_out"], remaining_duration - fade_in)
+
+	if is_restarted:
+		jump_sound.volume_linear = 0.0
+		jump_sound.play()
+
+	_jump_sound_fading_animation = create_tween()
+	_jump_sound_fading_animation.tween_property(jump_sound, "volume_linear", 1.0, fade_in) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_jump_sound_fading_animation.tween_interval(remaining_duration - fade_in - fade_out)
+	_jump_sound_fading_animation.tween_property(jump_sound, "volume_linear", 0.0, fade_out) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 #reads how many games this player started; zero on the first launch
 func _load_game_start_count() -> void:

@@ -28,6 +28,10 @@ var Shake: Dictionary[String, Variant] = {
 	"jump_height": 120.0,
 	#s for one jump, up and back to rest
 	"jump_duration": 0.5,
+	#s the jump sound takes to swell from silence at each play
+	"sound_fade_in": 0.15,
+	#s the jump sound takes to die out before its end
+	"sound_fade_out": 0.15,
 	#s the 3 stays on the button after the last click, before the start sequence
 	"click_pause": 0.5,
 	#s the play button is held to fill it and start the game, counting up like a click each click_count share of it
