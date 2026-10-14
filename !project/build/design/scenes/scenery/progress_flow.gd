@@ -74,6 +74,9 @@ func _init_buttons() -> void:
 #inits stops outline, each stop button gets its own outline material
 func _init_indicators() -> void:
 	for button in _buttons:
+		#the outline marks occupied stops, so the grey disabled look is dropped for the normal texture
+		button.texture_disabled = null
+
 		var outline_material: ShaderMaterial = ShaderMaterial.new()
 		outline_material.shader = OUTLINE_SHADER
 		outline_material.set_shader_parameter("outline_color", Color(0.33333325, 1, 0, 1))
@@ -148,9 +151,9 @@ func _highlight_indicators() -> void:
 func _indicate_bottleneck(idx: int) -> void:
 	var voters_waiting: int = _count_voters_waiting(idx)
 	if voters_waiting >= _indicator_alert_threshold:
-		_buttons[idx].material.set_shader_parameter("modulate_color", Color.RED)
+		_buttons[idx].material.set_shader_parameter("modulate_color", Configs.BottleneckIndicators["alert_indicator_color"])
 	elif voters_waiting >= _indicator_warning_threshold:
-		_buttons[idx].material.set_shader_parameter("modulate_color", Color.YELLOW)
+		_buttons[idx].material.set_shader_parameter("modulate_color", Configs.BottleneckIndicators["warning_indicator_color"])
 	else:
 		_buttons[idx].material.set_shader_parameter("modulate_color", Color.WHITE)
 

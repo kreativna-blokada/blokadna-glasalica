@@ -58,13 +58,6 @@ var CardDrag: Dictionary[String, Variant] = {
 	"slot_depth": 320.0,
 }
 
-var MenuHint: Dictionary[String, Variant] = {
-	#InfoLabel anchor height (0 = screen top, 1 = bottom) while the team row is chosen, centered between the SloganLabel bottom and the WebVersionBox top
-	"team_hint_anchor": 0.589,
-	#InfoLabel font size while the team row is chosen, smaller so the long team text fits
-	"team_font_size": 48,
-}
-
 var MenuDifficulty: Dictionary[String, Variant] = {
 	#ClickCounterLabel font size while the difficulty row is chosen, small enough for the longest difficulty text to fit the MenuOptionButton
 	"font_size": 52,
@@ -130,6 +123,14 @@ var Spotlights: Dictionary[String, Variant] = {
 	"spotlight_padding": 16.0,
 	#px over which a hole's edge fades into the full dim
 	"spotlight_softness": 16.0,
+}
+
+#HUD stop indicators tinted by the queue waiting before the stop
+var BottleneckIndicators: Dictionary[String, Variant] = {
+	#subtle but distinguishable red tint when the queue reaches the alert threshold
+	"alert_indicator_color": Color(1.0, 0.78, 0.78, 1),
+	#subtle but distinguishable yellow tint when the queue reaches the warning threshold
+	"warning_indicator_color": Color(1.0, 0.96, 0.72, 1),
 }
 
 #dialogue without zoom, re-using 153f7a2 - 60e239c

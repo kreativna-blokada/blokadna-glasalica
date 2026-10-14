@@ -1,6 +1,9 @@
 class_name Controls
 extends CanvasLayer
 
+#Confirm and Highlight moved to follow the right screen edge after a window resize
+signal buttons_moved()
+
 var _next_enabled_texture: Texture2D
 var _next_disabled_texture: Texture2D
 
@@ -8,6 +11,7 @@ var _next_disabled_texture: Texture2D
 @onready var _select_button: TouchScreenButton = $Selection/Select
 @onready var _initiate_button: TouchScreenButton = $Selection/Initiate
 @onready var _course_buttons: Array[TouchScreenButton] = [$Selection/Select, $Selection/Initiate]
+@onready var _dialogue_buttons_group: Control = $Validation
 @onready var _dialogue_buttons: Array[TouchScreenButton] = [$Validation/Confirm, $Validation/Highlight]
 @onready var _classic_buttons: Array[TouchScreenButton] = _course_buttons + _dialogue_buttons
 
@@ -31,6 +35,8 @@ func _ready() -> void:
 		_classic_button_actions[classic_button] = classic_button.action
 	_create_guide_border()
 	set_dialog_open(false)
+
+	_dialogue_buttons_group.item_rect_changed.connect(buttons_moved.emit)
 
 #the first Select press moves the guide border to Initiate, the first Initiate press hides it for good
 func _input(event: InputEvent) -> void:

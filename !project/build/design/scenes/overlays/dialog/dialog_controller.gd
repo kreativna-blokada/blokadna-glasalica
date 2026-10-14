@@ -47,9 +47,13 @@ func initialize(game_descriptor: GameDescriptor, dialog_path: Dictionary, dialog
 	add_child(_answer_lock_timer)
 	_start_timer_if_needed()
 
-#keeps the given buttons visible through the dialog dim, called before the dialog enters the tree
+#keeps the given buttons visible through the dialog dim, also re-applied to an open dialog after a window resize
 func set_spotlights(button_spotlights: PackedVector3Array) -> void:
 	_spotlights = button_spotlights
+	if not is_node_ready(): return
+
+	_dialog_box.set_spotlights(_spotlights)
+	_multi_choice_dialog_box.set_spotlights(_spotlights)
 
 #restarts the answer timers when the screen shows answers
 func _start_timer_if_needed() -> void:

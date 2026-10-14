@@ -75,10 +75,19 @@ func set_portraits(left_portrait: Texture2D, right_portrait: Texture2D) -> void:
 	left_speaker.texture = left_portrait
 	right_speaker.texture = right_portrait
 
-#stretches name plates from the screen edges up to the dialog box sides
+#stretches name plates from the screen edges up to the dialog box sides, with each bust centred over its plate
 func set_dialogue_width(dialog_width: float) -> void:
 	left_name_plate.offset_right = -dialog_width / 2.0
 	right_name_plate.offset_left = dialog_width / 2.0
+
+	_center_speaker_over_name_plate(left_speaker, -dialog_width / 4.0)
+	_center_speaker_over_name_plate(right_speaker, dialog_width / 4.0)
+
+#places the bust centre the given px off its screen quarter line, where the centre of its plate sits
+func _center_speaker_over_name_plate(speaker: TextureRect, name_plate_center_offset: float) -> void:
+	var speaker_half_width: float = speaker.size.x / 2.0
+	speaker.offset_left = name_plate_center_offset - speaker_half_width
+	speaker.offset_right = name_plate_center_offset + speaker_half_width
 
 #fills each name plate with the dialogue colour its speaker talks in
 func set_name_plate_colors(left_speaker_color: Color, right_speaker_color: Color, box_tint: Color) -> void:

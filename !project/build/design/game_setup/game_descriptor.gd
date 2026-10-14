@@ -42,6 +42,10 @@ func set_difficulty(difficulty: Difficulty) -> void:
 func are_timers_enabled() -> bool:
 	return _timers_enabled
 
+#true on the challenge difficulty, where several voters can walk the voting room at once
+func is_challenge() -> bool:
+	return _difficulty == Difficulty.NORMAL
+
 #keeps the controls picked on the start screen
 func set_controller_type(controller_type: Globals.ControllerType) -> void:
 	_controller_type = controller_type
