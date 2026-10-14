@@ -87,6 +87,21 @@ var DialogueScore: Dictionary[String, Variant] = {
 	"skip_round_penalty": 1.0,
 }
 
+var SkipPenalty: Dictionary[String, Variant] = {
+	#colour the old last digit of the round timer turns as it explodes, and of its sparks
+	"digit_color": Color(0.9, 0.35, 0.3, 0.8),
+	#old last digit scale at the end of the explosion
+	"digit_peak_scale": 1.3,
+	#s the old last digit grows and fades, and the sparks live
+	"explode_time": 0.3,
+	#sparks bursting from the old last digit
+	"spark_count": 6,
+	#px/s the fastest spark flies out at, the slowest at half
+	"spark_speed": 120.0,
+	#px side of a spark
+	"spark_size": 4.0,
+}
+
 var AnswerLock: Dictionary[String, Variant] = {
 	#wash over the part of a locked answer the colour has not filled yet
 	"locked_wash_color": Color(0.0, 0.0, 0.0, 0.10),

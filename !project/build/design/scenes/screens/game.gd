@@ -173,6 +173,7 @@ func _on_dialog_lock_skipped(round_penalty: float) -> void:
 
 	#a penalty eating the rest of the round ends it on the next frame, as a regular timeout
 	_round_timer.start(maxf(_round_timer.time_left - round_penalty, 0.01))
+	_round_timer_display.explode_last_digit()
 
 #pops the bonus seconds up over the round timer, the way answer points pop up
 func _show_bonus_time_popup(bonus_time: float) -> void:
