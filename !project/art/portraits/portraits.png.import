@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://mpmb7mjtqkqh"
-path.bptc="res://.godot/imported/portraits.png-963e4e68c6d8e1db8d222f753bc6729d.bptc.ctex"
-path.astc="res://.godot/imported/portraits.png-963e4e68c6d8e1db8d222f753bc6729d.astc.ctex"
+path="res://.godot/imported/portraits.png-963e4e68c6d8e1db8d222f753bc6729d.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://!project/art/portraits/portraits.png"
-dest_files=["res://.godot/imported/portraits.png-963e4e68c6d8e1db8d222f753bc6729d.bptc.ctex", "res://.godot/imported/portraits.png-963e4e68c6d8e1db8d222f753bc6729d.astc.ctex"]
+dest_files=["res://.godot/imported/portraits.png-963e4e68c6d8e1db8d222f753bc6729d.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
