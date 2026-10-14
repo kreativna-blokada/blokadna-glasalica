@@ -69,6 +69,7 @@ func _ready() -> void:
 	stage.room_voter_stopped.connect(_on_room_voter_stopped)
 
 	controls.init(stage, _game_descriptor.get_controller_type())
+	controls.buttons_moved.connect(_on_controls_buttons_moved)
 	Signals.game_close_requested.connect(_on_game_close_requested)
 	Signals.help_requested.connect(_on_help_requested)
 
@@ -264,6 +265,11 @@ func _open_dialogue(voter: Voter, stop_name: String) -> void:
 	var voter_personality: String = _dialog_voter.get_personality()
 	if Globals.DialogueMoodSounds.has(voter_personality):
 		SoundManager.play_stinger(Globals.DialogueMoodSounds[voter_personality])
+
+#moves the dim holes of an open dialog onto the buttons' new places
+func _on_controls_buttons_moved() -> void:
+	if _dialog_controller and is_instance_valid(_dialog_controller):
+		_dialog_controller.set_spotlights(controls.get_button_spotlights())
 
 func _on_dialog_finished() -> void:
 	var voter: Voter = _dialog_voter
