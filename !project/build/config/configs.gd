@@ -78,6 +78,23 @@ var Round: Dictionary[String, Variant] = {
 	"bonus_time_limit": 25.0,
 }
 
+var BonusTime: Dictionary[String, Variant] = {
+	#colour of the bonus text rising into the round timer, and of its sparks
+	"text_color": Color(0.35, 0.9, 0.4, 0.9),
+	#s the bonus text slides in from off screen left until it reaches the end of the time
+	"slide_time": 0.5,
+	#s the bonus text shrinks and fades into the time, and the sparks close in
+	"burst_time": 0.3,
+	#bonus text scale at the end of the burst
+	"burst_end_scale": 0.6,
+	#sparks closing in onto the seconds
+	"spark_count": 6,
+	#px from the seconds the sparks start closing in from
+	"spark_ring_radius": 40.0,
+	#px side of a spark
+	"spark_size": 4.0,
+}
+
 var DialogueScore: Dictionary[String, Variant] = {
 	#s an answer screen ignores picks after it opens, so no answer can be given faster
 	"answer_lock_time": 5.0,

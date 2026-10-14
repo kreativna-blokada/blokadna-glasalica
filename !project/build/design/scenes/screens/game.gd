@@ -175,13 +175,9 @@ func _on_dialog_lock_skipped(round_penalty: float) -> void:
 	_round_timer.start(maxf(_round_timer.time_left - round_penalty, 0.01))
 	_round_timer_display.explode_last_digit()
 
-#pops the bonus seconds up over the round timer, the way answer points pop up
+#bursts the bonus seconds into the round timer, the way the skip penalty bursts out of it
 func _show_bonus_time_popup(bonus_time: float) -> void:
-	var popup: PointsVfx = POINTS_VFX_SCENE.instantiate() as PointsVfx
-	dialog_layer.add_child(popup)
-	popup.global_position = _round_timer_display.get_time_center()
-	popup.setup("+%.0f s" % bonus_time, Color.GREEN)
-	popup.play()
+	_round_timer_display.implode_bonus_time("+%.0fs" % bonus_time)
 
 #starts the one-shot timer that ends the run
 func _start_round_timer() -> void:
