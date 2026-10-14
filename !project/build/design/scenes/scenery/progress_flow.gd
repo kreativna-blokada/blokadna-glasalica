@@ -74,6 +74,9 @@ func _init_buttons() -> void:
 #inits stops outline, each stop button gets its own outline material
 func _init_indicators() -> void:
 	for button in _buttons:
+		#the outline marks occupied stops, so the grey disabled look is dropped for the normal texture
+		button.texture_disabled = null
+
 		var outline_material: ShaderMaterial = ShaderMaterial.new()
 		outline_material.shader = OUTLINE_SHADER
 		outline_material.set_shader_parameter("outline_color", Color(0.33333325, 1, 0, 1))
