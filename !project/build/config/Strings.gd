@@ -58,6 +58,7 @@ const SUBMIT_MESSAGE: String = "ШАЉЕМ РЕЗУЛТАТ %s..."
 const SCORE_SAVED_MESSAGE: String = "РЕЗУЛТАТ %s ЈЕ САЧУВАН"
 const SCORE_HIGHER_MESSAGE: String = "РЕЗУЛТАТ %s - ТВОЈ НАЈБОЉИ РЕЗУЛТАТ НА РАНГ ЛИСТИ ЈЕ ВЕЋИ"
 const FAILED_MESSAGE: String = "РЕЗУЛТАТ %s НИЈЕ ПОСЛАТ"
+const LEARNING_SCORE_MESSAGE: String = "РЕЗУЛТАТ %s - УЧЕЊЕ СЕ НЕ БОДУЈЕ НА РАНГ ЛИСТИ"
 
 #leaderboard day strip captions for the two latest days; older days show their date
 const TODAY_DAY_CAPTION: String = "ДАНАС"

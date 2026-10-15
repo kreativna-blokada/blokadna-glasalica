@@ -74,6 +74,8 @@ func _ready() -> void:
 	_select_board(Globals.ScoreBoard.Daily)
 
 	_run_points = LeaderboardManager.get_run_points()
+	if _run_points != LeaderboardManager.NO_RUN_POINTS_PENDING and not GameManager.get_game_descriptor().is_challenge():
+		_show_learning_points()
 	if not LeaderboardManager.is_enabled():
 		_board_status_label.text = Literals.BOARD_OFFLINE_MESSAGE
 		return
@@ -262,6 +264,12 @@ func _create_column_content(cell_text: String, cell_alignment: HorizontalAlignme
 	row_label.add_theme_font_size_override("normal_font_size", ROW_FONT_SIZE)
 	row_label.text = cell_text
 	return row_label
+
+#shows the learning run score and drops it, as learning runs never reach the leaderboard
+func _show_learning_points() -> void:
+	_submit_status_label.text = Literals.LEARNING_SCORE_MESSAGE % DialogScoreCalculator.format_points(_run_points)
+	LeaderboardManager.clear_stored_points()
+	_run_points = LeaderboardManager.NO_RUN_POINTS_PENDING
 
 #sends the run score under this player's id and shows that it is on its way
 func _submit_points() -> void:

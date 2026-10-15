@@ -86,6 +86,14 @@ var Round: Dictionary[String, Variant] = {
 	"bonus_time_limit": 25.0,
 }
 
+#learning difficulty overrides of Round
+var LearningRound: Dictionary[String, Variant] = {
+	#s added to a learning round for every voter answered only with best answers at all stations
+	"flawless_voter_bonus": 15.0,
+	#s of flawless voter bonus a learning round can gain at most, so the round always ends
+	"bonus_time_limit": 60.0,
+}
+
 var BonusTime: Dictionary[String, Variant] = {
 	#colour of the bonus text rising into the round timer, and of its sparks
 	"text_color": Color(0.35, 0.9, 0.4, 0.9),
