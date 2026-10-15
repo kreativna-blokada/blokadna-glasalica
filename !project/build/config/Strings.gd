@@ -49,19 +49,18 @@ const BOARD_LOADING_MESSAGE: String = "UČITAVANJE..."
 const BOARD_OFFLINE_MESSAGE: String = "RANG LISTA NIJE DOSTUPNA"
 const BOARD_FAILED_MESSAGE: String = "RANG LISTA NIJE UČITANA"
 const EMPTY_BOARD_MESSAGE: String = "JOŠ NEMA REZULTATA"
-#leaderboard rewards popup until rewards are added
-const REWARDS_UPCOMING_MESSAGE: String = "NAGRADE STIŽU USKORO!\nNAJBOLJI IGRAČI DANA, NEDELJE I IZBORA BIĆE NAGRAĐENI"
+#rewards screen rules for claiming a top list reward
+const REWARDS_RULES_MESSAGE: String = "Prva 3 igrača na dnevnoj, nedeljnoj i ukupnoj rang-listi (zatvara se 31.10.2026.) osvajaju poklon. Piši nam na blokadna.igra@gmail.com i pošalji snimak ekrana sa svojim korisničkim imenom i ID-jem, da potvrdimo tvoj rezultat."
 
 #leaderboard screen captions
 const BOARD_TITLE: String = "RANG LISTA"
 const BOARD_BACK: String = "NAZAD"
 const BOARD_REWARDS: String = "NAGRADE"
-const BOARD_REWARDS_CLOSE: String = "ZATVORI"
 #leaderboard tab caption for each score board
 const BOARD_TAB_CAPTIONS: Dictionary[Globals.ScoreBoard, String] = {
 	Globals.ScoreBoard.Daily: "DNEVNA",
 	Globals.ScoreBoard.Weekly: "NEDELJNA",
-	Globals.ScoreBoard.Total: "IZBORNA",
+	Globals.ScoreBoard.Total: "UKUPNA",
 }
 #leaderboard rank chip and row rank, filled with the rank
 const BOARD_RANK_CAPTION: String = "%d."
@@ -87,7 +86,7 @@ const OLDER_WEEK_CAPTION: String = "NEDELJA"
 #filled with the week's first and last date
 const WEEK_DATES_CAPTION: String = "%s – %s"
 const TOTAL_CAPTION: String = "UKUPNO"
-const TOTAL_DATES_CAPTION: String = "cela izborna sezona"
+const TOTAL_DATES_CAPTION: String = "cela ukupna sezona"
 
 #name step captions and notes; %s is the run score
 const USERNAME_TITLE: String = "TVOJE IME"

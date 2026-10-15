@@ -103,9 +103,7 @@ var _own_chip_text_color: Color = Color.BLACK
 @onready var _snackbar: PanelContainer = %Snackbar
 @onready var _snackbar_label: Label = %SnackbarLabel
 @onready var _back_button: Button = %BackButton
-@onready var _rewards_popup: Control = %RewardsPopup
-@onready var _rewards_text_label: Label = %RewardsTextLabel
-@onready var _rewards_close_button: Button = %RewardsCloseButton
+@onready var _rewards_screen: RewardsScreen = %RewardsScreen
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -119,8 +117,6 @@ func _ready() -> void:
 	_title_label.text = Literals.BOARD_TITLE
 	_rewards_button.text = Literals.BOARD_REWARDS
 	_back_button.text = Literals.BOARD_BACK
-	_rewards_text_label.text = Literals.REWARDS_UPCOMING_MESSAGE
-	_rewards_close_button.text = Literals.BOARD_REWARDS_CLOSE
 	_own_chip_style = _rank_chip.get_theme_stylebox("panel")
 	_own_chip_text_color = _chip_rank_label.get_theme_color("font_color")
 	for score_board in _board_tabs:
@@ -131,7 +127,6 @@ func _ready() -> void:
 	_newer_button.pressed.connect(_on_period_arrow_pressed.bind(-1))
 	_rank_chip.gui_input.connect(_on_rank_chip_input)
 	_rewards_button.pressed.connect(_on_rewards_pressed)
-	_rewards_close_button.pressed.connect(_on_rewards_close_pressed)
 	_back_button.pressed.connect(_on_back_pressed)
 
 	Signals.run_days_fetched.connect(_on_run_days_fetched)
@@ -506,14 +501,10 @@ func _on_rank_chip_input(input_event: InputEvent) -> void:
 	if input_event is InputEventScreenTouch and input_event.pressed:
 		_center_own_row(true)
 
-#signal Button.pressed => opens the upcoming rewards note
+#signal Button.pressed => opens the rewards screen
 func _on_rewards_pressed() -> void:
 	SoundManager.play_stinger(Globals.Sound.MenuSelect)
-	_rewards_popup.visible = true
-
-#signal Button.pressed => closes the upcoming rewards note
-func _on_rewards_close_pressed() -> void:
-	_rewards_popup.visible = false
+	_rewards_screen.visible = true
 
 #signal Button.pressed => returns to the start screen
 func _on_back_pressed() -> void:
