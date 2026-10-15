@@ -3,7 +3,7 @@
 ##
 #description     : Online leaderboard manager over Firebase Realtime Database
 #maintainer      : Zeljko
-#version         : 1.2
+#version         : 1.4
 #===============================================================================
 extends Node
 
@@ -13,6 +13,10 @@ const PLAYER_IDENTITY: String = "user://player_identity.cfg"
 #letters, digits, space, _ and -;
 #must match the pattern in database.rules.json
 const NAME_PATTERN: String = "^[A-Za-z0-9 _-]+$"
+#child the leaderboard queries order by; indexed by .indexOn in database.rules.json
+const SCORE_ORDER: String = "\"score\""
+#lists only the day keys of the leaderboards, each answered as true, without their scores
+const RUN_DAY_KEYS_QUERY: String = "shallow=true"
 
 const NO_RUN_POINTS_PENDING: int = -1
 
@@ -26,6 +30,8 @@ var _player_id: String = ""
 var _username: String = ""
 var _username_regex: RegEx = RegEx.create_from_string(NAME_PATTERN)
 var _run_points: int = NO_RUN_POINTS_PENDING
+#a run score the database turned down for the player's higher best, until the leaderboard has told the player
+var _declined_points: int = NO_RUN_POINTS_PENDING
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -80,6 +86,16 @@ func get_run_points() -> int:
 func clear_stored_points() -> void:
 	_run_points = NO_RUN_POINTS_PENDING
 
+#keeps a run score the database turned down for a higher best, for the leaderboard to tell the player about
+func set_declined_points(run_points: int) -> void:
+	_declined_points = run_points
+
+#returns the run score turned down for a higher best and forgets it, or NO_RUN_POINTS_PENDING
+func take_declined_points() -> int:
+	var declined_points: int = _declined_points
+	_declined_points = NO_RUN_POINTS_PENDING
+	return declined_points
+
 #asks the database for the username; returns false if it is not valid, otherwise the answer
 #arrives through Signals.user_saved or Signals.user_refused;
 #the name the database holds for this player is read first, so a claim whose answer was lost still gets released
@@ -105,23 +121,53 @@ func submit_score(player_score: int) -> void:
 	var score_body: String = JSON.stringify({"score": player_score})
 	_send_request(score_endpoint, HTTPClient.METHOD_PATCH, score_body, _on_score_request_completed.bind(player_score))
 
-#fetches the best scores of the given run days, each player once with their best score of those days;
-#without run days fetches the best all-time scores; the result arrives through Signals.ranks_fetched
-func fetch_rankings(run_days: Array[int] = []) -> void:
+#returns today in whole days since 1970-01-01 shifted by Configs.Leaderboard.day_utc_offset, from the device clock
+func get_today_day() -> int:
+	var shifted_seconds: int = int(Time.get_unix_time_from_system()) + int(Configs.Leaderboard.day_utc_offset) * HOUR_SECONDS
+	return floori(float(shifted_seconds) / DAY_SECONDS)
+
+#lists every day holding scores in one request, newest first; the leaderboard screen picks the days its tabs look back for;
+#they arrive through Signals.run_days_fetched tagged with fetch_key
+func fetch_run_days(fetch_key: String) -> void:
 	if not is_enabled():
-		Signals.ranks_fetched.emit(false, [] as Array[Dictionary])
+		Signals.run_days_fetched.emit(fetch_key, false, [] as Array[int])
 		return
 
-	var top_query: String = "orderBy=%s&limitToLast=%d" % ["\"score\"".uri_encode(), Configs.Leaderboard.top_count]
-	var rankings_fetch: Dictionary = {"pending_count": maxi(run_days.size(), 1), "is_failed": false, "best_entries": {}}
+	var run_day_keys_endpoint: String = "%s/leaderboards.json?%s" % [_database_endpoint, RUN_DAY_KEYS_QUERY]
+	_send_request(run_day_keys_endpoint, HTTPClient.METHOD_GET, "", _on_run_days_request_completed.bind(fetch_key))
+
+#fetches the best Configs.Leaderboard.top_count scores of the given run days, each player once with their best score of those days;
+#without run days fetches the best all-time scores; the result arrives through Signals.ranks_fetched tagged with fetch_key
+func fetch_rankings(fetch_key: String, run_days: Array[int] = []) -> void:
+	if not is_enabled():
+		Signals.ranks_fetched.emit(fetch_key, false, [] as Array[Dictionary])
+		return
+
+	var top_query: String = "orderBy=%s&limitToLast=%d" % [SCORE_ORDER.uri_encode(), Configs.Leaderboard.top_count]
+	var rankings_fetch: Dictionary = {"fetch_key": fetch_key, "pending_count": maxi(run_days.size(), 1), "is_failed": false, "best_entries": {}}
+	for score_endpoint in _get_score_endpoints(run_days):
+		_send_request("%s?%s" % [score_endpoint, top_query], HTTPClient.METHOD_GET, "", _on_rankings_request_completed.bind(rankings_fetch))
+
+#finds this player's best score of the given run days, or all-time without run days, without counting the players above;
+#the result arrives through Signals.player_standing_fetched tagged with fetch_key
+func fetch_player_standing(fetch_key: String, run_days: Array[int] = []) -> void:
+	if not is_enabled():
+		Signals.player_standing_fetched.emit(fetch_key, false, {})
+		return
+
+	var standing_fetch: Dictionary = {"fetch_key": fetch_key, "pending_count": maxi(run_days.size(), 1), "is_failed": false, "best_entries": {}}
+	for score_endpoint in _get_score_endpoints(run_days):
+		var own_endpoint: String = score_endpoint.trim_suffix(".json") + "/%s.json" % _player_id
+		_send_request(own_endpoint, HTTPClient.METHOD_GET, "", _on_own_score_request_completed.bind(standing_fetch))
+
+#returns the leaderboard endpoint of each run day, or the all-time leaderboard endpoint without run days
+func _get_score_endpoints(run_days: Array[int]) -> PackedStringArray:
+	var score_endpoints: PackedStringArray = []
 	if run_days.is_empty():
-		var total_endpoint: String = "%s/scores.json?%s" % [_database_endpoint, top_query]
-		_send_request(total_endpoint, HTTPClient.METHOD_GET, "", _on_top_request_completed.bind(rankings_fetch))
-		return
-
+		score_endpoints.append("%s/scores.json" % _database_endpoint)
 	for run_day in run_days:
-		var daily_endpoint: String = "%s/leaderboards/%d.json?%s" % [_database_endpoint, run_day, top_query]
-		_send_request(daily_endpoint, HTTPClient.METHOD_GET, "", _on_top_request_completed.bind(rankings_fetch))
+		score_endpoints.append("%s/leaderboards/%d.json" % [_database_endpoint, run_day])
+	return score_endpoints
 
 #release endpoint only for release builds with debug_release off, otherwise the debug endpoint
 func _resolve_database_endpoint() -> String:
@@ -277,6 +323,54 @@ func _on_daily_request_completed(fetch_result: int, response_code: int, _server_
 		submit_result = Globals.ScoreSubmit.Failed
 	Signals.score_submitted.emit(submit_result)
 
+#signal HTTPRequest.request_completed => keeps every listed day; no leaderboards at all answers null,
+#a body that is neither null nor the day keys fails the fetch; emits the days holding scores newest first
+func _on_run_days_request_completed(fetch_result: int, response_code: int, _server_headers: PackedStringArray, server_body: PackedByteArray, server_request: HTTPRequest, fetch_key: String) -> void:
+	server_request.queue_free()
+
+	var run_days: Array[int] = []
+	if fetch_result != HTTPRequest.RESULT_SUCCESS or response_code != HTTPClient.RESPONSE_OK:
+		push_warning("LeaderboardManager._on_run_days_request_completed: fetch failed (result %d, HTTP %d)" % [fetch_result, response_code])
+		Signals.run_days_fetched.emit(fetch_key, false, run_days)
+		return
+
+	var run_day_keys_json: JSON = JSON.new()
+	var parse_error: Error = run_day_keys_json.parse(server_body.get_string_from_utf8())
+	var run_day_keys: Variant = run_day_keys_json.data
+	if parse_error != OK or not (run_day_keys == null or run_day_keys is Dictionary):
+		push_warning("LeaderboardManager._on_run_days_request_completed: unreadable day keys (%s)" % error_string(parse_error))
+		Signals.run_days_fetched.emit(fetch_key, false, run_days)
+		return
+
+	if run_day_keys is Dictionary:
+		for run_day_key in run_day_keys:
+			if str(run_day_key).is_valid_int():
+				run_days.append(str(run_day_key).to_int())
+	run_days.sort()
+	run_days.reverse()
+	Signals.run_days_fetched.emit(fetch_key, true, run_days)
+
+#signal HTTPRequest.request_completed => keeps this player's best score of the asked days; once every day answered,
+#emits the standing {username, score}, or an empty one when the player has no score there
+func _on_own_score_request_completed(fetch_result: int, response_code: int, _server_headers: PackedStringArray, server_body: PackedByteArray, server_request: HTTPRequest, standing_fetch: Dictionary) -> void:
+	server_request.queue_free()
+
+	if fetch_result != HTTPRequest.RESULT_SUCCESS or response_code != HTTPClient.RESPONSE_OK:
+		push_warning("LeaderboardManager._on_own_score_request_completed: fetch failed (result %d, HTTP %d)" % [fetch_result, response_code])
+		standing_fetch.is_failed = true
+	else:
+		_merge_best_entries(standing_fetch.best_entries, {_player_id: JSON.parse_string(server_body.get_string_from_utf8())})
+
+	standing_fetch.pending_count -= 1
+	if standing_fetch.pending_count > 0:
+		return
+	if standing_fetch.is_failed:
+		Signals.player_standing_fetched.emit(standing_fetch.fetch_key, false, {})
+		return
+	var own_entry: Dictionary = standing_fetch.best_entries.get(_player_id, {})
+	var own_standing: Dictionary = {} if own_entry.is_empty() else {"username": own_entry.username, "score": own_entry.score}
+	Signals.player_standing_fetched.emit(standing_fetch.fetch_key, true, own_standing)
+
 #keeps each fetched player's best score, so a player on several daily leaderboards is counted once
 func _merge_best_entries(best_entries: Dictionary, fetched_scores: Variant) -> void:
 	if not fetched_scores is Dictionary:
@@ -294,11 +388,11 @@ func _merge_best_entries(best_entries: Dictionary, fetched_scores: Variant) -> v
 
 #signal HTTPRequest.request_completed => once every requested leaderboard answered, emits the best scores sorted best first;
 #a single failed leaderboard fails the whole fetch, so a partial board is never shown
-func _on_top_request_completed(fetch_result: int, response_code: int, _server_headers: PackedStringArray, server_body: PackedByteArray, server_request: HTTPRequest, rankings_fetch: Dictionary) -> void:
+func _on_rankings_request_completed(fetch_result: int, response_code: int, _server_headers: PackedStringArray, server_body: PackedByteArray, server_request: HTTPRequest, rankings_fetch: Dictionary) -> void:
 	server_request.queue_free()
 
 	if fetch_result != HTTPRequest.RESULT_SUCCESS or response_code != HTTPClient.RESPONSE_OK:
-		push_warning("LeaderboardManager._on_top_request_completed: fetch failed (result %d, HTTP %d)" % [fetch_result, response_code])
+		push_warning("LeaderboardManager._on_rankings_request_completed: fetch failed (result %d, HTTP %d)" % [fetch_result, response_code])
 		rankings_fetch.is_failed = true
 	else:
 		_merge_best_entries(rankings_fetch.best_entries, JSON.parse_string(server_body.get_string_from_utf8()))
@@ -307,12 +401,12 @@ func _on_top_request_completed(fetch_result: int, response_code: int, _server_he
 	if rankings_fetch.pending_count > 0:
 		return
 
-	var top_entries: Array[Dictionary] = []
+	var rank_entries: Array[Dictionary] = []
 	if rankings_fetch.is_failed:
-		Signals.ranks_fetched.emit(false, top_entries)
+		Signals.ranks_fetched.emit(rankings_fetch.fetch_key, false, rank_entries)
 		return
 
-	top_entries.assign(rankings_fetch.best_entries.values())
-	top_entries.sort_custom(func(first_entry: Dictionary, second_entry: Dictionary) -> bool: return first_entry.score > second_entry.score)
-	top_entries.resize(mini(top_entries.size(), Configs.Leaderboard.top_count))
-	Signals.ranks_fetched.emit(true, top_entries)
+	rank_entries.assign(rankings_fetch.best_entries.values())
+	rank_entries.sort_custom(func(first_entry: Dictionary, second_entry: Dictionary) -> bool: return first_entry.score > second_entry.score)
+	rank_entries.resize(mini(rank_entries.size(), Configs.Leaderboard.top_count))
+	Signals.ranks_fetched.emit(rankings_fetch.fetch_key, true, rank_entries)

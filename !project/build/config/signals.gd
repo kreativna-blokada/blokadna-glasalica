@@ -15,9 +15,17 @@ signal game_close_requested
 @warning_ignore("unused_signal")
 signal help_requested
 
-#emitted when the leaderboard fetch finishes; entries are {player_id, username, score}, best first
+#emitted when the days holding scores for fetch_key are known; run days are newest first
 @warning_ignore("unused_signal")
-signal ranks_fetched(fetch_succeeded: bool, top_entries: Array[Dictionary])
+signal run_days_fetched(fetch_key: String, fetch_succeeded: bool, run_days: Array[int])
+
+#emitted when the player's own best score for fetch_key is known; standing is {username, score}, or empty without a score there
+@warning_ignore("unused_signal")
+signal player_standing_fetched(fetch_key: String, fetch_succeeded: bool, standing: Dictionary)
+
+#emitted when the leaderboard fetch for fetch_key finishes; the best entries {player_id, username, score}, best first
+@warning_ignore("unused_signal")
+signal ranks_fetched(fetch_key: String, fetch_succeeded: bool, rank_entries: Array[Dictionary])
 
 #emitted when a score submission finishes; Stored means the database kept a higher score
 @warning_ignore("unused_signal")

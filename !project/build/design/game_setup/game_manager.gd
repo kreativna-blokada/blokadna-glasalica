@@ -7,7 +7,7 @@
 #===============================================================================
 extends Node
 
-enum GameScreen {START, MAIN, LEADERBOARD}
+enum GameScreen {START, MAIN, NAME_ENTRY, LEADERBOARD}
 
 var _game_descriptor: GameDescriptor = GameDescriptor.new()
 var _mission_descriptor: MissionDescriptor = MissionDescriptor.new()
@@ -44,10 +44,13 @@ func return_home() -> void:
 	_is_returning_home = true
 	switch_screen(GameScreen.START)
 
-#keeps the run score for the leaderboard screen to submit, then opens it
+#keeps the run score for the name step to submit, then opens it; without a database the leaderboard opens to say so
 func end_run() -> void:
 	LeaderboardManager.set_run_points(_game_descriptor.get_points())
-	go_to_leaderboard()
+	if LeaderboardManager.is_enabled():
+		switch_screen(GameScreen.NAME_ENTRY)
+	else:
+		go_to_leaderboard()
 
 func _set_difficulty(difficulty: GameDescriptor.Difficulty) -> void:
 	_game_descriptor.set_difficulty(difficulty)
@@ -72,6 +75,9 @@ func switch_screen(game_screen: GameScreen, is_switch_transient: bool = false) -
 		GameScreen.MAIN:
 			SoundManager.stop_music()
 			ScreenManager.switch_scene(Globals.Scenes[Globals.Scene.Game]["path"], is_switch_transient)
+		GameScreen.NAME_ENTRY:
+			SoundManager.play_music(Globals.Music.Summary)
+			ScreenManager.switch_scene(Globals.Scenes[Globals.Scene.NameEntry]["path"], is_switch_transient)
 		GameScreen.LEADERBOARD:
 			SoundManager.play_music(Globals.Music.Summary)
 			ScreenManager.switch_scene(Globals.Scenes[Globals.Scene.Leaderboard]["path"], is_switch_transient)

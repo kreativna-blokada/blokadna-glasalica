@@ -15,8 +15,8 @@
       }
     },
     "leaderboards": {
+      ".read": true,
       "$run_day": {
-        ".read": true,
         ".indexOn": ["score"],
         "$player_id": {
           "username": {
