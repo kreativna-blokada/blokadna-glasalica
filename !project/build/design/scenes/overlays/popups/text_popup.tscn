@@ -21,6 +21,7 @@
 [ext_resource type="FontFile" uid="uid://b7wgk25vccvfr" path="res://!project/art/UI/DejaVuLGCSansMono-Bold.ttf" id="18_bold"]
 [ext_resource type="Texture2D" uid="uid://2imaosldxwu4" path="res://!project/art/UI/Buttons/help-home-active.png" id="19_home_a"]
 [ext_resource type="Texture2D" uid="uid://cyv45davybmd5" path="res://!project/art/UI/Buttons/help-home-default.png" id="20_home_d"]
+[ext_resource type="Texture2D" uid="uid://cxhvq4u2iff33" path="res://!project/art/UI/Buttons/flow-help-active.png" id="21_help"]
 
 [node name="TextPopup" type="Control" unique_id=193475490]
 layout_mode = 3
@@ -75,9 +76,22 @@ text = "Izborni je dan i ti si na biračkom mestu.
 Imaš 5 minuta. Provedi birače kroz proceduru glasanja. 
 
 Poštuješ pravila: postupaš po zakonu i dobijaš bodove. 
-Kršiš pravila: gubiš bodove i ispadaš ćaci.
+Kršiš pravila: gubiš bodove i ispadaš ćaci."
 
-Poštuj zakon, ne budi ćaci!"
+[node name="Slogan" type="RichTextLabel" parent="Container" unique_id=161253463]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 329.0
+offset_top = 239.0
+offset_right = -492.0
+offset_bottom = 275.0
+grow_horizontal = 2
+mouse_filter = 1
+theme = ExtResource("2_7j04v")
+theme_override_colors/default_color = Color(0.496, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 30
+text = "Poštuj zakon, ne budi ćaci!"
 
 [node name="Legend" type="VBoxContainer" parent="Container" unique_id=1023957364]
 layout_mode = 1
@@ -86,8 +100,9 @@ anchor_top = 0.38
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 40.0
+offset_top = -58.0
 offset_right = -40.0
-offset_bottom = -100.0
+offset_bottom = -107.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -95,6 +110,7 @@ theme = ExtResource("2_7j04v")
 theme_override_constants/separation = 20
 
 [node name="LeftCornerPair" type="HBoxContainer" parent="Container/Legend" unique_id=1719350030]
+visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 24
@@ -117,6 +133,7 @@ mouse_filter = 2
 theme_override_constants/separation = 20
 
 [node name="SelectExplanation" type="HBoxContainer" parent="Container/Legend/LeftCornerPair/Rows" unique_id=1719350033]
+custom_minimum_size = Vector2(0, 99)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 24
@@ -142,6 +159,7 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="InitiateExplanation" type="HBoxContainer" parent="Container/Legend/LeftCornerPair/Rows" unique_id=1719350036]
+custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 24
@@ -167,6 +185,7 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="RightCornerPair" type="HBoxContainer" parent="Container/Legend" unique_id=1719350039]
+visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 24
@@ -189,6 +208,7 @@ mouse_filter = 2
 theme_override_constants/separation = 20
 
 [node name="HighlightExplanation" type="HBoxContainer" parent="Container/Legend/RightCornerPair/Rows" unique_id=1719350042]
+custom_minimum_size = Vector2(0, 84)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 24
@@ -213,6 +233,7 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="ConfirmExplanation" type="HBoxContainer" parent="Container/Legend/RightCornerPair/Rows" unique_id=1719350045]
+custom_minimum_size = Vector2(0, 76)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 24
@@ -237,7 +258,7 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="NextExplanation" type="HBoxContainer" parent="Container/Legend" unique_id=827176777]
-visible = false
+custom_minimum_size = Vector2(0, 99)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 24
@@ -273,6 +294,7 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="StationsExplanation" type="HBoxContainer" parent="Container/Legend" unique_id=1511919802]
+custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 8
@@ -351,7 +373,7 @@ vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="DisabledStationExplanation" type="HBoxContainer" parent="Container/Legend" unique_id=1551175468]
-visible = false
+custom_minimum_size = Vector2(0, 84)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 24
@@ -375,8 +397,33 @@ text = "Siva stanica: nema nikoga, ne može se kliknuti."
 vertical_alignment = 1
 autowrap_mode = 3
 
+[node name="HelpExplanation" type="HBoxContainer" parent="Container/Legend" unique_id=2073122826]
+custom_minimum_size = Vector2(0, 76)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Icon" type="TextureRect" parent="Container/Legend/HelpExplanation" unique_id=548558704]
+texture_filter = 1
+custom_minimum_size = Vector2(90, 60)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("21_help")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Container/Legend/HelpExplanation" unique_id=592619833]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("13_font")
+theme_override_font_sizes/font_size = 29
+text = "Gore levo: pomoć, otvara ovaj prozor."
+vertical_alignment = 1
+autowrap_mode = 3
+
 [node name="CloseExplanation" type="HBoxContainer" parent="Container/Legend" unique_id=2073122825]
-visible = false
+custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 24
@@ -396,20 +443,26 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
 theme_override_fonts/font = ExtResource("13_font")
 theme_override_font_sizes/font_size = 29
-text = "Gore desno: izlaz iz igre."
+text = "Gore desno: kraj, izlaz iz igre."
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Footer" type="Label" parent="Container/Legend" unique_id=1925153939]
-layout_mode = 2
-size_flags_vertical = 10
+[node name="Footer" type="Label" parent="Container" unique_id=1925153939]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 801.5
+offset_right = -40.0
+offset_bottom = 846.5
+grow_horizontal = 2
 theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
 theme_override_fonts/font = ExtResource("13_font")
 theme_override_font_sizes/font_size = 38
 text = "Klikni bilo gde u ovom prozoru za početak"
 horizontal_alignment = 1
 
-[node name="IdFooter" type="Label" parent="Container/Legend/Footer" unique_id=1925153940]
+[node name="IdFooter" type="Label" parent="Container/Footer" unique_id=1925153940]
 visible = false
 layout_mode = 1
 anchors_preset = 12
