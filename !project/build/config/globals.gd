@@ -142,8 +142,7 @@ enum ScoreSubmit {
 enum ScoreBoard {
 	Daily,
 	Weekly,
-	Total,
-	Rewards
+	Total
 }
 
 #why the database did not give the player the username

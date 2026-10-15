@@ -42,19 +42,50 @@ const CONTROLLER_DESCRIPTIONS: Dictionary[Globals.ControllerType, String] = {
 	Globals.ControllerType.Screen: "ЕКРАНСКЕ",
 }
 
-#leaderboard screen board status
-const BOARD_LOADING_MESSAGE: String = "УЧИТАВАЊЕ..."
-const BOARD_OFFLINE_MESSAGE: String = "РАНГ ЛИСТА НИЈЕ ДОСТУПНА"
-const BOARD_FAILED_MESSAGE: String = "РАНГ ЛИСТА НИЈЕ УЧИТАНА"
-const EMPTY_BOARD_MESSAGE: String = "ЈОШ НЕМА РЕЗУЛТАТА"
-#leaderboard rewards tab placeholder until rewards are added
-const REWARDS_UPCOMING_MESSAGE: String = "НАГРАДЕ СТИЖУ УСКОРО!\nНАЈБОЉИ ИГРАЧИ ДАНА, НЕДЕЉЕ И ИЗБОРА БИЋЕ НАГРАЂЕНИ"
+#leaderboard screen board status, latin like the game summary before it
+const BOARD_LOADING_MESSAGE: String = "UČITAVANJE..."
+const BOARD_OFFLINE_MESSAGE: String = "RANG LISTA NIJE DOSTUPNA"
+const BOARD_FAILED_MESSAGE: String = "RANG LISTA NIJE UČITANA"
+const EMPTY_BOARD_MESSAGE: String = "JOŠ NEMA REZULTATA"
+#leaderboard rewards popup until rewards are added
+const REWARDS_UPCOMING_MESSAGE: String = "NAGRADE STIŽU USKORO!\nNAJBOLJI IGRAČI DANA, NEDELJE I IZBORA BIĆE NAGRAĐENI"
 
-#leaderboard day strip captions for the two latest days; older days show their date
-const TODAY_DAY_CAPTION: String = "ДАНАС"
-const YESTERDAY_CAPTION: String = "ЈУЧЕ"
-#leaderboard week strip caption, filled with the week's first and last date
-const WEEK_CAPTION: String = "%s–%s"
+#leaderboard screen captions
+const BOARD_TITLE: String = "RANG LISTA"
+const BOARD_BACK: String = "NAZAD"
+const BOARD_REWARDS: String = "NAGRADE"
+const BOARD_REWARDS_CLOSE: String = "ZATVORI"
+#leaderboard tab caption for each score board
+const BOARD_TAB_CAPTIONS: Dictionary[Globals.ScoreBoard, String] = {
+	Globals.ScoreBoard.Daily: "DNEVNA",
+	Globals.ScoreBoard.Weekly: "NEDELJNA",
+	Globals.ScoreBoard.Total: "IZBORNA",
+}
+#leaderboard rank chip and row rank, filled with the rank
+const BOARD_RANK_CAPTION: String = "%d."
+#leaderboard rank chip and own row below the best scores, whose exact rank is not counted; filled with the number of best scores
+const BOARD_BELOW_TOP_CAPTION: String = "> %d"
+#leaderboard chip when the player has no score in the period, for each score board
+const BOARD_NO_RESULT_CAPTIONS: Dictionary[Globals.ScoreBoard, String] = {
+	Globals.ScoreBoard.Daily: "NEMAŠ REZULTAT ZA OVAJ DAN",
+	Globals.ScoreBoard.Weekly: "NEMAŠ REZULTAT ZA OVU NEDELJU",
+	Globals.ScoreBoard.Total: "NEMAŠ REZULTAT",
+}
+#leaderboard gap row between the best scores and the player's own lower row
+const BOARD_GAP_CAPTION: String = "···"
+
+#leaderboard period captions; the upper line names the period, the lower line dates it
+const TODAY_DAY_CAPTION: String = "DANAS"
+const YESTERDAY_CAPTION: String = "JUČE"
+#weekday names, Monday first, for days older than yesterday
+const WEEKDAY_CAPTIONS: PackedStringArray = ["PONEDELJAK", "UTORAK", "SREDA", "ČETVRTAK", "PETAK", "SUBOTA", "NEDELJA"]
+const THIS_WEEK_CAPTION: String = "OVA NEDELJA"
+const LAST_WEEK_CAPTION: String = "PROŠLA NEDELJA"
+const OLDER_WEEK_CAPTION: String = "NEDELJA"
+#filled with the week's first and last date
+const WEEK_DATES_CAPTION: String = "%s – %s"
+const TOTAL_CAPTION: String = "UKUPNO"
+const TOTAL_DATES_CAPTION: String = "cela izborna sezona"
 
 #name step captions and notes; %s is the run score
 const USERNAME_TITLE: String = "TVOJE IME"

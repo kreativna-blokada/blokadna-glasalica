@@ -1,52 +1,111 @@
 ##
 # Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
 ##
-#description     : Shows the scores by tab and day, submitting the finished runs
+#description     : Shows the best scores by tab and period, only periods holding scores, with the player's own row centered
 #maintainer      : Zeljko
-#version         : 1.1
+#version         : 2.0
 #===============================================================================
 class_name LeaderboardScreen
 extends Control
 
-const ROW_FONT_SIZE: int = 52
-const ROW_RANK_WIDTH: float = 110.0
-const ROW_SCORE_WIDTH: float = 220.0
-const ROW_INNER_MARGIN: float = 16.0
-const PLAYER_HIGHLIGHT: Color = Color(0.08235294, 0.078431375, 0.09803922, 0.18)
+#one day, week or the whole season a tab can show; run days are the days holding scores, none for the whole season
+class BoardPeriod:
+	var key: String
+	var top_caption: String
+	var dates_caption: String
+	var run_days: Array[int] = []
 
-const UNSELECTED_TAB_ALPHA: float = 0.45
-const DAY_TAB_WIDTH: float = 200.0
-const WEEK_TAB_WIDTH: float = 250.0
+	func _init(period_key: String, period_top_caption: String, period_dates_caption: String) -> void:
+		key = period_key
+		top_caption = period_top_caption
+		dates_caption = period_dates_caption
+
+const PODIUM_ROW_SCENE: PackedScene = preload("res://!project/build/design/scenes/screens/leaderboard/podium_row.tscn")
+const RANK_ROW_SCENE: PackedScene = preload("res://!project/build/design/scenes/screens/leaderboard/rank_row.tscn")
+
+const PODIUM_SIZE: int = 3
+const DISABLED_ARROW_ALPHA: float = 0.3
+#s the list takes to glide to the player's row when the rank chip is tapped
+const CENTER_SCROLL_DURATION: float = 0.35
+#s a submit note stays above the back button
+const SUBMIT_NOTE_DURATION: float = 2.0
+const NOTE_ERROR_COLOR: Color = Color(0.478431, 0.121569, 0.0705882, 1)
+#s the snackbar stays up, fades included, and s each of its fades takes
+const SNACKBAR_DURATION: float = 4.0
+const SNACKBAR_FADE_DURATION: float = 0.2
+const TOTAL_PERIOD_KEY: String = "total"
+const DAY_PERIOD_KEY: String = "day_%d"
+const WEEK_PERIOD_KEY: String = "week_%d"
+const DAYS_PER_WEEK: int = 7
+#fetch key sent to LeaderboardManager: the period key and the fetch generation
+const FETCH_KEY: String = "%s#%d"
+const GAP_FONT_SIZE: int = 30
+const GAP_FONT_COLOR: Color = Color(0.419608, 0.372549, 0.333333, 1)
+const RUN_DAYS_FETCH_KEY: String = "run_days"
+
+#rank chip style and text color for the 1st, 2nd and 3rd place; lower ranks keep the chip's own purple
+@export var podium_chip_styles: Array[StyleBox] = []
+@export var podium_chip_text_color: Color = Color.BLACK
+@export var gap_font: Font
 
 #private vars
 var _run_points: int = LeaderboardManager.NO_RUN_POINTS_PENDING
 var _is_submitting: bool = false
-var _is_score_settled: bool = false
-var _top_entries: Array[Dictionary] = []
-var _is_board_loaded: bool = false
-var _is_fetching: bool = false
-var _is_refetch_pending: bool = false
 var _selected_board: Globals.ScoreBoard = Globals.ScoreBoard.Daily
-var _selected_period_offset: int = 0
+#periods of each tab, latest first
+var _board_periods: Dictionary[Globals.ScoreBoard, Array] = {}
+var _period_indexes: Dictionary[Globals.ScoreBoard, int] = {
+	Globals.ScoreBoard.Daily: 0,
+	Globals.ScoreBoard.Weekly: 0,
+	Globals.ScoreBoard.Total: 0,
+}
+#days and weeks are known once the days holding scores arrive; until then their tabs show this status
+var _run_days_status: String = Literals.BOARD_LOADING_MESSAGE
+#fetched best entries and the player's own standing below them, by period key, so stepping back to a period needs no new fetch
+var _period_entries: Dictionary[String, Array] = {}
+var _period_standings: Dictionary[String, Dictionary] = {}
+var _fetching_entries: Dictionary[String, bool] = {}
+var _fetching_standings: Dictionary[String, bool] = {}
+#raised whenever the fetched entries go stale, so answers to older fetches are dropped
+var _fetch_generation: int = 0
+var _own_row: ScoreRow = null
+var _scroll_tween: Tween = null
+var _note_tween: Tween = null
+var _snackbar_tween: Tween = null
+#the rank chip's purple look from the scene, put back after a podium rank
+var _own_chip_style: StyleBox = null
+var _own_chip_text_color: Color = Color.BLACK
 
 #onready vars
-@onready var _submit_status_label: RichTextLabel = $SubmitStatusLabel
-@onready var _username_form: UsernameForm = $UsernameForm
-@onready var _score_rows: VBoxContainer = $Board/BoardMargin/ScoreScroll/ScoreRows
-@onready var _board_status_label: RichTextLabel = $Board/BoardStatusLabel
-@onready var _back_button: Control = $BackButton
-@onready var _board_tabs: Dictionary[Globals.ScoreBoard, Control] = {
-	Globals.ScoreBoard.Daily: $Board/ScoreTabs/DailyTab,
-	Globals.ScoreBoard.Weekly: $Board/ScoreTabs/WeeklyTab,
-	Globals.ScoreBoard.Total: $Board/ScoreTabs/TotalTab,
-	Globals.ScoreBoard.Rewards: $Board/ScoreTabs/RewardsTab,
+@onready var _title_label: Label = %TitleLabel
+@onready var _rank_chip: PanelContainer = %RankChip
+@onready var _chip_rank_label: Label = %ChipRankLabel
+@onready var _no_result_chip: PanelContainer = %NoResultChip
+@onready var _no_result_label: Label = %NoResultLabel
+@onready var _rewards_button: Button = %RewardsButton
+@onready var _board_tabs: Dictionary[Globals.ScoreBoard, Button] = {
+	Globals.ScoreBoard.Daily: %DailyTab,
+	Globals.ScoreBoard.Weekly: %WeeklyTab,
+	Globals.ScoreBoard.Total: %TotalTab,
 }
-@onready var _period_strip: HBoxContainer = $Board/PeriodStrip
-@onready var _period_scroll: ScrollContainer = $Board/PeriodStrip/PeriodScroll
-@onready var _period_tabs: HBoxContainer = $Board/PeriodStrip/PeriodScroll/PeriodTabs
-@onready var _period_tab_template: Control = $Board/PeriodStrip/PeriodScroll/PeriodTabs/PeriodTab
-@onready var _left_arrow: Control = $Board/PeriodStrip/LeftArrow
-@onready var _right_arrow: Control = $Board/PeriodStrip/RightArrow
+@onready var _period_stepper: HBoxContainer = %PeriodStepper
+@onready var _older_button: Button = %OlderButton
+@onready var _newer_button: Button = %NewerButton
+@onready var _period_top_label: Label = %PeriodTopLabel
+@onready var _period_dates_label: Label = %PeriodDatesLabel
+@onready var _list_layout: VBoxContainer = %ListLayout
+@onready var _podium_rows: VBoxContainer = %PodiumRows
+@onready var _rest_scroll: ScrollContainer = %RestScroll
+@onready var _rest_margin: MarginContainer = %RestMargin
+@onready var _rest_rows: VBoxContainer = %RestRows
+@onready var _board_status_label: Label = %BoardStatusLabel
+@onready var _submit_note_label: Label = %SubmitNoteLabel
+@onready var _snackbar: PanelContainer = %Snackbar
+@onready var _snackbar_label: Label = %SnackbarLabel
+@onready var _back_button: Button = %BackButton
+@onready var _rewards_popup: Control = %RewardsPopup
+@onready var _rewards_text_label: Label = %RewardsTextLabel
+@onready var _rewards_close_button: Button = %RewardsCloseButton
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -57,34 +116,49 @@ var _selected_period_offset: int = 0
 # ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝
 
 func _ready() -> void:
-	_submit_status_label.text = ""
-	_back_button.gui_input.connect(_on_back_button)
+	_title_label.text = Literals.BOARD_TITLE
+	_rewards_button.text = Literals.BOARD_REWARDS
+	_back_button.text = Literals.BOARD_BACK
+	_rewards_text_label.text = Literals.REWARDS_UPCOMING_MESSAGE
+	_rewards_close_button.text = Literals.BOARD_REWARDS_CLOSE
+	_own_chip_style = _rank_chip.get_theme_stylebox("panel")
+	_own_chip_text_color = _chip_rank_label.get_theme_color("font_color")
 	for score_board in _board_tabs:
-		_board_tabs[score_board].gui_input.connect(_on_board_tab.bind(score_board))
-	_period_tab_template.gui_input.connect(_on_period_tab.bind(0))
-	_left_arrow.gui_input.connect(_on_period_arrow.bind(-1))
-	_right_arrow.gui_input.connect(_on_period_arrow.bind(1))
-	_period_strip.resized.connect(_update_period_arrows)
-	_period_tabs.resized.connect(_update_period_arrows)
+		_board_tabs[score_board].text = Literals.BOARD_TAB_CAPTIONS[score_board]
+		_board_tabs[score_board].pressed.connect(_on_board_tab_pressed.bind(score_board))
 
-	Signals.ranks_fetched.connect(_on_top_scores_received)
-	Signals.user_saved.connect(_on_user_saved)
+	_older_button.pressed.connect(_on_period_arrow_pressed.bind(1))
+	_newer_button.pressed.connect(_on_period_arrow_pressed.bind(-1))
+	_rank_chip.gui_input.connect(_on_rank_chip_input)
+	_rewards_button.pressed.connect(_on_rewards_pressed)
+	_rewards_close_button.pressed.connect(_on_rewards_close_pressed)
+	_back_button.pressed.connect(_on_back_pressed)
+
+	Signals.run_days_fetched.connect(_on_run_days_fetched)
+	Signals.ranks_fetched.connect(_on_ranks_fetched)
+	Signals.player_standing_fetched.connect(_on_player_standing_fetched)
 	Signals.score_submitted.connect(_on_score_submitted)
 
-	_select_board(Globals.ScoreBoard.Daily)
+	_board_periods[Globals.ScoreBoard.Total] = [BoardPeriod.new(TOTAL_PERIOD_KEY, Literals.TOTAL_CAPTION, Literals.TOTAL_DATES_CAPTION)]
+	_board_tabs[_selected_board].set_pressed_no_signal(true)
 
-	_run_points = LeaderboardManager.get_run_points()
+	#the name step's run score lost to a higher best is told here, once the board is up
+	var declined_points: int = LeaderboardManager.take_declined_points()
+	if declined_points != LeaderboardManager.NO_RUN_POINTS_PENDING:
+		_show_snackbar(Literals.SCORE_HIGHER_MESSAGE % DialogScoreCalculator.format_points(declined_points))
+
 	if not LeaderboardManager.is_enabled():
-		_board_status_label.text = Literals.BOARD_OFFLINE_MESSAGE
-		return
-	if _run_points == LeaderboardManager.NO_RUN_POINTS_PENDING:
+		_show_selected_period()
 		return
 
-	if LeaderboardManager.is_valid_username(LeaderboardManager.get_username()):
-		_submit_points()
-	else:
-		_submit_status_label.text = Literals.MISSING_USERNAME_MESSAGE % DialogScoreCalculator.format_points(_run_points)
-		_username_form.prompt_username()
+	#a run score still waiting, e.g. after a failed submit, goes out once the player has a name
+	_run_points = LeaderboardManager.get_run_points()
+	if _run_points != LeaderboardManager.NO_RUN_POINTS_PENDING and LeaderboardManager.is_valid_username(LeaderboardManager.get_username()):
+		_is_submitting = true
+		LeaderboardManager.submit_score(_run_points)
+
+	_show_selected_period()
+	LeaderboardManager.fetch_run_days(FETCH_KEY % [RUN_DAYS_FETCH_KEY, _fetch_generation])
 
 #FUNCTIONS
 #███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -94,246 +168,344 @@ func _ready() -> void:
 #██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
 #╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
 
-#refills the strip with one tab per day or per calendar week, the latest first and older ones to the right
-func _build_period_tabs(score_board: Globals.ScoreBoard) -> void:
-	for period_tab in _period_tabs.get_children():
-		if period_tab != _period_tab_template:
-			_period_tabs.remove_child(period_tab)
-			period_tab.queue_free()
+#fills the day and week periods from the days holding scores, latest first, keeping each tab on the period it showed
+func _build_periods(run_days: Array[int]) -> void:
+	var selected_keys: Dictionary[Globals.ScoreBoard, String] = {}
+	for score_board in [Globals.ScoreBoard.Daily, Globals.ScoreBoard.Weekly]:
+		var selected_period: BoardPeriod = _get_selected_period(score_board)
+		if selected_period != null:
+			selected_keys[score_board] = selected_period.key
 
-	var is_daily: bool = score_board == Globals.ScoreBoard.Daily
-	var period_count: int = int(Configs.Leaderboard.daily_history_days if is_daily else Configs.Leaderboard.weekly_history_weeks)
-	_period_tab_template.custom_minimum_size.x = DAY_TAB_WIDTH if is_daily else WEEK_TAB_WIDTH
-	for period_offset in range(1, period_count):
-		var period_tab: Control = _period_tab_template.duplicate(Node.DUPLICATE_GROUPS | Node.DUPLICATE_SCRIPTS | Node.DUPLICATE_USE_INSTANTIATION)
-		period_tab.gui_input.connect(_on_period_tab.bind(period_offset))
-		_period_tabs.add_child(period_tab)
+	var today_day: int = LeaderboardManager.get_today_day()
+	var this_monday: int = _week_monday(today_day)
+	var day_periods: Array[BoardPeriod] = []
+	var week_periods: Array[BoardPeriod] = []
+	for run_day in run_days:
+		if today_day - run_day < int(Configs.Leaderboard.daily_history_days):
+			var day_period: BoardPeriod = BoardPeriod.new(DAY_PERIOD_KEY % run_day, _describe_day(today_day - run_day, run_day), _format_date(run_day))
+			day_period.run_days.append(run_day)
+			day_periods.append(day_period)
 
-	var today_day: int = _today_day()
-	for period_offset in period_count:
-		var period_caption: String = _describe_day(period_offset, today_day - period_offset) if is_daily else _describe_week(today_day - period_offset * 7)
-		_period_tabs.get_child(period_offset).get_node("PeriodLabel").text = period_caption
+		var week_monday: int = _week_monday(run_day)
+		var weeks_ago: int = floori(float(this_monday - week_monday) / DAYS_PER_WEEK)
+		if weeks_ago >= int(Configs.Leaderboard.weekly_history_weeks):
+			continue
+		if week_periods.is_empty() or week_periods.back().key != WEEK_PERIOD_KEY % week_monday:
+			var week_dates: String = Literals.WEEK_DATES_CAPTION % [_format_date(week_monday), _format_date(week_monday + DAYS_PER_WEEK - 1)]
+			week_periods.append(BoardPeriod.new(WEEK_PERIOD_KEY % week_monday, _describe_week(weeks_ago), week_dates))
+		week_periods.back().run_days.append(run_day)
 
-	_select_period(0)
+	_board_periods[Globals.ScoreBoard.Daily] = day_periods
+	_board_periods[Globals.ScoreBoard.Weekly] = week_periods
+	for score_board in selected_keys:
+		var kept_index: int = _board_periods[score_board].find_custom(func(board_period: BoardPeriod) -> bool: return board_period.key == selected_keys[score_board])
+		_period_indexes[score_board] = maxi(kept_index, 0)
 
-#returns today in whole days since 1970-01-01 shifted by Configs.Leaderboard.day_utc_offset, from the device clock
-func _today_day() -> int:
-	var shifted_seconds: int = int(Time.get_unix_time_from_system()) + int(Configs.Leaderboard.day_utc_offset) * LeaderboardManager.HOUR_SECONDS
-	return floori(float(shifted_seconds) / LeaderboardManager.DAY_SECONDS)
+#returns the period the tab shows, or null while the tab has none
+func _get_selected_period(score_board: Globals.ScoreBoard) -> BoardPeriod:
+	var periods: Array = _board_periods.get(score_board, [])
+	if periods.is_empty():
+		return null
+	return periods[clampi(_period_indexes[score_board], 0, periods.size() - 1)]
 
-#returns the day tab caption: today, yesterday, or the date as dd.MM.
+#returns the day caption: today, yesterday, or the weekday name
 func _describe_day(day_offset: int, run_day: int) -> String:
 	if day_offset == 0:
 		return Literals.TODAY_DAY_CAPTION
 	if day_offset == 1:
 		return Literals.YESTERDAY_CAPTION
-	return _format_date(run_day)
+	return Literals.WEEKDAY_CAPTIONS[run_day - _week_monday(run_day)]
 
-#returns the week tab caption: its Monday and Sunday dates
-func _describe_week(run_day: int) -> String:
-	var week_monday: int = _week_monday(run_day)
-	return Literals.WEEK_CAPTION % [_format_date(week_monday), _format_date(week_monday + 6)]
+#returns the week caption: this week, last week, or just week
+func _describe_week(weeks_ago: int) -> String:
+	if weeks_ago == 0:
+		return Literals.THIS_WEEK_CAPTION
+	if weeks_ago == 1:
+		return Literals.LAST_WEEK_CAPTION
+	return Literals.OLDER_WEEK_CAPTION
 
 #returns the Monday of the calendar week holding the day; 1970-01-01 was a Thursday
 func _week_monday(run_day: int) -> int:
-	return run_day - posmod(run_day + 3, 7)
+	return run_day - posmod(run_day + 3, DAYS_PER_WEEK)
 
-#returns the run days the selected tab covers: the chosen day, the chosen week up to today, or none for the all-time board
-func _selected_run_days() -> Array[int]:
-	var today_day: int = _today_day()
-	var run_days: Array[int] = []
-	match _selected_board:
-		Globals.ScoreBoard.Daily:
-			run_days.append(today_day - _selected_period_offset)
-		Globals.ScoreBoard.Weekly:
-			var week_monday: int = _week_monday(today_day - _selected_period_offset * 7)
-			run_days.assign(range(week_monday, mini(week_monday + 7, today_day + 1)))
-	return run_days
-
-#returns a day counted since 1970-01-01 as dd.MM.
+#returns a day counted since 1970-01-01 as d.M.
 func _format_date(run_day: int) -> String:
 	var run_date: Dictionary = Time.get_date_dict_from_unix_time(run_day * LeaderboardManager.DAY_SECONDS)
-	return "%02d.%02d." % [run_date.day, run_date.month]
+	return "%d.%d." % [run_date.day, run_date.month]
 
-#marks the chosen tab; the strip shows days on the daily tab, weeks on the weekly tab, and hides on the total and rewards tabs
+#marks the chosen tab and shows its selected period
 func _select_board(score_board: Globals.ScoreBoard) -> void:
 	_selected_board = score_board
+	#set without signals, which skips the button group, so every tab is set
 	for board_option in _board_tabs:
-		_board_tabs[board_option].modulate.a = 1.0 if board_option == score_board else UNSELECTED_TAB_ALPHA
+		_board_tabs[board_option].set_pressed_no_signal(board_option == score_board)
+	_show_selected_period()
 
-	_period_strip.visible = score_board in [Globals.ScoreBoard.Daily, Globals.ScoreBoard.Weekly]
-	if _period_strip.visible:
-		_build_period_tabs(score_board)
-	else:
-		_show_selected_board()
-
-#marks the chosen day or week tab and scrolls it into view once the strip is laid out
-func _select_period(period_offset: int) -> void:
-	_selected_period_offset = period_offset
-	for period_tab in _period_tabs.get_children():
-		period_tab.modulate.a = 1.0 if period_tab.get_index() == period_offset else UNSELECTED_TAB_ALPHA
-
-	_period_scroll.ensure_control_visible.call_deferred(_period_tabs.get_child(period_offset))
-	_show_selected_board()
-
-#empties the board and fetches the selected tab and period; the rewards tab shows an upcoming message
-func _show_selected_board() -> void:
+#shows the stepper for the selected period and its rows, fetching what was not fetched before;
+#a tab without periods shows why: loading, failed, offline, or no scores at all
+func _show_selected_period() -> void:
 	if not LeaderboardManager.is_enabled():
+		_period_stepper.visible = false
+		_show_board_status(Literals.BOARD_OFFLINE_MESSAGE)
 		return
 
-	_top_entries = []
-	_populate_leaderboard()
-	if _selected_board == Globals.ScoreBoard.Rewards:
-		_board_status_label.text = Literals.REWARDS_UPCOMING_MESSAGE
+	var selected_period: BoardPeriod = _get_selected_period(_selected_board)
+	_period_stepper.visible = selected_period != null
+	if selected_period == null:
+		_show_board_status(_run_days_status if not _run_days_status.is_empty() else Literals.EMPTY_BOARD_MESSAGE)
 		return
 
-	_is_board_loaded = false
-	_top_scores_refresh()
+	var periods: Array = _board_periods[_selected_board]
+	var period_index: int = _period_indexes[_selected_board]
+	_period_top_label.text = selected_period.top_caption
+	_period_dates_label.text = selected_period.dates_caption
+	var has_steps: bool = periods.size() > 1
+	_older_button.visible = has_steps
+	_newer_button.visible = has_steps
+	_older_button.disabled = period_index >= periods.size() - 1
+	_newer_button.disabled = period_index <= 0
+	_older_button.modulate.a = DISABLED_ARROW_ALPHA if _older_button.disabled else 1.0
+	_newer_button.modulate.a = DISABLED_ARROW_ALPHA if _newer_button.disabled else 1.0
 
-#shows the arrows only when the period tabs are wider than the strip
-func _update_period_arrows() -> void:
-	var is_overflowing: bool = _period_tabs.size.x > _period_strip.size.x
-	_left_arrow.visible = is_overflowing
-	_right_arrow.visible = is_overflowing
-
-#asks for the best scores of the selected tab and period and shows the loading state until they arrive;
-#while a fetch is on its way one more is queued, so an older answer never replaces a newer board;
-#the rewards tab has no scores to fetch
-func _top_scores_refresh() -> void:
-	if _selected_board == Globals.ScoreBoard.Rewards:
+	var period_key: String = selected_period.key
+	var fetch_key: String = FETCH_KEY % [period_key, _fetch_generation]
+	if not _period_entries.has(period_key):
+		_show_board_status(Literals.BOARD_LOADING_MESSAGE)
+		if not _fetching_entries.has(period_key):
+			_fetching_entries[period_key] = true
+			LeaderboardManager.fetch_rankings(fetch_key, selected_period.run_days)
 		return
-	if _is_fetching:
-		_is_refetch_pending = true
-		return
-	_is_fetching = true
-	if not _is_board_loaded:
-		_board_status_label.text = Literals.BOARD_LOADING_MESSAGE
-	LeaderboardManager.fetch_rankings(_selected_run_days())
 
-#rebuilds the score rows, highlighting the row stored under this install's player id
-func _populate_leaderboard() -> void:
-	for score_row in _score_rows.get_children():
-		score_row.queue_free()
+	var rank_entries: Array = _period_entries[period_key]
+	if not _has_own_entry(rank_entries) and not _period_standings.has(period_key):
+		_show_board_status(Literals.BOARD_LOADING_MESSAGE)
+		if not _fetching_standings.has(period_key):
+			_fetching_standings[period_key] = true
+			LeaderboardManager.fetch_player_standing(fetch_key, selected_period.run_days)
+		return
+
+	_populate_leaderboard(rank_entries, _period_standings.get(period_key, {}))
+
+#true when the player is among the best entries; otherwise the own standing below them is fetched
+func _has_own_entry(rank_entries: Array) -> bool:
 	var player_id: String = LeaderboardManager.get_player_id()
-	for entry_index in _top_entries.size():
-		var top_entry: Dictionary = _top_entries[entry_index]
-		_score_rows.add_child(_create_player_standing(entry_index + 1, top_entry.username, top_entry.score, top_entry.player_id == player_id))
-	_board_status_label.text = Literals.EMPTY_BOARD_MESSAGE if _top_entries.is_empty() else ""
+	return rank_entries.any(func(rank_entry: Dictionary) -> bool: return rank_entry.player_id == player_id)
 
-#builds one rank / username / score row; the player's row gets a tinted background
-func _create_player_standing(entry_rank: int, entry_username: String, entry_score: int, is_own_standing: bool) -> PanelContainer:
-	var row_style: StyleBoxFlat = StyleBoxFlat.new()
-	row_style.bg_color = PLAYER_HIGHLIGHT if is_own_standing else Color.TRANSPARENT
-	row_style.content_margin_left = ROW_INNER_MARGIN
-	row_style.content_margin_right = ROW_INNER_MARGIN
-	var score_row: PanelContainer = PanelContainer.new()
-	score_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	score_row.add_theme_stylebox_override("panel", row_style)
+#empties the rows and the rank chips and shows the status in place of the list
+func _show_board_status(status_text: String) -> void:
+	_clear_rows()
+	_list_layout.visible = false
+	_rank_chip.visible = false
+	_no_result_chip.visible = false
+	_board_status_label.text = status_text
 
-	var row_columns: HBoxContainer = HBoxContainer.new()
-	row_columns.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	score_row.add_child(row_columns)
-	row_columns.add_child(_create_column_content("%d." % entry_rank, HORIZONTAL_ALIGNMENT_LEFT, ROW_RANK_WIDTH))
-	var username_label: RichTextLabel = _create_column_content(entry_username, HORIZONTAL_ALIGNMENT_LEFT, 0.0)
-	username_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	username_label.clip_contents = true
-	row_columns.add_child(username_label)
-	row_columns.add_child(_create_column_content(_group_score_digits(entry_score), HORIZONTAL_ALIGNMENT_RIGHT, ROW_SCORE_WIDTH))
-	return score_row
+#removes every row at once, so the new rows lay out alone
+func _clear_rows() -> void:
+	_own_row = null
+	for row_list: VBoxContainer in [_podium_rows, _rest_rows]:
+		for score_row in row_list.get_children():
+			row_list.remove_child(score_row)
+			score_row.queue_free()
 
-#writes the full score with a dot between each group of three digits
-func _group_score_digits(entry_score: int) -> String:
-	var score_digits: String = str(absi(entry_score))
-	var grouped_digits: String = ""
-	while score_digits.length() > 3:
-		grouped_digits = "." + score_digits.right(3) + grouped_digits
-		score_digits = score_digits.left(-3)
-	return ("-" if entry_score < 0 else "") + score_digits + grouped_digits
+#rebuilds the podium and the scrolling rows, the player's own row below them when lower,
+#marks the player's rank on the chip and centers the list on the player's row
+func _populate_leaderboard(rank_entries: Array, own_standing: Dictionary) -> void:
+	if rank_entries.is_empty():
+		_show_board_status(Literals.EMPTY_BOARD_MESSAGE)
+		return
 
-#builds one single-line row cell styled by the board theme
-func _create_column_content(cell_text: String, cell_alignment: HorizontalAlignment, cell_width: float) -> RichTextLabel:
-	var row_label: RichTextLabel = RichTextLabel.new()
-	row_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row_label.fit_content = true
-	row_label.autowrap_mode = TextServer.AUTOWRAP_OFF
-	row_label.scroll_active = false
-	row_label.horizontal_alignment = cell_alignment
-	row_label.custom_minimum_size.x = cell_width
-	row_label.add_theme_font_size_override("normal_font_size", ROW_FONT_SIZE)
-	row_label.text = cell_text
-	return row_label
+	_clear_rows()
+	_board_status_label.text = ""
+	_list_layout.visible = true
 
-#sends the run score under this player's id and shows that it is on its way
-func _submit_points() -> void:
-	_is_submitting = true
-	_submit_status_label.text = Literals.SUBMIT_MESSAGE % DialogScoreCalculator.format_points(_run_points)
-	LeaderboardManager.submit_score(_run_points)
+	var player_id: String = LeaderboardManager.get_player_id()
+	var own_rank: int = 0
+	for entry_index in rank_entries.size():
+		var rank_entry: Dictionary = rank_entries[entry_index]
+		var is_own_standing: bool = rank_entry.player_id == player_id
+		var is_podium: bool = entry_index < PODIUM_SIZE
+		var score_row: ScoreRow = (PODIUM_ROW_SCENE if is_podium else RANK_ROW_SCENE).instantiate() as ScoreRow
+		(_podium_rows if is_podium else _rest_rows).add_child(score_row)
+		score_row.setup(entry_index + 1, rank_entry.username, rank_entry.score, is_own_standing)
+		if is_own_standing:
+			own_rank = entry_index + 1
+			_own_row = score_row
 
-#signal Signals.score_submitted => shows the outcome; a higher stored score is not an error
+	#below the best scores the exact rank is not counted, as that would download every player above
+	var below_top_caption: String = Literals.BOARD_BELOW_TOP_CAPTION % Configs.Leaderboard.top_count
+	var is_below_top: bool = own_rank == 0 and not own_standing.is_empty()
+	if is_below_top:
+		_rest_rows.add_child(_create_gap_label())
+		_own_row = RANK_ROW_SCENE.instantiate() as ScoreRow
+		_rest_rows.add_child(_own_row)
+		_own_row.setup(0, own_standing.username, own_standing.score, true, below_top_caption)
+
+	_rank_chip.visible = own_rank > 0 or is_below_top
+	_no_result_chip.visible = not _rank_chip.visible
+	_chip_rank_label.text = below_top_caption if is_below_top else Literals.BOARD_RANK_CAPTION % own_rank
+	_paint_rank_chip(own_rank)
+	_no_result_label.text = Literals.BOARD_NO_RESULT_CAPTIONS[_selected_board]
+
+	#the rows lay out during this frame, so the list scrolls on the next one
+	if not get_tree().process_frame.is_connected(_center_own_row_at_once):
+		get_tree().process_frame.connect(_center_own_row_at_once, CONNECT_ONE_SHOT)
+
+#colors the rank chip gold, silver or bronze for a podium rank, purple for any lower one
+func _paint_rank_chip(own_rank: int) -> void:
+	var is_podium_rank: bool = own_rank >= 1 and own_rank <= podium_chip_styles.size()
+	_rank_chip.add_theme_stylebox_override("panel", podium_chip_styles[own_rank - 1] if is_podium_rank else _own_chip_style)
+	_chip_rank_label.add_theme_color_override("font_color", podium_chip_text_color if is_podium_rank else _own_chip_text_color)
+
+#builds the row standing between the best scores and the player's lower own row
+func _create_gap_label() -> Label:
+	var gap_label: Label = Label.new()
+	gap_label.text = Literals.BOARD_GAP_CAPTION
+	gap_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	gap_label.add_theme_font_override("font", gap_font)
+	gap_label.add_theme_font_size_override("font_size", GAP_FONT_SIZE)
+	gap_label.add_theme_color_override("font_color", GAP_FONT_COLOR)
+	return gap_label
+
+#shows in red above the back button for a moment that a resent run score did not go out
+func _show_submit_note(note_text: String) -> void:
+	_submit_note_label.text = note_text
+	_submit_note_label.add_theme_color_override("font_color", NOTE_ERROR_COLOR)
+	_submit_note_label.visible = true
+	if _note_tween != null:
+		_note_tween.kill()
+	_note_tween = create_tween()
+	_note_tween.tween_interval(SUBMIT_NOTE_DURATION)
+	_note_tween.tween_callback(_submit_note_label.hide)
+
+#shows a yellow message over the bottom of the board for SNACKBAR_DURATION, fading in and out
+func _show_snackbar(message_text: String) -> void:
+	_snackbar_label.text = message_text
+	_snackbar.modulate.a = 0.0
+	_snackbar.visible = true
+	if _snackbar_tween != null:
+		_snackbar_tween.kill()
+	_snackbar_tween = create_tween()
+	_snackbar_tween.tween_property(_snackbar, "modulate:a", 1.0, SNACKBAR_FADE_DURATION)
+	_snackbar_tween.tween_interval(SNACKBAR_DURATION - SNACKBAR_FADE_DURATION * 2.0)
+	_snackbar_tween.tween_property(_snackbar, "modulate:a", 0.0, SNACKBAR_FADE_DURATION)
+	_snackbar_tween.tween_callback(_snackbar.hide)
+
+#scrolls the list so the player's row sits in its middle; the top when the player is on the podium or not listed
+func _center_own_row(is_animated: bool) -> void:
+	var scroll_target: float = 0.0
+	if _own_row != null and _own_row.get_parent() == _rest_rows:
+		var row_center: float = _own_row.global_position.y - _rest_margin.global_position.y + _own_row.size.y / 2.0
+		scroll_target = row_center - _rest_scroll.size.y / 2.0
+	scroll_target = clampf(scroll_target, 0.0, maxf(_rest_margin.size.y - _rest_scroll.size.y, 0.0))
+
+	if _scroll_tween != null:
+		_scroll_tween.kill()
+	if not is_animated:
+		_rest_scroll.scroll_vertical = roundi(scroll_target)
+		return
+	_scroll_tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	_scroll_tween.tween_property(_rest_scroll, "scroll_vertical", roundi(scroll_target), CENTER_SCROLL_DURATION)
+
+#signal SceneTree.process_frame => once the new rows are laid out, the list jumps to the player's row
+func _center_own_row_at_once() -> void:
+	_center_own_row(false)
+
+#signal Signals.run_days_fetched => builds the day and week periods, or shows that the leaderboard did not load;
+#an answer from before the entries went stale is dropped
+func _on_run_days_fetched(fetch_key: String, fetch_succeeded: bool, run_days: Array[int]) -> void:
+	if fetch_key != FETCH_KEY % [RUN_DAYS_FETCH_KEY, _fetch_generation]:
+		return
+	if not fetch_succeeded:
+		_run_days_status = Literals.BOARD_FAILED_MESSAGE
+		if _selected_board != Globals.ScoreBoard.Total:
+			_show_selected_period()
+		return
+
+	_run_days_status = ""
+	_build_periods(run_days)
+	_show_selected_period()
+
+#signal Signals.ranks_fetched => keeps the period's best entries and shows the period if it is still selected
+func _on_ranks_fetched(fetch_key: String, fetch_succeeded: bool, rank_entries: Array[Dictionary]) -> void:
+	_on_period_fetched(fetch_key, fetch_succeeded, rank_entries, _period_entries, _fetching_entries)
+
+#signal Signals.player_standing_fetched => keeps the player's standing in the period and shows the period if it is still selected
+func _on_player_standing_fetched(fetch_key: String, fetch_succeeded: bool, own_standing: Dictionary) -> void:
+	_on_period_fetched(fetch_key, fetch_succeeded, own_standing, _period_standings, _fetching_standings)
+
+#keeps a fetched answer by period key and shows the period if it is still selected;
+#a failed fetch is forgotten, so selecting the period again tries again; an answer from before the entries went stale is dropped
+func _on_period_fetched(fetch_key: String, fetch_succeeded: bool, fetched_value: Variant, fetched_values: Dictionary, fetching_keys: Dictionary) -> void:
+	var period_key: String = fetch_key.get_slice("#", 0)
+	if fetch_key != FETCH_KEY % [period_key, _fetch_generation]:
+		return
+	fetching_keys.erase(period_key)
+	if fetch_succeeded:
+		fetched_values[period_key] = fetched_value
+
+	var selected_period: BoardPeriod = _get_selected_period(_selected_board)
+	if selected_period == null or selected_period.key != period_key:
+		return
+	if fetch_succeeded:
+		_show_selected_period()
+	else:
+		_show_board_status(Literals.BOARD_FAILED_MESSAGE)
+
+#signal Signals.score_submitted => a waiting run score sent from here; once stored, the boards are fetched anew to hold it,
+#also when a higher all-time score was kept, since today's board may still have taken the run; a failed send or a kept higher score is noted
 func _on_score_submitted(submit_result: Globals.ScoreSubmit) -> void:
 	if not _is_submitting:
 		return
 	_is_submitting = false
-	match submit_result:
-		Globals.ScoreSubmit.Accepted:
-			_is_score_settled = true
-			LeaderboardManager.clear_stored_points()
-			_submit_status_label.text = Literals.SCORE_SAVED_MESSAGE % DialogScoreCalculator.format_points(_run_points)
-			SoundManager.play_stinger(Globals.Sound.Points)
-			_top_scores_refresh()
-		Globals.ScoreSubmit.Stored:
-			_is_score_settled = true
-			LeaderboardManager.clear_stored_points()
-			_submit_status_label.text = Literals.SCORE_HIGHER_MESSAGE % DialogScoreCalculator.format_points(_run_points)
-		Globals.ScoreSubmit.Failed:
-			_submit_status_label.text = Literals.FAILED_MESSAGE % DialogScoreCalculator.format_points(_run_points)
-
-#signal Signals.ranks_fetched => shows the best scores, or why there are none;
-#an answer outdated by a queued fetch, e.g. for a tab selected meanwhile, is dropped, as is any answer on the rewards tab
-func _on_top_scores_received(fetch_succeeded: bool, top_entries: Array[Dictionary]) -> void:
-	_is_fetching = false
-	if _is_refetch_pending:
-		_is_refetch_pending = false
-		_top_scores_refresh()
-		return
-	if _selected_board == Globals.ScoreBoard.Rewards:
+	var formatted_points: String = DialogScoreCalculator.format_points(_run_points)
+	if submit_result == Globals.ScoreSubmit.Failed:
+		_show_submit_note(Literals.FAILED_MESSAGE % formatted_points)
 		return
 
-	if fetch_succeeded:
-		_is_board_loaded = true
-		_top_entries = top_entries
-		_populate_leaderboard()
-	elif not _is_board_loaded:
-		_board_status_label.text = Literals.BOARD_FAILED_MESSAGE
+	LeaderboardManager.clear_stored_points()
+	if submit_result == Globals.ScoreSubmit.Accepted:
+		SoundManager.play_stinger(Globals.Sound.Points)
+	else:
+		_show_snackbar(Literals.SCORE_HIGHER_MESSAGE % formatted_points)
+	_fetch_generation += 1
+	_period_entries.clear()
+	_period_standings.clear()
+	_fetching_entries.clear()
+	_fetching_standings.clear()
+	LeaderboardManager.fetch_run_days(FETCH_KEY % [RUN_DAYS_FETCH_KEY, _fetch_generation])
 
-#signal Signals.user_saved => refreshes the board for the new name and submits a score still waiting for a name or a retry
-func _on_user_saved(_saved_username: String) -> void:
-	if _run_points == LeaderboardManager.NO_RUN_POINTS_PENDING or _is_submitting or _is_score_settled:
-		_top_scores_refresh()
+#signal Button.pressed => a tap on a tab selects it
+func _on_board_tab_pressed(score_board: Globals.ScoreBoard) -> void:
+	if score_board == _selected_board:
 		return
-	_submit_points()
+	SoundManager.play_stinger(Globals.Sound.MenuSelect)
+	_select_board(score_board)
 
-#signal Control.gui_input => a tap on a score tab selects it
-func _on_board_tab(input_event: InputEvent, score_board: Globals.ScoreBoard) -> void:
-	if input_event is InputEventScreenTouch and input_event.pressed:
-		SoundManager.play_stinger(Globals.Sound.MenuSelect)
-		_select_board(score_board)
+#signal Button.pressed => an arrow steps to the next period; 1 towards older periods, -1 towards the latest
+func _on_period_arrow_pressed(period_step: int) -> void:
+	var periods: Array = _board_periods.get(_selected_board, [])
+	var period_index: int = clampi(_period_indexes[_selected_board] + period_step, 0, maxi(periods.size() - 1, 0))
+	if period_index == _period_indexes[_selected_board]:
+		return
+	SoundManager.play_stinger(Globals.Sound.MenuSelect)
+	_period_indexes[_selected_board] = period_index
+	_show_selected_period()
 
-#signal Control.gui_input => a tap on a day or week tab selects it
-func _on_period_tab(input_event: InputEvent, period_offset: int) -> void:
-	if input_event is InputEventScreenTouch and input_event.pressed:
-		SoundManager.play_stinger(Globals.Sound.MenuSelect)
-		_select_period(period_offset)
-
-#signal Control.gui_input => a tap on an arrow scrolls the period strip by one tab; -1 towards the latest, 1 towards older periods
-func _on_period_arrow(input_event: InputEvent, scroll_direction: int) -> void:
-	if input_event is InputEventScreenTouch and input_event.pressed:
-		SoundManager.play_stinger(Globals.Sound.MenuSelect)
-		var day_tab_step: float = _period_tab_template.size.x + _period_tabs.get_theme_constant("separation")
-		_period_scroll.scroll_horizontal += roundi(scroll_direction * day_tab_step)
-
-#signal Control.gui_input => a tap on the back button returns to the start screen;
+#signal Control.gui_input => a tap on the rank chip glides the list to the player's row;
 #touch only, since a mouse click also arrives as an emulated touch
-func _on_back_button(input_event: InputEvent) -> void:
+func _on_rank_chip_input(input_event: InputEvent) -> void:
 	if input_event is InputEventScreenTouch and input_event.pressed:
-		GameManager.switch_screen(GameManager.GameScreen.START)
+		_center_own_row(true)
+
+#signal Button.pressed => opens the upcoming rewards note
+func _on_rewards_pressed() -> void:
+	SoundManager.play_stinger(Globals.Sound.MenuSelect)
+	_rewards_popup.visible = true
+
+#signal Button.pressed => closes the upcoming rewards note
+func _on_rewards_close_pressed() -> void:
+	_rewards_popup.visible = false
+
+#signal Button.pressed => returns to the start screen
+func _on_back_pressed() -> void:
+	GameManager.switch_screen(GameManager.GameScreen.START)
