@@ -200,8 +200,7 @@ var Leaderboard: Dictionary[String, Variant] = {
 	"request_timeout": 10.0,
 	#number of days, today included, the daily tab looks back for days holding scores
 	"daily_history_days": 30,
-	#number of calendar weeks, this week included, the weekly tab looks back for weeks holding scores;
-	#only weeks within the daily_history_days the days are probed for can show
+	#number of calendar weeks, this week included, the weekly tab looks back for weeks holding scores
 	"weekly_history_weeks": 12,
 	#h added to UTC to pick the day a run's daily leaderboard is stored under; fixed, so in summer time the day
 	#turns at 01:00 local; must match the 3600000 ms in the database rules

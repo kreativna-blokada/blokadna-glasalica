@@ -3,7 +3,7 @@
 ##
 #description     : Online leaderboard manager over Firebase Realtime Database
 #maintainer      : Zeljko
-#version         : 1.3
+#version         : 1.4
 #===============================================================================
 extends Node
 
@@ -15,9 +15,8 @@ const PLAYER_IDENTITY: String = "user://player_identity.cfg"
 const NAME_PATTERN: String = "^[A-Za-z0-9 _-]+$"
 #child the leaderboard queries order by; indexed by .indexOn in database.rules.json
 const SCORE_ORDER: String = "\"score\""
-#a day probe asks for one entry in key order, which needs no index
-const DAY_PROBE_QUERY: String = "orderBy=%s&limitToFirst=1"
-const KEY_ORDER: String = "\"$key\""
+#lists only the day keys of the leaderboards, each answered as true, without their scores
+const RUN_DAY_KEYS_QUERY: String = "shallow=true"
 
 const NO_RUN_POINTS_PENDING: int = -1
 
@@ -127,25 +126,15 @@ func get_today_day() -> int:
 	var shifted_seconds: int = int(Time.get_unix_time_from_system()) + int(Configs.Leaderboard.day_utc_offset) * HOUR_SECONDS
 	return floori(float(shifted_seconds) / DAY_SECONDS)
 
-#asks each of the last Configs.Leaderboard.daily_history_days days, back to the Monday of the oldest one so its week is whole,
-#for a single entry, telling the days holding scores apart; they arrive through Signals.run_days_fetched tagged with fetch_key
+#lists every day holding scores in one request, newest first; the leaderboard screen picks the days its tabs look back for;
+#they arrive through Signals.run_days_fetched tagged with fetch_key
 func fetch_run_days(fetch_key: String) -> void:
-	var run_days: Array[int] = []
 	if not is_enabled():
-		Signals.run_days_fetched.emit(fetch_key, false, run_days)
+		Signals.run_days_fetched.emit(fetch_key, false, [] as Array[int])
 		return
 
-	var today_day: int = get_today_day()
-	var oldest_day: int = today_day - int(Configs.Leaderboard.daily_history_days) + 1
-	#1970-01-01 was a Thursday
-	oldest_day -= posmod(oldest_day + 3, 7)
-	var probed_count: int = today_day - oldest_day + 1
-	var run_days_fetch: Dictionary = {"fetch_key": fetch_key, "pending_count": probed_count, "is_failed": false, "run_days": run_days}
-	var probe_query: String = DAY_PROBE_QUERY % KEY_ORDER.uri_encode()
-	for day_offset in probed_count:
-		var run_day: int = today_day - day_offset
-		var daily_endpoint: String = "%s/leaderboards/%d.json?%s" % [_database_endpoint, run_day, probe_query]
-		_send_request(daily_endpoint, HTTPClient.METHOD_GET, "", _on_day_probe_request_completed.bind(run_days_fetch, run_day))
+	var run_day_keys_endpoint: String = "%s/leaderboards.json?%s" % [_database_endpoint, RUN_DAY_KEYS_QUERY]
+	_send_request(run_day_keys_endpoint, HTTPClient.METHOD_GET, "", _on_run_days_request_completed.bind(fetch_key))
 
 #fetches the best Configs.Leaderboard.top_count scores of the given run days, each player once with their best score of those days;
 #without run days fetches the best all-time scores; the result arrives through Signals.ranks_fetched tagged with fetch_key
@@ -334,30 +323,32 @@ func _on_daily_request_completed(fetch_result: int, response_code: int, _server_
 		submit_result = Globals.ScoreSubmit.Failed
 	Signals.score_submitted.emit(submit_result)
 
-#signal HTTPRequest.request_completed => keeps a probed day that answered an entry; a day without scores answers null;
-#once every probe answered emits the days holding scores newest first, failing them all if one failed
-func _on_day_probe_request_completed(fetch_result: int, response_code: int, _server_headers: PackedStringArray, server_body: PackedByteArray, server_request: HTTPRequest, run_days_fetch: Dictionary, run_day: int) -> void:
+#signal HTTPRequest.request_completed => keeps every listed day; no leaderboards at all answers null,
+#a body that is neither null nor the day keys fails the fetch; emits the days holding scores newest first
+func _on_run_days_request_completed(fetch_result: int, response_code: int, _server_headers: PackedStringArray, server_body: PackedByteArray, server_request: HTTPRequest, fetch_key: String) -> void:
 	server_request.queue_free()
 
+	var run_days: Array[int] = []
 	if fetch_result != HTTPRequest.RESULT_SUCCESS or response_code != HTTPClient.RESPONSE_OK:
-		push_warning("LeaderboardManager._on_day_probe_request_completed: fetch failed (result %d, HTTP %d)" % [fetch_result, response_code])
-		run_days_fetch.is_failed = true
-	else:
-		var probed_entries: Variant = JSON.parse_string(server_body.get_string_from_utf8())
-		if probed_entries is Dictionary and not probed_entries.is_empty():
-			run_days_fetch.run_days.append(run_day)
+		push_warning("LeaderboardManager._on_run_days_request_completed: fetch failed (result %d, HTTP %d)" % [fetch_result, response_code])
+		Signals.run_days_fetched.emit(fetch_key, false, run_days)
+		return
 
-	run_days_fetch.pending_count -= 1
-	if run_days_fetch.pending_count > 0:
+	var run_day_keys_json: JSON = JSON.new()
+	var parse_error: Error = run_day_keys_json.parse(server_body.get_string_from_utf8())
+	var run_day_keys: Variant = run_day_keys_json.data
+	if parse_error != OK or not (run_day_keys == null or run_day_keys is Dictionary):
+		push_warning("LeaderboardManager._on_run_days_request_completed: unreadable day keys (%s)" % error_string(parse_error))
+		Signals.run_days_fetched.emit(fetch_key, false, run_days)
 		return
-	var run_days: Array[int] = run_days_fetch.run_days
-	if run_days_fetch.is_failed:
-		run_days.clear()
-		Signals.run_days_fetched.emit(run_days_fetch.fetch_key, false, run_days)
-		return
+
+	if run_day_keys is Dictionary:
+		for run_day_key in run_day_keys:
+			if str(run_day_key).is_valid_int():
+				run_days.append(str(run_day_key).to_int())
 	run_days.sort()
 	run_days.reverse()
-	Signals.run_days_fetched.emit(run_days_fetch.fetch_key, true, run_days)
+	Signals.run_days_fetched.emit(fetch_key, true, run_days)
 
 #signal HTTPRequest.request_completed => keeps this player's best score of the asked days; once every day answered,
 #emits the standing {username, score}, or an empty one when the player has no score there
