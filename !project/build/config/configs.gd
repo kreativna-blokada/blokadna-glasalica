@@ -192,15 +192,16 @@ var DialogueZoom: Dictionary[String, Variant] = {
 var Leaderboard: Dictionary[String, Variant] = {
 	#debug firebase database endpoint, public on purpose; its rules get locked once the game is public
 	"debug_endpoint": "https://glasalica-default-rtdb.europe-west1.firebasedatabase.app/",
-	#number of best scores fetched for the leaderboard
+	#number of best scores fetched for each leaderboard period; the player's own row is added below when lower
 	"top_count": 10,
 	#must match the length limit in the database rules
 	"username_length": 20,
 	#s before a leaderboard request gives up
 	"request_timeout": 10.0,
-	#number of days, today included, the daily tab lets the player pick
+	#number of days, today included, the daily tab looks back for days holding scores
 	"daily_history_days": 30,
-	#number of calendar weeks, this week included, the weekly tab lets the player pick
+	#number of calendar weeks, this week included, the weekly tab looks back for weeks holding scores;
+	#only weeks within the daily_history_days the days are probed for can show
 	"weekly_history_weeks": 12,
 	#h added to UTC to pick the day a run's daily leaderboard is stored under; fixed, so in summer time the day
 	#turns at 01:00 local; must match the 3600000 ms in the database rules
