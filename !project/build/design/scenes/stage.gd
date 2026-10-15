@@ -31,6 +31,10 @@ var _is_voter_control_enabled: bool = true
 var _voter_awaiting_dialogue: Voter = null
 #true on the challenge difficulty: Initiate releases any selected queued voter, even while others walk the voting room
 var _is_room_shared: bool = false
+#true on the learning difficulty: one voter comes per room voter, selected automatically once the room voter leaves its last stop
+var _is_learning: bool = false
+#true once the room voter left its last stop, opening the room to the next voter on the learning difficulty
+var _is_room_voter_leaving: bool = false
 var _mission_descriptor: MissionDescriptor = GameManager.get_mission_descriptor()
 
 
@@ -58,11 +62,12 @@ func _ready() -> void:
 	_init_vars()
 	_init_nodes()
 
-#starts loading voters, the first one immediately, the rest on timer
+#starts loading voters, the first one immediately, the rest on timer; on the learning difficulty the timer starts as a voter enters the room
 func start_spawning() -> void:
 	#loads first voter
 	_get_voter(0)
-	timer.start()
+	if not _is_learning:
+		timer.start()
 
 func _process(_delta: float) -> void:
 	pass
@@ -81,6 +86,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _init_vars() -> void:
 	_rand.randomize()
 	_is_room_shared = GameManager.get_game_descriptor().is_challenge()
+	_is_learning = not _is_room_shared
 	for factory_index in Globals.VoterFactory:
 		var texture_path: String = Globals.VoterFactory[factory_index]["Texture2D"]
 		if ResourceLoader.exists(texture_path, "Texture2D"):
@@ -178,6 +184,7 @@ func _get_voter(index: int) -> Voter:
 	voter.voter_queued.connect(_on_voter_queued.bind(voter))
 	voter.course_point_reached.connect(_on_voter_course_point_reached.bind(voter))
 	voter.voter_stopped.connect(_on_voter_stopped.bind(voter))
+	voter.last_stop_left.connect(_on_voter_last_stop_left.bind(voter))
 	voter.init(_mission_descriptor.get_voter_descriptor(index))
 
 	return voter
@@ -209,7 +216,7 @@ func _find_first_queue_spot() -> Node2D:
 
 #spawns a voter at once when the room voter is far along the course and nobody waits or walks to the queue
 func _refill_empty_queue(stopped_voter: Voter) -> void:
-	if stopped_voter != _voter_in_room or _has_incoming_voter() or not _any_free_queue_spots():
+	if _is_learning or stopped_voter != _voter_in_room or _has_incoming_voter() or not _any_free_queue_spots():
 		return
 	if _get_station_number(stopped_voter) >= Configs.Round["queue_refill_station"]:
 		_spawn_voters()
@@ -231,9 +238,13 @@ func _get_active_selected_voter() -> Voter:
 		return _selected_voter
 	return null
 
-#reports whether the front voter can enter an empty voting room
+#reports whether the front voter can enter an open voting room
 func is_next_voter_available() -> bool:
-	return not _has_voter_in_room() and _get_front_queue_voter() != null
+	return _is_room_open() and _get_front_queue_voter() != null
+
+#reports whether the room takes the next voter: empty, or on the learning difficulty its voter already left the last stop
+func _is_room_open() -> bool:
+	return not _has_voter_in_room() or (_is_learning and _is_room_voter_leaving)
 
 #returns the queued voter closest to the room entrance
 func _get_front_queue_voter() -> Voter:
@@ -273,7 +284,7 @@ func get_stopped_voter_at_stop(stop_index: int) -> Voter:
 #manages voter release and queue consolidation
 func _dequeue_voter(voter: Voter) -> void:
 	if voter == null: return
-	if not _is_room_shared and (_has_voter_in_room() or voter != _get_front_queue_voter()):
+	if not _is_room_shared and (not _is_room_open() or voter != _get_front_queue_voter()):
 		return
 
 	#can_leave_queue() clears starting_spot, so retain it before advancing the voter
@@ -281,11 +292,15 @@ func _dequeue_voter(voter: Voter) -> void:
 	if not voter.can_leave_queue(): return
 
 	#a shared room keeps tracking its earliest voter, the ones following it walk in untracked
-	if not _has_voter_in_room():
+	if _is_room_open():
 		_voter_in_room = voter
+		_is_room_voter_leaving = false
 		#fallback for voters removed before reaching the normal Exit point
 		voter.tree_exited.connect(_on_room_voter_exited.bind(voter), CONNECT_ONE_SHOT)
 		next_voter_availability_updated.emit(false)
+		#the learning difficulty counts down to the one voter following the room voter
+		if _is_learning:
+			timer.start()
 
 	#removes voter from queue
 	queued_voters.erase(voter)
@@ -344,10 +359,21 @@ func _select_next_voter() -> void:
 	#sets voter outline, or selects currently available voter
 	_set_voter_outline(_selected_voter, true)
 
+#moves the selection outline onto the front queued voter, if anyone waits
+func _select_front_queue_voter() -> void:
+	var front_voter: Voter = _get_front_queue_voter()
+	if front_voter == null: return
+
+	if _selected_voter and is_instance_valid(_selected_voter):
+		_set_voter_outline(_selected_voter, false)
+	_selected_voter = front_voter
+	_set_voter_outline(_selected_voter, true)
+
 #gets all voters available for selection
 func _get_selectable_voters() -> Array:
 	var selectable_voters: Array = voters_factory.get_children().filter(
-		func(voter): return voter is Voter and (voter.is_stopping or voter.is_queueing)
+		#on the learning difficulty queued voters stay unselectable until the room opens
+		func(voter): return voter is Voter and (voter.is_stopping or (voter.is_queueing and (not _is_learning or _is_room_open())))
 	)
 
 	selectable_voters.sort_custom(func(primary, secondary):
@@ -378,6 +404,8 @@ func _on_voter_queued(voter: Voter) -> void:
 	queued_voters.append(voter)
 	queue_count_updated.emit(queued_voters.size())
 	next_voter_availability_updated.emit(is_next_voter_available())
+	if _is_learning and _is_room_open():
+		_select_front_queue_voter()
 
 #unlocks the next voter when the current voter reaches the room exit
 func _on_voter_course_point_reached(point_name: StringName, voter: Voter) -> void:
@@ -394,6 +422,14 @@ func _on_voter_stopped(stop_name: String, voter: Voter) -> void:
 	_voter_awaiting_dialogue = null
 	dialogue_requested.emit(voter, stop_name)
 
+#signal Voter.last_stop_left => on the learning difficulty opens the room and selects the waiting voter, whether the room voter left or not
+func _on_voter_last_stop_left(voter: Voter) -> void:
+	if not _is_learning or voter != _voter_in_room: return
+
+	_is_room_voter_leaving = true
+	next_voter_availability_updated.emit(is_next_voter_available())
+	_select_front_queue_voter()
+
 #fallback for a room voter removed before reaching Exit
 func _on_room_voter_exited(voter: Voter) -> void:
 	_release_room_voter(voter)
@@ -402,10 +438,16 @@ func _release_room_voter(voter: Voter) -> void:
 	if _voter_in_room != voter:
 		return
 	_voter_in_room = null
+	_is_room_voter_leaving = false
 	next_voter_availability_updated.emit(is_next_voter_available())
 
-#spawning voters signal handler
+#spawning voters signal handler; on the learning difficulty spawns the one voter following the room voter, without restarting
 func _on_timer_timeout() -> void:
+	if _is_learning:
+		if _any_free_queue_spots():
+			_spawn_voters()
+		return
+
 	if not _is_queue_consolidating and _any_free_queue_spots() and queued_voters.size() < _max_voter_queue:
 		_spawn_voters()
 

@@ -23,6 +23,8 @@ const MAIN_MENU_DESCRIPTIONS: Dictionary[Globals.MainMenu, String] = {
 #starting hint on web, where the phone can not be shaken
 const WEB_MENU_START_DESCRIPTION: String = "КЛИКНИ ДУГМЕ 3 ПУТА"
 
+#ClickCounterLabel text on the button while the leaderboard row is ticked
+const LEADERBOARD_BUTTON_CAPTION: String = "ПОРЕДАК"
 #IdLabel text under the ballot box before IdRevealButton is tapped
 const ID_WORD: String = "ИНДЕКС"
 #IdLabel text under the ballot box once IdRevealButton is tapped, filled with the leaderboard player id
@@ -98,6 +100,8 @@ const USERNAME_POINTS_CAPTION: String = "OSVOJENO POENA"
 const FAILED_MESSAGE: String = "REZULTAT %s NIJE POSLAT"
 #the database kept the player's higher best score
 const SCORE_HIGHER_MESSAGE: String = "REZULTAT %s - TVOJ NAJBOLJI REZULTAT NA RANG LISTI JE VEĆI"
+#learning runs never reach the leaderboard
+const LEARNING_SCORE_MESSAGE: String = "REZULTAT %s - UČENJE SE NE BODUJE NA RANG LISTI"
 #usernames stay latin, as the database rules allow only A-Z
 const USERNAME_TAKEN_MESSAGE: String = "IME JE ZAUZETO"
 const USERNAME_EMPTY_MESSAGE: String = "IME NE MOŽE DA BUDE PRAZNO"

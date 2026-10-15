@@ -12,6 +12,7 @@ extends Character
 signal voter_queued
 signal voter_stopped(vote_stop_name: String)
 signal course_point_reached(point_name: StringName)
+signal last_stop_left
 
 #broadcast vars
 var voter_factory_index: int = -1
@@ -319,9 +320,12 @@ func can_continue_voting_course() -> bool:
 		return false
 
 	#continue course
+	var is_last_stop: bool = _find_next_wait_stop_index() == -1
 	is_stopping = false
 	_free_current_stop()
 	_next_stop()
+	if is_last_stop:
+		last_stop_left.emit()
 
 	return true
 

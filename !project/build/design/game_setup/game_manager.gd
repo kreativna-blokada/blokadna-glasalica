@@ -44,10 +44,11 @@ func return_home() -> void:
 	_is_returning_home = true
 	switch_screen(GameScreen.START)
 
-#keeps the run score for the name step to submit, then opens it; without a database the leaderboard opens to say so
+#keeps the run score for the name step to submit, then opens it; without a database the leaderboard opens to say so,
+#as does a learning run, whose score the leaderboard only shows
 func end_run() -> void:
 	LeaderboardManager.set_run_points(_game_descriptor.get_points())
-	if LeaderboardManager.is_enabled():
+	if LeaderboardManager.is_enabled() and _game_descriptor.is_challenge():
 		switch_screen(GameScreen.NAME_ENTRY)
 	else:
 		go_to_leaderboard()

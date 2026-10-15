@@ -147,6 +147,9 @@ func _ready() -> void:
 	if declined_points != LeaderboardManager.NO_RUN_POINTS_PENDING:
 		_show_snackbar(Literals.SCORE_HIGHER_MESSAGE % DialogScoreCalculator.format_points(declined_points))
 
+	_run_points = LeaderboardManager.get_run_points()
+	if _run_points != LeaderboardManager.NO_RUN_POINTS_PENDING and not GameManager.get_game_descriptor().is_challenge():
+		_show_learning_points()
 	if not LeaderboardManager.is_enabled():
 		_show_selected_period()
 		return
@@ -450,6 +453,12 @@ func _on_period_fetched(fetch_key: String, fetch_succeeded: bool, fetched_value:
 		_show_selected_period()
 	else:
 		_show_board_status(Literals.BOARD_FAILED_MESSAGE)
+
+#shows the learning run score and drops it, as learning runs never reach the leaderboard
+func _show_learning_points() -> void:
+	_show_snackbar(Literals.LEARNING_SCORE_MESSAGE % DialogScoreCalculator.format_points(_run_points))
+	LeaderboardManager.clear_stored_points()
+	_run_points = LeaderboardManager.NO_RUN_POINTS_PENDING
 
 #signal Signals.score_submitted => a waiting run score sent from here; once stored, the boards are fetched anew to hold it,
 #also when a higher all-time score was kept, since today's board may still have taken the run; a failed send or a kept higher score is noted

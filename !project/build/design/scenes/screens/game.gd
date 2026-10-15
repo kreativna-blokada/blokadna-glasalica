@@ -53,6 +53,8 @@ var _granted_bonus_time: float = 0.0
 var _flawless_check_voter: Voter = null
 #true while that voter has only best answers
 var _is_voter_flawless: bool = true
+#true on the learning difficulty: dialogues pause the round time, skipping costs none, flawless voters earn more and the challenge music stays off
+var _is_learning: bool = false
 
 #onready vars
 @onready var stage: Stage = $Stage
@@ -63,6 +65,7 @@ var _is_voter_flawless: bool = true
 # called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_game_descriptor = GameManager.get_game_descriptor()
+	_is_learning = not _game_descriptor.is_challenge()
 	progress_flow.init(stage, _game_descriptor.get_controller_type())
 	progress_flow.stop_button_pressed.connect(_on_stop_button_pressed)
 	stage.dialogue_requested.connect(_open_dialogue)
@@ -160,28 +163,25 @@ func _on_voter_course_point_reached(point_name: StringName, voter: Voter) -> voi
 func _grant_flawless_voter_bonus() -> void:
 	if not _round_timer or _round_timer.is_stopped(): return
 
-	var bonus_time: float = minf(Configs.Round["flawless_voter_bonus"], Configs.Round["bonus_time_limit"] - _granted_bonus_time)
+	var round_settings: Dictionary[String, Variant] = Configs.LearningRound if _is_learning else Configs.Round
+	var bonus_time: float = minf(round_settings["flawless_voter_bonus"], round_settings["bonus_time_limit"] - _granted_bonus_time)
 	if bonus_time <= 0.0: return
 
 	_granted_bonus_time += bonus_time
 	_round_timer.start(_round_timer.time_left + bonus_time)
 	_show_bonus_time_popup(bonus_time)
 
-#signal DialogController.lock_skipped => takes the skip penalty off the round timer
+#signal DialogController.lock_skipped => takes the skip penalty off the round timer, never on the learning difficulty
 func _on_dialog_lock_skipped(round_penalty: float) -> void:
-	if not _round_timer or _round_timer.is_stopped(): return
+	if _is_learning or not _round_timer or _round_timer.is_stopped(): return
 
 	#a penalty eating the rest of the round ends it on the next frame, as a regular timeout
 	_round_timer.start(maxf(_round_timer.time_left - round_penalty, 0.01))
 	_round_timer_display.explode_last_digit()
 
-#pops the bonus seconds up over the round timer, the way answer points pop up
+#bursts the bonus seconds into the round timer, the way the skip penalty bursts out of it
 func _show_bonus_time_popup(bonus_time: float) -> void:
-	var popup: PointsVfx = POINTS_VFX_SCENE.instantiate() as PointsVfx
-	dialog_layer.add_child(popup)
-	popup.global_position = _round_timer_display.get_time_center()
-	popup.setup("+%.0f s" % bonus_time, Color.GREEN)
-	popup.play()
+	_round_timer_display.implode_bonus_time("+%.0fs" % bonus_time)
 
 #starts the one-shot timer that ends the run
 func _start_round_timer() -> void:
@@ -192,6 +192,11 @@ func _start_round_timer() -> void:
 	add_child(_round_timer)
 	_round_timer.start()
 	_round_timer_display.set_round_timer(_round_timer)
+
+#holds the round time still while a dialogue is open, learning difficulty only
+func _set_round_timer_paused(is_paused: bool) -> void:
+	if _is_learning and _round_timer:
+		_round_timer.paused = is_paused
 
 #signal Timer.timeout => the round is over, submit the score on the leaderboard
 func _on_round_timer_timeout() -> void:
@@ -220,13 +225,13 @@ func _on_game_close_requested() -> void:
 func _process(_delta: float) -> void:
 	_update_round_music()
 
-#switches the music while the round runs: challenge for its last seconds and while a timed dialogue is open, the round music otherwise
+#switches the music while the round runs: challenge for its last seconds and while a timed dialogue is open, the round music otherwise and always on the learning difficulty
 func _update_round_music() -> void:
 	if not _round_timer or _round_timer.is_stopped(): return
 
 	var is_timed_dialogue_open: bool = _dialog_controller != null and _game_descriptor.are_timers_enabled()
 	var fitting_music: Globals.Music = Globals.Music.Round
-	if _round_timer.time_left <= Configs.Round["challenge_time"] or is_timed_dialogue_open:
+	if not _is_learning and (_round_timer.time_left <= Configs.Round["challenge_time"] or is_timed_dialogue_open):
 		fitting_music = Globals.Music.Challenge
 	if fitting_music != _round_music:
 		_round_music = fitting_music
@@ -270,6 +275,7 @@ func _open_dialogue(voter: Voter, stop_name: String) -> void:
 
 	controls.set_dialog_open(true)
 	stage.set_voter_control_enabled(false)
+	_set_round_timer_paused(true)
 
 	var voter_personality: String = _dialog_voter.get_personality()
 	if Globals.DialogueMoodSounds.has(voter_personality):
@@ -288,6 +294,7 @@ func _on_dialog_finished() -> void:
 
 	controls.set_dialog_open(false)
 	stage.set_voter_control_enabled(true)
+	_set_round_timer_paused(false)
 
 	if controller and is_instance_valid(controller):
 		controller.queue_free()

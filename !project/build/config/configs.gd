@@ -28,8 +28,16 @@ var Shake: Dictionary[String, Variant] = {
 	"jump_height": 120.0,
 	#s for one jump, up and back to rest
 	"jump_duration": 0.5,
+	#s the jump sound takes to swell from silence at each play
+	"sound_fade_in": 0.15,
+	#s the jump sound takes to die out before its end
+	"sound_fade_out": 0.15,
 	#s the 3 stays on the button after the last click, before the start sequence
 	"click_pause": 0.5,
+	#s the play button is held to fill it and start the game, counting up like a click each click_count share of it
+	"hold_duration": 1.5,
+	#s a click takes to sweep the play button fill up to its next click_count share
+	"click_fill_duration": 0.15,
 	#px font size of the 3 on the button after the 1st, 2nd and 3rd click
 	"click_font_sizes": [80, 100, 120],
 	#s countdown digits 1, 2 and 3 each stay on screen after the last jump sound, before the game starts
@@ -60,7 +68,7 @@ var CardDrag: Dictionary[String, Variant] = {
 
 var MenuDifficulty: Dictionary[String, Variant] = {
 	#ClickCounterLabel font size while the difficulty row is chosen, small enough for the longest difficulty text to fit the MenuOptionButton
-	"font_size": 52,
+	"font_size": 80,
 	#s the arrows ignore further taps after switching the difficulty
 	"tap_debounce": 0.1,
 }
@@ -76,6 +84,31 @@ var Round: Dictionary[String, Variant] = {
 	"flawless_voter_bonus": 5.0,
 	#s of flawless voter bonus a round can gain at most, so the round always ends
 	"bonus_time_limit": 25.0,
+}
+
+#learning difficulty overrides of Round
+var LearningRound: Dictionary[String, Variant] = {
+	#s added to a learning round for every voter answered only with best answers at all stations
+	"flawless_voter_bonus": 15.0,
+	#s of flawless voter bonus a learning round can gain at most, so the round always ends
+	"bonus_time_limit": 60.0,
+}
+
+var BonusTime: Dictionary[String, Variant] = {
+	#colour of the bonus text rising into the round timer, and of its sparks
+	"text_color": Color(0.35, 0.9, 0.4, 0.9),
+	#s the bonus text slides in from off screen left until it reaches the end of the time
+	"slide_time": 0.5,
+	#s the bonus text shrinks and fades into the time, and the sparks close in
+	"burst_time": 0.3,
+	#bonus text scale at the end of the burst
+	"burst_end_scale": 0.6,
+	#sparks closing in onto the seconds
+	"spark_count": 6,
+	#px from the seconds the sparks start closing in from
+	"spark_ring_radius": 40.0,
+	#px side of a spark
+	"spark_size": 4.0,
 }
 
 var DialogueScore: Dictionary[String, Variant] = {
