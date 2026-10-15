@@ -57,6 +57,13 @@ var HandHint: Dictionary[String, Variant] = {
 	"plays_record": "user://hint_plays.cfg",
 }
 
+var Slogan: Dictionary[String, Variant] = {
+	#times its own size the intro popup slogan grows to at the peak of each breath
+	"breath_scale": 1.1,
+	#s for one breath, growing and shrinking back
+	"breath_duration": 2.0,
+}
+
 var CardDrag: Dictionary[String, Variant] = {
 	#px the finger moves up/down on the ballot box before the card follows it
 	"drag_threshold": 30.0,

@@ -4,7 +4,7 @@
 function = 0
 
 [sub_resource type="VisualShaderNodeRemap" id="VisualShaderNodeRemap_5fr7b"]
-default_input_values = [1, -1.0, 2, 1.0, 3, 0.2, 4, 0.7]
+default_input_values = [1, -1.0, 2, 1.0, 3, 0.5, 4, 0.8]
 
 [sub_resource type="VisualShaderNodeRemap" id="VisualShaderNodeRemap_7ke0b"]
 default_input_values = [1, -1.0, 2, 1.0, 3, 0.0, 4, 1.0]
@@ -26,14 +26,14 @@ default_input_values = [0, Vector2(0, 0)]
 op_type = 0
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_dup4w"]
-default_input_values = [0, 0.0, 1, 300.0]
+default_input_values = [0, 0.0, 1, 120.0]
 operator = 2
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_4tsnc"]
 input_name = "time"
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_fep47"]
-default_input_values = [0, 0.0, 1, 20.0]
+default_input_values = [0, 0.0, 1, 12.0]
 operator = 2
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_6qkop"]
