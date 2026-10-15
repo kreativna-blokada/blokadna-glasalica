@@ -18,7 +18,8 @@ enum Scene {
 	Voter,
 	Info,
 	Playround,
-	Leaderboard
+	Leaderboard,
+	NameEntry
 }
 
 var Scenes: Dictionary[Variant, Variant] = {
@@ -45,6 +46,9 @@ var Scenes: Dictionary[Variant, Variant] = {
 	},
 	Scene.Leaderboard: {
 		"path": "res://!project/build/design/scenes/screens/leaderboard/leaderboard.tscn"
+	},
+	Scene.NameEntry: {
+		"path": "res://!project/build/design/scenes/screens/leaderboard/name_entry.tscn"
 	}
 }
 

@@ -50,27 +50,29 @@ const EMPTY_BOARD_MESSAGE: String = "ЈОШ НЕМА РЕЗУЛТАТА"
 #leaderboard rewards tab placeholder until rewards are added
 const REWARDS_UPCOMING_MESSAGE: String = "НАГРАДЕ СТИЖУ УСКОРО!\nНАЈБОЉИ ИГРАЧИ ДАНА, НЕДЕЉЕ И ИЗБОРА БИЋЕ НАГРАЂЕНИ"
 
-#leaderboard screen run score status; %d is the run score
-const MISSING_USERNAME_MESSAGE: String = "УНЕСИ ИМЕ ДА ПРИЈАВИШ РЕЗУЛТАТ %s"
-const SUBMIT_MESSAGE: String = "ШАЉЕМ РЕЗУЛТАТ %s..."
-const SCORE_SAVED_MESSAGE: String = "РЕЗУЛТАТ %s ЈЕ САЧУВАН"
-const SCORE_HIGHER_MESSAGE: String = "РЕЗУЛТАТ %s - ТВОЈ НАЈБОЉИ РЕЗУЛТАТ НА РАНГ ЛИСТИ ЈЕ ВЕЋИ"
-const FAILED_MESSAGE: String = "РЕЗУЛТАТ %s НИЈЕ ПОСЛАТ"
-
 #leaderboard day strip captions for the two latest days; older days show their date
 const TODAY_DAY_CAPTION: String = "ДАНАС"
 const YESTERDAY_CAPTION: String = "ЈУЧЕ"
 #leaderboard week strip caption, filled with the week's first and last date
 const WEEK_CAPTION: String = "%s–%s"
 
-#leaderboard username form status; usernames stay latin, as the database rules allow only A-Z
-const USERNAME_SAVED_MESSAGE: String = "ИМЕ ЈЕ САЧУВАНО"
-const USERNAME_CHECK_MESSAGE: String = "ПРОВЕРАВАМ ИМЕ..."
-const USERNAME_TAKEN_MESSAGE: String = "ИМЕ ЈЕ ЗАУЗЕТО"
-const USERNAME_EMPTY_MESSAGE: String = "ИМЕ НЕ МОЖЕ ДА БУДЕ ПРАЗНО"
-const USERNAME_TOO_LONG_MESSAGE: String = "ИМЕ МОЖЕ ДА ИМА НАЈВИШЕ %d ЗНАКОВА"
-const USERNAME_INVALID_CHARACTER_MESSAGE: String = "ИМЕ СМЕ ДА САДРЖИ САМО ЛАТИНИЧНА СЛОВА A-Z, ЦИФРЕ, РАЗМАК, _ И -"
-const USERNAME_NOT_SAVED_MESSAGE: String = "ИМЕ НИЈЕ САЧУВАНО"
+#name step captions and notes; %s is the run score
+const USERNAME_TITLE: String = "TVOJE IME"
+const USERNAME_CONTINUE: String = "DALJE"
+const USERNAME_HINT: String = "Ovo ime vide ostali igrači na rang listi."
+#filled with the typed and the allowed name length
+const USERNAME_COUNTER_CAPTION: String = "%d / %d"
+#above the run score the name step is about to send
+const USERNAME_POINTS_CAPTION: String = "OSVOJENO POENA"
+const FAILED_MESSAGE: String = "REZULTAT %s NIJE POSLAT"
+#the database kept the player's higher best score
+const SCORE_HIGHER_MESSAGE: String = "REZULTAT %s - TVOJ NAJBOLJI REZULTAT NA RANG LISTI JE VEĆI"
+#usernames stay latin, as the database rules allow only A-Z
+const USERNAME_TAKEN_MESSAGE: String = "IME JE ZAUZETO"
+const USERNAME_EMPTY_MESSAGE: String = "IME NE MOŽE DA BUDE PRAZNO"
+const USERNAME_TOO_LONG_MESSAGE: String = "IME MOŽE DA IMA NAJVIŠE %d ZNAKOVA"
+const USERNAME_INVALID_CHARACTER_MESSAGE: String = "IME SME DA SADRŽI SAMO SLOVA A-Z, CIFRE, RAZMAK, _ I -"
+const USERNAME_NOT_SAVED_MESSAGE: String = "IME NIJE SAČUVANO"
 
 #game summary texts, latin like the dialogues they review
 const SUMMARY_TITLE: String = "ODGOVORI"
