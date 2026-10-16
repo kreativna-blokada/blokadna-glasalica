@@ -39,6 +39,12 @@ var _are_slice_glitch_points_shown: bool = false
 var _crumble_time: float = 0.0
 #s the crumble lasts
 var _crumble_duration: float = 0.0
+#all slogan pixel points sit in the throne, it stands until a tap or the restore delay
+var _is_throne_complete: bool = false
+#s the complete throne has stood
+var _throne_stand_time: float = 0.0
+#area the throne is fitted into, a tap inside it restores the start screen
+var _throne_area: Rect2
 
 #onready vars
 @onready var pixel_points: MultiMeshInstance2D = $PixelPoints
@@ -48,8 +54,13 @@ func _ready() -> void:
 	set_process(false)
 	_sample_throne_shares()
 
-#slice glitches the team and web version points and then makes them vanish, flies the slogan points into the throne after that, stops once the throne is complete
+#slice glitches the team and web version points and then makes them vanish, flies the slogan points into the throne after that, restores the start screen once the complete throne has stood for the restore delay
 func _process(delta: float) -> void:
+	if _is_throne_complete:
+		_throne_stand_time += delta
+		if _throne_stand_time >= Configs.Thrones["restore_delay"]: _restore()
+		return
+
 	_crumble_time = minf(_crumble_time + delta, _crumble_duration)
 	var slice_glitch_duration: float = Configs.Thrones["slice_glitch_share"] * _crumble_duration
 	var pixel_multimesh: MultiMesh = pixel_points.multimesh
@@ -66,7 +77,19 @@ func _process(delta: float) -> void:
 		for point_index: int in range(_slogan_point_count, _letter_positions.size()):
 			pixel_multimesh.set_instance_color(point_index, Color.TRANSPARENT)
 
-	if _crumble_time >= _crumble_duration: set_process(false)
+	if _crumble_time >= _crumble_duration: _is_throne_complete = true
+
+#only the complete throne takes taps
+func _has_point(point: Vector2) -> bool:
+	return _is_throne_complete and _throne_area.has_point(point)
+
+#a tap on the complete throne restores the start screen; touch only, mouse clicks arrive as emulated touch
+func _gui_input(event: InputEvent) -> void:
+	var touch_event: InputEventScreenTouch = event as InputEventScreenTouch
+	if not touch_event or not touch_event.pressed: return
+
+	_restore()
+	accept_event()
 
 #turns the slogan, team and shown web version letter pixels on screen into pixel points of the same colour; over the crumble duration the team names and web version box slice glitch and vanish, then the slogan crumbles into the throne set in the team area
 func crumble(team_label: Control, slogan_label: Control, web_version_box: Control, crumble_duration: float) -> void:
@@ -102,12 +125,20 @@ func crumble(team_label: Control, slogan_label: Control, web_version_box: Contro
 	_are_slice_glitch_points_shown = true
 	_crumble_time = 0.0
 	_crumble_duration = crumble_duration
+	_is_throne_complete = false
+	_throne_stand_time = 0.0
 	set_process(true)
 
 #removes the pixel points and the throne they form
 func clear() -> void:
 	set_process(false)
+	_is_throne_complete = false
 	pixel_points.multimesh.instance_count = 0
+
+#removes the throne and lets the start screen bring back the letters it replaced
+func _restore() -> void:
+	clear()
+	Signals.throne_dismissed.emit()
 
 #the pixel points are on screen, slice glitching, crumbling or sitting in the throne
 func is_shown() -> bool:
@@ -154,6 +185,7 @@ func _fit_throne_positions(team_area: Rect2) -> void:
 	var throne_texture_size: Vector2 = _THRONE_TEXTURE.get_size()
 	var throne_size: Vector2 = throne_texture_size * minf(team_area.size.x / throne_texture_size.x, team_area.size.y / throne_texture_size.y)
 	var throne_corner: Vector2 = team_area.get_center() - throne_size / 2.0
+	_throne_area = Rect2(throne_corner, throne_size)
 	var throne_pixel_count: int = _throne_shares.size()
 	_throne_positions.resize(_slogan_point_count)
 	for point_index: int in _slogan_point_count:

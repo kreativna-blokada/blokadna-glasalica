@@ -271,6 +271,8 @@ var Thrones: Dictionary[String, Variant] = {
 	"stagger_share": 0.2,
 	#s of near silence ending the alert sound, the crumble finishes before it
 	"silent_tail": 0.7,
+	#s the complete throne stands before the start screen is restored
+	"restore_delay": 3.0,
 }
 
 #ENTITY

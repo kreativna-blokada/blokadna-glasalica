@@ -166,6 +166,7 @@ func _ready() -> void:
 	left_arrow.gui_input.connect(_on_arrow_input)
 	right_arrow.gui_input.connect(_on_arrow_input)
 	Signals.menu_option_selected.connect(_on_menu_option_selected)
+	Signals.throne_dismissed.connect(_on_throne_dismissed)
 
 	#the button shows whether sound was switched off before the menu loaded
 	music_controller.set_pressed_no_signal(AudioServer.is_bus_mute(AudioServer.get_bus_index(&"Master")))
@@ -432,6 +433,12 @@ func _on_menu_option_button_input(event: InputEvent) -> void:
 			_start_hold_fill()
 		else:
 			_stop_hold_fill()
+
+#signal Signals.throne_dismissed => brings back the team, slogan and web version letters the throne replaced, so the I, T, B order can crumble them again
+func _on_throne_dismissed() -> void:
+	team_label.show()
+	slogan_label.show()
+	web_version_box.visible = not OS.has_feature("web")
 
 #signal Signals.menu_option_selected => shows the hint for the menu option the ballot card has ticked; the team row shows TeamLabel in place of the hidden MenuOptionButton and InfoLabel
 func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
