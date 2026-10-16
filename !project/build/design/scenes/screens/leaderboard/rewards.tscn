@@ -1,11 +1,11 @@
-[gd_scene format=3 uid="uid://2f5lbujdbu7o"]
+[gd_scene format=3 uid="uid://dpmxum5qnxcdv"]
 
 [ext_resource type="Texture2D" uid="uid://bt3o17rw8gpyk" path="res://icon.png" id="app_icon"]
 [ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="dialog_box"]
 [ext_resource type="FontFile" uid="uid://b7wgk25vccvfr" path="res://!project/art/UI/DejaVuLGCSansMono-Bold.ttf" id="help_bold"]
 [ext_resource type="Shader" uid="uid://boii51q6tykpk" path="res://!project/art/shaders/outline.gdshader" id="outline_shader"]
 [ext_resource type="Script" uid="uid://ccfewk3ofj2cy" path="res://!project/build/design/scenes/overlays/popups/pixel_style_box.gd" id="pixel"]
-[ext_resource type="Script" uid="uid://d0vqkf7eeacmw" path="res://!project/build/design/scenes/screens/leaderboard/rewards.gd" id="rewards"]
+[ext_resource type="Script" path="res://!project/build/design/scenes/screens/leaderboard/rewards.gd" id="rewards"]
 [ext_resource type="FontFile" uid="uid://bdaf012h5ofyp" path="res://!project/assets/fonts/LiberationSans-Bold.ttf" id="sans"]
 
 [sub_resource type="StyleBox" id="StyleBox_badge_box"]
@@ -146,24 +146,6 @@ content_margin_top = 8.0
 content_margin_right = 8.0
 content_margin_bottom = 8.0
 
-[sub_resource type="Shader" id="Shader_vivid_colors"]
-code = "shader_type canvas_item;
-
-//screen behind the overlay, read back to strengthen its colours
-uniform sampler2D screen_texture : hint_screen_texture, filter_nearest;
-uniform float saturation : hint_range(1.0, 3.0) = 1.5;
-
-void fragment() {
-	vec3 screen_color = texture(screen_texture, SCREEN_UV).rgb;
-	float luminance = dot(screen_color, vec3(0.299, 0.587, 0.114));
-	COLOR = vec4(clamp(mix(vec3(luminance), screen_color, saturation), 0.0, 1.0), 1.0);
-}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vivid_colors"]
-shader = SubResource("Shader_vivid_colors")
-shader_parameter/saturation = 1.5
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_icon_outline"]
 shader = ExtResource("outline_shader")
 shader_parameter/outline_color = Color(1, 1, 1, 1)
@@ -204,6 +186,24 @@ corner_radius_top_right = 999
 corner_radius_bottom_right = 999
 corner_radius_bottom_left = 999
 corner_detail = 20
+
+[sub_resource type="Shader" id="Shader_vivid_colors"]
+code = "shader_type canvas_item;
+
+//screen behind the overlay, read back to strengthen its colours
+uniform sampler2D screen_texture : hint_screen_texture, filter_nearest;
+uniform float saturation : hint_range(1.0, 3.0) = 1.5;
+
+void fragment() {
+	vec3 screen_color = texture(screen_texture, SCREEN_UV).rgb;
+	float luminance = dot(screen_color, vec3(0.299, 0.587, 0.114));
+	COLOR = vec4(clamp(mix(vec3(luminance), screen_color, saturation), 0.0, 1.0), 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vivid_colors"]
+shader = SubResource("Shader_vivid_colors")
+shader_parameter/saturation = 1.5
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_badge_circle_red"]
 content_margin_left = 8.0

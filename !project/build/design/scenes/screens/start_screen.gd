@@ -28,6 +28,18 @@ const _ROW_TICK_SPACING: float = 0.64
 const _SEARCH_MOMENT_ITERATIONS: int = 16
 #rows on the card, ticked one after another as the ballot goes down the slot
 const _ROW_COUNT: int = 5
+#px the I, T and B team letters sink, and their shadow shrinks, while held
+const _TEAM_LETTER_PRESS_DEPTH: int = 2
+#seconds of silence between the B team letter sound and the alert sound once I, T and B are pressed in that order
+const _TEAM_SEQUENCE_ALERT_GAP: float = 0.3
+#team member name each of the I, T and B team letters glitches
+const _TEAM_LETTER_NAMES: Dictionary[StringName, String] = {&"LetterI": "Марија М.", &"LetterT": "Марко М.", &"LetterB": "Жељко В."}
+#matrix rain characters the glitched name letters turn into
+const _MATRIX_GLYPHS: String = "0123456789Z:.\"=*+-<>¦|"
+#seconds between two scrambles of the glitched name
+const _NAME_GLITCH_STEP: float = 0.05
+#scrambles before the glitched name is restored
+const _NAME_GLITCH_STEPS: int = 7
 
 #exported vars
 @export_group("Main Menu")
@@ -70,6 +82,14 @@ var _menu_choice: Globals.MainMenu = Globals.MainMenu.Starting
 #ClickCounterLabel text and font size from the scene, shown before the first click
 var _rest_click_caption: String
 var _rest_click_fontsize: int
+#shadow offset of the I, T and B team letters from the scene, px
+var _rest_letter_shadow: int
+#team list text from the scene, the glitched name is restored from it
+var _rest_team_text: String
+#team letters pressed so far in the I, T, B order
+var _team_sequence_count: int = 0
+#scrambles a team member name for a moment, then restores it
+var _name_glitch_animation: Tween
 #ms tick of the latest difficulty switch, arrow taps closer than Configs.MenuDifficulty["tap_debounce"] to it are ignored
 var _arrow_switch_moment: int = 0
 #player id shown after the ИНДЕКС word, fully or still unveiling
@@ -107,12 +127,14 @@ var _jump_sound_fading_animation: Tween
 @onready var left_side_mask: TextureRect = $BallotBoxSelection/LeftSideMask
 @onready var right_side_mask: TextureRect = $BallotBoxSelection/RightSideMask
 @onready var info_label: Label = %InfoLabel
-@onready var team_label: Label = %TeamLabel
+@onready var team_label: RichTextLabel = %TeamLabel
 @onready var id_label: Label = %IdLabel
 @onready var id_reveal_button: Button = %IdRevealButton
 @onready var web_version_box: VBoxContainer = %WebVersionBox
 @onready var music_controller: TextureButton = %MusicController
 @onready var zoom_controller: TextureButton = %ZoomController
+@onready var team_letters: Array[Label] = [$TeamLabel/ITglouriousBasterds/LetterI, $TeamLabel/ITglouriousBasterds/LetterT, $TeamLabel/ITglouriousBasterds/LetterB]
+@onready var team_alert_sound: AudioStreamPlayer = $TeamLabel/ITglouriousBasterds/AlertSound
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -151,6 +173,11 @@ func _ready() -> void:
 	#a Label ignores taps by default, the ИНДЕКС word has to catch them to switch the player id
 	id_label.mouse_filter = Control.MOUSE_FILTER_STOP
 	id_label.gui_input.connect(_on_id_label_input)
+
+	_rest_letter_shadow = team_letters[0].get_theme_constant(&"shadow_offset_x")
+	_rest_team_text = team_label.text
+	for team_letter: Label in team_letters:
+		team_letter.gui_input.connect(_on_team_letter_input.bind(team_letter))
 
 #counts up/down phone movements via accelerometer, starts game on enough shakes
 func _process(_delta: float) -> void:
@@ -285,6 +312,56 @@ func _on_id_label_input(event: InputEvent) -> void:
 
 	_switch_player_id()
 	accept_event()
+
+#signal LetterI/LetterT/LetterB.gui_input => plays the letter sound, glitches its team member name, counts it towards the I, T, B order and sinks the letter, shrinking its shadow, while the finger holds it, lifts it back on release; touch only, mouse clicks arrive as emulated touch
+func _on_team_letter_input(event: InputEvent, team_letter: Label) -> void:
+	var touch_event: InputEventScreenTouch = event as InputEventScreenTouch
+	if not touch_event: return
+
+	var letter_shadow: int = _rest_letter_shadow - _TEAM_LETTER_PRESS_DEPTH if touch_event.pressed else _rest_letter_shadow
+	team_letter.add_theme_constant_override(&"shadow_offset_x", letter_shadow)
+	team_letter.add_theme_constant_override(&"shadow_offset_y", letter_shadow)
+	#the container puts the letter back in its row on release
+	if touch_event.pressed:
+		team_letter.position += Vector2.ONE * _TEAM_LETTER_PRESS_DEPTH
+		(team_letter.get_node(^"LetterSound") as AudioStreamPlayer).play()
+		_glitch_team_name(_TEAM_LETTER_NAMES[team_letter.name])
+		_advance_team_sequence(team_letter)
+	else:
+		(team_letter.get_parent() as Container).queue_sort()
+	accept_event()
+
+#counts the team letter towards the I, T, B order, plays the alert sound after the B sound and a short gap once the order is complete
+func _advance_team_sequence(team_letter: Label) -> void:
+	if team_letter == team_letters[_team_sequence_count]:
+		_team_sequence_count += 1
+	else:
+		_team_sequence_count = 1 if team_letter == team_letters[0] else 0
+	if _team_sequence_count < team_letters.size(): return
+
+	_team_sequence_count = 0
+	var letter_sound: AudioStreamPlayer = team_letter.get_node(^"LetterSound")
+	get_tree().create_timer(letter_sound.stream.get_length() + _TEAM_SEQUENCE_ALERT_GAP).timeout.connect(team_alert_sound.play)
+
+#scrambles and recolours the team member name with matrix rain characters a few times, then restores the team list
+func _glitch_team_name(team_name: String) -> void:
+	if _name_glitch_animation: _name_glitch_animation.kill()
+	_name_glitch_animation = create_tween()
+	for glitch_step: int in _NAME_GLITCH_STEPS:
+		_name_glitch_animation.tween_callback(_scramble_team_name.bind(team_name))
+		_name_glitch_animation.tween_interval(_NAME_GLITCH_STEP)
+	_name_glitch_animation.tween_callback(team_label.set_text.bind(_rest_team_text))
+
+#swaps 1 or 2 random letters of the team member name for matrix rain characters in the team list, coloured like the I, T and B team letters
+func _scramble_team_name(team_name: String) -> void:
+	var glitched_name: String = team_name
+	for swapped_letter: int in randi_range(1, 2):
+		var letter_index: int = randi() % team_name.length()
+		while team_name[letter_index] in " .":
+			letter_index = randi() % team_name.length()
+		glitched_name[letter_index] = _MATRIX_GLYPHS[randi() % _MATRIX_GLYPHS.length()]
+	var letter_colour: String = team_letters[0].get_theme_color(&"font_color").to_html(false)
+	team_label.text = _rest_team_text.replace(team_name, "[color=#%s]%s[/color]" % [letter_colour, glitched_name])
 
 #signal IdRevealButton.pressed => unveils the player id when hidden, otherwise brings back the lone ИНДЕКС word
 func _switch_player_id() -> void:
