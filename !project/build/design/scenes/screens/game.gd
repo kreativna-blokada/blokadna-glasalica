@@ -318,8 +318,8 @@ func _on_dialog_choice_made(dialog_descriptor: DialogDescriptor, choice_descript
 	var points_str: String = ("+" if actual_score >= 0.0 else "") + DialogScoreCalculator.format_points(actual_score)
 	var points_color: Color = Color.GREEN
 	var choice_stinger: Globals.Sound = Globals.Sound.ChoiceRight
-	#any answer that is not the best counts as wrong, even with points
-	if not is_best_choice:
+	#only answers scoring zero or below count as wrong, as on the game summary
+	if not choice_descriptor.is_correct():
 		points_color = Color.RED
 		choice_stinger = Globals.Sound.ChoiceWrong
 	SoundManager.play_stinger(choice_stinger)

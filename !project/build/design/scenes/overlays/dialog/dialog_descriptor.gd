@@ -10,9 +10,9 @@ class ChoiceDescriptor:
 		score = _score
 		explanation = _explanation
 
-	#choices scoring below zero are wrong
+	#choices scoring zero or below are wrong
 	func is_correct() -> bool:
-		return score >= 0
+		return score > 0
 
 enum Speaker {LEFT = 0, RIGHT = 1}
 
