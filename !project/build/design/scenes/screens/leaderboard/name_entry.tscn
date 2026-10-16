@@ -1,0 +1,333 @@
+[gd_scene format=3 uid="uid://b15uuj432anht"]
+
+[ext_resource type="Script" path="res://!project/build/design/scenes/screens/leaderboard/name_entry.gd" id="1_name"]
+[ext_resource type="Script" uid="uid://ccfewk3ofj2cy" path="res://!project/build/design/scenes/overlays/popups/pixel_style_box.gd" id="2_pixel_box"]
+[ext_resource type="FontFile" uid="uid://bdaf012h5ofyp" path="res://!project/assets/fonts/LiberationSans-Bold.ttf" id="3_sans"]
+[ext_resource type="FontFile" uid="uid://b7wgk25vccvfr" path="res://!project/art/UI/DejaVuLGCSansMono-Bold.ttf" id="4_mono_bold"]
+[ext_resource type="FontFile" uid="uid://w8p5mlgowyma" path="res://!project/art/UI/DejaVuLGCSansMono.ttf" id="5_mono"]
+[ext_resource type="Script" path="res://!project/build/design/scenes/overlays/popups/pixel_spinner.gd" id="6_spinner"]
+[ext_resource type="Texture2D" uid="uid://bfux1anwob0q8" path="res://!project/art/UI/leaderboard/star.svg" id="7_star"]
+[ext_resource type="Texture2D" uid="uid://ctlycc1wl61ws" path="res://!project/art/UI/leaderboard/pencil.svg" id="8_pencil"]
+[ext_resource type="Texture2D" uid="uid://cbajvjv08cmqv" path="res://!project/art/UI/leaderboard/arrow_continue.svg" id="9_arrow"]
+
+[sub_resource type="StyleBox" id="StyleBox_panel"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.968627, 0.941176, 0.87451, 1)
+border_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+border_width = 8
+shadow_color = Color(0.117647, 0.121569, 0.137255, 1)
+shadow_offset = Vector2(10, 10)
+inset_color = Color(0.847059, 0.803922, 0.690196, 1)
+inset_width = 8
+
+[sub_resource type="StyleBox" id="StyleBox_plaque"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 48.0
+content_margin_top = 45.0
+content_margin_right = 48.0
+content_margin_bottom = 50.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.862745, 0.909804, 0.721569, 1)
+border_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+border_width = 8
+border_sides = 8
+inset_color = Color(0.764706, 0.827451, 0.596078, 1)
+inset_width = 8
+inset_sides = 8
+
+[sub_resource type="FontVariation" id="FontVariation_wide"]
+base_font = ExtResource("3_sans")
+spacing_glyph = 3
+
+[sub_resource type="StyleBox" id="StyleBox_field"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 39.0
+content_margin_top = -1.0
+content_margin_right = 39.0
+content_margin_bottom = -1.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.984314, 0.968627, 0.92549, 1)
+border_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+border_width = 6
+inset_color = Color(0.894118, 0.866667, 0.796078, 1)
+inset_width = 6
+inset_sides = 3
+
+[sub_resource type="StyleBox" id="StyleBox_field_focus"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = -1.0
+content_margin_top = -1.0
+content_margin_right = -1.0
+content_margin_bottom = -1.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(1, 0.988235, 0.952941, 1)
+border_color = Color(0.745098, 0.584314, 0.172549, 1)
+border_width = 6
+ring_color = Color(0.913725, 0.85098, 0.65098, 1)
+ring_width = 6
+inset_color = Color(0.937255, 0.890196, 0.760784, 1)
+inset_width = 6
+inset_sides = 3
+
+[sub_resource type="StyleBox" id="StyleBox_continue"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = -1.0
+content_margin_top = -1.0
+content_margin_right = -1.0
+content_margin_bottom = -1.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.839216, 0.74902, 0.486275, 1)
+border_color = Color(0.745098, 0.584314, 0.172549, 1)
+border_width = 8
+dashed = true
+shadow_color = Color(0.847059, 0.803922, 0.690196, 1)
+shadow_offset = Vector2(9, 9)
+
+[sub_resource type="StyleBox" id="StyleBox_continue_pressed"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = -1.0
+content_margin_top = -1.0
+content_margin_right = -1.0
+content_margin_bottom = -1.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.862745, 0.776471, 0.533333, 1)
+border_color = Color(0.745098, 0.584314, 0.172549, 1)
+border_width = 8
+dashed = true
+shadow_color = Color(0.847059, 0.803922, 0.690196, 1)
+shadow_offset = Vector2(4, 4)
+
+[sub_resource type="StyleBox" id="StyleBox_continue_hover"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = -1.0
+content_margin_top = -1.0
+content_margin_right = -1.0
+content_margin_bottom = -1.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.862745, 0.776471, 0.533333, 1)
+border_color = Color(0.745098, 0.584314, 0.172549, 1)
+border_width = 8
+dashed = true
+shadow_color = Color(0.847059, 0.803922, 0.690196, 1)
+shadow_offset = Vector2(9, 9)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[node name="NameEntry" type="Control" unique_id=1721252137]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_name")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=682324070]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.243137, 0.25098, 0.27451, 1)
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=1086556503]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1290, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -645.0
+offset_right = 645.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="Layout" type="VBoxContainer" parent="Panel" unique_id=1374505337]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="ScorePlaque" type="PanelContainer" parent="Panel/Layout" unique_id=1750368279]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_plaque")
+
+[node name="Score" type="VBoxContainer" parent="Panel/Layout/ScorePlaque" unique_id=2082569039]
+layout_mode = 2
+theme_override_constants/separation = 9
+
+[node name="Caption" type="HBoxContainer" parent="Panel/Layout/ScorePlaque/Score" unique_id=1988011557]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="StarLeft" type="TextureRect" parent="Panel/Layout/ScorePlaque/Score/Caption" unique_id=920552962]
+layout_mode = 2
+texture = ExtResource("7_star")
+stretch_mode = 3
+
+[node name="CaptionLabel" type="Label" parent="Panel/Layout/ScorePlaque/Score/Caption" unique_id=158007485]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.184314, 0.27451, 0, 1)
+theme_override_fonts/font = SubResource("FontVariation_wide")
+theme_override_font_sizes/font_size = 24
+text = "OSVOJENO POENA"
+
+[node name="StarRight" type="TextureRect" parent="Panel/Layout/ScorePlaque/Score/Caption" unique_id=216603243]
+layout_mode = 2
+texture = ExtResource("7_star")
+stretch_mode = 3
+
+[node name="PointsLabel" type="Label" parent="Panel/Layout/ScorePlaque/Score" unique_id=1942604409]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.184314, 0.27451, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.709804, 0.776471, 0.541176, 1)
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/shadow_outline_size = 0
+theme_override_fonts/font = ExtResource("3_sans")
+theme_override_font_sizes/font_size = 144
+text = "0"
+horizontal_alignment = 1
+
+[node name="Body" type="MarginContainer" parent="Panel/Layout" unique_id=471118872]
+layout_mode = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 60
+
+[node name="Content" type="VBoxContainer" parent="Panel/Layout/Body" unique_id=1817027202]
+layout_mode = 2
+theme_override_constants/separation = 48
+
+[node name="Name" type="VBoxContainer" parent="Panel/Layout/Body/Content" unique_id=1754829663]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="TitleLabel" type="Label" parent="Panel/Layout/Body/Content/Name" unique_id=1427784356]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_fonts/font = SubResource("FontVariation_wide")
+theme_override_font_sizes/font_size = 27
+text = "TVOJE IME"
+
+[node name="UsernameField" type="LineEdit" parent="Panel/Layout/Body/Content/Name" unique_id=1731133385]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 126)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/caret_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/selection_color = Color(0.839216, 0.74902, 0.486275, 1)
+theme_override_fonts/font = ExtResource("4_mono_bold")
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBox_field")
+theme_override_styles/focus = SubResource("StyleBox_field_focus")
+caret_blink = true
+right_icon = ExtResource("8_pencil")
+
+[node name="Hint" type="HBoxContainer" parent="Panel/Layout/Body/Content/Name" unique_id=1804089831]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="HintLabel" type="Label" parent="Panel/Layout/Body/Content/Name/Hint" unique_id=1365551891]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.419608, 0.372549, 0.333333, 1)
+theme_override_fonts/font = ExtResource("5_mono")
+theme_override_font_sizes/font_size = 24
+text = "Ovo ime vide ostali igrači na rang listi."
+
+[node name="CounterLabel" type="Label" parent="Panel/Layout/Body/Content/Name/Hint" unique_id=1706546709]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.419608, 0.372549, 0.333333, 1)
+theme_override_fonts/font = ExtResource("5_mono")
+theme_override_font_sizes/font_size = 24
+text = "0 / 20"
+horizontal_alignment = 2
+
+[node name="ErrorLabel" type="Label" parent="Panel/Layout/Body/Content/Name" unique_id=64904608]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.478431, 0.121569, 0.0705882, 1)
+theme_override_fonts/font = ExtResource("5_mono")
+theme_override_font_sizes/font_size = 24
+autowrap_mode = 3
+
+[node name="ContinueButton" type="Button" parent="Panel/Layout/Body/Content" unique_id=1827664625]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 126)
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBox_continue")
+theme_override_styles/pressed = SubResource("StyleBox_continue_pressed")
+theme_override_styles/hover = SubResource("StyleBox_continue_hover")
+theme_override_styles/hover_pressed = SubResource("StyleBox_continue_pressed")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+
+[node name="ContinueContent" type="HBoxContainer" parent="Panel/Layout/Body/Content/ContinueButton" unique_id=1369094941]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="ContinueLabel" type="Label" parent="Panel/Layout/Body/Content/ContinueButton/ContinueContent" unique_id=1153183850]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_fonts/font = SubResource("FontVariation_wide")
+theme_override_font_sizes/font_size = 51
+text = "DALJE"
+
+[node name="ContinueArrow" type="TextureRect" parent="Panel/Layout/Body/Content/ContinueButton/ContinueContent" unique_id=173866701]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("9_arrow")
+stretch_mode = 3
+
+[node name="Spinner" type="Control" parent="Panel/Layout/Body/Content/ContinueButton" unique_id=588102308]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.0
+offset_top = -33.0
+offset_right = 33.0
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_spinner")
+block_size = 20.0

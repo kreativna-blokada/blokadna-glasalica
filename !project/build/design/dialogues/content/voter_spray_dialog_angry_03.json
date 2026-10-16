@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Dajte desni kažiprst da nanesemo nevidljivi sprej.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Neću, imam sastanak posle ovoga i neću fleke na ruci.",
+        "explanation": "Odbijanje obeležavanja sprejem sprečava nastavak postupka.",
+        "score": -26000,
+        "next": "spray_required"
+      },
+      {
+        "text": "Nemam desni kažiprst, možete obeležiti drugi dostupan prst.",
+        "explanation": "Ispravno, ako birač nema desni kažiprst, sprej se nanosi na drugi dostupan prst prema proceduri.",
+        "score": 131000,
+        "next": "alternate_finger"
+      },
+      {
+        "text": "Ajde brzo, samo nemojte mnogo.",
+        "explanation": "Birač prihvata proceduru, iako je komunikacija nestrpljiva.",
+        "score": 105000
+      }
+    ]
+  },
+  "spray_required": {
+    "text": "Bez obeležavanja sprejem ne možemo vam izdati glasački listić.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Dobro, obeležite prst, samo da završimo.",
+        "explanation": "Birač se vraća obaveznoj proceduri.",
+        "score": 105000
+      },
+      {
+        "text": "Onda mi dajte listić bez spreja, neću da čekam.",
+        "explanation": "Listić ne sme biti izdat ako je obavezno obeležavanje sprejem odbijeno.",
+        "score": -39000
+      }
+    ]
+  },
+  "alternate_finger": {
+    "text": "U redu, obeležićemo drugi dostupan prst.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala. Važno je samo da procedura bude sprovedena.",
+        "explanation": "Birač sarađuje i omogućava sprovođenje procedure.",
+        "score": 131000
+      },
+      {
+        "text": "Vidite da može kad vas čovek pritisne.",
+        "explanation": "Postupak je ispravan, ali nepotrebna agresivnost narušava komunikaciju.",
+        "score": 66000
+      }
+    ]
+  }
+}

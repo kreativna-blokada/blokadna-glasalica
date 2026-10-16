@@ -1,0 +1,499 @@
+[gd_scene format=3 uid="uid://cxeryuhplc7sx"]
+
+[ext_resource type="Script" uid="uid://bhyuht14ycopf" path="res://!project/build/design/scenes/overlays/popups/text_popup.gd" id="1_g5y81"]
+[ext_resource type="Texture2D" uid="uid://djhqpix5l4fd5" path="res://!project/art/UI/DialogBox/DialogBoxNineSlice.png" id="1_wboge"]
+[ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="2_7j04v"]
+[ext_resource type="Texture2D" uid="uid://cbdxc56qr4g0g" path="res://!project/art/UI/Buttons/input-play-active.png" id="3_next"]
+[ext_resource type="Texture2D" uid="uid://cuhe1tglra5ip" path="res://!project/art/UI/Buttons/stop-lamp.png" id="4_lamp"]
+[ext_resource type="Texture2D" uid="uid://dlfkolkueeemx" path="res://!project/art/UI/Buttons/stop-id.png" id="5_id"]
+[ext_resource type="Texture2D" uid="uid://cxxrl7p6bgrmk" path="res://!project/art/UI/Buttons/stop-list.png" id="6_list"]
+[ext_resource type="Texture2D" uid="uid://dxyehxk1wwiea" path="res://!project/art/UI/Buttons/stop-spray.png" id="7_spray"]
+[ext_resource type="Texture2D" uid="uid://cnn7b7nl8olpg" path="res://!project/art/UI/Buttons/stop-ballot.png" id="8_ballot"]
+[ext_resource type="Texture2D" uid="uid://bxqeglmbirscv" path="res://!project/art/UI/Buttons/stop-booth.png" id="9_booth"]
+[ext_resource type="Texture2D" uid="uid://pcilj6pcgqi8" path="res://!project/art/UI/Buttons/stop-box.png" id="10_box"]
+[ext_resource type="Texture2D" uid="uid://drvshxrdvhmnu" path="res://!project/art/UI/Buttons/stop-lamp-disabled.png" id="11_lampd"]
+[ext_resource type="Texture2D" uid="uid://buvdxuyq6y88s" path="res://!project/art/UI/Buttons/input-wrong-active.png" id="12_close"]
+[ext_resource type="FontFile" uid="uid://w8p5mlgowyma" path="res://!project/art/UI/DejaVuLGCSansMono.ttf" id="13_font"]
+[ext_resource type="Texture2D" uid="uid://dd6mrsxeupov" path="res://!project/art/UI/Buttons/input-select-active.png" id="14_select"]
+[ext_resource type="Texture2D" uid="uid://c650drbdu3mdx" path="res://!project/art/UI/Buttons/input-initiate-active.png" id="15_initiate"]
+[ext_resource type="Texture2D" uid="uid://cgrjan06rrdsh" path="res://!project/art/UI/Buttons/input-highlight-active.png" id="16_highlight"]
+[ext_resource type="Texture2D" uid="uid://trtlhsve38j3" path="res://!project/art/UI/Buttons/input-confirm-active.png" id="17_confirm"]
+[ext_resource type="FontFile" uid="uid://b7wgk25vccvfr" path="res://!project/art/UI/DejaVuLGCSansMono-Bold.ttf" id="18_bold"]
+[ext_resource type="Texture2D" uid="uid://2imaosldxwu4" path="res://!project/art/UI/Buttons/help-home-active.png" id="19_home_a"]
+[ext_resource type="Texture2D" uid="uid://cyv45davybmd5" path="res://!project/art/UI/Buttons/help-home-default.png" id="20_home_d"]
+[ext_resource type="Texture2D" uid="uid://cxhvq4u2iff33" path="res://!project/art/UI/Buttons/flow-help-active.png" id="21_help"]
+
+[node name="TextPopup" type="Control" unique_id=193475490]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g5y81")
+
+[node name="Container" type="Control" parent="." unique_id=433921096]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -760.0
+offset_top = -456.0
+offset_right = 755.0
+offset_bottom = 444.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="NinePatchRect" parent="Container" unique_id=1186843262]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+scale = Vector2(8, 8)
+texture = ExtResource("1_wboge")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Text" type="RichTextLabel" parent="Container" unique_id=161253462]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.36
+offset_left = 43.0
+offset_top = 44.0
+offset_right = -37.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("2_7j04v")
+theme_override_font_sizes/normal_font_size = 30
+text = "Izborni je dan i ti si na biračkom mestu. 
+Imaš 5 minuta. Provedi birače kroz proceduru glasanja. 
+
+Poštuješ pravila: postupaš po zakonu i dobijaš bodove. 
+Kršiš pravila: gubiš bodove i ispadaš ćaci."
+
+[node name="Slogan" type="RichTextLabel" parent="Container" unique_id=161253463]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 329.0
+offset_top = 239.0
+offset_right = -492.0
+offset_bottom = 275.0
+grow_horizontal = 2
+mouse_filter = 1
+theme = ExtResource("2_7j04v")
+theme_override_colors/default_color = Color(0.496, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 30
+text = "Poštuj zakon, ne budi ćaci!"
+
+[node name="Legend" type="VBoxContainer" parent="Container" unique_id=1023957364]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.38
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -58.0
+offset_right = -40.0
+offset_bottom = -107.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_7j04v")
+theme_override_constants/separation = 20
+
+[node name="LeftCornerPair" type="HBoxContainer" parent="Container/Legend" unique_id=1719350030]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Place" type="Label" parent="Container/Legend/LeftCornerPair" unique_id=1719350031]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("18_bold")
+theme_override_font_sizes/font_size = 40
+text = "DOLE &
+LEVO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Rows" type="VBoxContainer" parent="Container/Legend/LeftCornerPair" unique_id=1719350032]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="SelectExplanation" type="HBoxContainer" parent="Container/Legend/LeftCornerPair/Rows" unique_id=1719350033]
+custom_minimum_size = Vector2(0, 99)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Select" type="TextureRect" parent="Container/Legend/LeftCornerPair/Rows/SelectExplanation" unique_id=1719350034]
+texture_filter = 1
+custom_minimum_size = Vector2(76, 76)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("14_select")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Container/Legend/LeftCornerPair/Rows/SelectExplanation" unique_id=1719350035]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("18_bold")
+theme_override_font_sizes/font_size = 34
+text = "Izbor birača kojim se inicira korak
+ili s kojim se započinje razgovor."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="InitiateExplanation" type="HBoxContainer" parent="Container/Legend/LeftCornerPair/Rows" unique_id=1719350036]
+custom_minimum_size = Vector2(0, 85)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Initiate" type="TextureRect" parent="Container/Legend/LeftCornerPair/Rows/InitiateExplanation" unique_id=1719350037]
+texture_filter = 1
+custom_minimum_size = Vector2(76, 76)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("15_initiate")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Container/Legend/LeftCornerPair/Rows/InitiateExplanation" unique_id=1719350038]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("18_bold")
+theme_override_font_sizes/font_size = 34
+text = "Iniciranje koraka sa biračem
+ili započinjanje razgovora s istim."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="RightCornerPair" type="HBoxContainer" parent="Container/Legend" unique_id=1719350039]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Place" type="Label" parent="Container/Legend/RightCornerPair" unique_id=1719350040]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("18_bold")
+theme_override_font_sizes/font_size = 40
+text = "DOLE &
+DESNO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Rows" type="VBoxContainer" parent="Container/Legend/RightCornerPair" unique_id=1719350041]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="HighlightExplanation" type="HBoxContainer" parent="Container/Legend/RightCornerPair/Rows" unique_id=1719350042]
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Highlight" type="TextureRect" parent="Container/Legend/RightCornerPair/Rows/HighlightExplanation" unique_id=1719350043]
+texture_filter = 1
+custom_minimum_size = Vector2(76, 76)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("16_highlight")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Container/Legend/RightCornerPair/Rows/HighlightExplanation" unique_id=1719350044]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("18_bold")
+theme_override_font_sizes/font_size = 34
+text = "Izbor ponuđenih odgovora u razgovoru."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ConfirmExplanation" type="HBoxContainer" parent="Container/Legend/RightCornerPair/Rows" unique_id=1719350045]
+custom_minimum_size = Vector2(0, 76)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Confirm" type="TextureRect" parent="Container/Legend/RightCornerPair/Rows/ConfirmExplanation" unique_id=1719350046]
+texture_filter = 1
+custom_minimum_size = Vector2(76, 76)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("17_confirm")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Container/Legend/RightCornerPair/Rows/ConfirmExplanation" unique_id=1719350047]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("18_bold")
+theme_override_font_sizes/font_size = 34
+text = "Potvrda izabranog odgovora u razgovoru."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="NextExplanation" type="HBoxContainer" parent="Container/Legend" unique_id=827176777]
+custom_minimum_size = Vector2(0, 99)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Place" type="Label" parent="Container/Legend/NextExplanation" unique_id=1719350050]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("18_bold")
+theme_override_font_sizes/font_size = 40
+text = "DOLE &
+LEVO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Container/Legend/NextExplanation" unique_id=1956949673]
+texture_filter = 1
+custom_minimum_size = Vector2(76, 76)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_next")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Container/Legend/NextExplanation" unique_id=1941352087]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("18_bold")
+theme_override_font_sizes/font_size = 34
+text = "Ulazak sledećeg birača na biračko mesto."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="StationsExplanation" type="HBoxContainer" parent="Container/Legend" unique_id=1511919802]
+custom_minimum_size = Vector2(0, 85)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Lamp" type="TextureRect" parent="Container/Legend/StationsExplanation" unique_id=464626982]
+texture_filter = 1
+custom_minimum_size = Vector2(80, 84)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_lamp")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ID" type="TextureRect" parent="Container/Legend/StationsExplanation" unique_id=2086228796]
+texture_filter = 1
+custom_minimum_size = Vector2(80, 84)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("5_id")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="List" type="TextureRect" parent="Container/Legend/StationsExplanation" unique_id=497069499]
+texture_filter = 1
+custom_minimum_size = Vector2(80, 84)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("6_list")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Spray" type="TextureRect" parent="Container/Legend/StationsExplanation" unique_id=1198449909]
+texture_filter = 1
+custom_minimum_size = Vector2(80, 84)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("7_spray")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Ballot" type="TextureRect" parent="Container/Legend/StationsExplanation" unique_id=1564393637]
+texture_filter = 1
+custom_minimum_size = Vector2(80, 84)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_ballot")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Booth" type="TextureRect" parent="Container/Legend/StationsExplanation" unique_id=1170034497]
+texture_filter = 1
+custom_minimum_size = Vector2(80, 84)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("9_booth")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Box" type="TextureRect" parent="Container/Legend/StationsExplanation" unique_id=471926551]
+texture_filter = 1
+custom_minimum_size = Vector2(80, 84)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("10_box")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Container/Legend/StationsExplanation" unique_id=1393357061]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("13_font")
+theme_override_font_sizes/font_size = 29
+text = "Pozicija svetli i dobija zeleni okvir kad birač čeka. Klikni za početak razgovora."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="DisabledStationExplanation" type="HBoxContainer" parent="Container/Legend" unique_id=1551175468]
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Icon" type="TextureRect" parent="Container/Legend/DisabledStationExplanation" unique_id=943664604]
+texture_filter = 1
+custom_minimum_size = Vector2(90, 84)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("11_lampd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Container/Legend/DisabledStationExplanation" unique_id=840216806]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("13_font")
+theme_override_font_sizes/font_size = 29
+text = "Siva stanica: nema nikoga, ne može se kliknuti."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="HelpExplanation" type="HBoxContainer" parent="Container/Legend" unique_id=2073122826]
+custom_minimum_size = Vector2(0, 76)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Icon" type="TextureRect" parent="Container/Legend/HelpExplanation" unique_id=548558704]
+texture_filter = 1
+custom_minimum_size = Vector2(90, 60)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("21_help")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Container/Legend/HelpExplanation" unique_id=592619833]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("13_font")
+theme_override_font_sizes/font_size = 29
+text = "Gore levo: pomoć, otvara ovaj prozor."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="CloseExplanation" type="HBoxContainer" parent="Container/Legend" unique_id=2073122825]
+custom_minimum_size = Vector2(0, 85)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="Icon" type="TextureRect" parent="Container/Legend/CloseExplanation" unique_id=548558703]
+texture_filter = 1
+custom_minimum_size = Vector2(90, 60)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("12_close")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Container/Legend/CloseExplanation" unique_id=592619832]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("13_font")
+theme_override_font_sizes/font_size = 29
+text = "Gore desno: kraj, izlaz iz igre."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Footer" type="Label" parent="Container" unique_id=1925153939]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 801.5
+offset_right = -40.0
+offset_bottom = 846.5
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("13_font")
+theme_override_font_sizes/font_size = 38
+text = "Klikni bilo gde u ovom prozoru za početak"
+horizontal_alignment = 1
+
+[node name="IdFooter" type="Label" parent="Container/Footer" unique_id=1925153940]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 6.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("13_font")
+theme_override_font_sizes/font_size = 24
+text = "(INDEKS: )"
+horizontal_alignment = 1
+
+[node name="Home" type="TextureButton" parent="Container" unique_id=1925153941]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -137.0
+offset_top = 40.0
+offset_right = -40.0
+offset_bottom = 137.0
+grow_horizontal = 0
+texture_normal = ExtResource("19_home_a")
+texture_pressed = ExtResource("20_home_d")
+ignore_texture_size = true
+stretch_mode = 5
+
+[connection signal="gui_input" from="Container" to="." method="_on_container_gui_input"]
+[connection signal="pressed" from="Container/Home" to="." method="_on_home_pressed"]

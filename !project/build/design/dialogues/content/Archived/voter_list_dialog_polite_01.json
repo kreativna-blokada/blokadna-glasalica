@@ -1,0 +1,23 @@
+﻿{
+  "root": {
+    "text": "[POL] Molim vas, potpišite se ovde, na ovu liniju.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Izvinite, ali to nije moje ime. Molim vas da proverite još jednom.",
+        "explanation": "Birač mora biti potpisan isključivo pored svog imena.",
+        "score": 131000,
+        "next": "controller_apologizes"
+      },
+      {
+        "text": "U redu, potpisujem se gde ste rekli.",
+        "explanation": "Potpisivanje na pogrešnom mestu može omogućiti zloupotrebe.",
+        "score": -26000
+      }
+    ]
+  },
+  "controller_apologizes": {
+    "text": "Hvala što ste ukazali, odmah ćemo pronaći vaše ime.",
+    "speaker": "LEFT"
+  }
+}
