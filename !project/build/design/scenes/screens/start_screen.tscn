@@ -24,6 +24,7 @@
 [ext_resource type="AudioStream" uid="uid://bamoxwy6fhy21" path="res://!project/audio/jingles/8-bit-game-2.mp3" id="15_letter_i_sound"]
 [ext_resource type="AudioStream" uid="uid://bd62u3m57hkgc" path="res://!project/audio/jingles/8-bit-game-4.mp3" id="15_letter_t_sound"]
 [ext_resource type="AudioStream" uid="uid://dgyiphceo0177" path="res://!project/audio/jingles/retro-synth-alert-sound.mp3" id="15_team_alert_sound"]
+[ext_resource type="PackedScene" path="res://!project/build/design/scenes/screens/thrones.tscn" id="16_thrones"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_start_fill"]
 shader = ExtResource("14_filler")
@@ -480,6 +481,10 @@ vertical_alignment = 1
 
 [node name="AlertSound" type="AudioStreamPlayer" parent="TeamLabel/ITglouriousBasterds" unique_id=913500110]
 stream = ExtResource("15_team_alert_sound")
+
+[node name="Thrones" parent="." unique_id=1487874626 instance=ExtResource("16_thrones")]
+unique_name_in_owner = true
+layout_mode = 1
 
 [node name="MenuOptionButton" type="Button" parent="." unique_id=120688566]
 unique_name_in_owner = true

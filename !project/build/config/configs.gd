@@ -252,6 +252,15 @@ var IdReveal: Dictionary[String, Variant] = {
 	"unveil_speed": 30.0,
 }
 
+var Thrones: Dictionary[String, Variant] = {
+	#px between sampled team letter pixels, also the pixel point size
+	"point_spacing": 4.0,
+	#throne texture px between sampled throne pixels
+	"throne_sample_step": 3,
+	#share of the crumble over which the pixel points start flying into the throne one after another
+	"stagger_share": 0.2,
+}
+
 #ENTITY
 #███████╗███╗   ██╗████████╗██╗████████╗██╗   ██╗
 #██╔════╝████╗  ██║╚══██╔══╝██║╚══██╔══╝╚██╗ ██╔╝

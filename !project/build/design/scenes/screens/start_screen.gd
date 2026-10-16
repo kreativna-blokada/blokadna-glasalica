@@ -135,6 +135,7 @@ var _jump_sound_fading_animation: Tween
 @onready var zoom_controller: TextureButton = %ZoomController
 @onready var team_letters: Array[Label] = [$TeamLabel/ITglouriousBasterds/LetterI, $TeamLabel/ITglouriousBasterds/LetterT, $TeamLabel/ITglouriousBasterds/LetterB]
 @onready var team_alert_sound: AudioStreamPlayer = $TeamLabel/ITglouriousBasterds/AlertSound
+@onready var thrones: Thrones = %Thrones
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -331,7 +332,7 @@ func _on_team_letter_input(event: InputEvent, team_letter: Label) -> void:
 		(team_letter.get_parent() as Container).queue_sort()
 	accept_event()
 
-#counts the team letter towards the I, T, B order, plays the alert sound after the B sound and a short gap once the order is complete
+#counts the team letter towards the I, T, B order, crumbles the team letters into the throne after the B sound and a short gap once the order is complete
 func _advance_team_sequence(team_letter: Label) -> void:
 	if team_letter == team_letters[_team_sequence_count]:
 		_team_sequence_count += 1
@@ -341,7 +342,16 @@ func _advance_team_sequence(team_letter: Label) -> void:
 
 	_team_sequence_count = 0
 	var letter_sound: AudioStreamPlayer = team_letter.get_node(^"LetterSound")
-	get_tree().create_timer(letter_sound.stream.get_length() + _TEAM_SEQUENCE_ALERT_GAP).timeout.connect(team_alert_sound.play)
+	get_tree().create_timer(letter_sound.stream.get_length() + _TEAM_SEQUENCE_ALERT_GAP).timeout.connect(_crumble_team_into_throne)
+
+#plays the alert sound and, while the team row still shows, swaps the team and slogan letters for pixel points crumbling into the throne for as long as the alert sound plays
+func _crumble_team_into_throne() -> void:
+	team_alert_sound.play()
+	if not team_label.visible: return
+
+	thrones.crumble(team_label, slogan_label, team_alert_sound.stream.get_length())
+	team_label.hide()
+	slogan_label.hide()
 
 #scrambles and recolours the team member name with matrix rain characters a few times, then restores the team list
 func _glitch_team_name(team_name: String) -> void:
@@ -437,7 +447,10 @@ func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
 	left_arrow.visible = is_selector_chosen
 	right_arrow.visible = is_selector_chosen
 	_show_button_caption()
-	team_label.visible = is_team_chosen
+	#the throne stays until the team row is left, the team and slogan letters come back after it
+	if not is_team_chosen: thrones.clear()
+	team_label.visible = is_team_chosen and not thrones.is_shown()
+	slogan_label.visible = not thrones.is_shown()
 	info_label.visible = not is_team_chosen
 	if not is_team_chosen: info_label.text = _get_menu_description(menu_option)
 
