@@ -21,7 +21,6 @@ android/build/
 
 # Android export output
 android/
-export_presets.cfg
 
 # Local tooling
 .mcp.json
