@@ -1,0 +1,245 @@
+class_name MultiChoiceCharacterDialog
+extends CharacterDialogBase
+
+signal finished(choice: int)
+#the player showed the whole line before it finished unveiling
+signal text_skipped()
+
+var choiceOriginal: PackedScene = preload("res://!project/build/design/scenes/overlays/dialog/view/dialog_choice.tscn")
+
+@onready var panel_container: Control = $PanelContainer
+@onready var background: Control = $PanelContainer/BackgroundContainer
+@onready var box_background: NinePatchRect = $PanelContainer/BackgroundContainer/Background
+@onready var text_container: Control = $PanelContainer/TextContainer
+@onready var text: RichTextLabel = $PanelContainer/TextContainer/RichTextLabel
+@onready var timer_vfx: DialogTimerVfx = $DialogTimerVfx
+
+var _choices: Array[DialogChoice] = []
+var _num_choices: int = 0
+var _requestedText: String = ""
+var _unveiledText: String = ""
+var _tint: Color
+#text colours of the left and right speakers
+var _left_text_color: Color
+var _right_text_color: Color
+#answer the Confirm button submits, moved by the Highlight button
+var _highlighted_choice_index: int = 0
+var _is_answered_by_controls: bool = false
+
+const MAX_NUM_CHOICES: int = 3
+@export var _choiceHeight: int = 120
+
+const TOUCH_DEBOUNCE_TIME: float = 0.1
+var _touch_debounce_timer: float = 0
+
+const choiceMargin: Vector2 = Vector2(24,8)
+
+#### usage of pre-zoom font, tint and text area re-uses 153f7a2 - 60e239c
+func initialize(textboxScale: Vector2i, is_zoomed_dialogue: bool) -> void:
+	super.initialize(textboxScale, is_zoomed_dialogue)
+	if is_zoomed_dialogue: return
+
+	apply_compact_look(text, box_background)
+	for choice in _choices:
+		choice.use_compact_look()
+
+func set_tint(tint: Color) -> void:
+	_tint = tint
+
+#deep text colours the left and right speakers talk in for this dialogue
+func set_text_colors(left_text_color: Color, right_text_color: Color) -> void:
+	_left_text_color = left_text_color
+	_right_text_color = right_text_color
+
+func show_timer_vfx(show: bool) -> void:
+	if show:
+		timer_vfx.show()
+	else:
+		timer_vfx.hide()
+
+func set_text(dialog_descriptor: DialogDescriptor) -> void:
+	_initialize_choices(dialog_descriptor.choices)
+	_requestedText = dialog_descriptor.text
+
+	if dialog_descriptor.speaker == DialogDescriptor.Speaker.RIGHT:
+		background.modulate = _tint
+	else:
+		background.modulate = DialogColors.get_default_color()
+	var line_text_color: Color = _right_text_color if dialog_descriptor.speaker == DialogDescriptor.Speaker.RIGHT else _left_text_color
+	DialogColors.apply_text_colors(text, line_text_color, background.modulate * box_background.modulate)
+	_color_choices(dialog_descriptor.speaker)
+
+	reset_unveil()
+	_touch_debounce_timer = TOUCH_DEBOUNCE_TIME
+
+	# full text is laid out once so words never jump lines while unveiling
+	_unveiledText = ""
+	text.text = _requestedText
+	text.visible_characters = 0
+
+	#### pre-zoom typing grows the text from an empty label, re-using 153f7a2 - 60e239c
+	if not _is_zoomed_dialogue:
+		text.text = ""
+		text.visible_characters = -1
+
+#locks the shown answers for the lock time, each with a padlock and a filling colour
+func lock_choices(lock_time: float) -> void:
+	for choice_index in range(_num_choices):
+		_choices[choice_index].lock(lock_time)
+
+#cuts the answers' lock down to the given seconds left
+func shorten_choices_lock(remaining_lock_time: float) -> void:
+	for choice_index in range(_num_choices):
+		_choices[choice_index].shorten_lock(remaining_lock_time)
+
+#marks the answer picked during the lock as the one going in when it unlocks
+func mark_pending_choice(pending_choice_index: int) -> void:
+	for choice_index in range(_num_choices):
+		_choices[choice_index].set_pending(choice_index == pending_choice_index)
+
+#prints the answers in the text colour of the speaker answering, the one not saying the line, over the sentence box
+func _color_choices(line_speaker: DialogDescriptor.Speaker) -> void:
+	var answer_text_color: Color = _left_text_color if line_speaker == DialogDescriptor.Speaker.RIGHT else _right_text_color
+	for choice in _choices:
+		choice.set_text_colors(answer_text_color, background.modulate * box_background.modulate)
+
+func _initialize_choices(choices: Array[DialogDescriptor.ChoiceDescriptor]) -> void:
+	var numChoices: int = len(choices)
+	_num_choices = numChoices
+
+	for i in range(numChoices):
+		_choices[i].set_text(choices[i].text)
+		_choices[i].show()
+	
+	# hide whatever other choices are left
+	for i in range(numChoices, MAX_NUM_CHOICES):
+		_choices[i].hide()
+
+	_initialize_placement(numChoices)
+	timer_vfx.start_anim()
+
+	_highlighted_choice_index = 0
+	_refresh_choice_highlight()
+
+func _initialize_placement(num_choices: int) -> void:
+	panel_container.size = textboxScalePx
+	# Top-left-anchored position, move by half of scale back from center of screen
+	var windowSize: Vector2i = get_viewport().get_visible_rect().size
+	panel_container.position = windowSize * 0.5 - panel_container.size * panel_container.scale * 0.5
+	
+	var total_offset: float = 0
+	for i in range(num_choices):
+		# force height to be a single line, at the final width so the line count matches
+		#### _choices[i].size = Vector2(textboxScalePx.x, _choiceHeight)
+		#### pre-zoom answers are measured at the full dialog width, apprach re-uses 153f7a2 - 60e239c implementation
+		var choice_measure_width: float = textboxScalePx.x - choiceMargin.x * 2 if _is_zoomed_dialogue else textboxScalePx.x
+		_choices[i].size = Vector2(choice_measure_width, _choiceHeight)
+
+	# frame wait is needed for the text to actually process itself :/
+	await get_tree().process_frame
+	
+	# now, with the assumed height, calculate num lines
+	# extremely finicky but ok...
+	var choice_heights: Array[float] = []
+	for i in range(num_choices):
+		#### total_offset += _choiceHeight * _choices[i].get_num_lines()
+		choice_heights.append(_get_choice_height(_choices[i]))
+		total_offset += choice_heights[i]
+	
+	var accum_offset: float = 0
+	for i in range(num_choices):
+		_choices[i].position = panel_container.position + Vector2(0, textboxScalePx.y - textMargin.y - total_offset + accum_offset)
+		#### _choices[i].size = Vector2(textboxScalePx.x, _choiceHeight * _choices[i].get_num_lines())
+		_choices[i].size = Vector2(textboxScalePx.x, choice_heights[i])
+		accum_offset += _choices[i].size.y
+		apply_margins(_choices[i], choiceMargin)
+
+	# Scale the main textbox down to accomodate choices
+	text_container.position = Vector2(0,0)
+	#### text_container.size = panel_container.size - Vector2(0, _choiceHeight * num_choices)
+	#### pre-zoom text area leaves a single answer height for each answer, re-using 153f7a2 - 60e239c
+	var choices_height: float = total_offset if _is_zoomed_dialogue else _choiceHeight * num_choices
+	text_container.size = panel_container.size - Vector2(0, choices_height)
+	apply_margins(text_container, textMargin)
+	warn_if_text_overflows(text)
+
+	# place timer to the right of the dialog box
+	timer_vfx.position = panel_container.position + Vector2(panel_container.size.x + 24, 0)
+
+#answer box height, the text's own height plus padding in the zoomed dialogue, whole line slots in the pre-zoom one
+func _get_choice_height(choice: DialogChoice) -> float:
+	if not _is_zoomed_dialogue:
+		return _choiceHeight * choice.get_num_lines()
+	return choice.get_text_height() + (Configs.DialogueZoom["answer_text_padding"] + choiceMargin.y) * 2
+
+func _ready() -> void:
+	# pre-allocate the choices and hide them, to avoid dynamic instantiation
+	for i in range(MAX_NUM_CHOICES):
+		var choiceInstance: DialogChoice = choiceOriginal.instantiate();
+		choiceInstance.hide()
+		choiceInstance.choice_clicked.connect(_on_choice_clicked)
+		_choices.append(choiceInstance)
+		add_child(choiceInstance)
+
+	get_viewport().size_changed.connect(_on_viewport_size_changed)
+
+
+# re-centers the dialog and its choices after the window is resized
+func _on_viewport_size_changed() -> void:
+	_initialize_placement(_num_choices)
+
+#highlights the answers only with classic controls, where Confirm and Highlight pick them
+func show_choice_highlight(is_shown: bool) -> void:
+	_is_answered_by_controls = is_shown
+
+#Highlight button: moves the highlight to the next answer, from the last back to the first
+func highlight_next_choice() -> void:
+	if _num_choices == 0: return
+	_highlighted_choice_index = (_highlighted_choice_index + 1) % _num_choices
+	_refresh_choice_highlight()
+
+#Confirm button: shows the whole line if it is still unveiling and picks the highlighted answer
+func submit_highlighted_choice() -> void:
+	_skip_unveil()
+	finished.emit(_highlighted_choice_index)
+
+#tints the highlighted answer, the others keep their scene look
+func _refresh_choice_highlight() -> void:
+	for choice_index in range(_num_choices):
+		_choices[choice_index].set_highlighted(_is_answered_by_controls and choice_index == _highlighted_choice_index)
+
+#a click on an answer shows the whole line if it is still unveiling and picks that answer
+func _on_choice_clicked(sender: DialogChoice) -> void:
+	_skip_unveil()
+	finished.emit(_choices.find(sender))
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	if _touch_debounce_timer > 0:
+		_touch_debounce_timer -= delta
+	
+	if _unveiledText == _requestedText:
+		return
+
+	_unveiledText = get_unveiled(_requestedText, delta)
+	#### re-using 153f7a2 - 60e239c
+	#### text.text = _unveiledText
+	if _is_zoomed_dialogue:
+		text.visible_characters = _unveiledText.length()
+	else:
+		#pre-zoom typing, words may jump to the next line while unveiling
+		text.text = _unveiledText
+
+
+func _on_text_container_gui_input(event: InputEvent) -> void:
+	if _touch_debounce_timer > 0: return
+	
+	if (event is InputEventScreenTouch or event is InputEventMouseButton) and event.pressed:
+		_skip_unveil()
+
+#shows the whole line at once and reports the skip, only while it is still unveiling
+func _skip_unveil() -> void:
+	if _unveiledText == _requestedText: return
+
+	unveil_full_text(_requestedText)
+	text_skipped.emit()

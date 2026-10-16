@@ -1,0 +1,1191 @@
+[gd_scene format=3 uid="uid://dpmxum5qnxcdv"]
+
+[ext_resource type="Texture2D" uid="uid://bt3o17rw8gpyk" path="res://icon.png" id="app_icon"]
+[ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="dialog_box"]
+[ext_resource type="FontFile" uid="uid://b7wgk25vccvfr" path="res://!project/art/UI/DejaVuLGCSansMono-Bold.ttf" id="help_bold"]
+[ext_resource type="Shader" uid="uid://boii51q6tykpk" path="res://!project/art/shaders/outline.gdshader" id="outline_shader"]
+[ext_resource type="Script" uid="uid://ccfewk3ofj2cy" path="res://!project/build/design/scenes/overlays/popups/pixel_style_box.gd" id="pixel"]
+[ext_resource type="Script" path="res://!project/build/design/scenes/screens/leaderboard/rewards.gd" id="rewards"]
+[ext_resource type="FontFile" uid="uid://bdaf012h5ofyp" path="res://!project/assets/fonts/LiberationSans-Bold.ttf" id="sans"]
+
+[sub_resource type="StyleBox" id="StyleBox_badge_box"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 18.0
+content_margin_top = 18.0
+content_margin_right = 18.0
+content_margin_bottom = 18.0
+script = ExtResource("pixel")
+bg_color = Color(0.92549, 0.898039, 0.823529, 1)
+border_color = Color(0.823529, 0.788235, 0.698039, 1)
+border_width = 5
+dashed = true
+
+[sub_resource type="StyleBox" id="StyleBox_badge_box_selected"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 18.0
+content_margin_top = 18.0
+content_margin_right = 18.0
+content_margin_bottom = 18.0
+script = ExtResource("pixel")
+bg_color = Color(0.92549, 0.898039, 0.823529, 1)
+border_color = Color(0.745098, 0.584314, 0.172549, 1)
+border_width = 5
+dashed = true
+
+[sub_resource type="StyleBox" id="StyleBox_panel"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 40.0
+content_margin_top = 32.0
+content_margin_right = 40.0
+content_margin_bottom = 32.0
+script = ExtResource("pixel")
+bg_color = Color(0.968627, 0.941176, 0.87451, 1)
+border_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+border_width = 8
+shadow_color = Color(0.117647, 0.121569, 0.137255, 1)
+shadow_offset = Vector2(10, 10)
+inset_color = Color(0.847059, 0.803922, 0.690196, 1)
+inset_width = 8
+
+[sub_resource type="FontVariation" id="FontVariation_sans"]
+base_font = ExtResource("sans")
+spacing_glyph = 2
+
+[sub_resource type="StyleBox" id="StyleBox_tab"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 12.0
+content_margin_top = -1.0
+content_margin_right = 24.0
+content_margin_bottom = -1.0
+script = ExtResource("pixel")
+bg_color = Color(0.92549, 0.898039, 0.823529, 1)
+border_color = Color(0.823529, 0.788235, 0.698039, 1)
+border_width = 5
+dashed = true
+
+[sub_resource type="StyleBox" id="StyleBox_tab_selected"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 12.0
+content_margin_top = -1.0
+content_margin_right = 24.0
+content_margin_bottom = -1.0
+script = ExtResource("pixel")
+bg_color = Color(0.839216, 0.74902, 0.486275, 1)
+border_color = Color(0.745098, 0.584314, 0.172549, 1)
+border_width = 5
+dashed = true
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_boards"]
+
+[sub_resource type="StyleBox" id="StyleBox_rules"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 12.0
+content_margin_top = 14.0
+content_margin_right = 24.0
+content_margin_bottom = 14.0
+script = ExtResource("pixel")
+bg_color = Color(0.92549, 0.898039, 0.823529, 1)
+border_color = Color(0.733333, 0.698039, 0.627451, 1)
+border_width = 5
+dashed = true
+
+[sub_resource type="StyleBox" id="StyleBox_list"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 18.0
+content_margin_top = 18.0
+content_margin_right = 18.0
+content_margin_bottom = 18.0
+script = ExtResource("pixel")
+bg_color = Color(0.984314, 0.968627, 0.92549, 1)
+border_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+border_width = 5
+
+[sub_resource type="StyleBox" id="StyleBox_badge_divider"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = -1.0
+content_margin_top = 3.0
+content_margin_right = -1.0
+content_margin_bottom = -1.0
+script = ExtResource("pixel")
+bg_color = Color(0, 0, 0, 0)
+border_color = Color(0.823529, 0.788235, 0.698039, 1)
+border_width = 3
+border_sides = 2
+dashed = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_badge_circle_gold"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.937255, 0.772549, 0.298039, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.831373, 0.65098, 0.180392, 1)
+corner_radius_top_left = 999
+corner_radius_top_right = 999
+corner_radius_bottom_right = 999
+corner_radius_bottom_left = 999
+corner_detail = 20
+
+[sub_resource type="StyleBoxEmpty" id="StyleBox_badge_icon_outline"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_icon_outline"]
+shader = ExtResource("outline_shader")
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 24.0
+shader_parameter/enabled_outline = true
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_badge_circle_silver"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.8, 0.819608, 0.85098, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.658824, 0.682353, 0.721569, 1)
+corner_radius_top_left = 999
+corner_radius_top_right = 999
+corner_radius_bottom_right = 999
+corner_radius_bottom_left = 999
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_badge_circle_bronze"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.823529, 0.552941, 0.317647, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.698039, 0.419608, 0.196078, 1)
+corner_radius_top_left = 999
+corner_radius_top_right = 999
+corner_radius_bottom_right = 999
+corner_radius_bottom_left = 999
+corner_detail = 20
+
+[sub_resource type="Shader" id="Shader_vivid_colors"]
+code = "shader_type canvas_item;
+
+//screen behind the overlay, read back to strengthen its colours
+uniform sampler2D screen_texture : hint_screen_texture, filter_nearest;
+uniform float saturation : hint_range(1.0, 3.0) = 1.5;
+
+void fragment() {
+	vec3 screen_color = texture(screen_texture, SCREEN_UV).rgb;
+	float luminance = dot(screen_color, vec3(0.299, 0.587, 0.114));
+	COLOR = vec4(clamp(mix(vec3(luminance), screen_color, saturation), 0.0, 1.0), 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vivid_colors"]
+shader = SubResource("Shader_vivid_colors")
+shader_parameter/saturation = 1.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_badge_circle_red"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.776471, 0.211765, 0.235294, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.658824, 0.180392, 0.2, 1)
+corner_radius_top_left = 999
+corner_radius_top_right = 999
+corner_radius_bottom_right = 999
+corner_radius_bottom_left = 999
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_badge_circle_blue"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.0470588, 0.25098, 0.462745, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.039216, 0.211765, 0.392157, 1)
+corner_radius_top_left = 999
+corner_radius_top_right = 999
+corner_radius_bottom_right = 999
+corner_radius_bottom_left = 999
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_badge_circle_white"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.85098, 0.85098, 0.85098, 1)
+corner_radius_top_left = 999
+corner_radius_top_right = 999
+corner_radius_bottom_right = 999
+corner_radius_bottom_left = 999
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_badge_circle_slogan_red"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.496, 0, 0, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.419608, 0, 0, 1)
+corner_radius_top_left = 999
+corner_radius_top_right = 999
+corner_radius_bottom_right = 999
+corner_radius_bottom_left = 999
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_badge_circle_vest_yellow"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.87451, 1, 0, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.745098, 0.85098, 0, 1)
+corner_radius_top_left = 999
+corner_radius_top_right = 999
+corner_radius_bottom_right = 999
+corner_radius_bottom_left = 999
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_badge_circle_icon_orange"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.866667, 0.647059, 0.423529, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.737255, 0.54902, 0.360784, 1)
+corner_radius_top_left = 999
+corner_radius_top_right = 999
+corner_radius_bottom_right = 999
+corner_radius_bottom_left = 999
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_badge_circle_pikachu_yellow"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.972549, 0.815686, 0.188235, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.827451, 0.694118, 0.160784, 1)
+corner_radius_top_left = 999
+corner_radius_top_right = 999
+corner_radius_bottom_right = 999
+corner_radius_bottom_left = 999
+corner_detail = 20
+
+[sub_resource type="StyleBox" id="StyleBox_continue"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+script = ExtResource("pixel")
+bg_color = Color(0.894118, 0.866667, 0.796078, 1)
+border_color = Color(0.733333, 0.698039, 0.627451, 1)
+border_width = 8
+dashed = true
+
+[sub_resource type="StyleBox" id="StyleBox_continue_pressed"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+script = ExtResource("pixel")
+bg_color = Color(0.839216, 0.74902, 0.486275, 1)
+border_color = Color(0.745098, 0.584314, 0.172549, 1)
+border_width = 8
+dashed = true
+
+[node name="Rewards" type="Control" unique_id=659093148]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("rewards")
+box_style = SubResource("StyleBox_badge_box")
+selected_box_style = SubResource("StyleBox_badge_box_selected")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=1882979321]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.243137, 0.25098, 0.27451, 1)
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=1814077851]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 78.0
+offset_top = 40.0
+offset_right = -78.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="Layout" type="VBoxContainer" parent="Panel" unique_id=1206996310]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Top" type="HBoxContainer" parent="Panel/Layout" unique_id=580399767]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TopLeft" type="VBoxContainer" parent="Panel/Layout/Top" unique_id=2015993640]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Header" type="HBoxContainer" parent="Panel/Layout/Top/TopLeft" unique_id=241708743]
+custom_minimum_size = Vector2(0, 76)
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="Panel/Layout/Top/TopLeft/Header" unique_id=1933400491]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_fonts/font = SubResource("FontVariation_sans")
+theme_override_font_sizes/font_size = 44
+text = "NAGRADE"
+vertical_alignment = 1
+
+[node name="Controls" type="HBoxContainer" parent="Panel/Layout/Top/TopLeft" unique_id=250797652]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BoardTabs" type="HBoxContainer" parent="Panel/Layout/Top/TopLeft/Controls" unique_id=993132798]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+
+[node name="DailyTab" type="Button" parent="Panel/Layout/Top/TopLeft/Controls/BoardTabs" unique_id=1838377838]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 72)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_colors/font_focus_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_colors/font_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/font_hover_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_fonts/font = SubResource("FontVariation_sans")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBox_tab")
+theme_override_styles/pressed = SubResource("StyleBox_tab_selected")
+theme_override_styles/hover = SubResource("StyleBox_tab")
+theme_override_styles/hover_pressed = SubResource("StyleBox_tab_selected")
+theme_override_styles/disabled = SubResource("StyleBox_tab")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_boards")
+text = "DNEVNA"
+
+[node name="WeeklyTab" type="Button" parent="Panel/Layout/Top/TopLeft/Controls/BoardTabs" unique_id=1648859213]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 72)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_colors/font_focus_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_colors/font_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/font_hover_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_fonts/font = SubResource("FontVariation_sans")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBox_tab")
+theme_override_styles/pressed = SubResource("StyleBox_tab_selected")
+theme_override_styles/hover = SubResource("StyleBox_tab")
+theme_override_styles/hover_pressed = SubResource("StyleBox_tab_selected")
+theme_override_styles/disabled = SubResource("StyleBox_tab")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_boards")
+text = "NEDELJNA"
+
+[node name="TotalTab" type="Button" parent="Panel/Layout/Top/TopLeft/Controls/BoardTabs" unique_id=720702005]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 72)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_colors/font_focus_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_colors/font_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/font_hover_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_fonts/font = SubResource("FontVariation_sans")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBox_tab")
+theme_override_styles/pressed = SubResource("StyleBox_tab_selected")
+theme_override_styles/hover = SubResource("StyleBox_tab")
+theme_override_styles/hover_pressed = SubResource("StyleBox_tab_selected")
+theme_override_styles/disabled = SubResource("StyleBox_tab")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_boards")
+text = "UKUPNA"
+
+[node name="RulesCard" type="PanelContainer" parent="Panel/Layout/Top" unique_id=1573131022]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBox_rules")
+
+[node name="RulesText" type="RichTextLabel" parent="Panel/Layout/Top/RulesCard" unique_id=2120703917]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+theme = ExtResource("dialog_box")
+theme_override_font_sizes/normal_font_size = 24
+text = "Prvih 10 igrača na dnevnoj, nedeljnoj i ukupnoj rang-listi (sve se zatvara 31.10.2026.) osvajaju poklone. Pišite nam na email adresu blokadna.igra@gmail.com i pošaljite snimak ekrana sa navedenim imenom i ID, da potvrdimo Vaš rezultat."
+fit_content = true
+horizontal_alignment = 3
+vertical_alignment = 1
+
+[node name="List" type="PanelContainer" parent="Panel/Layout" unique_id=1794967253]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBox_list")
+
+[node name="Boxes" type="HBoxContainer" parent="Panel/Layout/List" unique_id=1418230561]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="DailyBox" type="PanelContainer" parent="Panel/Layout/List/Boxes" unique_id=1418230562]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBox_badge_box")
+
+[node name="DailyBadges" type="VBoxContainer" parent="Panel/Layout/List/Boxes/DailyBox" unique_id=1418230563]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="DailyTitle" type="Label" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges" unique_id=1418232200]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 30
+text = "DNEVNE NAGRADE"
+horizontal_alignment = 1
+
+[node name="TitleDivider" type="HSeparator" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges" unique_id=1418232201]
+layout_mode = 2
+theme_override_constants/separation = 20
+theme_override_styles/separator = SubResource("StyleBox_badge_divider")
+
+[node name="BadgeRow1" type="HBoxContainer" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges" unique_id=1418230564]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="Badge" type="PanelContainer" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow1" unique_id=1418230565]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBox_badge_circle_gold")
+
+[node name="IconOutline" type="PanelContainer" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow1/Badge" unique_id=1418230566]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_badge_icon_outline")
+
+[node name="Icon" type="TextureRect" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow1/Badge/IconOutline" unique_id=1418230567]
+material = SubResource("ShaderMaterial_icon_outline")
+layout_mode = 2
+texture = ExtResource("app_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DailyCaption1" type="VBoxContainer" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow1" unique_id=1418230568]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="PlaceLabel" type="Label" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow1/DailyCaption1" unique_id=1418230569]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.745098, 0.584314, 0.172549, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "1. mesto"
+uppercase = true
+
+[node name="BadgeNameLabel" type="Label" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow1/DailyCaption1" unique_id=1418230570]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 34
+text = "zlatni"
+uppercase = true
+
+[node name="BadgeKindLabel" type="Label" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow1/DailyCaption1" unique_id=1418231570]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "GLASALICA BEDŽ"
+
+[node name="Divider1" type="HSeparator" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges" unique_id=1418232000]
+layout_mode = 2
+theme_override_constants/separation = 3
+theme_override_styles/separator = SubResource("StyleBox_badge_divider")
+
+[node name="BadgeRow2" type="HBoxContainer" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges" unique_id=1418230571]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="Badge" type="PanelContainer" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow2" unique_id=1418230572]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBox_badge_circle_silver")
+
+[node name="IconOutline" type="PanelContainer" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow2/Badge" unique_id=1418230573]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_badge_icon_outline")
+
+[node name="Icon" type="TextureRect" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow2/Badge/IconOutline" unique_id=1418230574]
+material = SubResource("ShaderMaterial_icon_outline")
+layout_mode = 2
+texture = ExtResource("app_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DailyCaption2" type="VBoxContainer" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow2" unique_id=1418230575]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="PlaceLabel" type="Label" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow2/DailyCaption2" unique_id=1418230576]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.745098, 0.584314, 0.172549, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "2. mesto"
+uppercase = true
+
+[node name="BadgeNameLabel" type="Label" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow2/DailyCaption2" unique_id=1418230577]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 34
+text = "srebrni"
+uppercase = true
+
+[node name="BadgeKindLabel" type="Label" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow2/DailyCaption2" unique_id=1418231577]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "GLASALICA BEDŽ"
+
+[node name="Divider2" type="HSeparator" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges" unique_id=1418232001]
+layout_mode = 2
+theme_override_constants/separation = 3
+theme_override_styles/separator = SubResource("StyleBox_badge_divider")
+
+[node name="BadgeRow3" type="HBoxContainer" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges" unique_id=1418230578]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="Badge" type="PanelContainer" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow3" unique_id=1418230579]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBox_badge_circle_bronze")
+
+[node name="IconOutline" type="PanelContainer" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow3/Badge" unique_id=1418230580]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_badge_icon_outline")
+
+[node name="Icon" type="TextureRect" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow3/Badge/IconOutline" unique_id=1418230581]
+material = SubResource("ShaderMaterial_icon_outline")
+layout_mode = 2
+texture = ExtResource("app_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DailyCaption3" type="VBoxContainer" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow3" unique_id=1418230582]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="PlaceLabel" type="Label" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow3/DailyCaption3" unique_id=1418230583]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.745098, 0.584314, 0.172549, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "3. mesto"
+uppercase = true
+
+[node name="BadgeNameLabel" type="Label" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow3/DailyCaption3" unique_id=1418230584]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 34
+text = "bronzani"
+uppercase = true
+
+[node name="BadgeKindLabel" type="Label" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges/BadgeRow3/DailyCaption3" unique_id=1418231584]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "GLASALICA BEDŽ"
+
+[node name="Divider3" type="HSeparator" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges" unique_id=1418232100]
+layout_mode = 2
+theme_override_constants/separation = 3
+theme_override_styles/separator = SubResource("StyleBox_badge_divider")
+
+[node name="EmptyRow4" type="Control" parent="Panel/Layout/List/Boxes/DailyBox/DailyBadges" unique_id=1418232101]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="DailyVividOverlay" type="ColorRect" parent="Panel/Layout/List/Boxes/DailyBox" unique_id=1418232300]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_vivid_colors")
+layout_mode = 2
+mouse_filter = 2
+
+[node name="WeeklyBox" type="PanelContainer" parent="Panel/Layout/List/Boxes" unique_id=1418230585]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBox_badge_box")
+
+[node name="WeeklyBadges" type="VBoxContainer" parent="Panel/Layout/List/Boxes/WeeklyBox" unique_id=1418230586]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="WeeklyTitle" type="Label" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges" unique_id=1418232202]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 30
+text = "NEDELJNE NAGRADE"
+horizontal_alignment = 1
+
+[node name="TitleDivider" type="HSeparator" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges" unique_id=1418232203]
+layout_mode = 2
+theme_override_constants/separation = 20
+theme_override_styles/separator = SubResource("StyleBox_badge_divider")
+
+[node name="BadgeRow1" type="HBoxContainer" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges" unique_id=1418230587]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="Badge" type="PanelContainer" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow1" unique_id=1418230588]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBox_badge_circle_red")
+
+[node name="IconOutline" type="PanelContainer" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow1/Badge" unique_id=1418230589]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_badge_icon_outline")
+
+[node name="Icon" type="TextureRect" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow1/Badge/IconOutline" unique_id=1418230590]
+material = SubResource("ShaderMaterial_icon_outline")
+layout_mode = 2
+texture = ExtResource("app_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WeeklyCaption1" type="VBoxContainer" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow1" unique_id=1418230591]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="PlaceLabel" type="Label" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow1/WeeklyCaption1" unique_id=1418230592]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.745098, 0.584314, 0.172549, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "1. mesto"
+uppercase = true
+
+[node name="BadgeNameLabel" type="Label" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow1/WeeklyCaption1" unique_id=1418230593]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 34
+text = "crveni"
+uppercase = true
+
+[node name="BadgeKindLabel" type="Label" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow1/WeeklyCaption1" unique_id=1418231593]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "GLASALICA BEDŽ"
+
+[node name="Divider1" type="HSeparator" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges" unique_id=1418232002]
+layout_mode = 2
+theme_override_constants/separation = 3
+theme_override_styles/separator = SubResource("StyleBox_badge_divider")
+
+[node name="BadgeRow2" type="HBoxContainer" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges" unique_id=1418230594]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="Badge" type="PanelContainer" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow2" unique_id=1418230595]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBox_badge_circle_blue")
+
+[node name="IconOutline" type="PanelContainer" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow2/Badge" unique_id=1418230596]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_badge_icon_outline")
+
+[node name="Icon" type="TextureRect" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow2/Badge/IconOutline" unique_id=1418230597]
+material = SubResource("ShaderMaterial_icon_outline")
+layout_mode = 2
+texture = ExtResource("app_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WeeklyCaption2" type="VBoxContainer" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow2" unique_id=1418230598]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="PlaceLabel" type="Label" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow2/WeeklyCaption2" unique_id=1418230599]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.745098, 0.584314, 0.172549, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "2. mesto"
+uppercase = true
+
+[node name="BadgeNameLabel" type="Label" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow2/WeeklyCaption2" unique_id=1418230600]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 34
+text = "plavi"
+uppercase = true
+
+[node name="BadgeKindLabel" type="Label" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow2/WeeklyCaption2" unique_id=1418231600]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "GLASALICA BEDŽ"
+
+[node name="Divider2" type="HSeparator" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges" unique_id=1418232003]
+layout_mode = 2
+theme_override_constants/separation = 3
+theme_override_styles/separator = SubResource("StyleBox_badge_divider")
+
+[node name="BadgeRow3" type="HBoxContainer" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges" unique_id=1418230601]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="Badge" type="PanelContainer" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow3" unique_id=1418230602]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBox_badge_circle_white")
+
+[node name="IconOutline" type="PanelContainer" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow3/Badge" unique_id=1418230603]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_badge_icon_outline")
+
+[node name="Icon" type="TextureRect" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow3/Badge/IconOutline" unique_id=1418230604]
+material = SubResource("ShaderMaterial_icon_outline")
+layout_mode = 2
+texture = ExtResource("app_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WeeklyCaption3" type="VBoxContainer" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow3" unique_id=1418230605]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="PlaceLabel" type="Label" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow3/WeeklyCaption3" unique_id=1418230606]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.745098, 0.584314, 0.172549, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "3. mesto"
+uppercase = true
+
+[node name="BadgeNameLabel" type="Label" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow3/WeeklyCaption3" unique_id=1418230607]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 34
+text = "beli"
+uppercase = true
+
+[node name="BadgeKindLabel" type="Label" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges/BadgeRow3/WeeklyCaption3" unique_id=1418231607]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "GLASALICA BEDŽ"
+
+[node name="Divider3" type="HSeparator" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges" unique_id=1418232102]
+layout_mode = 2
+theme_override_constants/separation = 3
+theme_override_styles/separator = SubResource("StyleBox_badge_divider")
+
+[node name="EmptyRow4" type="Control" parent="Panel/Layout/List/Boxes/WeeklyBox/WeeklyBadges" unique_id=1418232103]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="WeeklyVividOverlay" type="ColorRect" parent="Panel/Layout/List/Boxes/WeeklyBox" unique_id=1418232301]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_vivid_colors")
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TotalBox" type="PanelContainer" parent="Panel/Layout/List/Boxes" unique_id=1418230608]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBox_badge_box")
+
+[node name="TotalBadges" type="VBoxContainer" parent="Panel/Layout/List/Boxes/TotalBox" unique_id=1418230609]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TotalTitle" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges" unique_id=1418232204]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 30
+text = "UKUPNE NAGRADE"
+horizontal_alignment = 1
+
+[node name="TitleDivider" type="HSeparator" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges" unique_id=1418232205]
+layout_mode = 2
+theme_override_constants/separation = 20
+theme_override_styles/separator = SubResource("StyleBox_badge_divider")
+
+[node name="BadgeRow1" type="HBoxContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges" unique_id=1418230610]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="Badge" type="PanelContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow1" unique_id=1418230611]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBox_badge_circle_slogan_red")
+
+[node name="IconOutline" type="PanelContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow1/Badge" unique_id=1418230612]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_badge_icon_outline")
+
+[node name="Icon" type="TextureRect" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow1/Badge/IconOutline" unique_id=1418230613]
+material = SubResource("ShaderMaterial_icon_outline")
+layout_mode = 2
+texture = ExtResource("app_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TotalCaption1" type="VBoxContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow1" unique_id=1418230614]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="PlaceLabel" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow1/TotalCaption1" unique_id=1418230615]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.745098, 0.584314, 0.172549, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "1. mesto"
+uppercase = true
+
+[node name="BadgeNameLabel" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow1/TotalCaption1" unique_id=1418230616]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 34
+text = "studentski"
+uppercase = true
+
+[node name="BadgeKindLabel" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow1/TotalCaption1" unique_id=1418231616]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "GLASALICA BEDŽ"
+
+[node name="Divider1" type="HSeparator" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges" unique_id=1418232004]
+layout_mode = 2
+theme_override_constants/separation = 3
+theme_override_styles/separator = SubResource("StyleBox_badge_divider")
+
+[node name="BadgeRow2" type="HBoxContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges" unique_id=1418230617]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="Badge" type="PanelContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow2" unique_id=1418230618]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBox_badge_circle_vest_yellow")
+
+[node name="IconOutline" type="PanelContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow2/Badge" unique_id=1418230619]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_badge_icon_outline")
+
+[node name="Icon" type="TextureRect" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow2/Badge/IconOutline" unique_id=1418230620]
+material = SubResource("ShaderMaterial_icon_outline")
+layout_mode = 2
+texture = ExtResource("app_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TotalCaption2" type="VBoxContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow2" unique_id=1418230621]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="PlaceLabel" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow2/TotalCaption2" unique_id=1418230622]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.745098, 0.584314, 0.172549, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "2. mesto"
+uppercase = true
+
+[node name="BadgeNameLabel" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow2/TotalCaption2" unique_id=1418230623]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 34
+text = "redarski"
+uppercase = true
+
+[node name="BadgeKindLabel" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow2/TotalCaption2" unique_id=1418231623]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "GLASALICA BEDŽ"
+
+[node name="Divider2" type="HSeparator" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges" unique_id=1418232005]
+layout_mode = 2
+theme_override_constants/separation = 3
+theme_override_styles/separator = SubResource("StyleBox_badge_divider")
+
+[node name="BadgeRow3" type="HBoxContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges" unique_id=1418230624]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="Badge" type="PanelContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow3" unique_id=1418230625]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBox_badge_circle_icon_orange")
+
+[node name="IconOutline" type="PanelContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow3/Badge" unique_id=1418230626]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_badge_icon_outline")
+
+[node name="Icon" type="TextureRect" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow3/Badge/IconOutline" unique_id=1418230627]
+material = SubResource("ShaderMaterial_icon_outline")
+layout_mode = 2
+texture = ExtResource("app_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TotalCaption3" type="VBoxContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow3" unique_id=1418230628]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="PlaceLabel" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow3/TotalCaption3" unique_id=1418230629]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.745098, 0.584314, 0.172549, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "3. mesto"
+uppercase = true
+
+[node name="BadgeNameLabel" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow3/TotalCaption3" unique_id=1418230630]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 34
+text = "kreativni"
+uppercase = true
+
+[node name="BadgeKindLabel" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow3/TotalCaption3" unique_id=1418231630]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "GLASALICA BEDŽ"
+
+[node name="Divider3" type="HSeparator" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges" unique_id=1418232006]
+layout_mode = 2
+theme_override_constants/separation = 3
+theme_override_styles/separator = SubResource("StyleBox_badge_divider")
+
+[node name="BadgeRow4" type="HBoxContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges" unique_id=1418230631]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="Badge" type="PanelContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow4" unique_id=1418230632]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBox_badge_circle_pikachu_yellow")
+
+[node name="IconOutline" type="PanelContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow4/Badge" unique_id=1418230633]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_badge_icon_outline")
+
+[node name="Icon" type="TextureRect" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow4/Badge/IconOutline" unique_id=1418230634]
+material = SubResource("ShaderMaterial_icon_outline")
+layout_mode = 2
+texture = ExtResource("app_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TotalCaption4" type="VBoxContainer" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow4" unique_id=1418230635]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="PlaceLabel" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow4/TotalCaption4" unique_id=1418230636]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.745098, 0.584314, 0.172549, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "4 - 10 mesta"
+uppercase = true
+
+[node name="BadgeNameLabel" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow4/TotalCaption4" unique_id=1418230637]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08235294, 0.078431375, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 34
+text = "dinstachu"
+uppercase = true
+
+[node name="BadgeKindLabel" type="Label" parent="Panel/Layout/List/Boxes/TotalBox/TotalBadges/BadgeRow4/TotalCaption4" unique_id=1418231637]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.290196, 0.258824, 0.219608, 1)
+theme_override_fonts/font = ExtResource("help_bold")
+theme_override_font_sizes/font_size = 22
+text = "GLASALICA BEDŽ"
+
+[node name="TotalVividOverlay" type="ColorRect" parent="Panel/Layout/List/Boxes/TotalBox" unique_id=1418232302]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_vivid_colors")
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BackButton" type="Button" parent="Panel/Layout" unique_id=705845046]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 86)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/font_focus_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/font_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/font_hover_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/font_disabled_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_fonts/font = SubResource("FontVariation_sans")
+theme_override_font_sizes/font_size = 46
+theme_override_styles/normal = SubResource("StyleBox_continue")
+theme_override_styles/pressed = SubResource("StyleBox_continue_pressed")
+theme_override_styles/hover = SubResource("StyleBox_continue")
+theme_override_styles/hover_pressed = SubResource("StyleBox_continue_pressed")
+theme_override_styles/disabled = SubResource("StyleBox_continue")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+text = "NAZAD"

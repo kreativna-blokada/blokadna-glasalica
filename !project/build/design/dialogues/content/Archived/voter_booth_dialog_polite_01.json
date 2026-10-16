@@ -1,0 +1,18 @@
+﻿{
+  "root": {
+    "text": "[POL] Izvinite, vidim da vadite telefon. Znate li da ne smete da slikate listić?",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Naravno da smem, to je moj listić.",
+        "explanation": "Fotografisanje glasačkog listića nije dozvoljeno. Tajnost glasanja mora biti zaštićena.",
+        "score": -26000
+      },
+      {
+        "text": "Bolje da ne slikam, poštujem pravila.",
+        "explanation": "Ispravno ste postupili. Fotografisanje listića je zabranjeno radi zaštite tajnosti glasanja.",
+        "score": 131000
+      }
+    ]
+  }
+}

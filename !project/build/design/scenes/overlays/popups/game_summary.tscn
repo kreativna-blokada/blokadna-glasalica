@@ -1,0 +1,183 @@
+[gd_scene format=3 uid="uid://ds02u7r8egoqj"]
+
+[ext_resource type="Script" uid="uid://mmt8ucftmisr" path="res://!project/build/design/scenes/overlays/popups/game_summary.gd" id="1_bs6ff"]
+[ext_resource type="Script" path="res://!project/build/design/scenes/overlays/popups/pixel_style_box.gd" id="2_pixel_box"]
+[ext_resource type="Script" path="res://!project/build/design/scenes/overlays/popups/summary_score_bar.gd" id="3_score_bar"]
+[ext_resource type="FontFile" uid="uid://bdaf012h5ofyp" path="res://!project/assets/fonts/LiberationSans-Bold.ttf" id="4_sans"]
+
+[sub_resource type="FontVariation" id="FontVariation_sans"]
+base_font = ExtResource("4_sans")
+spacing_glyph = 2
+
+[sub_resource type="StyleBox" id="StyleBox_panel"]
+content_margin_left = 48.0
+content_margin_top = 43.0
+content_margin_right = 48.0
+content_margin_bottom = 43.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.968627, 0.941176, 0.87451, 1)
+border_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+border_width = 8
+shadow_color = Color(0.117647, 0.121569, 0.137255, 1)
+shadow_offset = Vector2(10, 10)
+inset_color = Color(0.847059, 0.803922, 0.690196, 1)
+inset_width = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_list"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.984314, 0.968627, 0.92549, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_scroll"]
+content_margin_left = 20.0
+bg_color = Color(0.894118, 0.866667, 0.796078, 1)
+border_width_left = 5
+border_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grabber"]
+content_margin_left = 20.0
+bg_color = Color(0.54902, 0.517647, 0.447059, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+
+[sub_resource type="Theme" id="Theme_list"]
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_grabber")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_grabber")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_grabber")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_scroll")
+VScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_scroll")
+
+[sub_resource type="StyleBox" id="StyleBox_continue"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.894118, 0.866667, 0.796078, 1)
+border_color = Color(0.733333, 0.698039, 0.627451, 1)
+border_width = 8
+dashed = true
+
+[sub_resource type="StyleBox" id="StyleBox_continue_pressed"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+script = ExtResource("2_pixel_box")
+bg_color = Color(0.839216, 0.74902, 0.486275, 1)
+border_color = Color(0.745098, 0.584314, 0.172549, 1)
+border_width = 8
+dashed = true
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[node name="GameSummary" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bs6ff")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 78.0
+offset_top = 40.0
+offset_right = -78.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="Layout" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Header" type="HBoxContainer" parent="Panel/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="TitleLabel" type="Label" parent="Panel/Layout/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_fonts/font = SubResource("FontVariation_sans")
+theme_override_font_sizes/font_size = 51
+text = "ODGOVORI"
+
+[node name="Score" type="HBoxContainer" parent="Panel/Layout/Header"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="PercentLabel" type="Label" parent="Panel/Layout/Header/Score"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_fonts/font = ExtResource("4_sans")
+theme_override_font_sizes/font_size = 33
+text = "0%"
+
+[node name="ScoreBar" type="Control" parent="Panel/Layout/Header/Score"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 39)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("3_score_bar")
+
+[node name="List" type="PanelContainer" parent="Panel/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_list")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/Layout/List"]
+layout_mode = 2
+theme = SubResource("Theme_list")
+horizontal_scroll_mode = 0
+scroll_deadzone = 20
+
+[node name="ListMargin" type="MarginContainer" parent="Panel/Layout/List/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="Answers" type="VBoxContainer" parent="Panel/Layout/List/ScrollContainer/ListMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="ContinueButton" type="Button" parent="Panel/Layout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/font_hover_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/font_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_fonts/font = SubResource("FontVariation_sans")
+theme_override_font_sizes/font_size = 51
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/normal = SubResource("StyleBox_continue")
+theme_override_styles/hover = SubResource("StyleBox_continue")
+theme_override_styles/pressed = SubResource("StyleBox_continue_pressed")
+theme_override_styles/hover_pressed = SubResource("StyleBox_continue_pressed")
+text = "DALJE"

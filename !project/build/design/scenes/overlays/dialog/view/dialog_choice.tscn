@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bajym0ymo77hl"]
+
+[ext_resource type="Texture2D" uid="uid://dedyjt5as2e08" path="res://!project/art/UI/DialogBox/DialogBoxChoiceNineSlice.png" id="1_d5xtk"]
+[ext_resource type="Script" uid="uid://dnq08vd4q8j85" path="res://!project/build/design/scenes/overlays/dialog/view/dialog_choice.gd" id="1_j0xkp"]
+[ext_resource type="Theme" uid="uid://duic02i5k0kb4" path="res://!project/art/UI/DialogBox/dialog_box.tres" id="2_gqu4x"]
+
+[node name="DialogChoice" type="Control" unique_id=1370238554]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_j0xkp")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=215934071]
+modulate = Color(1, 1, 1, 0.59607846)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.125
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(8, 8)
+texture = ExtResource("1_d5xtk")
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="ChoiceText" type="RichTextLabel" parent="." unique_id=767626315]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_right = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_gqu4x")
+scroll_active = false
+vertical_alignment = 1
+
+[node name="ClickDetector" type="Control" parent="." unique_id=318280899]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="gui_input" from="ClickDetector" to="." method="_on_click_detector_gui_input"]

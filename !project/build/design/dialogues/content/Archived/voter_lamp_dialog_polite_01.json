@@ -1,0 +1,69 @@
+﻿{
+  "root": {
+    "text": "[POL] Dobar dan, molim vas da pružite ruku da proverimo sprej UV lampom.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Naravno, izvolite.",
+        "explanation": "Birač poštuje proceduru.",
+        "score": 131000,
+        "next": "check_passed"
+      },
+      {
+        "text": "Zašto to radite?",
+        "explanation": "Birač traži objašnjenje, što je dozvoljeno.",
+        "score": 66000,
+        "next": "procedure_explained"
+      },
+      {
+        "text": "Neću, žurim.",
+        "explanation": "Birač odbija proveru, što je prekršaj.",
+        "score": -52000,
+        "next": "check_refused"
+      }
+    ]
+  },
+  "check_passed": {
+    "text": "Hvala, možete nastaviti dalje.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala i vama, prijatan dan.",
+        "explanation": "Korektna komunikacija.",
+        "score": 131000
+      }
+    ]
+  },
+  "procedure_explained": {
+    "text": "Proveravamo da li je neko već glasao, to je obavezna procedura.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Razumem, izvolite ruku.",
+        "explanation": "Birač prihvata objašnjenje.",
+        "score": 105000
+      },
+      {
+        "text": "I dalje mi nije jasno, ali ajde.",
+        "explanation": "Birač je nepoverljiv, ali ne pravi problem.",
+        "score": 66000
+      }
+    ]
+  },
+  "check_refused": {
+    "text": "Nažalost, bez UV provere ne možete pristupiti glasanju.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Dobro, evo ruka.",
+        "explanation": "Birač se vraća proceduri.",
+        "score": 66000
+      },
+      {
+        "text": "Onda neću ni da glasam!",
+        "explanation": "Birač odustaje, što je njegovo pravo, ali nije preporučljivo.",
+        "score": -13000
+      }
+    ]
+  }
+}

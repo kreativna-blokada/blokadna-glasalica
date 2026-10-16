@@ -1,0 +1,52 @@
+﻿{
+  "root": {
+    "text": "[ANG] Pružite ruku pod lampu, nemamo ceo dan!",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Evo ruke, samo polako.",
+        "explanation": "Ispravno, birač poštuje proceduru.",
+        "score": 131000,
+        "next": "check_passed"
+      },
+      {
+        "text": "Ma pusti me, neću da mi neko sija u facu!",
+        "explanation": "Birač odbija proveru, što je ozbiljan prekršaj.",
+        "score": -52000,
+        "next": "check_insisted"
+      }
+    ]
+  },
+  "check_passed": {
+    "text": "Nema tragova spreja, možete dalje.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala, prijatno.",
+        "explanation": "Korektna komunikacija.",
+        "score": 131000
+      },
+      {
+        "text": "Ajde više, gubim vreme zbog vas!",
+        "explanation": "Nepristojan odgovor birača ometa rad biračkog odbora.",
+        "score": -26000
+      }
+    ]
+  },
+  "check_insisted": {
+    "text": "Bez UV provere ne možeš da glasaš, to je pravilo.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Ma ne zanima me, zovi šefa!",
+        "explanation": "Birač eskalira situaciju, ometa rad biračkog mesta.",
+        "score": -79000
+      },
+      {
+        "text": "Dobro, ajde, proveri brzo.",
+        "explanation": "Birač popušta, vraća se proceduri.",
+        "score": 66000
+      }
+    ]
+  }
+}

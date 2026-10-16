@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Pored vašeg imena već postoji potpis. Moramo da zaustavimo postupak i proverimo šta se dogodilo.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Nisam ja potpisao! Tražim da se odmah pozove predsednik odbora i unese primedba.",
+        "explanation": "Ispravno, sumnja da je neko glasao ili se potpisao umesto birača mora se rešavati kroz birački odbor i zapisnik.",
+        "score": 131000,
+        "next": "chair_called"
+      },
+      {
+        "text": "Dajte mi drugo mesto da se potpišem, nemam vremena za ovo.",
+        "explanation": "Potpisivanje na drugo mesto ne rešava nepravilnost i može pogoršati evidenciju.",
+        "score": -39000,
+        "next": "refusal"
+      },
+      {
+        "text": "Znao sam da ćete nešto smuljati, sad ću sam da precrtam taj potpis.",
+        "explanation": "Birač ne sme samovoljno menjati birački spisak.",
+        "score": -52000
+      }
+    ]
+  },
+  "chair_called": {
+    "text": "Predsednik odbora prilazi i kaže da se situacija mora evidentirati pre bilo kakvog nastavka.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U redu, sačekaću da se sve zabeleži.",
+        "explanation": "Ispravno, birač omogućava da se nepravilnost dokumentuje.",
+        "score": 131000
+      },
+      {
+        "text": "Neću da čekam, samo mi dajte listić.",
+        "explanation": "Nastavak bez razrešenja sporne evidencije bio bi nepravilnost.",
+        "score": -39000
+      }
+    ]
+  },
+  "refusal": {
+    "text": "Ne možemo vas potpisati na drugo mesto. Ovo mora da se proveri.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Dobro, proverite i zabeležite šta se desilo.",
+        "explanation": "Birač se vraća pravilnom postupanju.",
+        "score": 105000
+      },
+      {
+        "text": "Onda niko neće glasati dok mene ne pustite.",
+        "explanation": "Blokiranje glasanja zbog spora dodatno ometa rad biračkog mesta.",
+        "score": -79000
+      }
+    ]
+  }
+}
