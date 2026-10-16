@@ -197,6 +197,24 @@ var ClassicalControllers: Dictionary[String, Variant] = {
 	"guide_border_faded_opacity": 0.05,
 	#stations where the guide border pulses around Initiate the first time the room voter stops there
 	"initiate_guide_stations": [1, 2],
+	#mm of screen height a button covers on a mobile screen, a comfortable thumb target
+	"button_target_mm": 10.5,
+	#px smallest button side, reached only where the dialog leaves little room beside it
+	"button_min_size": 80.0,
+	#px largest button side
+	"button_max_size": 200.0,
+	#gap between the two buttons of a pair, as a share of the button side
+	"button_gap_ratio": 0.25,
+	#px the upper button of a pair (Select, Highlight) sits above the lower one, leaving room for the round timer under Select
+	"button_stagger": 106.0,
+	#px between the outer button of a pair and the screen side
+	"button_edge_margin": 40.0,
+	#px between the lower button of a pair and the screen bottom
+	"button_bottom_margin": 46.0,
+	#px kept free between the buttons and the dialog box, and between the buttons and the speaker name plates
+	"dialog_clearance": 24.0,
+	#px the touch area of a button reaches past its art on every side
+	"touch_padding": 8.0,
 }
 
 #round holes the dialog dim leaves over the on-screen buttons

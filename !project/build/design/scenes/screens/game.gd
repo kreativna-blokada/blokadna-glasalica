@@ -71,7 +71,7 @@ func _ready() -> void:
 	stage.dialogue_requested.connect(_open_dialogue)
 	stage.room_voter_stopped.connect(_on_room_voter_stopped)
 
-	controls.init(stage, _game_descriptor.get_controller_type())
+	controls.init(stage, _game_descriptor.get_controller_type(), DIALOG_SIZE.x)
 	controls.buttons_moved.connect(_on_controls_buttons_moved)
 	Signals.game_close_requested.connect(_on_game_close_requested)
 	Signals.help_requested.connect(_on_help_requested)
