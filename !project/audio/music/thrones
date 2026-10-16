@@ -1,0 +1,126 @@
+# C minor, 3/4
+use_bpm 85
+
+INTRO_BARS = 8
+MELODY_BARS = 16
+CLIMAX_BARS = 16
+FADE_BARS = 4
+TOTAL_BARS = INTRO_BARS + MELODY_BARS + CLIMAX_BARS + FADE_BARS
+FADE_START = TOTAL_BARS - FADE_BARS
+CLIMAX_START = INTRO_BARS + MELODY_BARS
+
+PHRASE_A = [[:g3, 2], [:c4, 2], [:eb4, 0.5],
+            [:f4, 0.5], [:d4, 3], [:r, 4]]
+PHRASE_B = [[:bb3, 2], [:eb4, 2], [:d4, 0.5],
+            [:c4, 0.5], [:bb3, 3], [:r, 4]]
+PAD_CHORDS = [chord(:c3, :minor), chord(:ab2, :major),
+              chord(:bb2, :major), chord(:c3, :minor)]
+
+# plays one bar of the low ostinato, every fourth bar with A2
+define :ostinato_bar do |bar, level|
+  third = (bar % 4 == 3) ? :a2 : :ab2
+  pitches = [:c3, :g2, third, :bb2] * 2
+  durations = [0.5, 0.5, 0.25, 0.25] * 2
+  use_synth :dsaw
+  pitches.zip(durations).each do |pitch, duration|
+    play pitch, amp: level, attack: 0.01,
+      release: duration * 0.9, cutoff: 80, detune: 0.1
+    sleep duration
+  end
+end
+
+# hits the downbeat drums, heavier with reverb every 4 bars
+define :drum_bar do |bar, level|
+  sample :drum_bass_hard, amp: level
+  sample :drum_tom_lo_hard, amp: level * 0.8
+  if bar % 4 == 0
+    with_fx :reverb, room: 1, mix: 0.6 do
+      sample :drum_bass_hard, amp: level * 1.5, rate: 0.8
+    end
+  end
+end
+
+# plays one melody phrase, doubled by extra voices when full
+define :melody_phrase do |phrase, octave_shift, full|
+  with_fx :echo, phase: 0.75, decay: 4, mix: 0.3 do
+    phrase.each do |name, duration|
+      unless name == :r
+        pitch = note(name) + octave_shift
+        shape = { attack: 0.3,
+                  sustain: duration * 0.7,
+                  release: duration * 0.5 }
+        synth :blade, shape.merge(note: pitch, amp: 0.8)
+        if full
+          synth :hollow,
+            shape.merge(note: pitch + 12, amp: 0.5)
+          synth :saw,
+            shape.merge(note: pitch - 12, amp: 0.25, cutoff: 70)
+        end
+      end
+      sleep duration
+    end
+  end
+end
+
+# holds one bar of the brass-like chord pad
+define :pad_bar do |bar, level|
+  use_synth :prophet
+  play_chord PAD_CHORDS[bar % 4], amp: level,
+    attack: 1, sustain: 1.5, release: 1, cutoff: 70
+end
+
+# holds one bar of the high string shimmer
+define :shimmer_bar do |level|
+  [:c5, :g5].each do |pitch|
+    synth :hollow, note: pitch, amp: level,
+      attack: 1, sustain: 1, release: 1
+  end
+end
+
+with_fx :reverb, room: 0.8, mix: 0.4 do
+  TOTAL_BARS.times do |bar|
+    fade_step = bar - FADE_START
+    fading = fade_step >= 0
+    climax = bar >= CLIMAX_START && !fading
+    early_fade = !fading || fade_step < 2
+
+    ostinato_level = 0.8
+    ostinato_level = 0.8 * (1 - fade_step * 0.2) if fading
+    in_thread { ostinato_bar bar, ostinato_level }
+
+    if early_fade
+      drum_level = 1.0
+      drum_level = 1.3 if climax
+      drum_level = 0.6 if fading
+      in_thread { drum_bar bar, drum_level }
+    end
+
+    if bar >= 16 && early_fade
+      pad_level = climax ? 0.6 : 0.4
+      pad_level = 0.5 * (1 - fade_step * 0.5) if fading
+      in_thread { pad_bar bar, pad_level }
+    end
+
+    if climax || (fading && fade_step < 2)
+      shimmer_level = 0.3
+      shimmer_level = 0.3 * (1 - fade_step * 0.5) if fading
+      in_thread { shimmer_bar shimmer_level }
+    end
+
+    if [INTRO_BARS, INTRO_BARS + 8].include?(bar)
+      in_thread do
+        melody_phrase PHRASE_A, 0, false
+        melody_phrase PHRASE_B, 0, false
+      end
+    end
+
+    if [CLIMAX_START, CLIMAX_START + 8].include?(bar)
+      in_thread do
+        melody_phrase PHRASE_A, 12, true
+        melody_phrase PHRASE_B, 12, true
+      end
+    end
+
+    sleep 3
+  end
+end

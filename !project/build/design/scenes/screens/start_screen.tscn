@@ -20,6 +20,11 @@
 [ext_resource type="Texture2D" uid="uid://clj5env0n8wrv" path="res://!project/art/UI/Buttons/setup-zoom-active.png" id="13_zoom_active"]
 [ext_resource type="Texture2D" uid="uid://d3usamqtowmd" path="res://!project/art/UI/Buttons/setup-zoom-default.png" id="13_zoom_default"]
 [ext_resource type="Shader" path="res://!project/art/shaders/filler.gdshader" id="14_filler"]
+[ext_resource type="AudioStream" uid="uid://nlcpusj8vuv" path="res://!project/audio/jingles/8-bit-game-7.mp3" id="15_letter_b_sound"]
+[ext_resource type="AudioStream" uid="uid://bamoxwy6fhy21" path="res://!project/audio/jingles/8-bit-game-2.mp3" id="15_letter_i_sound"]
+[ext_resource type="AudioStream" uid="uid://bd62u3m57hkgc" path="res://!project/audio/jingles/8-bit-game-4.mp3" id="15_letter_t_sound"]
+[ext_resource type="AudioStream" uid="uid://dgyiphceo0177" path="res://!project/audio/jingles/retro-synth-alert-sound.mp3" id="15_team_alert_sound"]
+[ext_resource type="PackedScene" path="res://!project/build/design/scenes/screens/thrones.tscn" id="16_thrones"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_start_fill"]
 shader = ExtResource("14_filler")
@@ -315,6 +320,7 @@ uppercase = true
 
 [node name="InfoLabel" type="Label" parent="." unique_id=1279247605]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.7814815
@@ -335,26 +341,27 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="TeamLabel" type="Label" parent="." unique_id=1843605127]
+[node name="TeamLabel" type="RichTextLabel" parent="." unique_id=1843605127]
 unique_name_in_owner = true
-visible = false
+clip_contents = false
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.589
 anchor_right = 0.6
 anchor_bottom = 0.589
 offset_left = 76.0
-offset_top = -50.0
+offset_top = 2.5
 offset_right = -76.0
-offset_bottom = 50.0
+offset_bottom = 102.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.496, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 48
-text = "КРЕАТИВНА (ИТ?) БЛОКАДА
-
-Марија М., Игор И.,
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.496, 0, 0, 1)
+theme_override_constants/line_separation = 3
+theme_override_fonts/normal_font = ExtResource("2_font")
+theme_override_font_sizes/normal_font_size = 42
+bbcode_enabled = true
+text = "Марија М., Игор И.,
 Немања М., Ђорђе Ђ.,
 Александар Љ., Андреј О.,
 Бојан В., Ивана Б.,
@@ -363,12 +370,125 @@ text = "КРЕАТИВНА (ИТ?) БЛОКАДА
 Милош П., Владимир А.,
 Жељко В. као и сви
 саборци студентског покрета"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KreativnaBlokada" type="Label" parent="TeamLabel" unique_id=1843605128]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -118.0
+offset_bottom = -63.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.496, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 50
+text = "КРЕАТИВНА БЛОКАДА"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
+[node name="ITglouriousBasterds" type="HBoxContainer" parent="TeamLabel" unique_id=1843605129]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -59.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="WithSomeText" type="Label" parent="TeamLabel/ITglouriousBasterds" unique_id=913500101]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4117647, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 44
+text = "w/ some "
+vertical_alignment = 1
+
+[node name="LetterI" type="Label" parent="TeamLabel/ITglouriousBasterds" unique_id=913500102]
+custom_minimum_size = Vector2(16.1, 0)
+layout_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.4117647, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.4)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 44
+text = "I"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LetterSound" type="AudioStreamPlayer" parent="TeamLabel/ITglouriousBasterds/LetterI" unique_id=913500107]
+stream = ExtResource("15_letter_i_sound")
+
+[node name="LetterT" type="Label" parent="TeamLabel/ITglouriousBasterds" unique_id=913500103]
+custom_minimum_size = Vector2(29.4, 0)
+layout_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.4117647, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.4)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 44
+text = "T"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LetterSound" type="AudioStreamPlayer" parent="TeamLabel/ITglouriousBasterds/LetterT" unique_id=913500108]
+stream = ExtResource("15_letter_t_sound")
+
+[node name="GlouriousText" type="Label" parent="TeamLabel/ITglouriousBasterds" unique_id=913500104]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4117647, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 44
+text = "glourious "
+vertical_alignment = 1
+
+[node name="LetterB" type="Label" parent="TeamLabel/ITglouriousBasterds" unique_id=913500105]
+custom_minimum_size = Vector2(33.9, 0)
+layout_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.4117647, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.4)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 44
+text = "B"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LetterSound" type="AudioStreamPlayer" parent="TeamLabel/ITglouriousBasterds/LetterB" unique_id=913500109]
+stream = ExtResource("15_letter_b_sound")
+
+[node name="AsterdsText" type="Label" parent="TeamLabel/ITglouriousBasterds" unique_id=913500106]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4117647, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 44
+text = "asterds"
+vertical_alignment = 1
+
+[node name="AlertSound" type="AudioStreamPlayer" parent="TeamLabel/ITglouriousBasterds" unique_id=913500110]
+stream = ExtResource("15_team_alert_sound")
+
+[node name="Thrones" parent="." unique_id=1487874626 instance=ExtResource("16_thrones")]
+unique_name_in_owner = true
+layout_mode = 1
+
 [node name="MenuOptionButton" type="Button" parent="." unique_id=120688566]
 unique_name_in_owner = true
+visible = false
 material = SubResource("ShaderMaterial_start_fill")
 layout_mode = 1
 anchors_preset = -1
@@ -1019,7 +1139,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
-theme_override_colors/font_color = Color(0.496, 0, 0, 1)
+theme_override_colors/font_color = Color(0.65882355, 0.18039216, 0.2, 1)
 theme_override_colors/font_pressed_color = Color(0.18431373, 0.43529412, 0.8784314, 1)
 theme_override_colors/font_hover_color = Color(0.18431373, 0.43529412, 0.8784314, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.18431373, 0.43529412, 0.8784314, 1)
