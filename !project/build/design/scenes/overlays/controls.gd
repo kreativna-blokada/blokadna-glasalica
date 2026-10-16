@@ -88,6 +88,13 @@ func get_button_spotlights() -> PackedVector3Array:
 		button_spotlights.append(Vector3(button_centre.x, button_centre.y, spotlight_radius))
 	return button_spotlights
 
+#canvas y of the highest shown button, the speaker name plates stay above it
+func get_buttons_top() -> float:
+	var buttons_top: float = get_viewport().get_visible_rect().size.y
+	for shown_button in _get_shown_buttons():
+		buttons_top = minf(buttons_top, shown_button.global_position.y)
+	return buttons_top
+
 #classic or next buttons the controller type keeps on screen
 func _get_shown_buttons() -> Array[TouchScreenButton]:
 	var shown_buttons: Array[TouchScreenButton] = []
