@@ -344,14 +344,15 @@ func _advance_team_sequence(team_letter: Label) -> void:
 	var letter_sound: AudioStreamPlayer = team_letter.get_node(^"LetterSound")
 	get_tree().create_timer(letter_sound.stream.get_length() + _TEAM_SEQUENCE_ALERT_GAP).timeout.connect(_crumble_team_into_throne)
 
-#plays the alert sound and, while the team row still shows, swaps the team and slogan letters for pixel points crumbling into the throne for as long as the alert sound plays
+#while the team row still shows, swaps the team, web version and slogan letters for pixel points slice glitching, vanishing and crumbling into the throne for as long as the alert sound is heard, then plays the alert sound so both start together
 func _crumble_team_into_throne() -> void:
-	team_alert_sound.play()
-	if not team_label.visible: return
+	if team_label.visible:
+		thrones.crumble(team_label, slogan_label, web_version_box, team_alert_sound.stream.get_length() - Configs.Thrones["silent_tail"])
+		team_label.hide()
+		slogan_label.hide()
+		web_version_box.hide()
 
-	thrones.crumble(team_label, slogan_label, team_alert_sound.stream.get_length())
-	team_label.hide()
-	slogan_label.hide()
+	team_alert_sound.play()
 
 #scrambles and recolours the team member name with matrix rain characters a few times, then restores the team list
 func _glitch_team_name(team_name: String) -> void:
@@ -447,10 +448,11 @@ func _on_menu_option_selected(menu_option: Globals.MainMenu) -> void:
 	left_arrow.visible = is_selector_chosen
 	right_arrow.visible = is_selector_chosen
 	_show_button_caption()
-	#the throne stays until the team row is left, the team and slogan letters come back after it
+	#the throne stays until the team row is left, the team, slogan and web version letters come back after it
 	if not is_team_chosen: thrones.clear()
 	team_label.visible = is_team_chosen and not thrones.is_shown()
 	slogan_label.visible = not thrones.is_shown()
+	web_version_box.visible = not OS.has_feature("web") and not thrones.is_shown()
 	info_label.visible = not is_team_chosen
 	if not is_team_chosen: info_label.text = _get_menu_description(menu_option)
 

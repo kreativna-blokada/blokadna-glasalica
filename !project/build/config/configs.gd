@@ -255,10 +255,22 @@ var IdReveal: Dictionary[String, Variant] = {
 var Thrones: Dictionary[String, Variant] = {
 	#px between sampled team letter pixels, also the pixel point size
 	"point_spacing": 4.0,
+	#px between sampled slogan letter pixels, denser so the slogan alone fills the throne
+	"slogan_point_spacing": 2.0,
 	#throne texture px between sampled throne pixels
 	"throne_sample_step": 3,
-	#share of the crumble over which the pixel points start flying into the throne one after another
+	#share of the crumble the team names slice glitch for
+	"slice_glitch_share": 0.3,
+	#s a slice glitch picture holds before the slices shift again
+	"slice_glitch_step_duration": 0.06,
+	#px tall team slice shifting sideways as one
+	"slice_height": 18.0,
+	#px a team slice shifts sideways at most
+	"slice_shift": 60.0,
+	#share of the slogan flight over which its pixel points start flying into the throne one after another
 	"stagger_share": 0.2,
+	#s of near silence ending the alert sound, the crumble finishes before it
+	"silent_tail": 0.7,
 }
 
 #ENTITY
