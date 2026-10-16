@@ -320,7 +320,6 @@ uppercase = true
 
 [node name="InfoLabel" type="Label" parent="." unique_id=1279247605]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.7814815
@@ -343,6 +342,7 @@ autowrap_mode = 3
 
 [node name="TeamLabel" type="RichTextLabel" parent="." unique_id=1843605127]
 unique_name_in_owner = true
+visible = false
 clip_contents = false
 layout_mode = 1
 anchors_preset = -1
@@ -488,7 +488,6 @@ layout_mode = 1
 
 [node name="MenuOptionButton" type="Button" parent="." unique_id=120688566]
 unique_name_in_owner = true
-visible = false
 material = SubResource("ShaderMaterial_start_fill")
 layout_mode = 1
 anchors_preset = -1
