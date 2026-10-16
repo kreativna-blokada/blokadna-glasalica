@@ -24,8 +24,13 @@ const SCANLINE_SHADER: VisualShader = preload("res://!project/art/shaders/scanli
 var _name_plate_outline_style: StyleBoxFlat
 var _name_plate_outline_alphas: Dictionary[PanelContainer, float] = {}
 var _scanline_material: ShaderMaterial
+#scene offset_top and offset_bottom of each bust and name plate, before they are lifted clear of the buttons
+var _base_vertical_offsets: Dictionary[Control, Vector2] = {}
 
 func _ready() -> void:
+	for lifted_control: Control in [left_speaker, right_speaker, left_name_plate, right_name_plate]:
+		_base_vertical_offsets[lifted_control] = Vector2(lifted_control.offset_top, lifted_control.offset_bottom)
+
 	left_name_plate.resized.connect(_autosize_speaker_name.bind(left_name_plate, left_name_label))
 	right_name_plate.resized.connect(_autosize_speaker_name.bind(right_name_plate, right_name_label))
 
@@ -82,6 +87,20 @@ func set_dialogue_width(dialog_width: float) -> void:
 
 	_center_speaker_over_name_plate(left_speaker, -dialog_width / 4.0)
 	_center_speaker_over_name_plate(right_speaker, dialog_width / 4.0)
+
+#lifts busts and name plates together just enough for the plates to end above the given canvas y, back to their scene place when they already do
+func set_bottom_limit(limit_y: float) -> void:
+	var plates_bottom: float = maxf(_get_base_bottom(left_name_plate), _get_base_bottom(right_name_plate))
+	var lift: float = maxf(0.0, plates_bottom - limit_y)
+	for lifted_control: Control in _base_vertical_offsets:
+		lifted_control.offset_top = _base_vertical_offsets[lifted_control].x - lift
+		lifted_control.offset_bottom = _base_vertical_offsets[lifted_control].y - lift
+
+#canvas y the plate ends at in its scene place, grown to its minimum height, as the speakers span the whole screen
+func _get_base_bottom(name_plate: PanelContainer) -> float:
+	var base_offsets: Vector2 = _base_vertical_offsets[name_plate]
+	var plate_bottom_offset: float = maxf(base_offsets.y, base_offsets.x + name_plate.get_combined_minimum_size().y)
+	return get_viewport_rect().size.y * name_plate.anchor_bottom + plate_bottom_offset
 
 #places the bust centre the given px off its screen quarter line, where the centre of its plate sits
 func _center_speaker_over_name_plate(speaker: TextureRect, name_plate_center_offset: float) -> void:

@@ -32,6 +32,8 @@ var _is_answered_by_controls: bool = false
 var _is_zoomed_dialogue: bool = true
 #buttons the dim leaves uncovered, canvas centre and radius each
 var _spotlights: PackedVector3Array = []
+#canvas y the speaker name plates end above, clear of the buttons; INF leaves them in their scene place
+var _speakers_bottom_limit: float = INF
 #busts of the staff member on the left and the voter on the right
 var _staff_portrait: Texture2D
 var _voter_portrait: Texture2D
@@ -59,6 +61,13 @@ func set_spotlights(button_spotlights: PackedVector3Array) -> void:
 
 	_dialog_box.set_spotlights(_spotlights)
 	_multi_choice_dialog_box.set_spotlights(_spotlights)
+
+#keeps the speakers above the given canvas y, also re-applied to an open dialog after a window resize
+func set_speakers_bottom_limit(limit_y: float) -> void:
+	_speakers_bottom_limit = limit_y
+	if not is_node_ready(): return
+
+	_dialog_speakers.set_bottom_limit(_speakers_bottom_limit)
 
 #restarts the answer timers when the screen shows answers
 func _start_timer_if_needed() -> void:
@@ -100,6 +109,7 @@ func _create_view() -> void:
 
 	_dialog_speakers.initialize(_current_node.get_dialog_descriptor().speaker)
 	_dialog_speakers.set_dialogue_width(_dialog_size.x)
+	_dialog_speakers.set_bottom_limit(_speakers_bottom_limit)
 	_dialog_speakers.set_portraits(_staff_portrait, _voter_portrait)
 
 	var box_tint: Color = Color.WHITE if _is_zoomed_dialogue else Configs.DialogueZoom["compact_box_tint"]

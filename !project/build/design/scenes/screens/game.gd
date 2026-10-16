@@ -71,7 +71,7 @@ func _ready() -> void:
 	stage.dialogue_requested.connect(_open_dialogue)
 	stage.room_voter_stopped.connect(_on_room_voter_stopped)
 
-	controls.init(stage, _game_descriptor.get_controller_type())
+	controls.init(stage, _game_descriptor.get_controller_type(), DIALOG_SIZE.x)
 	controls.buttons_moved.connect(_on_controls_buttons_moved)
 	Signals.game_close_requested.connect(_on_game_close_requested)
 	Signals.help_requested.connect(_on_help_requested)
@@ -267,7 +267,7 @@ func _open_dialogue(voter: Voter, stop_name: String) -> void:
 	var staff_portrait: Texture2D = DialogPortraits.get_staff_portrait(stop_name)
 	var voter_portrait: Texture2D = DialogPortraits.get_voter_portrait(voter.voter_factory_index)
 	_dialog_controller.initialize(_game_descriptor, DialoguesManager.get_dialogue(dialog_id), dialog_color, DIALOG_SIZE, staff_portrait, voter_portrait)
-	_dialog_controller.set_spotlights(controls.get_button_spotlights())
+	_sync_dialog_with_controls()
 	_dialog_controller.finished.connect(_on_dialog_finished)
 	_dialog_controller.choice_made.connect(_on_dialog_choice_made)
 	_dialog_controller.lock_skipped.connect(_on_dialog_lock_skipped)
@@ -281,10 +281,15 @@ func _open_dialogue(voter: Voter, stop_name: String) -> void:
 	if Globals.DialogueMoodSounds.has(voter_personality):
 		SoundManager.play_stinger(Globals.DialogueMoodSounds[voter_personality])
 
-#moves the dim holes of an open dialog onto the buttons' new places
+#moves the dim holes of an open dialog onto the buttons' new places and its speakers clear of them
 func _on_controls_buttons_moved() -> void:
 	if _dialog_controller and is_instance_valid(_dialog_controller):
-		_dialog_controller.set_spotlights(controls.get_button_spotlights())
+		_sync_dialog_with_controls()
+
+#leaves the buttons uncovered by the dialog dim and keeps the speaker name plates above them
+func _sync_dialog_with_controls() -> void:
+	_dialog_controller.set_spotlights(controls.get_button_spotlights())
+	_dialog_controller.set_speakers_bottom_limit(controls.get_buttons_top() - Configs.ClassicalControllers["dialog_clearance"])
 
 func _on_dialog_finished() -> void:
 	var voter: Voter = _dialog_voter
