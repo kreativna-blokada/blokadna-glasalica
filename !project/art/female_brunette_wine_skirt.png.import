@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cwj3o7q2aocs"
-path="res://.godot/imported/female_brunette_wine_skirt.png-ab75bfc70fba37600831ebd3e9027dfe.ctex"
+path.s3tc="res://.godot/imported/female_brunette_wine_skirt.png-ab75bfc70fba37600831ebd3e9027dfe.s3tc.ctex"
+path.etc2="res://.godot/imported/female_brunette_wine_skirt.png-ab75bfc70fba37600831ebd3e9027dfe.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://!project/art/female_brunette_wine_skirt.png"
-dest_files=["res://.godot/imported/female_brunette_wine_skirt.png-ab75bfc70fba37600831ebd3e9027dfe.ctex"]
+dest_files=["res://.godot/imported/female_brunette_wine_skirt.png-ab75bfc70fba37600831ebd3e9027dfe.s3tc.ctex", "res://.godot/imported/female_brunette_wine_skirt.png-ab75bfc70fba37600831ebd3e9027dfe.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
