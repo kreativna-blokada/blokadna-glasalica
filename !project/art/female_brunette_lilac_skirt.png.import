@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dvw4mdleo26xo"
-path.s3tc="res://.godot/imported/female_brunette_lilac_skirt.png-ec469ea3c99caf85516e045df3b6640c.s3tc.ctex"
-path.etc2="res://.godot/imported/female_brunette_lilac_skirt.png-ec469ea3c99caf85516e045df3b6640c.etc2.ctex"
+path="res://.godot/imported/female_brunette_lilac_skirt.png-ec469ea3c99caf85516e045df3b6640c.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://!project/art/female_brunette_lilac_skirt.png"
-dest_files=["res://.godot/imported/female_brunette_lilac_skirt.png-ec469ea3c99caf85516e045df3b6640c.s3tc.ctex", "res://.godot/imported/female_brunette_lilac_skirt.png-ec469ea3c99caf85516e045df3b6640c.etc2.ctex"]
+dest_files=["res://.godot/imported/female_brunette_lilac_skirt.png-ec469ea3c99caf85516e045df3b6640c.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=4
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

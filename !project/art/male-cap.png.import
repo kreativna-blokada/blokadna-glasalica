@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ruq7qlula7a"
-path.s3tc="res://.godot/imported/male-cap.png-60d5a8ab3f1b14bb79d45dc2cdff377a.s3tc.ctex"
-path.etc2="res://.godot/imported/male-cap.png-60d5a8ab3f1b14bb79d45dc2cdff377a.etc2.ctex"
+path="res://.godot/imported/male-cap.png-60d5a8ab3f1b14bb79d45dc2cdff377a.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://!project/art/male-cap.png"
-dest_files=["res://.godot/imported/male-cap.png-60d5a8ab3f1b14bb79d45dc2cdff377a.s3tc.ctex", "res://.godot/imported/male-cap.png-60d5a8ab3f1b14bb79d45dc2cdff377a.etc2.ctex"]
+dest_files=["res://.godot/imported/male-cap.png-60d5a8ab3f1b14bb79d45dc2cdff377a.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=4
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

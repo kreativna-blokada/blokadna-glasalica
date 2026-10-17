@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://84h3rg0mmhcs"
-path.s3tc="res://.godot/imported/female_blonde_rose_skirt.png-9ef0ece84b322ae3a2c6311ed1212d0b.s3tc.ctex"
-path.etc2="res://.godot/imported/female_blonde_rose_skirt.png-9ef0ece84b322ae3a2c6311ed1212d0b.etc2.ctex"
+path="res://.godot/imported/female_blonde_rose_skirt.png-9ef0ece84b322ae3a2c6311ed1212d0b.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://!project/art/female_blonde_rose_skirt.png"
-dest_files=["res://.godot/imported/female_blonde_rose_skirt.png-9ef0ece84b322ae3a2c6311ed1212d0b.s3tc.ctex", "res://.godot/imported/female_blonde_rose_skirt.png-9ef0ece84b322ae3a2c6311ed1212d0b.etc2.ctex"]
+dest_files=["res://.godot/imported/female_blonde_rose_skirt.png-9ef0ece84b322ae3a2c6311ed1212d0b.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=4
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
