@@ -15,7 +15,7 @@ dest_files=["res://.godot/imported/male-cap.png-60d5a8ab3f1b14bb79d45dc2cdff377a
 
 [params]
 
-compress/mode=0
+compress/mode=4
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
