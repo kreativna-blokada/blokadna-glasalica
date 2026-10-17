@@ -149,7 +149,10 @@ func _track_flawless_voter(voter: Voter) -> void:
 
 	_flawless_check_voter = voter
 	_is_voter_flawless = true
-	voter.course_point_reached.connect(_on_voter_course_point_reached.bind(voter))
+	#a voter tracked again after another one keeps its earlier connection
+	var exit_check: Callable = _on_voter_course_point_reached.bind(voter)
+	if not voter.course_point_reached.is_connected(exit_check):
+		voter.course_point_reached.connect(exit_check)
 
 #signal Voter.course_point_reached => a voter leaving with only best answers grants the flawless voter bonus
 func _on_voter_course_point_reached(point_name: StringName, voter: Voter) -> void:
