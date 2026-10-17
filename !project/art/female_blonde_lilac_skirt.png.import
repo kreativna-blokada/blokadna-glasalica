@@ -15,7 +15,7 @@ dest_files=["res://.godot/imported/female_blonde_lilac_skirt.png-8b21246070b190b
 
 [params]
 
-compress/mode=0
+compress/mode=4
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
