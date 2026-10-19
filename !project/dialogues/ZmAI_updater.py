@@ -21,6 +21,7 @@ from pathlib import Path
 #stage 2: the dialogue goes back to ZmAI, which rates each answer by the severity of the violation
 #the levels turn into points balanced to the average and maximum run targets
 #prompts longer than one ZmAI message go out as numbered parts in one thread
+#ZmAI threads are kept short: one compact sample, no rules samples, the rating in its own thread
 #--fast spaces ZmAI requests closer; its first ZmAI failure stops the run and restarts it at the normal pace
 #an incomplete or unusable ZmAI answer is flagged in red and its pair retried in a new thread
 DIALOGUES_DIR = Path(__file__).resolve().parent
@@ -100,6 +101,10 @@ SENTENCE_ENDINGS = (".", "!", "?", "…", '"', "”", "»", ")")
 DRAFT_ATTEMPTS = 3
 # end of the raw ZmAI answer shown with a failure
 FAILURE_ANSWER_TAIL_CHARS = 300
+# start of a ZmAI error response shown with a failure
+ERROR_BODY_CHARS = 500
+# existing dialogues of the stop and personality sent as samples, newest first
+SAMPLE_DIALOGUES_PER_PROMPT = 1
 
 
 class ServiceBlocked(Exception):
@@ -369,14 +374,12 @@ def without_scores(dialogue):
             for node_id, node in dialogue.items()}
 
 
-# "Deo 1" of ZmAI_dialogues.md: the task, election rules, scenarios and JSON structure, its samples without points
+# "Deo 1" of ZmAI_dialogues.md: the task, election rules and scenarios; its structure samples stay out, the stop samples show it
 def read_prompt_rules():
     rules_markdown = PROMPT_RULES_PATH.read_text(encoding="utf-8")
     rules_start = rules_markdown.index("# Deo 1: Pravila za prompt")
     rules_text = rules_markdown[rules_start:rules_markdown.index("# Deo 2: Rezultat (JSON)")].strip().removesuffix("---").strip()
-    return re.sub(r"(?s)```json\n(.*?)\n```",
-                  lambda json_block: "```json\n" + json.dumps(without_scores(json.loads(json_block.group(1))), ensure_ascii=False, indent=2) + "\n```",
-                  rules_text)
+    return re.sub(r"(?ms)^## Struktura dijaloga \(uzorak\)\n.*?(?=^## |\Z)", "", rules_text).strip()
 
 
 # {"## heading": text of its ~~~ block} of ZmAI_prompts.md, with tones and answer levels split out
@@ -495,10 +498,14 @@ def ask_zmai_politely(question, thread_id):
         try:
             return ask_zmai(question, thread_id)
         except urllib.error.HTTPError as error:
+            error_body = error.read().decode("utf-8", errors="replace")[:ERROR_BODY_CHARS]
+            # a refused request is refused again at any pace, so it never restarts the run
+            if error.code not in RETRYABLE_HTTP_CODES:
+                raise ServiceBlocked(f"ZmAI refused the request with {error.code}: {error_body}")
             if zmai_pacer.fail_fast:
-                raise FastPaceBroken(f"ZmAI answered {error.code}")
-            if error.code not in RETRYABLE_HTTP_CODES or attempt == MAX_ATTEMPTS - 1:
-                raise ServiceBlocked(f"ZmAI answered {error.code}")
+                raise FastPaceBroken(f"ZmAI answered {error.code}: {error_body}")
+            if attempt == MAX_ATTEMPTS - 1:
+                raise ServiceBlocked(f"ZmAI answered {error.code}: {error_body}")
             zmai_pacer.back_off(attempt, error.headers.get("Retry-After"))
         except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as error:
             if zmai_pacer.fail_fast:
@@ -573,9 +580,9 @@ def ask_zmai_for_json(question, thread_id, find_answer_error, zmai_prompts):
     raise UnusableAnswer(answer_error, answer_text)
 
 
-# stage 1 prompt: rules, the stop, its existing dialogues without points as the sample and Crta Q&A
+# stage 1 prompt: rules, the stop, its existing dialogues as compact samples without points and Crta Q&A
 def build_dialogue_prompt(zmai_prompts, stop_info, personality, sample_dialogues, covered_roots, crta_excerpt):
-    sample_text = "\n\n".join(f"### {name}.json\n```json\n{json.dumps(without_scores(dialogue), ensure_ascii=False, indent=2)}\n```"
+    sample_text = "\n\n".join(f"### {name}.json\n```json\n{json.dumps(without_scores(dialogue), ensure_ascii=False, separators=(',', ':'))}\n```"
                               for name, dialogue in sample_dialogues.items())
     covered_text = "\n".join(f"- {root_text}" for root_text in covered_roots)
     return zmai_prompts["dialogue_request"].substitute(
@@ -727,10 +734,11 @@ def publish_drafts(calibration):
     return len(list(CONTENT_DIR.glob("voter_*.json"))) - len(content_dialogues)
 
 
-# the personality's own dialogues of a stop as samples, and every scenario of the stop already in content or drafts
+# the personality's newest dialogues of a stop as samples, and every scenario of the stop already in content or drafts
 def gather_stop_context(topic, personality, content_dialogues):
     stop_dialogues = {name: dialogue for name, dialogue in content_dialogues.items() if f"voter_{topic}_dialog_" in name}
-    sample_dialogues = {name: dialogue for name, dialogue in stop_dialogues.items() if name.split("_")[-2] == personality}
+    personality_names = sorted(name for name in stop_dialogues if name.split("_")[-2] == personality)
+    sample_dialogues = {name: stop_dialogues[name] for name in personality_names[-SAMPLE_DIALOGUES_PER_PROMPT:]}
     covered_roots = [dialogue["root"]["text"] for dialogue in stop_dialogues.values()]
     covered_roots += [json.loads(path.read_text(encoding="utf-8"))["dialogue"]["root"]["text"]
                       for path in DRAFTS_DIR.glob(f"{topic}_*.json")]
@@ -753,7 +761,7 @@ def create_draft(zmai_prompts, stop_name, stop_info, personality, content_dialog
     sample_dialogues, covered_roots = gather_stop_context(topic, personality, content_dialogues)
 
     dialogue_prompt = build_dialogue_prompt(zmai_prompts, stop_info, personality, sample_dialogues, covered_roots, crta_excerpt)
-    dialogue, thread_id = ask_zmai_for_json(dialogue_prompt, None,
+    dialogue, _ = ask_zmai_for_json(dialogue_prompt, None,
                                             lambda answer: find_dialogue_error(answer, require_points=False),
                                             zmai_prompts)
     dialogue = without_scores(dialogue)
@@ -762,7 +770,8 @@ def create_draft(zmai_prompts, stop_name, stop_info, personality, content_dialog
         print(f"  skipped, repeats a covered scenario: {root_text}")
         return False
 
-    answer_levels, _ = ask_zmai_for_json(build_rating_prompt(zmai_prompts, dialogue), thread_id,
+    # a new thread, so the rating never sits on top of the long stage 1 context
+    answer_levels, _ = ask_zmai_for_json(build_rating_prompt(zmai_prompts, dialogue), None,
                                          lambda answer: find_levels_error(dialogue, answer, zmai_prompts["answer_levels"]),
                                          zmai_prompts)
     answer_levels = {node_id: node_levels for node_id, node_levels in answer_levels.items() if "choices" in dialogue.get(node_id, {})}
@@ -816,10 +825,10 @@ def main():
                         print_failure(f"✗ GAVE UP {pair_label}, skipped after {DRAFT_ATTEMPTS} attempts")
             run_progress.finished_pairs += 1
     except FastPaceBroken as reason:
-        print(f"\nFast pace broke: {reason}. Stopping and restarting at the normal pace.", file=sys.stderr)
+        print_failure(f"✗ Fast pace broke: {reason}\nStopping and restarting at the normal pace.")
         fast_pace_broken = True
     except (ServiceBlocked, RequestBudgetExhausted) as reason:
-        print(f"Stopped asking ZmAI: {reason}", file=sys.stderr)
+        print_failure(f"✗ Stopped asking ZmAI: {reason}")
     except KeyboardInterrupt:
         print("\nInterrupted", file=sys.stderr)
     finally:
