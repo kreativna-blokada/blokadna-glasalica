@@ -9,10 +9,10 @@
 extends Node
 
 #scrambled content shipped inside the build as the offline fallback; same file as the hosted one
-const HOSTED_DIALOGUES: String = "https://raw.githubusercontent.com/zeljko-vulovic/glasalica/main/dialogues.bin"
+const HOSTED_DIALOGUES: String = "https://raw.githubusercontent.com/kreativna-blokada/blokadna-glasalica/main/!project/dialogues/dialogues_content.bin"
 const DOWNLOAD_TIMEOUT: float = 10.0
 
-const BUILTIN_DIALOGUES: String = "res://!project/build/design/dialogues/dialogues_content.bin"
+const BUILTIN_DIALOGUES: String = "res://!project/dialogues/dialogues_content.bin"
 const DIALOGUES_ETAG: String = "user://dialogues_content.etag"
 const DIALOGUES_CACHE: String = "user://dialogues_content.bin"
 

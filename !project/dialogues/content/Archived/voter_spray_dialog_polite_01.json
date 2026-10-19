@@ -1,0 +1,23 @@
+﻿{
+  "root": {
+    "text": "[POL] Molim Vas, da li biste mogli da mi pokažete desnu ruku za sprej?",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Naravno, izvolite.",
+        "explanation": "Ispravno – birač daje ruku za obeležavanje sprejem.",
+        "score": 131000
+      },
+      {
+        "text": "Možete li mi objasniti zašto se ovo radi?",
+        "explanation": "Ispravno – birač ima pravo da traži objašnjenje, član odbora mora da objasni svrhu spreja.",
+        "score": 131000
+      },
+      {
+        "text": "Ne želim da mi prskate ruku.",
+        "explanation": "Odbijanje spreja znači da birač ne može dobiti listić – prekršaj.",
+        "score": -26000
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+﻿{
+  "root": {
+    "text": "[ANG] Dajte ličnu kartu odmah, nemamo ceo dan!",
+    "speaker": "LEFT",
+    "next": "voter_reply"
+  },
+  "voter_reply": {
+    "text": "Nemam ličnu kartu kod sebe, može vozačka?",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Ne može, potrebna je lična karta, pasoš ili potvrda MUP-a.",
+        "explanation": "Ispravno – glasa se samo sa važećom ličnom kartom, pasošem ili potvrdom MUP-a o promeni lične karte.",
+        "score": 131000,
+        "next": "voter_leaves"
+      },
+      {
+        "text": "Može, samo brzo.",
+        "explanation": "Prekršaj – vozačka dozvola nije dokument sa kojim se može glasati.",
+        "score": -26000,
+        "next": "voter_passes"
+      }
+    ]
+  },
+  "voter_leaves": {
+    "text": "Dobro, idem po ličnu kartu.",
+    "speaker": "RIGHT"
+  },
+  "voter_passes": {
+    "text": "Evo vozačke, hvala.",
+    "speaker": "RIGHT"
+  }
+}

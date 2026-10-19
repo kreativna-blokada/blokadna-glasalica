@@ -6,14 +6,12 @@ import sys
 import time
 from pathlib import Path
 
-#XOR-scrambles dialogues/content/voter_*.json into dialogues_content.bin
-#dialogues_content.bin is built into the game and hosted online
+#XOR-scrambles !project/dialogues/content/voter_*.json into dialogues_content.bin
+#dialogues_content.bin is built into the game and hosted online from the main branch
 PROJECT_DIR = Path(__file__).resolve().parents[2]
-DIALOGUES_DIR = PROJECT_DIR / "!project/build/design/dialogues"
+DIALOGUES_DIR = PROJECT_DIR / "!project/dialogues"
 CONTENT_DIR = DIALOGUES_DIR / "content"
 DIALOGUES_BUILTIN_PATH = DIALOGUES_DIR / "dialogues_content.bin"
-# local clone of github.com/zeljko-vulovic/glasalica
-HOSTED_PATH = PROJECT_DIR.parent.parent / "glasalica/dialogues.bin"
 
 # gitignored, shared with DialogueScrambler._get_scrambler_key()
 RUNTIME_CREDENTIALS = PROJECT_DIR / "runtime_credentials.cfg"
@@ -82,13 +80,7 @@ def main():
     scrambled = scramble(json.dumps(content, ensure_ascii=False).encode("utf-8"))
 
     DIALOGUES_BUILTIN_PATH.write_bytes(scrambled)
-    print(f"Scrambled {len(dialogues)} dialogues, version {content['version']} -> {DIALOGUES_BUILTIN_PATH}")
-
-    if not HOSTED_PATH.parent.is_dir():
-        print(f"Hosting repo not found, skipped: {HOSTED_PATH}")
-        return
-    HOSTED_PATH.write_bytes(scrambled)
-    print(f"Hosted copy -> {HOSTED_PATH} (commit and push it to publish)")
+    print(f"Scrambled {len(dialogues)} dialogues, version {content['version']} -> {DIALOGUES_BUILTIN_PATH} (commit and push it to main to publish)")
 
 
 if __name__ == "__main__":

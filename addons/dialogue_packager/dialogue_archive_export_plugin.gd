@@ -1,7 +1,7 @@
 @tool
 extends EditorExportPlugin
 
-const ARCHIVE_PATH: String = "res://!project/build/design/dialogues/dialogues.zip"
+const ARCHIVE_PATH: String = "res://!project/dialogues/dialogues.zip"
 
 
 func _get_name() -> String:

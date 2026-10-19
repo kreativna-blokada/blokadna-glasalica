@@ -1,0 +1,33 @@
+﻿{
+  "root": {
+    "text": "[ANG] Dajte dokument, brzo!",
+    "speaker": "LEFT",
+    "next": "voter_reply"
+  },
+  "voter_reply": {
+    "text": "Evo, ovo je od mog brata, isti smo.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Ne možete glasati sa tuđim dokumentom.",
+        "explanation": "Glasanje sa tuđim dokumentom je ozbiljan prekršaj.",
+        "score": 131000,
+        "next": "voter_leaves"
+      },
+      {
+        "text": "Ma nema veze, prođi.",
+        "explanation": "Ozbiljan prekršaj – omogućavanje glasanja sa tuđim dokumentom.",
+        "score": -26000,
+        "next": "voter_passes"
+      }
+    ]
+  },
+  "voter_leaves": {
+    "text": "Dobro, idem po svoj dokument.",
+    "speaker": "RIGHT"
+  },
+  "voter_passes": {
+    "text": "Hvala, brate, znao sam da nećeš praviti problem.",
+    "speaker": "RIGHT"
+  }
+}
