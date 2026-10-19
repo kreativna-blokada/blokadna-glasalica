@@ -10,6 +10,8 @@ extends Node
 
 #scrambled content shipped inside the build as the offline fallback; same file as the hosted one
 const HOSTED_DIALOGUES: String = "https://raw.githubusercontent.com/kreativna-blokada/blokadna-glasalica/main/!project/dialogues/dialogues_content.bin"
+#previous hosting location of the same content; fallback only while the current one is unreachable
+const LEGACY_HOSTED_DIALOGUES: String = "https://raw.githubusercontent.com/zeljko-vulovic/glasalica/main/dialogues.bin"
 const DOWNLOAD_TIMEOUT: float = 10.0
 
 const BUILTIN_DIALOGUES: String = "res://!project/dialogues/dialogues_content.bin"
@@ -22,6 +24,7 @@ const DIALOGUE_ID_FORMAT: String = "^voter_(?<topic>.+?)_dialog_(?<personality>.
 
 #private vars
 var _fetch_dialogues: HTTPRequest = null
+var _fetched_dialogues_url: String = ""
 var _active_dialogues_version: int = -1
 var _active_dialogues: Dictionary = {}
 var _dialogue_variants: Dictionary = {}
@@ -89,8 +92,9 @@ func _load_offline_dialogues() -> void:
 	if FileAccess.file_exists(DIALOGUES_CACHE):
 		_set_active_dialogues(_parse_scrambled_dialogues(FileAccess.get_file_as_bytes(DIALOGUES_CACHE)))
 
-#starts downloading the hosted content; sends the cached etag so unchanged content is not downloaded again
-func _fetch_online_dialogues() -> void:
+#starts downloading the hosted content from the given location; sends the cached etag only to the current one
+func _fetch_online_dialogues(hosted_dialogues_url: String = HOSTED_DIALOGUES) -> void:
+	_fetched_dialogues_url = hosted_dialogues_url
 	_fetch_dialogues = HTTPRequest.new()
 	_fetch_dialogues.timeout = DOWNLOAD_TIMEOUT
 	add_child(_fetch_dialogues)
@@ -98,10 +102,10 @@ func _fetch_online_dialogues() -> void:
 
 	var request_headers: PackedStringArray = PackedStringArray()
 	#on web the browser cache revalidates by itself; a custom header would force a CORS preflight
-	if not OS.has_feature("web") and FileAccess.file_exists(DIALOGUES_ETAG) and FileAccess.file_exists(DIALOGUES_CACHE):
+	if hosted_dialogues_url == HOSTED_DIALOGUES and not OS.has_feature("web") and FileAccess.file_exists(DIALOGUES_ETAG) and FileAccess.file_exists(DIALOGUES_CACHE):
 		request_headers.append("If-None-Match: " + FileAccess.get_file_as_string(DIALOGUES_ETAG))
 
-	var request_error: Error = _fetch_dialogues.request(HOSTED_DIALOGUES, request_headers)
+	var request_error: Error = _fetch_dialogues.request(hosted_dialogues_url, request_headers)
 	if request_error != OK:
 		push_warning("DialoguesManager._fetch_online_dialogues: request failed to start (%s)" % error_string(request_error))
 		_dispose_fetch_request()
@@ -111,6 +115,9 @@ func _on_request_completed(fetch_result: int, response_code: int, server_headers
 	_dispose_fetch_request()
 
 	if fetch_result != HTTPRequest.RESULT_SUCCESS or response_code != HTTPClient.RESPONSE_OK:
+		#current location unreachable or not published yet => try the previous one once; 304 means content is current
+		if response_code != HTTPClient.RESPONSE_NOT_MODIFIED and _fetched_dialogues_url == HOSTED_DIALOGUES:
+			_fetch_online_dialogues(LEGACY_HOSTED_DIALOGUES)
 		return
 
 	var dialogues_content: Dictionary = _parse_scrambled_dialogues(server_body)
@@ -121,6 +128,8 @@ func _on_request_completed(fetch_result: int, response_code: int, server_headers
 	if not _set_active_dialogues(dialogues_content):
 		return
 	_save_dialogues(server_body)
+	if _fetched_dialogues_url != HOSTED_DIALOGUES:
+		return
 	for server_header in server_headers:
 		if server_header.to_lower().begins_with("etag:"):
 			_save_etag(server_header.substr(5).strip_edges())
