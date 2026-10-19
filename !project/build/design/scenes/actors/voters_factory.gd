@@ -15,6 +15,8 @@ var _voter_scene: PackedScene = preload("res://!project/build/design/scenes/acto
 var _voter_group: String = Globals.EntityProperties[Globals.Entity.Voter]["group"]
 
 var _voter_scene_struct: Dictionary = Globals.Scenes[Globals.Scene.Voter]["structure"]
+#voter sheets loaded so far by voter index, kept while the factory lives so a spawn never reloads and transcodes one again
+var _loaded_textures: Dictionary[int, Texture2D] = {}
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -45,16 +47,22 @@ func load_voter(_index: int) -> Voter:
 	voter.add_to_group(_voter_group)
 
 	#set texture
-	var texture: Resource = _get_texture(_index)
+	var texture: Texture2D = _get_texture(_index)
 	var _voter_scene_sprite = _voter_scene_struct["sprite"]
 	voter.get_node(_voter_scene_sprite).set_texture(texture)
 	voter.name = Globals.Voter.keys()[_index] + "_" + str(_voter_id)
 	_voter_id += 1
 	return voter
 
-#dynimacally loaded instance's texture
-func _get_texture(_index: int) -> Resource:
+#dynimacally loaded instance's texture, loaded once and cached
+func _get_texture(_index: int) -> Texture2D:
+	if _loaded_textures.has(_index): return _loaded_textures[_index]
+
 	var texture_path: String = Globals.VoterFactory[_index]["Texture2D"]
 	if not ResourceLoader.exists(texture_path, "Texture2D"):
 		texture_path = Globals.VoterFactory[Globals.Voter.MaleCap]["Texture2D"]
-	return load(texture_path)
+	var texture: Texture2D = load(texture_path)
+	#a failed load is not cached, the next spawn tries again
+	if texture != null:
+		_loaded_textures[_index] = texture
+	return texture
