@@ -23,7 +23,7 @@ from pathlib import Path
 #prompts longer than one ZmAI message go out as numbered parts in one thread
 #ZmAI threads are kept short: one compact sample, no rules samples, the rating in its own thread
 #--fast spaces ZmAI requests closer; its first ZmAI failure stops the run and restarts it at the normal pace
-#an incomplete or unusable ZmAI answer is flagged in red and its pair retried in a new thread
+#an incomplete or unusable ZmAI answer, or a message ZmAI refuses, is flagged in red and its pair retried in a new thread
 DIALOGUES_DIR = Path(__file__).resolve().parent
 CONTENT_DIR = DIALOGUES_DIR / "content"
 PROMPT_RULES_PATH = DIALOGUES_DIR / "ZmAI_dialogues.md"
@@ -62,6 +62,8 @@ CRTA_MAX_REQUESTS_PER_RUN = 40
 BACKOFF_BASE_DELAY = 120.0
 MAX_ATTEMPTS = 3
 RETRYABLE_HTTP_CODES = {429, 500, 502, 503, 504}
+# ZmAI's answer to a message its filter rejects; fails the pair, not the run
+REFUSED_MESSAGE_HTTP_CODE = 422
 
 ZMAI_API_URL = "https://vernestra.app/api/assistant-chat/chat/stream"
 ZMAI_ASSISTANT_ID = "c764b9e5-3ab9-40a6-a36f-ba2ab36bfcb8"
@@ -103,6 +105,8 @@ DRAFT_ATTEMPTS = 3
 FAILURE_ANSWER_TAIL_CHARS = 300
 # start of a ZmAI error response shown with a failure
 ERROR_BODY_CHARS = 500
+# start of a refused ZmAI message shown with a failure
+REFUSED_MESSAGE_HEAD_CHARS = 200
 # existing dialogues of the stop and personality sent as samples, newest first
 SAMPLE_DIALOGUES_PER_PROMPT = 1
 
@@ -124,6 +128,11 @@ class UnusableAnswer(ValueError):
     def __init__(self, answer_error, answer_text):
         super().__init__(answer_error)
         self.answer_text = answer_text
+
+
+# a message ZmAI's filter rejected, named by its place in the pair
+class RefusedMessage(ValueError):
+    pass
 
 
 # seconds as m:ss, or h:mm:ss from an hour up
@@ -491,14 +500,17 @@ def ask_zmai(question, thread_id):
     return "".join(answer_parts), thread_id
 
 
-# asks ZmAI with pacing and backoff; 403 or repeated failures stop the run instead of pushing on
-def ask_zmai_politely(question, thread_id):
+# asks ZmAI with pacing and backoff; 403 or repeated failures stop the run, a filtered message fails only its pair
+def ask_zmai_politely(question, thread_id, message_label):
     for attempt in range(MAX_ATTEMPTS):
         zmai_pacer.wait_turn()
         try:
             return ask_zmai(question, thread_id)
         except urllib.error.HTTPError as error:
             error_body = error.read().decode("utf-8", errors="replace")[:ERROR_BODY_CHARS]
+            if error.code == REFUSED_MESSAGE_HTTP_CODE:
+                raise RefusedMessage(f"ZmAI refused {message_label} with {error.code}: {error_body}"
+                                     f"\n  refused message began with: {question[:REFUSED_MESSAGE_HEAD_CHARS]}")
             # a refused request is refused again at any pace, so it never restarts the run
             if error.code not in RETRYABLE_HTTP_CODES:
                 raise ServiceBlocked(f"ZmAI refused the request with {error.code}: {error_body}")
@@ -550,21 +562,21 @@ def count_zmai_messages(question, zmai_prompts):
 
 
 # sends a prompt too long for one message as numbered parts in one thread, returns the answer to the last part
-def ask_zmai_in_parts(question, thread_id, zmai_prompts):
+def ask_zmai_in_parts(question, thread_id, zmai_prompts, stage_label):
     if len(question) <= ZMAI_MAX_MESSAGE_CHARS:
-        return ask_zmai_politely(question, thread_id)
+        return ask_zmai_politely(question, thread_id, stage_label)
     prompt_parts = split_prompt(question, prompt_part_limit(zmai_prompts))
     for part_index, part_text in enumerate(prompt_parts, 1):
         part_template = zmai_prompts["last_prompt_part" if part_index == len(prompt_parts) else "prompt_part"]
         part_message = part_template.substitute(part_index=part_index, part_count=len(prompt_parts), part_text=part_text)
-        answer_text, thread_id = ask_zmai_politely(part_message, thread_id)
+        answer_text, thread_id = ask_zmai_politely(part_message, thread_id, f"{stage_label} part {part_index}/{len(prompt_parts)}")
     return answer_text, thread_id
 
 
 # asks for JSON and gives ZmAI one correction in the same thread when the answer does not parse or validate
-def ask_zmai_for_json(question, thread_id, find_answer_error, zmai_prompts):
+def ask_zmai_for_json(question, thread_id, find_answer_error, zmai_prompts, stage_label):
     correction_request = zmai_prompts["correction_request"]
-    answer_text, thread_id = ask_zmai_in_parts(question, thread_id, zmai_prompts)
+    answer_text, thread_id = ask_zmai_in_parts(question, thread_id, zmai_prompts, stage_label)
     for correction_round in range(2):
         try:
             parsed_answer = extract_json(answer_text)
@@ -576,7 +588,7 @@ def ask_zmai_for_json(question, thread_id, find_answer_error, zmai_prompts):
         if correction_round == 1:
             break
         correction_question = correction_request.substitute(answer_error=answer_error)
-        answer_text, thread_id = ask_zmai_politely(correction_question, thread_id)
+        answer_text, thread_id = ask_zmai_politely(correction_question, thread_id, f"{stage_label} correction")
     raise UnusableAnswer(answer_error, answer_text)
 
 
@@ -762,8 +774,8 @@ def create_draft(zmai_prompts, stop_name, stop_info, personality, content_dialog
 
     dialogue_prompt = build_dialogue_prompt(zmai_prompts, stop_info, personality, sample_dialogues, covered_roots, crta_excerpt)
     dialogue, _ = ask_zmai_for_json(dialogue_prompt, None,
-                                            lambda answer: find_dialogue_error(answer, require_points=False),
-                                            zmai_prompts)
+                                    lambda answer: find_dialogue_error(answer, require_points=False),
+                                    zmai_prompts, "stage 1")
     dialogue = without_scores(dialogue)
     root_text = dialogue["root"]["text"]
     if any(difflib.SequenceMatcher(None, root_text, covered_root).ratio() > DUPLICATE_ROOT_RATIO for covered_root in covered_roots):
@@ -773,7 +785,7 @@ def create_draft(zmai_prompts, stop_name, stop_info, personality, content_dialog
     # a new thread, so the rating never sits on top of the long stage 1 context
     answer_levels, _ = ask_zmai_for_json(build_rating_prompt(zmai_prompts, dialogue), None,
                                          lambda answer: find_levels_error(dialogue, answer, zmai_prompts["answer_levels"]),
-                                         zmai_prompts)
+                                         zmai_prompts, "rating")
     answer_levels = {node_id: node_levels for node_id, node_levels in answer_levels.items() if "choices" in dialogue.get(node_id, {})}
     draft = {"topic": topic, "personality": personality, "dialogue": dialogue, "levels": answer_levels}
     draft_path = DRAFTS_DIR / f"{topic}_{personality}_{int(time.time())}.json"
