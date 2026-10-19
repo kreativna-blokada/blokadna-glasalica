@@ -412,10 +412,16 @@ def read_zmai_prompts():
     }
 
 
-# {file stem: dialogue} of every content dialogue
-def read_content_dialogues():
-    return {dialogue_path.stem: json.loads(dialogue_path.read_text(encoding="utf-8-sig"))
-            for dialogue_path in sorted(CONTENT_DIR.glob("voter_*.json"))}
+# {file stem: dialogue} of every readable content dialogue; unreadable ones are skipped, reported in red when asked
+def read_content_dialogues(report_unreadable=False):
+    content_dialogues = {}
+    for dialogue_path in sorted(CONTENT_DIR.glob("voter_*.json")):
+        try:
+            content_dialogues[dialogue_path.stem] = json.loads(dialogue_path.read_text(encoding="utf-8-sig"))
+        except (OSError, ValueError) as error:
+            if report_unreadable:
+                print_failure(f"✗ Skipped unreadable {dialogue_path.name}: {error}")
+    return content_dialogues
 
 
 # mirrors DialogTree.find_data_error, plus speakers, loops and, with points required, both positive and negative answers
@@ -795,8 +801,9 @@ def estimate_zmai_requests_per_pair(zmai_prompts, stop_infos, content_dialogues,
     return count_zmai_messages(dialogue_prompt, zmai_prompts) + count_zmai_messages(rating_prompt, zmai_prompts)
 
 
-# new dialogues per (topic, personality) done before this run: content files untracked in git plus rated drafts
-def count_earlier_work():
+# finished new dialogues per (topic, personality) done before this run: valid content files untracked in git plus valid rated drafts
+#broken ones are reported in red and left untouched, their pairs are drafted again
+def count_earlier_work(allowed_levels):
     try:
         untracked_paths = subprocess.run(["git", "-C", str(DIALOGUES_DIR), "ls-files", "--others", "--exclude-standard", "--", CONTENT_DIR.name],
                                          capture_output=True, text=True, check=True).stdout.splitlines()
@@ -804,16 +811,42 @@ def count_earlier_work():
         print(f"Earlier untracked dialogues not checked, git failed: {error}")
         untracked_paths = []
     earlier_work_counts = {}
+    broken_reports = []
+
     for untracked_path in untracked_paths:
-        filename_match = DIALOGUE_FILENAME_PATTERN.fullmatch(Path(untracked_path).name)
-        if filename_match:
-            pair_key = (filename_match.group(1), filename_match.group(2))
-            earlier_work_counts[pair_key] = earlier_work_counts.get(pair_key, 0) + 1
-    for draft_path in DRAFTS_DIR.glob("*.json"):
-        draft = json.loads(draft_path.read_text(encoding="utf-8"))
-        if draft["levels"] is not None:
-            pair_key = (draft["topic"], draft["personality"])
-            earlier_work_counts[pair_key] = earlier_work_counts.get(pair_key, 0) + 1
+        dialogue_path = DIALOGUES_DIR / untracked_path
+        filename_match = DIALOGUE_FILENAME_PATTERN.fullmatch(dialogue_path.name)
+        if not filename_match:
+            continue
+        try:
+            dialogue_error = find_dialogue_error(json.loads(dialogue_path.read_text(encoding="utf-8-sig")), require_points=True)
+        except (OSError, ValueError) as error:
+            dialogue_error = f"unreadable JSON ({error})"
+        if dialogue_error:
+            broken_reports.append(f"{dialogue_path.name}: {dialogue_error}")
+            continue
+        pair_key = (filename_match.group(1), filename_match.group(2))
+        earlier_work_counts[pair_key] = earlier_work_counts.get(pair_key, 0) + 1
+
+    # a rated draft gets its points only when published, so its dialogue and levels are checked apart
+    for draft_path in sorted(DRAFTS_DIR.glob("*.json")):
+        try:
+            draft = json.loads(draft_path.read_text(encoding="utf-8"))
+            if draft["levels"] is None:
+                continue
+            draft_error = find_dialogue_error(draft["dialogue"], require_points=False) \
+                or find_levels_error(draft["dialogue"], draft["levels"], allowed_levels)
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            draft_error = f"unreadable draft ({error})"
+        if draft_error:
+            broken_reports.append(f"draft {draft_path.name}: {draft_error}")
+            continue
+        pair_key = (draft["topic"], draft["personality"])
+        earlier_work_counts[pair_key] = earlier_work_counts.get(pair_key, 0) + 1
+
+    if broken_reports:
+        print_failure(f"✗ {len(broken_reports)} broken dialogues of earlier runs not counted, their pairs are drafted again:\n  "
+                      + "\n  ".join(broken_reports))
     return earlier_work_counts
 
 
@@ -867,7 +900,7 @@ def main():
         zmai_pacer.min_delay, zmai_pacer.delay_jitter, zmai_pacer.fail_fast = ZMAI_FAST_MIN_DELAY, ZMAI_FAST_DELAY_JITTER, True
 
     DRAFTS_DIR.mkdir(parents=True, exist_ok=True)
-    content_dialogues = read_content_dialogues()
+    content_dialogues = read_content_dialogues(report_unreadable=True)
     zmai_prompts = read_zmai_prompts()
     calibration = load_calibration(content_dialogues, max(zmai_prompts["answer_levels"]))
     stop_infos = json.loads(INFO_TEXTS_PATH.read_text(encoding="utf-8"))
@@ -879,7 +912,7 @@ def main():
     stop_order = arguments.stop_order.split(",") if arguments.stop_order else sorted(
         DIALOGUE_STOPS, key=lambda stop_name: sum(f"voter_{stop_name.lower()}_dialog_" in name for name in content_dialogues))
     # rounds a pair already has from earlier untracked work are skipped, which also resumes the --fast restart
-    earlier_work_counts = count_earlier_work()
+    earlier_work_counts = count_earlier_work(zmai_prompts["answer_levels"])
     if earlier_work_counts:
         print(f"Continuing from {sum(earlier_work_counts.values())} untracked dialogues of earlier runs: "
               + ", ".join(f"{topic}/{personality} {count}" for (topic, personality), count in sorted(earlier_work_counts.items())))
