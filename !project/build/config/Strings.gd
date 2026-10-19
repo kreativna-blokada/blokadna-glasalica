@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Curated registry of string literals
 #maintainer      : Zeljko
@@ -50,7 +50,7 @@ const BOARD_OFFLINE_MESSAGE: String = "RANG LISTA NIJE DOSTUPNA"
 const BOARD_FAILED_MESSAGE: String = "RANG LISTA NIJE UČITANA"
 const EMPTY_BOARD_MESSAGE: String = "JOŠ NEMA REZULTATA"
 #rewards screen rules for claiming a top list reward
-const REWARDS_RULES_MESSAGE: String = "Prva 3 igrača na dnevnoj, nedeljnoj i ukupnoj rang-listi (zatvara se 31.10.2026.) osvajaju poklon. Piši nam na blokadna.igra@gmail.com i pošalji snimak ekrana sa svojim korisničkim imenom i ID-jem, da potvrdimo tvoj rezultat."
+const REWARDS_RULES_MESSAGE: String = "Prva 3 igrača na dnevnoj, nedeljnoj i ukupnoj rang-listi (zatvara se 31.10.2026.) osvajaju poklon. Piši nam na kreativna.blokada@proton.me i pošalji snimak ekrana sa svojim korisničkim imenom i ID-jem, da potvrdimo tvoj rezultat."
 
 #leaderboard screen captions
 const BOARD_TITLE: String = "RANG LISTA"

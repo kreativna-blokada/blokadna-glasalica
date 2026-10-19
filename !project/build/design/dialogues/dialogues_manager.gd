@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Dialogue content provider; uses the latest of built-in/cached content
 #                  and refreshes the cache from GitHub on every start (ETag-conditional)
