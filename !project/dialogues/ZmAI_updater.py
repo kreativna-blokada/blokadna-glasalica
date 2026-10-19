@@ -451,17 +451,19 @@ def find_dialogue_error(dialogue, require_points):
             if not isinstance(next_id, str) or (next_id and next_id not in dialogue):
                 return f'node "{node_id}" points to unknown node "{next_id}"'
 
+    # answers may join on a shared node, only a node leading back to itself is a loop
     visited_ids = set()
-    node_path = ["root"]
-    while node_path:
-        node_id = node_path.pop()
-        if node_id in visited_ids:
-            return f'node "{node_id}" is reached twice'
+    node_paths = [("root", ())]
+    while node_paths:
+        node_id, ancestor_ids = node_paths.pop()
+        if node_id in ancestor_ids:
+            return f'node "{node_id}" leads back to itself'
         visited_ids.add(node_id)
         node = dialogue[node_id]
-        node_path.extend(choice["next"] for choice in node.get("choices", []) if choice.get("next"))
+        next_ids = [choice["next"] for choice in node.get("choices", []) if choice.get("next")]
         if node.get("next"):
-            node_path.append(node["next"])
+            next_ids.append(node["next"])
+        node_paths.extend((next_id, ancestor_ids + (node_id,)) for next_id in next_ids)
     unreached_ids = set(dialogue) - visited_ids
     if unreached_ids:
         return f'nodes {sorted(unreached_ids)} are never reached from "root"'
