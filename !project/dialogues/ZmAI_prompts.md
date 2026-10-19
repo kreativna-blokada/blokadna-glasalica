@@ -94,9 +94,7 @@ Oceni svaki odgovor u ovom dijalogu jednim nivoom sa skale. Ispravni odgovori do
 
 $answer_levels
 
-```json
 $dialogue
-```
 
 Vrati samo JSON u obliku {"id_čvora": [nivo prvog odgovora, nivo drugog odgovora, ...]}, za svaki čvor sa izborima, redom kojim su odgovori navedeni.
 ~~~

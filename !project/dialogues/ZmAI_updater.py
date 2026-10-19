@@ -95,8 +95,8 @@ TOPIC_PATTERNS = {
     "booth": re.compile(r"paravan|tajnost|fotografis|zaokruz|presavi"),
 }
 
-# root texts this close to an existing one count as a repeated scenario
-DUPLICATE_ROOT_RATIO = 0.75
+# scenarios this close to an existing one count as a repeat
+DUPLICATE_SCENARIO_RATIO = 0.75
 # every text of the existing dialogues ends with one of these, a cut-off ZmAI answer does not
 SENTENCE_ENDINGS = (".", "!", "?", "…", '"', "”", "»", ")")
 # tries per pair before an unusable ZmAI answer skips it
@@ -587,18 +587,39 @@ def ask_zmai_for_json(question, thread_id, find_answer_error, zmai_prompts, stag
             parsed_answer, answer_error = None, f"JSON se ne može pročitati ({error})"
         if not answer_error:
             return parsed_answer, thread_id
-        if correction_round == 1:
+        # a plain text answer is ZmAI declining the topic, which a correction in the same thread does not change
+        if correction_round == 1 or "{" not in answer_text:
             break
         correction_question = correction_request.substitute(answer_error=answer_error)
         answer_text, thread_id = ask_zmai_politely(correction_question, thread_id, f"{stage_label} correction")
-    raise UnusableAnswer(answer_error, answer_text)
+    raise UnusableAnswer(f"{stage_label}: {answer_error}", answer_text)
+
+
+# root text plus the line it leads to, where a scenario starts to differ from the stop's generic opening
+def describe_scenario(dialogue):
+    root_node = dialogue["root"]
+    first_reply_text = dialogue.get(root_node.get("next", ""), {}).get("text", "")
+    return f"{root_node['text']} {first_reply_text}".strip()
+
+
+# dialogue as a plain outline, without the repeated JSON keys ZmAI's filter rejects as repetition
+def format_dialogue_outline(dialogue):
+    outline_lines = []
+    for node_id, node in dialogue.items():
+        outline_lines.append(f"{node_id} [{node['speaker']}]: {node['text']}")
+        for choice_number, choice in enumerate(node.get("choices", []), 1):
+            next_text = f" → {choice['next']}" if choice.get("next") else ""
+            outline_lines.append(f"  {choice_number}. {choice['text']}{next_text} ({choice['explanation']})")
+        if node.get("next"):
+            outline_lines.append(f"  → {node['next']}")
+    return "\n".join(outline_lines)
 
 
 # stage 1 prompt: rules, the stop, its existing dialogues as compact samples without points and Crta Q&A
-def build_dialogue_prompt(zmai_prompts, stop_info, personality, sample_dialogues, covered_roots, crta_excerpt):
+def build_dialogue_prompt(zmai_prompts, stop_info, personality, sample_dialogues, covered_scenarios, crta_excerpt):
     sample_text = "\n\n".join(f"### {name}.json\n```json\n{json.dumps(without_scores(dialogue), ensure_ascii=False, separators=(',', ':'))}\n```"
                               for name, dialogue in sample_dialogues.items())
-    covered_text = "\n".join(f"- {root_text}" for root_text in covered_roots)
+    covered_text = "\n".join(f"- {scenario_text}" for scenario_text in covered_scenarios)
     return zmai_prompts["dialogue_request"].substitute(
         prompt_rules=zmai_prompts["prompt_rules"],
         stop_title=stop_info["title"],
@@ -615,7 +636,7 @@ def build_dialogue_prompt(zmai_prompts, stop_info, personality, sample_dialogues
 def build_rating_prompt(zmai_prompts, dialogue):
     return zmai_prompts["rating_request"].substitute(
         answer_levels=zmai_prompts["answer_levels_text"],
-        dialogue=json.dumps(dialogue, ensure_ascii=False, indent=2),
+        dialogue=format_dialogue_outline(dialogue),
     )
 
 
@@ -719,10 +740,13 @@ def next_dialogue_index(topic, personality):
 # scores every finished draft, adds it to content/ as a new file and prints where the pool points land
 def publish_drafts(calibration):
     draft_paths = sorted(DRAFTS_DIR.glob("*.json")) if DRAFTS_DIR.exists() else []
-    if not draft_paths:
+    # drafts still waiting for their rating stay for the next run of their pair
+    rated_drafts = {draft_path: draft for draft_path in draft_paths
+                    if (draft := json.loads(draft_path.read_text(encoding="utf-8")))["levels"] is not None}
+    if not rated_drafts:
         print("No new dialogues to add")
         return 0
-    drafts = [json.loads(draft_path.read_text(encoding="utf-8")) for draft_path in draft_paths]
+    draft_paths, drafts = list(rated_drafts), list(rated_drafts.values())
     content_dialogues = read_content_dialogues()
     negative_scale = score_drafts(drafts, content_dialogues, calibration)
 
@@ -753,18 +777,18 @@ def gather_stop_context(topic, personality, content_dialogues):
     stop_dialogues = {name: dialogue for name, dialogue in content_dialogues.items() if f"voter_{topic}_dialog_" in name}
     personality_names = sorted(name for name in stop_dialogues if name.split("_")[-2] == personality)
     sample_dialogues = {name: stop_dialogues[name] for name in personality_names[-SAMPLE_DIALOGUES_PER_PROMPT:]}
-    covered_roots = [dialogue["root"]["text"] for dialogue in stop_dialogues.values()]
-    covered_roots += [json.loads(path.read_text(encoding="utf-8"))["dialogue"]["root"]["text"]
-                      for path in DRAFTS_DIR.glob(f"{topic}_*.json")]
-    return sample_dialogues, covered_roots
+    covered_scenarios = [describe_scenario(dialogue) for dialogue in stop_dialogues.values()]
+    covered_scenarios += [describe_scenario(json.loads(path.read_text(encoding="utf-8"))["dialogue"])
+                          for path in DRAFTS_DIR.glob(f"{topic}_*.json")]
+    return sample_dialogues, covered_scenarios
 
 
 # ZmAI requests of one pair before any is measured: the first pair's stage 1 parts plus rating one of its samples
 def estimate_zmai_requests_per_pair(zmai_prompts, stop_infos, content_dialogues, crta_excerpts):
     stop_name, personality = DIALOGUE_STOPS[0], next(iter(zmai_prompts["tones"]))
-    sample_dialogues, covered_roots = gather_stop_context(stop_name.lower(), personality, content_dialogues)
+    sample_dialogues, covered_scenarios = gather_stop_context(stop_name.lower(), personality, content_dialogues)
     dialogue_prompt = build_dialogue_prompt(zmai_prompts, stop_infos[stop_name], personality, sample_dialogues,
-                                            covered_roots, crta_excerpts[stop_name.lower()])
+                                            covered_scenarios, crta_excerpts[stop_name.lower()])
     rating_prompt = build_rating_prompt(zmai_prompts, without_scores(next(iter(sample_dialogues.values()), {})))
     return count_zmai_messages(dialogue_prompt, zmai_prompts) + count_zmai_messages(rating_prompt, zmai_prompts)
 
@@ -772,17 +796,29 @@ def estimate_zmai_requests_per_pair(zmai_prompts, stop_infos, content_dialogues,
 # stage 1 and 2 for one stop and personality, saved as a draft so an interrupted run loses nothing
 def create_draft(zmai_prompts, stop_name, stop_info, personality, content_dialogues, crta_excerpt):
     topic = stop_name.lower()
-    sample_dialogues, covered_roots = gather_stop_context(topic, personality, content_dialogues)
+    sample_dialogues, covered_scenarios = gather_stop_context(topic, personality, content_dialogues)
 
-    dialogue_prompt = build_dialogue_prompt(zmai_prompts, stop_info, personality, sample_dialogues, covered_roots, crta_excerpt)
-    dialogue, _ = ask_zmai_for_json(dialogue_prompt, None,
-                                    lambda answer: find_dialogue_error(answer, require_points=False),
-                                    zmai_prompts, "stage 1")
-    dialogue = without_scores(dialogue)
-    root_text = dialogue["root"]["text"]
-    if any(difflib.SequenceMatcher(None, root_text, covered_root).ratio() > DUPLICATE_ROOT_RATIO for covered_root in covered_roots):
-        print(f"  skipped, repeats a covered scenario: {root_text}")
-        return False
+    # a stage 1 dialogue whose rating failed is rated again instead of written anew
+    unrated_paths = [draft_path for draft_path in sorted(DRAFTS_DIR.glob(f"{topic}_{personality}_*.json"))
+                     if json.loads(draft_path.read_text(encoding="utf-8"))["levels"] is None]
+    if unrated_paths:
+        draft_path = unrated_paths[0]
+        dialogue = json.loads(draft_path.read_text(encoding="utf-8"))["dialogue"]
+    else:
+        dialogue_prompt = build_dialogue_prompt(zmai_prompts, stop_info, personality, sample_dialogues, covered_scenarios, crta_excerpt)
+        dialogue, _ = ask_zmai_for_json(dialogue_prompt, None,
+                                        lambda answer: find_dialogue_error(answer, require_points=False),
+                                        zmai_prompts, "stage 1")
+        dialogue = without_scores(dialogue)
+        scenario_text = describe_scenario(dialogue)
+        if any(difflib.SequenceMatcher(None, scenario_text, covered_scenario).ratio() > DUPLICATE_SCENARIO_RATIO
+               for covered_scenario in covered_scenarios):
+            print(f"  skipped, repeats a covered scenario: {scenario_text}")
+            return False
+
+        draft_path = DRAFTS_DIR / f"{topic}_{personality}_{int(time.time())}.json"
+        unrated_draft = {"topic": topic, "personality": personality, "dialogue": dialogue, "levels": None}
+        draft_path.write_text(json.dumps(unrated_draft, ensure_ascii=False, indent=2), encoding="utf-8")
 
     # a new thread, so the rating never sits on top of the long stage 1 context
     answer_levels, _ = ask_zmai_for_json(build_rating_prompt(zmai_prompts, dialogue), None,
@@ -790,9 +826,8 @@ def create_draft(zmai_prompts, stop_name, stop_info, personality, content_dialog
                                          zmai_prompts, "rating")
     answer_levels = {node_id: node_levels for node_id, node_levels in answer_levels.items() if "choices" in dialogue.get(node_id, {})}
     draft = {"topic": topic, "personality": personality, "dialogue": dialogue, "levels": answer_levels}
-    draft_path = DRAFTS_DIR / f"{topic}_{personality}_{int(time.time())}.json"
     draft_path.write_text(json.dumps(draft, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"  drafted: {root_text}")
+    print(f"  drafted: {dialogue['root']['text']}")
     return True
 
 
@@ -803,6 +838,7 @@ def main():
                                  help=f"ZmAI requests {ZMAI_FAST_MIN_DELAY:.0f}-{ZMAI_FAST_MIN_DELAY + ZMAI_FAST_DELAY_JITTER:.0f}s apart instead of"
                                       f" {ZMAI_MIN_DELAY:.0f}-{ZMAI_MIN_DELAY + ZMAI_DELAY_JITTER:.0f}s; the first ZmAI failure restarts the run at the normal pace")
     argument_parser.add_argument("--resume-from", type=int, default=0, help="stop and personality pair to start from, set by the --fast restart")
+    argument_parser.add_argument("--stop-order", default="", help="comma separated stops in run order, set by the --fast restart")
     arguments = argument_parser.parse_args()
     if arguments.fast:
         zmai_pacer.min_delay, zmai_pacer.delay_jitter, zmai_pacer.fail_fast = ZMAI_FAST_MIN_DELAY, ZMAI_FAST_DELAY_JITTER, True
@@ -816,8 +852,11 @@ def main():
     refresh_crta_cache()
     crta_excerpts = collect_crta_excerpts()
 
-    run_pairs = [(stop_name, personality) for stop_name in DIALOGUE_STOPS
-                  for personality in zmai_prompts["tones"] for _ in range(arguments.per_pair)][arguments.resume_from:]
+    # rounds over the stops, fewest dialogues first, so a run cut short by the request budget still reaches every stop
+    stop_order = arguments.stop_order.split(",") if arguments.stop_order else sorted(
+        DIALOGUE_STOPS, key=lambda stop_name: sum(f"voter_{stop_name.lower()}_dialog_" in name for name in content_dialogues))
+    run_pairs = [(stop_name, personality) for _ in range(arguments.per_pair) for stop_name in stop_order
+                 for personality in zmai_prompts["tones"]][arguments.resume_from:]
     run_progress = RunProgress(len(run_pairs),
                                estimate_zmai_requests_per_pair(zmai_prompts, stop_infos, content_dialogues, crta_excerpts))
     drafted_count = 0
@@ -855,7 +894,8 @@ def main():
 
     if fast_pace_broken:
         restart_arguments = ["--per-pair", str(arguments.per_pair),
-                             "--resume-from", str(arguments.resume_from + run_progress.finished_pairs)]
+                             "--resume-from", str(arguments.resume_from + run_progress.finished_pairs),
+                             "--stop-order", ",".join(stop_order)]
         wait_with_countdown(BACKOFF_BASE_DELAY, "before restarting at the normal pace")
         print(f"Restarting at the normal pace from pair {arguments.resume_from + run_progress.finished_pairs + 1}", flush=True)
         os.execv(sys.executable, [sys.executable, __file__, *restart_arguments])
