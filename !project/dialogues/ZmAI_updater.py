@@ -6,6 +6,7 @@ import os
 import random
 import re
 import string
+import subprocess
 import sys
 import time
 import unicodedata
@@ -24,6 +25,7 @@ from pathlib import Path
 #ZmAI threads are kept short: one compact sample, no rules samples, the rating in its own thread
 #--fast spaces ZmAI requests closer; its first ZmAI failure stops the run and restarts it at the normal pace
 #an incomplete or unusable ZmAI answer, or a message ZmAI refuses, is flagged in red and its pair retried in a new thread
+#dialogues earlier runs left untracked in git, and their rated drafts, count toward --per-pair, so a new run continues from them
 DIALOGUES_DIR = Path(__file__).resolve().parent
 CONTENT_DIR = DIALOGUES_DIR / "content"
 PROMPT_RULES_PATH = DIALOGUES_DIR / "ZmAI_dialogues.md"
@@ -793,6 +795,28 @@ def estimate_zmai_requests_per_pair(zmai_prompts, stop_infos, content_dialogues,
     return count_zmai_messages(dialogue_prompt, zmai_prompts) + count_zmai_messages(rating_prompt, zmai_prompts)
 
 
+# new dialogues per (topic, personality) done before this run: content files untracked in git plus rated drafts
+def count_earlier_work():
+    try:
+        untracked_paths = subprocess.run(["git", "-C", str(DIALOGUES_DIR), "ls-files", "--others", "--exclude-standard", "--", CONTENT_DIR.name],
+                                         capture_output=True, text=True, check=True).stdout.splitlines()
+    except (OSError, subprocess.CalledProcessError) as error:
+        print(f"Earlier untracked dialogues not checked, git failed: {error}")
+        untracked_paths = []
+    earlier_work_counts = {}
+    for untracked_path in untracked_paths:
+        filename_match = DIALOGUE_FILENAME_PATTERN.fullmatch(Path(untracked_path).name)
+        if filename_match:
+            pair_key = (filename_match.group(1), filename_match.group(2))
+            earlier_work_counts[pair_key] = earlier_work_counts.get(pair_key, 0) + 1
+    for draft_path in DRAFTS_DIR.glob("*.json"):
+        draft = json.loads(draft_path.read_text(encoding="utf-8"))
+        if draft["levels"] is not None:
+            pair_key = (draft["topic"], draft["personality"])
+            earlier_work_counts[pair_key] = earlier_work_counts.get(pair_key, 0) + 1
+    return earlier_work_counts
+
+
 # stage 1 and 2 for one stop and personality, saved as a draft so an interrupted run loses nothing
 def create_draft(zmai_prompts, stop_name, stop_info, personality, content_dialogues, crta_excerpt):
     topic = stop_name.lower()
@@ -837,7 +861,6 @@ def main():
     argument_parser.add_argument("--fast", action="store_true",
                                  help=f"ZmAI requests {ZMAI_FAST_MIN_DELAY:.0f}-{ZMAI_FAST_MIN_DELAY + ZMAI_FAST_DELAY_JITTER:.0f}s apart instead of"
                                       f" {ZMAI_MIN_DELAY:.0f}-{ZMAI_MIN_DELAY + ZMAI_DELAY_JITTER:.0f}s; the first ZmAI failure restarts the run at the normal pace")
-    argument_parser.add_argument("--resume-from", type=int, default=0, help="stop and personality pair to start from, set by the --fast restart")
     argument_parser.add_argument("--stop-order", default="", help="comma separated stops in run order, set by the --fast restart")
     arguments = argument_parser.parse_args()
     if arguments.fast:
@@ -855,8 +878,14 @@ def main():
     # rounds over the stops, fewest dialogues first, so a run cut short by the request budget still reaches every stop
     stop_order = arguments.stop_order.split(",") if arguments.stop_order else sorted(
         DIALOGUE_STOPS, key=lambda stop_name: sum(f"voter_{stop_name.lower()}_dialog_" in name for name in content_dialogues))
-    run_pairs = [(stop_name, personality) for _ in range(arguments.per_pair) for stop_name in stop_order
-                 for personality in zmai_prompts["tones"]][arguments.resume_from:]
+    # rounds a pair already has from earlier untracked work are skipped, which also resumes the --fast restart
+    earlier_work_counts = count_earlier_work()
+    if earlier_work_counts:
+        print(f"Continuing from {sum(earlier_work_counts.values())} untracked dialogues of earlier runs: "
+              + ", ".join(f"{topic}/{personality} {count}" for (topic, personality), count in sorted(earlier_work_counts.items())))
+    run_pairs = [(stop_name, personality) for pair_round in range(arguments.per_pair) for stop_name in stop_order
+                 for personality in zmai_prompts["tones"]
+                 if pair_round >= earlier_work_counts.get((stop_name.lower(), personality), 0)]
     run_progress = RunProgress(len(run_pairs),
                                estimate_zmai_requests_per_pair(zmai_prompts, stop_infos, content_dialogues, crta_excerpts))
     drafted_count = 0
@@ -893,11 +922,9 @@ def main():
             print_failure(f"✗ {len(failure_reports)} failed attempts this run:\n  " + "\n  ".join(failure_reports))
 
     if fast_pace_broken:
-        restart_arguments = ["--per-pair", str(arguments.per_pair),
-                             "--resume-from", str(arguments.resume_from + run_progress.finished_pairs),
-                             "--stop-order", ",".join(stop_order)]
+        restart_arguments = ["--per-pair", str(arguments.per_pair), "--stop-order", ",".join(stop_order)]
         wait_with_countdown(BACKOFF_BASE_DELAY, "before restarting at the normal pace")
-        print(f"Restarting at the normal pace from pair {arguments.resume_from + run_progress.finished_pairs + 1}", flush=True)
+        print("Restarting at the normal pace, continuing from the untracked dialogues", flush=True)
         os.execv(sys.executable, [sys.executable, __file__, *restart_arguments])
 
 
