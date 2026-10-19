@@ -309,12 +309,9 @@ def list_crta_article_slugs():
     if listing_cache_path.exists() and time.time() - listing_cache_path.stat().st_mtime < CRTA_LISTING_MAX_AGE:
         return json.loads(listing_cache_path.read_text(encoding="utf-8"))
 
-    robots_parser = urllib.robotparser.RobotFileParser(CRTA_HOME_URL + "robots.txt")
-    crta_pacer.wait_turn()
-    robots_parser.read()
-    # a blocked robots.txt reads as disallow all, which must not be cached as an empty listing
-    if robots_parser.disallow_all:
-        raise ServiceBlocked("crta.rs robots.txt unreachable or disallows crawling")
+    robots_parser = urllib.robotparser.RobotFileParser()
+    # fetched with CRTA_USER_AGENT, since Cloudflare answers 403 to the Python-urllib agent robots_parser.read() sends
+    robots_parser.parse((fetch_crta_page(CRTA_HOME_URL + "robots.txt") or "").splitlines())
     article_slugs = []
     for page_number in range(1, CRTA_QA_MAX_LISTING_PAGES + 1):
         listing_url = CRTA_QA_LISTING_URL if page_number == 1 else f"{CRTA_QA_LISTING_URL}page/{page_number}/"
