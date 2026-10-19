@@ -19,7 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://bggx3osjd627g" path="res://!project/art/UI/Buttons/setup-music-default.png" id="13_music_default"]
 [ext_resource type="Texture2D" uid="uid://clj5env0n8wrv" path="res://!project/art/UI/Buttons/setup-zoom-active.png" id="13_zoom_active"]
 [ext_resource type="Texture2D" uid="uid://d3usamqtowmd" path="res://!project/art/UI/Buttons/setup-zoom-default.png" id="13_zoom_default"]
-[ext_resource type="Shader" path="res://!project/art/shaders/filler.gdshader" id="14_filler"]
+[ext_resource type="Shader" uid="uid://b3735lhktr6ra" path="res://!project/art/shaders/filler.gdshader" id="14_filler"]
 [ext_resource type="AudioStream" uid="uid://nlcpusj8vuv" path="res://!project/audio/jingles/8-bit-game-7.mp3" id="15_letter_b_sound"]
 [ext_resource type="AudioStream" uid="uid://bamoxwy6fhy21" path="res://!project/audio/jingles/8-bit-game-2.mp3" id="15_letter_i_sound"]
 [ext_resource type="AudioStream" uid="uid://bd62u3m57hkgc" path="res://!project/audio/jingles/8-bit-game-4.mp3" id="15_letter_t_sound"]
