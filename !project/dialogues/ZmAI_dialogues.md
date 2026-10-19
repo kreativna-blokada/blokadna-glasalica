@@ -40,7 +40,6 @@ Dijalozi postoje u prvih 6 koraka, u sedmom nema dijaloga, samo ubacivanje listi
 - Nekada kontrolor može da pravi greške ili prekršaje a da ga birač koriguje, a i obrnuto.
 - Pisati različite scenarije koji pokrivaju greške ili prekršaje i kontrolora i birača.
 - Pogledati priloženi uzorak dijaloga, izmisliti dijaloge ali **nipošto ne menjati JSON strukturu**.
-- Bodovati dijaloge po veličini greške ili prekršaja, staviti svaki bod u odnos sa svim dijalozima i bodovima.
 
 ## Pravila na izborima
 
