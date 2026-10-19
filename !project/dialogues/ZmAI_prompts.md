@@ -39,11 +39,30 @@ $crta_material
 ## Zahtev
 
 Napiši JEDAN novi dijalog za tačku „$stop_title”, sa novim scenarijom greške ili prekršaja birača ili člana biračkog odbora, tačan prema zakonu i materijalu Crte.
-- Ista JSON struktura kao u postojećim dijalozima: "root", "text", "speaker" (LEFT je član odbora, RIGHT birač), "next", "choices" sa "text", "explanation", "score", "next".
+- Ista JSON struktura kao u postojećim dijalozima: "root", "text", "speaker" (LEFT je član odbora, RIGHT birač), "next", "choices" sa "text", "explanation", "next".
 - Svaki čvor sa izborima ima bar jedan ispravan odgovor, a dijalog ima bar jedan pogrešan.
-- Svaki "score" postavi na 0, bodove određujemo posle.
 - Bez oznaka [ANG] ili [POL] u tekstu.
 - Vrati samo JSON, bez ikakvog drugog teksta.
+~~~
+
+## Deo upita
+
+Šalje se kada je upit duži od jedne poruke, za svaki deo osim poslednjeg. Mesta: `$part_index`, `$part_count`, `$part_text`.
+
+~~~
+Upit stiže u $part_count delova, ovo je deo $part_index. Samo potvrdi prijem jednom rečju i ne odgovaraj na upit dok ne stigne poslednji deo.
+
+$part_text
+~~~
+
+## Poslednji deo upita
+
+Šalje se kao poslednji deo upita podeljenog na delove. Mesta: `$part_index`, `$part_count`, `$part_text`.
+
+~~~
+Ovo je poslednji deo upita, deo $part_index od $part_count. Spoji ga sa prethodnim delovima i odgovori na ceo upit.
+
+$part_text
 ~~~
 
 ## Ton: angry
