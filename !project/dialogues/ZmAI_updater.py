@@ -22,6 +22,7 @@ from pathlib import Path
 #the levels turn into points balanced to the average and maximum run targets
 #prompts longer than one ZmAI message go out as numbered parts in one thread
 #--fast spaces ZmAI requests closer; its first ZmAI failure stops the run and restarts it at the normal pace
+#an incomplete or unusable ZmAI answer is flagged in red and its pair retried in a new thread
 DIALOGUES_DIR = Path(__file__).resolve().parent
 CONTENT_DIR = DIALOGUES_DIR / "content"
 PROMPT_RULES_PATH = DIALOGUES_DIR / "ZmAI_dialogues.md"
@@ -93,6 +94,12 @@ TOPIC_PATTERNS = {
 
 # root texts this close to an existing one count as a repeated scenario
 DUPLICATE_ROOT_RATIO = 0.75
+# every text of the existing dialogues ends with one of these, a cut-off ZmAI answer does not
+SENTENCE_ENDINGS = (".", "!", "?", "…", '"', "”", "»", ")")
+# tries per pair before an unusable ZmAI answer skips it
+DRAFT_ATTEMPTS = 3
+# end of the raw ZmAI answer shown with a failure
+FAILURE_ANSWER_TAIL_CHARS = 300
 
 
 class ServiceBlocked(Exception):
@@ -105,6 +112,13 @@ class RequestBudgetExhausted(Exception):
 
 class FastPaceBroken(Exception):
     pass
+
+
+# a ZmAI answer that stays invalid after its correction, keeping the raw answer for the failure banner
+class UnusableAnswer(ValueError):
+    def __init__(self, answer_error, answer_text):
+        super().__init__(answer_error)
+        self.answer_text = answer_text
 
 
 # seconds as m:ss, or h:mm:ss from an hour up
@@ -125,6 +139,15 @@ def wait_with_countdown(wait_seconds, reason):
         print(f"\r\033[K  waiting {seconds_left:.0f}s {reason}", end="", flush=True)
         time.sleep(min(seconds_left, 1.0))
     print("\r\033[K", end="", flush=True)
+
+
+# red failure banner on stderr, with the end of the raw ZmAI answer when there is one
+def print_failure(failure_text, answer_text=""):
+    red_start, red_end = ("\033[1;31m", "\033[0m") if sys.stderr.isatty() else ("", "")
+    print(f"\n{red_start}{'!' * 60}\n{failure_text}{red_end}", file=sys.stderr)
+    if answer_text:
+        print(f"  answer ended with: …{answer_text[-FAILURE_ANSWER_TAIL_CHARS:]}", file=sys.stderr)
+    print(f"{red_start}{'!' * 60}{red_end}\n", file=sys.stderr, flush=True)
 
 
 # spaces requests to one service with a jittered delay and stops at the per-run request cap
@@ -390,6 +413,8 @@ def find_dialogue_error(dialogue, require_points):
             return f'node "{node_id}" needs a "text" string'
         if node.get("speaker") not in ("LEFT", "RIGHT"):
             return f'node "{node_id}" needs "speaker" LEFT or RIGHT'
+        if not node["text"].rstrip().endswith(SENTENCE_ENDINGS):
+            return f'node "{node_id}" text is empty or cut off'
         if node["text"].lstrip().startswith(("[ANG]", "[POL]")):
             return f'node "{node_id}" keeps an [ANG]/[POL] tag'
         if "choices" in node:
@@ -400,6 +425,8 @@ def find_dialogue_error(dialogue, require_points):
                 if not isinstance(choice, dict) or not isinstance(choice.get("text"), str) \
                         or not isinstance(choice.get("explanation"), str):
                     return f'node "{node_id}" has a choice without text or explanation'
+                if not all(choice[text_key].rstrip().endswith(SENTENCE_ENDINGS) for text_key in ("text", "explanation")):
+                    return f'node "{node_id}" has a choice text or explanation empty or cut off'
                 score = choice.get("score")
                 if require_points and (isinstance(score, bool) or not isinstance(score, (int, float))):
                     return f'node "{node_id}" has a choice without score'
@@ -423,6 +450,9 @@ def find_dialogue_error(dialogue, require_points):
         node_path.extend(choice["next"] for choice in node.get("choices", []) if choice.get("next"))
         if node.get("next"):
             node_path.append(node["next"])
+    unreached_ids = set(dialogue) - visited_ids
+    if unreached_ids:
+        return f'nodes {sorted(unreached_ids)} are never reached from "root"'
     if require_points and not any(choice["score"] < 0 for node in dialogue.values() for choice in node.get("choices", [])):
         return "no answer has negative points"
     return ""
@@ -540,7 +570,7 @@ def ask_zmai_for_json(question, thread_id, find_answer_error, zmai_prompts):
             break
         correction_question = correction_request.substitute(answer_error=answer_error)
         answer_text, thread_id = ask_zmai_politely(correction_question, thread_id)
-    raise ValueError(answer_error)
+    raise UnusableAnswer(answer_error, answer_text)
 
 
 # stage 1 prompt: rules, the stop, its existing dialogues without points as the sample and Crta Q&A
@@ -768,15 +798,22 @@ def main():
     run_progress = RunProgress(len(run_pairs),
                                estimate_zmai_requests_per_pair(zmai_prompts, stop_infos, content_dialogues, crta_excerpts))
     drafted_count = 0
+    failure_reports = []
     fast_pace_broken = False
     try:
         for stop_name, personality in run_pairs:
             print(run_progress.describe_next_pair(stop_name, personality), flush=True)
-            try:
-                drafted_count += create_draft(zmai_prompts, stop_name, stop_infos[stop_name], personality,
-                                              content_dialogues, crta_excerpts[stop_name.lower()])
-            except ValueError as error:
-                print(f"  skipped, ZmAI answer unusable: {error}")
+            for draft_attempt in range(1, DRAFT_ATTEMPTS + 1):
+                try:
+                    drafted_count += create_draft(zmai_prompts, stop_name, stop_infos[stop_name], personality,
+                                                  content_dialogues, crta_excerpts[stop_name.lower()])
+                    break
+                except ValueError as error:
+                    pair_label = f"[{run_progress.finished_pairs + 1}/{run_progress.total_pairs}] {stop_name} / {personality}"
+                    failure_reports.append(f"{pair_label}, attempt {draft_attempt}/{DRAFT_ATTEMPTS}: {error}")
+                    print_failure(f"✗ FAILED {failure_reports[-1]}", getattr(error, "answer_text", ""))
+                    if draft_attempt == DRAFT_ATTEMPTS:
+                        print_failure(f"✗ GAVE UP {pair_label}, skipped after {DRAFT_ATTEMPTS} attempts")
             run_progress.finished_pairs += 1
     except FastPaceBroken as reason:
         print(f"\nFast pace broke: {reason}. Stopping and restarting at the normal pace.", file=sys.stderr)
@@ -790,6 +827,8 @@ def main():
         print(f"Done in {format_duration(time.time() - run_progress.start_time)}"
               f" · ZmAI requests {zmai_pacer.request_count}/{zmai_pacer.max_requests}"
               f" · drafted {drafted_count} · published {published_count}")
+        if failure_reports:
+            print_failure(f"✗ {len(failure_reports)} failed attempts this run:\n  " + "\n  ".join(failure_reports))
 
     if fast_pace_broken:
         restart_arguments = ["--per-pair", str(arguments.per_pair),
