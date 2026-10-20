@@ -20,7 +20,7 @@ from pathlib import Path
 #stage 1: ZmAI writes a dialogue without points from the ZmAI_dialogues.md rules, the existing dialogues and Crta Q&A
 #everything sent to ZmAI is worded in ZmAI_dialogues.md and ZmAI_prompts.md, this script only fills it in
 #stage 2: the dialogue goes back to ZmAI, which rates each answer by the severity of the violation
-#the levels turn into points balanced to the average and maximum run targets
+#the levels turn into points at one fixed scale, the same across runs and as the existing content
 #prompts longer than one ZmAI message go out as numbered parts in one thread
 #ZmAI threads are kept short: one compact sample, no rules samples, the rating in its own thread
 #--fast spaces ZmAI requests closer; its first ZmAI failure stops the run and restarts it at the normal pace
@@ -46,8 +46,6 @@ DIALOGUE_STOPS = ["Lamp", "ID", "List", "Spray", "Ballot", "Booth"]
 TARGET_MAX_RUN_POINTS = 6_500_000
 TARGET_AVERAGE_RUN_POINTS = 2_000_000
 AVERAGE_PLAYER_ACCURACY = 0.75
-# keeps a negative-points scale off the extremes so penalties stay ordered and meaningful
-NEGATIVE_SCALE_LIMITS = (0.5, 2.0)
 
 ZMAI_MIN_DELAY = 40.0
 ZMAI_DELAY_JITTER = 20.0
@@ -698,41 +696,17 @@ def load_calibration(content_dialogues, best_answer_level):
     return calibration
 
 
-# points of a level, rounded to thousands like the existing content; negatives never round to zero
-def level_points(level, score_unit, negative_scale):
-    if level > 0:
-        return int(round(level * score_unit, -3))
-    return min(int(round(level * score_unit * negative_scale, -3)), -1000)
+# points of a level, rounded to thousands like the existing content
+def level_points(level, score_unit):
+    return int(round(level * score_unit, -3))
 
 
-# writes the levels into the drafts as points, scaling new negatives so the whole pool holds the average target
-def score_drafts(drafts, content_dialogues, calibration):
-    score_unit = calibration["score_unit"]
-    target_answer_points = TARGET_AVERAGE_RUN_POINTS / calibration["average_run_answers"]
-    content_screens = answer_screens(content_dialogues.values())
-    draft_level_screens = [node_levels for draft in drafts for node_levels in draft["levels"].values()]
-    screen_count = len(content_screens) + len(draft_level_screens)
-
-    content_points_sum = sum(map(expected_answer_points, content_screens))
-    draft_positive_sum = draft_negative_sum = 0.0
-    for node_levels in draft_level_screens:
-        positive_points = [level_points(level, score_unit, 1.0) for level in node_levels if level > 0]
-        negative_points = [level * score_unit for level in node_levels if level < 0]
-        positive_weight = AVERAGE_PLAYER_ACCURACY if negative_points else 1.0
-        draft_positive_sum += positive_weight * sum(positive_points) / len(positive_points)
-        if negative_points:
-            draft_negative_sum += (1 - AVERAGE_PLAYER_ACCURACY) * sum(negative_points) / len(negative_points)
-
-    negative_scale = 1.0
-    if draft_negative_sum:
-        negative_scale = (screen_count * target_answer_points - content_points_sum - draft_positive_sum) / draft_negative_sum
-        negative_scale = min(max(negative_scale, NEGATIVE_SCALE_LIMITS[0]), NEGATIVE_SCALE_LIMITS[1])
-
+# writes the levels into the drafts as points, every level worth the same in every run
+def score_drafts(drafts, score_unit):
     for draft in drafts:
         for node_id, node_levels in draft["levels"].items():
             for choice, level in zip(draft["dialogue"][node_id]["choices"], node_levels):
-                choice["score"] = level_points(level, score_unit, negative_scale)
-    return negative_scale
+                choice["score"] = level_points(level, score_unit)
 
 
 # next free file index of a stop and personality in content/
@@ -753,7 +727,7 @@ def publish_drafts(calibration):
         return 0
     draft_paths, drafts = list(rated_drafts), list(rated_drafts.values())
     content_dialogues = read_content_dialogues()
-    negative_scale = score_drafts(drafts, content_dialogues, calibration)
+    score_drafts(drafts, calibration["score_unit"])
 
     for draft_path, draft in zip(draft_paths, drafts):
         dialogue_error = find_dialogue_error(draft["dialogue"], require_points=True)
@@ -771,7 +745,6 @@ def publish_drafts(calibration):
     screens = answer_screens(read_content_dialogues().values())
     average_answer_points = sum(map(expected_answer_points, screens)) / len(screens)
     best_answer_points = max(max(choice_scores) for choice_scores in screens)
-    print(f"Negative points scale of the new dialogues: {negative_scale:.2f}")
     print(f"Projected average run ({AVERAGE_PLAYER_ACCURACY:.0%} accuracy): {calibration['average_run_answers'] * average_answer_points:,.0f}")
     print(f"Projected theoretical maximum: {calibration['max_run_answers'] * best_answer_points:,.0f}")
     return len(list(CONTENT_DIR.glob("voter_*.json"))) - len(content_dialogues)
