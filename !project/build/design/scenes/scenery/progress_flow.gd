@@ -41,8 +41,8 @@ func _ready() -> void:
 	_init_buttons()
 	#Help stays clickable while the game is frozen, so it can close the help it opened
 	$CenterContainer/VBoxContainer/HBoxContainer/HelpSlot/Help.process_mode = Node.PROCESS_MODE_ALWAYS
-	#browsers can't close the tab from the game, quit() is a no-op there
-	if OS.has_feature("web"):
+	#browsers can't close the tab from the game and iOS apps can't quit themselves, quit() is a no-op there
+	if OS.has_feature("web") or OS.has_feature("ios"):
 		%Close.hide()
 
 #signal Help.pressed => requests the intro text
