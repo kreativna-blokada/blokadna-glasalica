@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Gameplay configuration settings
 #maintainer      : Zeljko
@@ -143,8 +143,8 @@ var SkipPenalty: Dictionary[String, Variant] = {
 }
 
 var AnswerLock: Dictionary[String, Variant] = {
-	#wash over the part of a locked answer the colour has not filled yet
-	"locked_wash_color": Color(0.0, 0.0, 0.0, 0.10),
+	#wash dimming a locked answer, swept off a pending pick left to right
+	"locked_wash_color": Color(0.0, 0.0, 0.0, 0.2),
 	#answer background tint of a pick made during the lock, submitted the moment it unlocks
 	"pending_answer_tint": Color(0.55, 0.85, 0.55, 1.0),
 	#opacity of the padlock, drawn in the answer text colour, solid on a pending pick
@@ -163,6 +163,8 @@ var AnswerLock: Dictionary[String, Variant] = {
 	"unlock_pop_time": 0.12,
 	#s the opened padlock fades out after the pop
 	"padlock_fade_time": 0.25,
+	#s a pick made during the lock waits after the lock ends, so its padlock is seen opening
+	"pending_submit_delay": 0.2,
 }
 
 var Sound: Dictionary[String, Variant] = {
@@ -183,8 +185,8 @@ var ClassicalControllers: Dictionary[String, Variant] = {
 	"highlighted_answer_tint": Color(1.0, 0.85, 0.3, 1.0),
 	#dialog opening grace period before the voter stops
 	"dialog_opening_buffer": 0.5,
-	#gold of the guide border shown around Select, then Initiate, until the first start, same as the name plate border
-	"guide_border_color": Color(0.72, 0.62, 0.32, 1.0),
+	#red of the guide border shown around Select, then Initiate, until the first start, same as the start button border
+	"guide_border_color": Color(0.49411765, 0, 0, 1.0),
 	#px width of the guide border
 	"guide_border_width": 32,
 	#px gap between the guided button and the guide border

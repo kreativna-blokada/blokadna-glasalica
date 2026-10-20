@@ -1,0 +1,67 @@
+{
+  "root": {
+    "text": "Izvolite, dajte mi identifikacioni dokument kako bismo utvrdili identitet.",
+    "speaker": "LEFT",
+    "next": "voter_reply"
+  },
+  "voter_reply": {
+    "text": "Evo moja vozačka dozvola. Tu su mi slika i svi podaci, žurim.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Nažalost, vozačka nema JMBG, a važi samo lična karta ili pasoš.",
+        "explanation": "Ispravno postupanje. Prema pravilima RIK-a i zakonu, identitet se utvrđuje isključivo važećom ličnom kartom ili pasošem (odnosno potvrdom MUP-a ako je u izradi), dok vozačka dozvola nije dozvoljena jer ne sadrži JMBG.",
+        "next": "voter_understands",
+        "score": 131000
+      },
+      {
+        "text": "U redu je, vidim sliku i ime, prođite dalje na spisak.",
+        "explanation": "Prekršaj. Član biračkog odbora ne sme dozvoliti identifikaciju dokumentom koji zakonom nije predviđen za glasanje.",
+        "next": "voter_passes",
+        "score": -52000
+      },
+      {
+        "text": "Ne primam to, napustite odmah biračko mesto i ne vraćajte se!",
+        "explanation": "Pogrešan i neprofesionalan pristup. Biraču treba smireno objasniti koji su dokumenti važeći i omogućiti mu da donese ispravan dokument dok traje glasanje.",
+        "next": "voter_argues",
+        "score": -39000
+      }
+    ]
+  },
+  "voter_understands": {
+    "text": "Imam i ličnu kartu u novčaniku, samo mi je vozačka bila pri ruci. Izvolite.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Hvala. Sada utvrđujemo identitet i upućujemo vas na potpis u spisku.",
+        "explanation": "Pravilno sprovedena procedura identifikacije uz odgovarajući dokument.",
+        "score": 131000
+      },
+      {
+        "text": "Eto vidite, što odmah niste dali to umesto da komplikujete.",
+        "explanation": "Identitet jeste utvrđen, ali ovakva primedba predstavlja nepotrebno narušavanje profesionalne komunikacije na biračkom mestu.",
+        "score": -26000
+      }
+    ]
+  },
+  "voter_argues": {
+    "text": "Nemate pravo da vičete na mene! Zašto vozačka ne može ako je to zvanični državni dokument?",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Izvinite na tonu. Zakon traži ličnu kartu ili pasoš, sa njima možete da glasate.",
+        "explanation": "Član odbora smiruje tenziju, priznaje grešku u tonu i tačno obrazlaže zakonsku proceduru.",
+        "score": 105000
+      },
+      {
+        "text": "Zato što sam ja ovde vlast i ja odlučujem ko glasa!",
+        "explanation": "Nedozvoljeno ponašanje. Član biračkog odbora mora poštovati pravila i postupati nepristrasno i profesionalno.",
+        "score": -26000
+      }
+    ]
+  },
+  "voter_passes": {
+    "text": "Odlično, hvala što ste mi izašli u susret.",
+    "speaker": "RIGHT"
+  }
+}

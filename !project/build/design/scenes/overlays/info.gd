@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Full-screen info dialog overlay
 #maintainer      : Zeljko
@@ -12,7 +12,7 @@ extends CanvasLayer
 signal dialog_closed
 
 #private vars
-var _info_file: FileAccess = FileAccess.open("res://!project/build/design/info_texts.json", FileAccess.READ)
+var _info_file: FileAccess = FileAccess.open("res://!project/dialogues/info_texts.json", FileAccess.READ)
 var _info_data: Dictionary = {}
 var _tweening: Tween = null
 var _is_closed: bool = false

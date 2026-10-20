@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Neko je već škrabnuo grafitnom po ovom listiću. Dajte, obrisaću to gumicom iza paravana.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Ne smete ga prepravljati. Predsednik odbora će ga poništiti i dati vam čist.",
+        "explanation": "Ispravno, birački odbor mora obezbediti ispravan, neobeležen listić pre glasanja, a uočeni nepravilan listić se mora evidentirati i zameniti po propisanoj proceduri.",
+        "next": "replace_ballot",
+        "score": 131000
+      },
+      {
+        "text": "Važi, evo vam gumica pa obrišite to iza paravana da ne pravimo gužvu.",
+        "explanation": "Nepravilno, član biračkog odbora ne sme izdati prethodno obeležen ili sumnjiv listić niti prepuštati biraču da samostalno koriguje izborni materijal.",
+        "score": -66000
+      },
+      {
+        "text": "Nema veze, zaokružite hemijskom, odbor će priznati ono što je hemijskom.",
+        "explanation": "Pogrešno, postojanje bilo kakvih ranijih oznaka na listiću može dovesti u pitanje njegovu validnost i tajnost glasanja.",
+        "next": "voter_insists",
+        "score": -39000
+      }
+    ]
+  },
+  "replace_ballot": {
+    "text": "Predsednik odbora konstatuje oznaku, odlaže listić u koverat za nevažeće i izdaje vam novi.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala, u redu je, sada odlazim iza paravana na glasanje sa ispravnim listićem.",
+        "explanation": "Birač prihvata propisnu proceduru i nastavlja glasanje u skladu sa pravilima.",
+        "score": 131000
+      },
+      {
+        "text": "Što pravite dramu oko jedne crtice, samo mi dajte drugi listić.",
+        "explanation": "Birač greši jer svako odstupanje i neispravan listić moraju biti uredno evidentirani radi slaganja izbornog materijala.",
+        "score": -26000
+      }
+    ]
+  },
+  "voter_insists": {
+    "text": "Neću da mi glas bude nevažeći zbog tuđe škrabotine, zahtevam nov, čist listić.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "U pravu ste. Pozvaćemo predsednika odbora da zameni listić po proceduri.",
+        "explanation": "Član biračkog odbora prihvata primedbu birača i vraća postupak u zakonske okvire.",
+        "score": 105000
+      },
+      {
+        "text": "Ako vam se ne sviđa ovaj, onda nemojte ni da glasate.",
+        "explanation": "Nedopustivo ponašanje i prekršaj člana biračkog odbora kojim se biraču neosnovano uskraćuje biračko pravo.",
+        "score": -66000
+      }
+    ]
+  }
+}

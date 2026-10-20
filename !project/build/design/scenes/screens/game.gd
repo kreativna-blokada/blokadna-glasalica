@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Master gameplay runner
 #maintainer      : Zeljko
@@ -79,7 +79,11 @@ func _ready() -> void:
 	_round_timer_display = ROUND_TIMER_SCENE.instantiate() as RoundTimerDisplay
 	dialog_layer.add_child(_round_timer_display)
 	
-	_show_start_popup()
+	#the intro text opens only on the same games as the start screen's moving finger
+	if _is_intro_scheduled():
+		_show_start_popup()
+	else:
+		_start_round()
 
 
 func _show_start_popup() -> void:
@@ -91,7 +95,17 @@ func _show_start_popup() -> void:
 
 func _start_popup_closed() -> void:
 	_close_text_popup()
-	
+	_start_round()
+
+#true when this game is one of Configs.HandHint["play_numbers"]; an unreadable record counts as the first game
+func _is_intro_scheduled() -> bool:
+	var start_record: ConfigFile = ConfigFile.new()
+	if start_record.load(Configs.HandHint["plays_record"]) != OK: return true
+	var game_start_count: int = int(start_record.get_value("plays", "game_start_count", 0))
+	return Configs.HandHint["play_numbers"].has(game_start_count)
+
+#starts spawning voters and the round music
+func _start_round() -> void:
 	stage.start_spawning()
 	#the round time counts from the first voter waiting in the queue
 	stage.queue_count_updated.connect(_on_first_voter_queued, CONNECT_ONE_SHOT)

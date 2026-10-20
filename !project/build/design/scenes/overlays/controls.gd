@@ -22,7 +22,7 @@ var _next_disabled_texture: Texture2D
 #action each button fires while its state is played, kept while the button is inactive
 var _classic_button_actions: Dictionary[TouchScreenButton, String] = {}
 
-#gold border guiding the first run: around Select once the first voter stops in the queue, then around Initiate until it is pressed
+#red border guiding the first run: around Select once the first voter stops in the queue, then around Initiate until it is pressed
 var _guide_border: Panel
 var _guide_border_pulse: Tween
 #button the guide border is around right now; null once the guide is over
@@ -192,7 +192,7 @@ func _set_classic_button_active(classic_button: TouchScreenButton, is_active: bo
 	classic_button.action = _classic_button_actions[classic_button] if is_active else ""
 
 
-#builds the hidden gold border the guide moves from Select to Initiate
+#builds the hidden red border the guide moves from Select to Initiate
 func _create_guide_border() -> void:
 	var border_style := StyleBoxFlat.new()
 	border_style.draw_center = false

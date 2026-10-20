@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Pixel loader: eight outlined blocks around a 3x3 grid, a dark head stepping clockwise with a fading trail
 #maintainer      : Zeljko

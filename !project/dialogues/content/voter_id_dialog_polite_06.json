@@ -1,0 +1,64 @@
+{
+  "root": {
+    "text": "Vaš identifikacioni dokument, molim.",
+    "speaker": "LEFT",
+    "next": "voter_reply"
+  },
+  "voter_reply": {
+    "text": "Izvolite vozačku dozvolu, ličnu kartu sam zaboravio kod kuće.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Nažalost, vozačka nije propisan dokument. Potrebna je lična karta ili pasoš.",
+        "explanation": "Ispravno postupanje. Glasanje je dozvoljeno isključivo uz važeću ličnu kartu ili pasoš, odnosno potvrdu MUP-a o podnetom zahtevu za izdavanje novog dokumenta.",
+        "next": "voter_insists",
+        "score": 131000
+      },
+      {
+        "text": "U redu je, na vozačkoj dozvoli se vide slika i JMBG, možete da prođete.",
+        "explanation": "Prekršaj člana biračkog odbora. Birački odbor ne sme da dozvoli glasanje na osnovu dokumenata koji nisu zakonom predviđeni za identifikaciju na biračkom mestu.",
+        "next": "voter_accepts_error",
+        "score": -66000
+      }
+    ]
+  },
+  "voter_insists": {
+    "text": "Ali tu su svi moji podaci i slika, zar to nije dovoljno za utvrđivanje identiteta?",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Zakon traži samo ličnu kartu ili pasoš. Donesite jedno od njih da biste glasali.",
+        "explanation": "Ispravno objašnjenje zakonskih pravila biraču uz omogućavanje da se vrati sa važećim dokumentom pre zatvaranja biračkog mesta.",
+        "next": "voter_understands",
+        "score": 131000
+      },
+      {
+        "text": "Dobro, ako komšija iz odbora garantuje za vas, napravićemo izuzetak.",
+        "explanation": "Prekršaj. Zakon ne dozvoljava svedočenje ili lično poznavanje kao zamenu za važeći identifikacioni dokument.",
+        "score": -66000
+      }
+    ]
+  },
+  "voter_understands": {
+    "text": "Razumem, otići ću po ličnu kartu pa se vraćam.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Hvala na razumevanju, čekamo vas do 20 časova.",
+        "explanation": "Pravilno i profesionalno zaključenje situacije u skladu sa procedurom.",
+        "score": 131000
+      }
+    ]
+  },
+  "voter_accepts_error": {
+    "text": "Hvala vam što ste napravili ustupak.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Ipak ne smemo, zakon izričito traži ličnu kartu ili pasoš.",
+        "explanation": "Član biračkog odbora ispravlja prvobitni propust i vraća postupak u zakonske okvire pre nego što birač pristupi spisku.",
+        "score": 105000
+      }
+    ]
+  }
+}

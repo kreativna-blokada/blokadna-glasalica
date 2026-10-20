@@ -169,10 +169,10 @@ movement_speed = 120.0
 
 [node name="CharacterSprite" parent="." index="1" unique_id=3088008]
 modulate = Color(0.89, 0.89, 0.89, 1)
-scale = Vector2(1.5, 1.5)
+scale = Vector2(1.517, 1.517)
 texture = ExtResource("3_5suuu")
 centered = false
-offset = Vector2(-59, -200)
+offset = Vector2(-58, -198)
 hframes = 39
 vframes = 5
 region_rect = Rect2(100, 100, 100, 100)

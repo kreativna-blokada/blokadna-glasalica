@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Izvolite listić. Samo sekund, da ga obeležim hemijskom u uglu radi evidencije.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Molim vas, ne označavajte moj listić, to ugrožava tajnost glasanja.",
+        "explanation": "Ispravno, član biračkog odbora ne sme stavljati nikakve posebne oznake, šifre ili potpise na glasački listić jer to narušava tajnost i regularnost.",
+        "next": "marking_prevented",
+        "score": 131000
+      },
+      {
+        "text": "Nema problema, označite ga kako god vam je lakše za evidenciju.",
+        "explanation": "Pogrešno, birač ne sme da dozvoli označavanje svog listića jer to omogućava identifikaciju načina glasanja.",
+        "score": -52000
+      },
+      {
+        "text": "Zašto ga obeležavate, da li je to novo izborno pravilo?",
+        "explanation": "Birač sumnja u proceduru, pa član odbora mora da pojasni situaciju.",
+        "next": "rule_clarified",
+        "score": 66000
+      }
+    ]
+  },
+  "marking_prevented": {
+    "text": "U pravu ste, izvinite. Listić se izdaje potpuno čist, bez ikakvih oznaka. Evo čistog.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala vam, sada odlazim iza paravana da glasam.",
+        "explanation": "Procedura je vraćena u zakonske okvire i obezbeđena je tajnost glasa.",
+        "score": 131000
+      },
+      {
+        "text": "U redu je, samo vodite računa da ne označite listiće drugim biračima.",
+        "explanation": "Birač podseća člana biračkog odbora na obavezu poštovanja izbornih pravila prema svim građanima.",
+        "score": 105000
+      }
+    ]
+  },
+  "rule_clarified": {
+    "text": "Mislio sam da tako lakše pratimo seriju, ali propisi traže potpuno čist listić.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Tako je, zakon štiti tajnost glasa. Dajte mi neobeležen listić.",
+        "explanation": "Birač ispravno insistira na poštovanju zakona i zaštiti tajnosti glasanja.",
+        "score": 131000
+      },
+      {
+        "text": "Ako vi tako kažete, onda ga ipak označite.",
+        "explanation": "Pogrešno, prihvatanje nepropisnog označavanja glasačkog listića ugrožava izborni integritet.",
+        "score": -52000
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Odbijate da vam nanesemo sprej na prst? Onda ne možete da preuzmete listić niti da glasate.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Nemate pravo da me uslovljavate hemikalijama, dajte mi moj listić odmah!",
+        "explanation": "Pogrešno. Ako birač odbije obeležavanje sprejom, birački odbor po zakonu i proceduri ne sme da mu dozvoli glasanje.",
+        "next": "refusal_escalation",
+        "score": -39000
+      },
+      {
+        "text": "U redu, nisam znao da je to obavezno. Evo kažiprsta, nanesite sprej.",
+        "explanation": "Ispravno. Prihvatanjem zakonske procedure obeležavanja prsta birač stiče pravo da preuzme glasački listić i glasa.",
+        "score": 131000
+      },
+      {
+        "text": "Tražim da u zapisnik unesete da mi uskraćujete biračko pravo.",
+        "explanation": "Pogrešan stav birača. Zahtev za unos primedbe je pravo, ali odbijanje spreja je zakonski osnov da se glasanje onemogući, a ne nezakonito uskraćivanje prava.",
+        "next": "protocol_request",
+        "score": 39000
+      }
+    ]
+  },
+  "refusal_escalation": {
+    "text": "Pravilo važi za sve: bez spreja nema listića. Molim vas, omogućite red ostalima.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Dobro, nanesite sprej na kažiprst da mogu da završim glasanje.",
+        "explanation": "Ispravno. Birač odustaje od neosnovanog odbijanja i pristupa propisanoj proceduri.",
+        "score": 105000
+      },
+      {
+        "text": "Ne pristajem i neću se pomeriti odavde dok ne dobijem listić!",
+        "explanation": "Pogrešno. Ometanje rada biračkog mesta i odbijanje poštovanja propisane izborne procedure predstavlja narušavanje reda na biračkom mestu.",
+        "score": -39000
+      }
+    ]
+  },
+  "protocol_request": {
+    "text": "Možemo zapisati da ste odbili obeležavanje sprejom, ali bez toga ne možete da glasate.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Ako je tako, obeležite me sprejem pa da glasam.",
+        "explanation": "Ispravno. Birač prihvata zakonsku proceduru kako bi ostvario svoje biračko pravo.",
+        "score": 105000
+      },
+      {
+        "text": "Upišite to i dajte mi potvrdu, a ja ću se žaliti komisiji bez nanošenja spreja.",
+        "explanation": "Pogrešno. Odbor ne izdaje posebne potvrde biračima na licu mesta, a glasanje ostaje onemogućeno sve dok birač odbija obeležavanje sprejom.",
+        "score": 39000
+      }
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "root": {
+    "text": "Primetio sam da ste odmah posle spreja obrisali prst maramicom da uklonite trag.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Samo sam čistio prst, ali razumem, sprej mora ostati. Proverite UV lampom.",
+        "explanation": "Ispravno, birač prihvata objašnjenje pravila o obeležavanju sprejem i nudi proveru kako bi se potvrdilo da oznaka nije uklonjena.",
+        "next": "uv_check",
+        "score": 105000
+      },
+      {
+        "text": "Moja ruka, moja stvar, niko me ne tera da nosim hemikalije. Dajte listić.",
+        "explanation": "Pogrešno, namerno uklanjanje spreja ili odbijanje postupka obeležavanja sprečava birača da preuzme glasački listić.",
+        "score": -39000
+      },
+      {
+        "text": "Ako se obeležavanje skinulo, nanesite sprej ponovo pre nego što mi date listić.",
+        "explanation": "Ispravno, birač sarađuje sa biračkim odborom kako bi se procedura obeležavanja sprovela u potpunosti u skladu sa propisima.",
+        "next": "reapply_spray",
+        "score": 105000
+      }
+    ]
+  },
+  "uv_check": {
+    "text": "Pod UV lampom trag je ostao na korenu nokta, tako da možete preuzeti listić.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala vam. Sada uzimam listić i odlazim iza paravana na glasanje.",
+        "explanation": "Ispravno, birač nakon uspešno potvrđenog obeležavanja nastavlja proceduru glasanja.",
+        "score": 131000
+      }
+    ]
+  },
+  "reapply_spray": {
+    "text": "U redu, nanećemo sprej ponovo i sačekati nekoliko trenutaka da se osuši pre preuzimanja materijala.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Važi, sačekaću da se osuši, pa tek onda uzimam glasački listić.",
+        "explanation": "Ispravno, procedura nanošenja nevidljivog spreja je u potpunosti ispoštovana pre izdavanja listića.",
+        "score": 131000
+      },
+      {
+        "text": "Nemam vremena da čekam, dajte mi odmah listić pa ću mahati rukom usput.",
+        "explanation": "Pogrešno, birač mora sačekati da se postupak obeležavanja pravilno završi pre nastavka procesa.",
+        "score": -39000
+      }
+    ]
+  }
+}

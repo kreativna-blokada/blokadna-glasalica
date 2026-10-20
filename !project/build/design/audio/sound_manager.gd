@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Plays the music loops, jingles and stingers over every screen
 #maintainer      : Zeljko
@@ -31,6 +31,8 @@ func _ready() -> void:
 		_loaded_streams[stream_path] = load(stream_path)
 
 	_music_player = _add_player()
+	#the web plays samples by default, decoding the whole loop and copying it again on every play, loop and unpause
+	_music_player.playback_type = AudioServer.PLAYBACK_TYPE_STREAM
 	_jingle_player = _add_player()
 	_jingle_player.finished.connect(_on_jingle_finished)
 	for player_index: int in _STINGER_PLAYER_COUNT:
@@ -105,10 +107,24 @@ func _start_music(next_music_path: String) -> void:
 	if _music_player.playing and _music_player.stream.resource_path == next_music_path: return
 
 	if _music_player.playing:
-		_music_positions[_music_player.stream.resource_path] = _music_player.get_playback_position()
+		_music_positions[_music_player.stream.resource_path] = _get_loop_position(_music_player)
 	_music_player.stop()
 	if next_music_path.is_empty(): return
 
 	_music_player.stream = _loaded_streams[next_music_path]
 	_music_player.volume_db = Configs.Sound["silent_volume"]
 	_music_player.play(_music_positions.get(next_music_path, 0.0))
+
+#the playback position wrapped into the loop, a guard should the music go back to samples; a web sample reports the time played
+#since its start offset, past the loop end, and resuming from there ends the sample at once, restarting it over and over;
+#the wrap starts again from the loop offset, streams without a length keep their position
+func _get_loop_position(sound_player: AudioStreamPlayer) -> float:
+	var playback_position: float = sound_player.get_playback_position()
+	var loop_length: float = sound_player.stream.get_length()
+	if loop_length <= 0.0 or playback_position < loop_length: return playback_position
+
+	#only Ogg and MP3 streams have a loop offset
+	var stream_loop_offset: Variant = sound_player.stream.get("loop_offset")
+	var loop_offset: float = stream_loop_offset if stream_loop_offset != null else 0.0
+	if loop_offset >= loop_length: return 0.0
+	return loop_offset + fmod(playback_position - loop_offset, loop_length - loop_offset)

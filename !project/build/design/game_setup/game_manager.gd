@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Game Manager, Game Descriptor, Mission Descriptor stubs
 #maintainer      : Nemanja, Zeljko

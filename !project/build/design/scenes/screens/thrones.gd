@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Team names and web version box slice glitching and vanishing, then slogan letters as pixel points flying into the throne shape
 #maintainer      : Zeljko

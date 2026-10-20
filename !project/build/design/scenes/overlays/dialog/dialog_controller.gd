@@ -121,9 +121,10 @@ func _connect_events() -> void:
 	_multi_choice_dialog_box.finished.connect(_on_multi_choice_dialog_finish)
 	_multi_choice_dialog_box.text_skipped.connect(_on_multi_choice_text_skipped)
 
-#submits the pick made during the lock once the lock ends
+#submits the pick made during the lock once the lock ends and its padlock has opened
 func _process(_delta: float) -> void:
-	if _pending_choice_index < 0 or _is_answer_locked(): return
+	if _pending_choice_index < 0: return
+	if _answer_lock_timer.get_elapsed_seconds() < _answer_lock_time + Configs.AnswerLock["pending_submit_delay"]: return
 
 	var pending_choice_index: int = _pending_choice_index
 	_pending_choice_index = -1
@@ -195,7 +196,7 @@ func _on_multi_choice_text_skipped() -> void:
 func _on_multi_choice_dialog_finish(choice: int) -> void:
 	if _is_answer_locked():
 		_pending_choice_index = choice
-		_multi_choice_dialog_box.mark_pending_choice(choice)
+		_multi_choice_dialog_box.mark_pending_choice(choice, _answer_lock_time - _answer_lock_timer.get_elapsed_seconds())
 		return
 
 	_submit_choice(choice)
