@@ -42,6 +42,7 @@ Napiši JEDAN novi dijalog za tačku „$stop_title”, sa novim scenarijom gre�
 - Ista JSON struktura kao u postojećim dijalozima: "root", "text", "speaker" (LEFT je član odbora, RIGHT birač), "next", "choices" sa "text", "explanation", "next".
 - Svaki čvor sa izborima ima bar jedan ispravan odgovor, a dijalog ima bar jedan pogrešan.
 - Bez oznaka [ANG] ili [POL] u tekstu.
+- Tekst mora stati u okvir dijaloga na ekranu: replika ("text" čvora) ima 40–90 znakova, a najviše 100; odgovor ("text" izbora) ima 25–70 znakova, a najviše 80. Kraće rečenice, isto značenje; obrazloženje ide u "explanation".
 - Vrati samo JSON, bez ikakvog drugog teksta.
 ~~~
 
