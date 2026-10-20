@@ -1,0 +1,69 @@
+{
+  "root": {
+    "text": "Dobar dan, pokažite mi vaš identifikacioni dokument.",
+    "speaker": "LEFT",
+    "next": "voter_reply"
+  },
+  "voter_reply": {
+    "text": "Posle udaje u ličnoj karti imam novo prezime, a u spisku je još devojačko.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Nema problema, uporedićemo sliku i JMBG sa spiskom da utvrdimo da ste to vi.",
+        "explanation": "Ispravno, prema pravilima i Priručniku RIK-a, neslaganje u prezimenu ne sprečava glasanje ukoliko se na osnovu fotografije i JMBG-a može nesumnjivo utvrditi identitet birača.",
+        "next": "data_checked",
+        "score": 131000
+      },
+      {
+        "text": "Prezime mora biti identično onom u biračkom spisku, ne možete da glasate.",
+        "explanation": "Pogrešno, birački odbor ne sme odbiti birača samo zbog promene prezimena ako se identitet i JMBG poklapaju.",
+        "next": "voter_explains",
+        "score": -39000
+      },
+      {
+        "text": "Znam vas iz komšiluka, ne morate ništa ni da pokazujete, produžite dalje.",
+        "explanation": "Pogrešno, članovi biračkog odbora moraju proveriti lični dokument bez obzira na lično poznanstvo sa biračem.",
+        "score": -52000
+      }
+    ]
+  },
+  "voter_explains": {
+    "text": "JMBG i slika su isti, a pravila nalažu da glasam ako se utvrdi da sam to ja.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "U pravu ste, izvinite. Ako se matični broj i slika poklapaju, nastavljamo.",
+        "explanation": "Ispravno, član biračkog odbora uvažava propise i ispravlja početnu grešku.",
+        "next": "correction_accepted",
+        "score": 105000
+      },
+      {
+        "text": "Ne zanima me to, bez rešenja o promeni podataka u spisku ne možete glasati.",
+        "explanation": "Pogrešno, biraču se neosnovano i suprotno procedurama uskraćuje ostvarivanje biračkog prava.",
+        "score": -39000
+      }
+    ]
+  },
+  "correction_accepted": {
+    "text": "JMBG se poklapa, a fotografija odgovara vašem izgledu. Izvinite na zabuni, možete nastaviti.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala vam na razumevanju, idem do kolege za birački spisak.",
+        "explanation": "Situacija je uspešno razrešena i glasač nastavlja zakonsku proceduru.",
+        "score": 131000
+      }
+    ]
+  },
+  "data_checked": {
+    "text": "Matični broj i fotografija odgovaraju. Možete preći na proveru u izvodu iz spiska.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala, produžavam do člana odbora koji vodi birački spisak.",
+        "explanation": "Procedura provere identiteta je pravilno i uspešno okončana.",
+        "score": 131000
+      }
+    ]
+  }
+}

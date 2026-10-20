@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##                 FACTORY METHOD CLASS
 #description     : Class for randomized generation of Voter characters
 #maintainer      : Zeljko

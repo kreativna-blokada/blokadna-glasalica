@@ -1,0 +1,89 @@
+{
+  "root": {
+    "text": "Dobar dan, pripremite ličnu kartu ili pasoš za utvrđivanje identiteta.",
+    "speaker": "LEFT",
+    "next": "voter_reply"
+  },
+  "voter_reply": {
+    "text": "Evo, izvolite moju vozačku dozvolu, tu su mi i slika i matični broj.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Po zakonu identitet dokazujete samo važećom ličnom kartom ili pasošem.",
+        "explanation": "Ispravno postupanje kontrolora. Zakon o izboru narodnih poslanika i pravila glasanja propisuju da se identitet utvrđuje samo ličnom kartom ili putnom ispravom (pasošem).",
+        "next": "voter_alternative",
+        "score": 131000
+      },
+      {
+        "text": "U redu je, vidim sliku i JMBG, važno je samo da se vidi ko ste.",
+        "explanation": "Prekršaj biračkog odbora. Vozačka dozvola, zdravstvena knjižica ili drugi dokumenti nisu zakonom dozvoljeni za identifikaciju birača, čak i ako sadrže sliku i JMBG.",
+        "next": "illegal_pass",
+        "score": -52000
+      },
+      {
+        "text": "Vozačka ne važi, napustite biračko mesto, danas više ne možete da glasate.",
+        "explanation": "Pogrešan i agresivan pristup. Član odbora treba da objasni biraču kojim dokumentima može da glasa i omogući mu da se vrati sa važećom ličnom kartom ili pasošem tokom radnog vremena biračkog mesta.",
+        "next": "voter_protest",
+        "score": -26000
+      }
+    ]
+  },
+  "voter_alternative": {
+    "text": "Lična karta mi je istekla, ali imam potvrdu MUP-a da sam podneo zahtev. Važi li to?",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Da, istekla lična karta važi uz potvrdu MUP-a o podnetom zahtevu za novu.",
+        "explanation": "Ispravno postupanje biračkog odbora prema zvaničnim pravilima RIK-a.",
+        "next": "identity_confirmed",
+        "score": 131000
+      },
+      {
+        "text": "Ne priznajemo nikakve potvrde, morate imati isključivo važeću plastičnu karticu.",
+        "explanation": "Greška člana biračkog odbora. Biraču čiji je dokument istekao mora se omogućiti glasanje ako poseduje potvrdu MUP-a o podnetom zahtevu za izdavanje novog dokumenta.",
+        "next": "voter_corrects_board",
+        "score": -39000
+      }
+    ]
+  },
+  "identity_confirmed": {
+    "text": "Odlično, izvolite dokument i potvrdu, drago mi je da poštujete proceduru.",
+    "speaker": "RIGHT"
+  },
+  "voter_corrects_board": {
+    "text": "Po pravilima RIK-a istekla karta važi uz potvrdu MUP-a. Proverite sa predsednikom.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "U pravu ste, izvinjavam se. Proverićemo podatke sa potvrde i isteklog dokumenta.",
+        "explanation": "Član odbora prihvata ispravku birača i primenjuje zakonita pravila.",
+        "score": 105000
+      },
+      {
+        "text": "Ne zanima me šta piše u pravilima, ja ovde odlučujem šta važi.",
+        "explanation": "Težak prekršaj člana biračkog odbora i samovlašće kojim se biraču nezakonito uskraćuje biračko pravo.",
+        "score": -39000
+      }
+    ]
+  },
+  "illegal_pass": {
+    "text": "Super, hvala vam što ne pravite problem oko formalnosti.",
+    "speaker": "RIGHT"
+  },
+  "voter_protest": {
+    "text": "Nemate pravo da me isterujete, imam kod kuće pasoš i doneću ga pre zatvaranja biračkog mesta.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Tako je, možete doći sa važećim pasošem ili ličnom kartom do 20 časova.",
+        "explanation": "Član biračkog odbora koriguje ton i pruža tačnu zakonsku informaciju biraču.",
+        "score": 105000
+      },
+      {
+        "text": "Jednom kada vas odbijemo, nema više povratka.",
+        "explanation": "Potpuno netačno i nezakonito postupanje kojim se krši izborno pravo građana.",
+        "score": -39000
+      }
+    ]
+  }
+}

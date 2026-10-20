@@ -82,7 +82,7 @@ func set_text(dialog_descriptor: DialogDescriptor) -> void:
 		text.text = ""
 		text.visible_characters = -1
 
-#locks the shown answers for the lock time, each with a padlock and a filling colour
+#locks the shown answers for the lock time, each dimmed under a padlock
 func lock_choices(lock_time: float) -> void:
 	for choice_index in range(_num_choices):
 		_choices[choice_index].lock(lock_time)
@@ -92,10 +92,11 @@ func shorten_choices_lock(remaining_lock_time: float) -> void:
 	for choice_index in range(_num_choices):
 		_choices[choice_index].shorten_lock(remaining_lock_time)
 
-#marks the answer picked during the lock as the one going in when it unlocks
-func mark_pending_choice(pending_choice_index: int) -> void:
+#marks the answer picked during the lock as the one going in, its colour sweeping until the lock ends
+func mark_pending_choice(pending_choice_index: int, remaining_lock_time: float) -> void:
 	for choice_index in range(_num_choices):
 		_choices[choice_index].set_pending(choice_index == pending_choice_index)
+		_choices[choice_index].shorten_lock(remaining_lock_time)
 
 #prints the answers in the text colour of the speaker answering, the one not saying the line, over the sentence box
 func _color_choices(line_speaker: DialogDescriptor.Speaker) -> void:

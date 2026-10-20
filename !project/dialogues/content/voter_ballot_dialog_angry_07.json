@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Evo vam listić, samo da znate, ako zaokružite broj 3 sigurno nećete pogrešiti.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Ne smete mi govoriti za koga da glasam, to je protivzakonito i ide u zapisnik!",
+        "explanation": "Ispravno. Članovima biračkog odbora je strogo zabranjeno da utiču na odluku birača i vrše propagandu na biračkom mestu.",
+        "next": "board_reaction",
+        "score": 131000
+      },
+      {
+        "text": "Hvala na savetu, baš sam se dvoumio koga da zaokružim.",
+        "explanation": "Pogrešno. Prihvatanje sugestije člana biračkog odbora narušava slobodu i nezavisnost glasanja.",
+        "score": -13000
+      },
+      {
+        "text": "Dajte vi meni dva listića pa ću razmisliti iza paravana.",
+        "explanation": "Pogrešno. Birač može dobiti isključivo jedan glasački listić.",
+        "score": -79000
+      }
+    ]
+  },
+  "board_reaction": {
+    "text": "Samo sam se šalio, nema potrebe da pravite dramu i zovete predsednika.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Nije šala, tražim da predsednik odbora ovo odmah unese u zapisnik.",
+        "explanation": "Ispravno. Birač insistira na zakonitoj proceduri i evidentiranju povrede izbornih pravila.",
+        "next": "incident_recorded",
+        "score": 131000
+      },
+      {
+        "text": "U redu, ako je šala onda nema veze, dajte mi listić.",
+        "explanation": "Pogrešno. Prelazak preko kršenja izbornih pravila omogućava ponavljanje nepravilnosti na biračkom mestu.",
+        "score": 66000
+      }
+    ]
+  },
+  "incident_recorded": {
+    "text": "Predsednik odbora opominje člana i u zapisnik unosi primedbu o uticaju na birača.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala, sada uzimam svoj listić i idem sam iza paravana da glasam.",
+        "explanation": "Ispravno. Nakon evidentiranja nepravilnosti, birač nastavlja postupak glasanja u skladu sa zakonom.",
+        "score": 131000
+      },
+      {
+        "text": "Sad iz inata neću da glasam iza paravana nego javno pred vama.",
+        "explanation": "Pogrešno. Glasanje van paravana narušava tajnost glasanja koja je zakonska obaveza.",
+        "score": -52000
+      }
+    ]
+  }
+}

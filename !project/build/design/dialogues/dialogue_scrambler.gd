@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Unscrambles dialogue content made by scramble_dialogues.py (XOR with a SHA-256 checksum)
 #maintainer      : Zeljko

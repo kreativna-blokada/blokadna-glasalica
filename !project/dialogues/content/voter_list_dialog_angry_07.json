@@ -1,0 +1,74 @@
+{
+  "root": {
+    "text": "U izvodu piše da ste upisani za glasanje van biračkog mesta. Ovde ne možete da se potpišete.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Neka predsednik proveri da li su poverenici već krenuli sa mojim materijalom.",
+        "explanation": "Ispravno, mora se tačno utvrditi status poverenika i sprečiti mogućnost dvostrukog glasanja pre donošenja odluke.",
+        "next": "field_check",
+        "score": 131000
+      },
+      {
+        "text": "Nema veze šta piše, došao sam lično i hoću ovde da se potpišem i glasam.",
+        "explanation": "Pogrešno, potpisivanje u izvodu bez provere statusa poverenika na terenu može dovesti do neregularnosti i višestrukog glasanja.",
+        "next": "force_vote",
+        "score": -66000
+      },
+      {
+        "text": "Onda ću samo precrtati tu zabelešku u spisku i staviti svoj potpis preko nje.",
+        "explanation": "Pogrešno, birač ne sme samovoljno prepravljati službenu evidenciju i izvod iz biračkog spiska.",
+        "score": -39000
+      }
+    ]
+  },
+  "field_check": {
+    "text": "Predsednik potvrđuje da su poverenici već na terenu sa vašim materijalom. Sačekajte ih.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U redu, sačekaću da poverenici vrate materijal i da se sve evidentira.",
+        "explanation": "Ispravno, birač poštuje proceduru i omogućava da se postupak sprovede regularno.",
+        "next": "wait_resolution",
+        "score": 131000
+      },
+      {
+        "text": "Neću da čekam, dajte mi listić, a njima recite da me precrtaju kad se vrate.",
+        "explanation": "Pogrešno, izdavanje listića pre razduženja terenskog materijala predstavlja ozbiljan prekršaj izborne procedure.",
+        "score": -66000
+      }
+    ]
+  },
+  "force_vote": {
+    "text": "Ne smemo vam dati da se potpišete dok ne utvrdimo da niste već glasali kod kuće.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Razumem rizik dvostrukog glasa, sačekaću da predsednik proveri sa poverenicima.",
+        "explanation": "Ispravno, birač prihvata zakonska pravila koja štite regularnost procesa.",
+        "score": 105000
+      },
+      {
+        "text": "Baš me briga za proceduru, ako me ne pustite da se potpišem, napraviću skandal!",
+        "explanation": "Pogrešno, ometanje rada biračkog odbora i pretnje prekidom glasanja predstavljaju grubo kršenje reda na biračkom mestu.",
+        "score": -26000
+      }
+    ]
+  },
+  "wait_resolution": {
+    "text": "Poverenici su vratili neiskorišćen listić, niste glasali kod kuće. Potpišite se u izvod.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala na poštovanju propisa, sada ću se potpisati u izvod iz biračkog spiska.",
+        "explanation": "Ispravno, procedura je u potpunosti ispoštovana i integritet glasanja je sačuvan.",
+        "score": 131000
+      },
+      {
+        "text": "Uzmite vi taj spisak, sad namerno neću ni da se potpišem nego samo dajte listić.",
+        "explanation": "Pogrešno, potpis u izvodu iz biračkog spiska je zakonski obavezan uslov za preuzimanje listića.",
+        "score": -39000
+      }
+    ]
+  }
+}

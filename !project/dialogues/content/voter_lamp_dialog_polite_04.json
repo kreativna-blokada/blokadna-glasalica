@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Lampa je prestala da radi, verovatno baterije. Prođite do kolege sa spiskom da ne čekamo.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Procedura nalaže da se glasanje zaustavi dok lampa ne proradi ili se ne zameni.",
+        "explanation": "Ispravno, prema izbornim pravilima birački odbor mora u najkraćem roku da otkloni kvar, a dok se to ne učini, glasanje se mora prekinuti.",
+        "next": "battery_replaced",
+        "score": 131000
+      },
+      {
+        "text": "Odlično, taman da završim brže pošto žurim.",
+        "explanation": "Birač ne sme da pristane na glasanje bez prethodne provere UV lampom jer se time narušava zakonitost izbornog procesa.",
+        "score": -66000
+      },
+      {
+        "text": "Pozovite predsednika odbora da konstatuje problem pre nego što iko nastavi.",
+        "explanation": "Ispravno je obratiti se predsedniku biračkog odbora kako bi se osiguralo poštovanje propisane procedure.",
+        "next": "chair_consulted",
+        "score": 105000
+      }
+    ]
+  },
+  "battery_replaced": {
+    "text": "U pravu ste, zamenili smo baterije iz rezervnog materijala i lampa radi. Proverimo.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Izvolite ruku na proveru, drago mi je da se poštuje propisana procedura.",
+        "explanation": "Birač sarađuje i podržava zakonit nastavak postupka glasanja.",
+        "score": 131000
+      },
+      {
+        "text": "U redu, ali ako se lampa opet ugasi, glasanje se mora odmah prekinuti.",
+        "explanation": "Opravdano podsećanje članova biračkog odbora na obavezu prekida glasanja ako UV kontrola nije u funkciji.",
+        "score": 39000
+      }
+    ]
+  },
+  "chair_consulted": {
+    "text": "Predsednik je naložio da se uzme rezervna lampa i da niko ne glasa bez provere.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala, sačekaću proveru kako zakon i nalaže.",
+        "explanation": "Birač prihvata pravilno rešenje i čeka redovnu proveru.",
+        "score": 131000
+      },
+      {
+        "text": "Izvolite ruku, važno je da se osigura regularnost glasanja za sve birače.",
+        "explanation": "Birač pristupa proveri nakon što je procedura dovedena u zakonske okvire.",
+        "score": 131000
+      }
+    ]
+  }
+}

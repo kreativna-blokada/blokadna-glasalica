@@ -1,0 +1,52 @@
+{
+  "root": {
+    "text": "Iza paravana vidim da je listić koji sam dobio već unapred zaokružen.",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Pokažite listić odboru i tražite da se utvrdi šta se desilo i da dobijete čist.",
+        "explanation": "Ispravno. Davanje prethodno popunjenog listića ukazuje na tešku nepravilnost poput 'bugarskog voza'. Birač ima pravo na čist listić, a slučaj mora ući u zapisnik.",
+        "next": "zamena_listica",
+        "score": 131000
+      },
+      {
+        "text": "Samo precrtajte taj broj i zaokružite onaj koji vi želite.",
+        "explanation": "Pogrešno. Precrtavanje i višestruko popunjavanje može dovesti do poništavanja glasačkog listića i prikriva ozbiljnu neregularnost na biračkom mestu.",
+        "score": -39000
+      },
+      {
+        "text": "Ubacite ga takvog u kutiju, birački odbor je već odlučio umesto vas.",
+        "explanation": "Pogrešno. Ovo predstavlja potpuno odricanje od biračkog prava i prihvatanje izborne krađe.",
+        "score": -79000
+      }
+    ]
+  },
+  "zamena_listica": {
+    "text": "Predsednik biračkog odbora prilazi, pregleda listić i nudi rešenje situacije.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Tražim da se listić poništi, unese u zapisnik i da mi se pred svima da nov.",
+        "explanation": "Ispravno. Procedura zahteva striktno evidentiranje nepravilnosti u zapisnik o radu biračkog odbora kako bi se sprečila izborna manipulacija.",
+        "next": "kraj_glasanja",
+        "score": 131000
+      },
+      {
+        "text": "Dajte mi samo drugi listić tiho, da ne pravimo gužvu i ne usporavamo glasanje.",
+        "explanation": "Pogrešno. Prikrivanje unosa unapred popunjenog listića omogućava nastavak izborne prevare.",
+        "score": -66000
+      }
+    ]
+  },
+  "kraj_glasanja": {
+    "text": "U redu, unosimo primedbu u zapisnik o radu, odlažemo sporni listić i uručujemo vam nov.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala. Vraćam se iza paravana da slobodno i u tajnosti popunim listić.",
+        "explanation": "Ispravno. Regularnost je obezbeđena, a birač samostalno i tajno obavlja glasanje.",
+        "score": 131000
+      }
+    ]
+  }
+}

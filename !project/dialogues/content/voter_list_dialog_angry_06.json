@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Našao sam vas u spisku. Potpišite se i umesto supruge, pa ću vam dati oba listića.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Ne dolazi u obzir. Svako glasa lično, supruga mora sama da dođe i potpiše se.",
+        "explanation": "Ispravno. Glasanje je lično pravo i niko ne može potpisati izvod niti glasati u ime drugog birača, čak ni za člana porodice.",
+        "next": "correct_procedure",
+        "score": 131000
+      },
+      {
+        "text": "Odlično, hvala vam što ste mi uštedeli vreme, odmah ću potpisati za oboje.",
+        "explanation": "Nepravilno. Potpisivanje umesto drugog lica i glasanje u tuđe ime predstavlja teško kršenje izbornih procedura i krivično delo.",
+        "next": "violation_attempt",
+        "score": -79000
+      },
+      {
+        "text": "Dajte mi onda da potpišem i za komšiju kad već nudite, i on je bolestan.",
+        "explanation": "Nepravilno. Glasanje umesto drugih lica je strogo zabranjeno; za birače koji ne mogu da dođu na biračko mesto postoji posebna procedura glasanja van biračkog mesta.",
+        "score": -79000
+      }
+    ]
+  },
+  "correct_procedure": {
+    "text": "U pravu ste, birač mora lično da se potpiše. Potpišite se samo u svojoj rubrici.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Tako je, potpisujem se na svoje mesto, a supruga će doći kasnije tokom dana.",
+        "explanation": "Ispravno. Birač poštuje zakonitu proceduru i lično ostvaruje svoje biračko pravo.",
+        "score": 131000
+      },
+      {
+        "text": "Ipak neću ni ja glasati kad već ne mogu da ponesem i njen listić.",
+        "explanation": "Pogrešna reakcija. Birač nepotrebno odustaje od svog garantovanog biračkog prava zbog zakonitog postupanja odbora.",
+        "score": 39000
+      }
+    ]
+  },
+  "violation_attempt": {
+    "text": "Drugi član odbora upozorava da je zabranjeno potpisati izvod umesto drugog birača.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Izvinjavam se, nisam znao. Potpisaću se samo pored svog imena.",
+        "explanation": "Ispravno. Birač prihvata korekciju i vraća se u zakonske okvire.",
+        "score": 105000
+      },
+      {
+        "text": "Kakva glupost, svi to rade, dajte mi te listiće odmah!",
+        "explanation": "Pogrešno. Insistiranje na kršenju izbornog zakona vodi prekidu postupka i mogućem udaljavanju birača uz asistenciju policije.",
+        "score": -79000
+      }
+    ]
+  }
+}

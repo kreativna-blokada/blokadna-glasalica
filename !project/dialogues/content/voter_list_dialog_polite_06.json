@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Nema vas u izvodu, ali vam je adresa iz ove ulice. Dopisaću vas na kraj spiska da glasate.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Nemojte, zakon zabranjuje dopisivanje birača u izvod na samom biračkom mestu.",
+        "explanation": "Ispravno. Član biračkog odbora nipošto ne sme dopisivati građane u izvod iz biračkog spiska, jer to predstavlja grubu nepravilnost i kršenje zakona.",
+        "next": "zakonska_procedura",
+        "score": 131000
+      },
+      {
+        "text": "Odlično, hvala vam što ste mi omogućili da obavim svoju građansku dužnost.",
+        "explanation": "Pogrešno. Birač ne sme pristati na dopisivanje u izvod, jer je takvo postupanje protivzakonito.",
+        "score": -66000
+      },
+      {
+        "text": "Proverite prvo da li sam u spisku naknadnih promena ili na drugom mestu.",
+        "explanation": "Ispravno. Pre bilo kakvog zaključka treba proveriti sve zvanične delove izvoda i tačnu lokaciju gde je birač upisan.",
+        "next": "provera_spiskova",
+        "score": 66000
+      }
+    ]
+  },
+  "zakonska_procedura": {
+    "text": "U pravu ste, odbor ne sme da dopisuje birače. Proverite status na zvaničnom sajtu.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U redu, proveriću na upit.birackispisak.gov.rs gde sam tačno upisan.",
+        "explanation": "Ispravno. Birač prihvata zakonitu proceduru i proverava podatke na zvaničnom portalu.",
+        "score": 131000
+      },
+      {
+        "text": "Ako me ne dopišete, neću otići odavde dok mi ne date listić.",
+        "explanation": "Pogrešno. Ometanje rada biračkog odbora i insistiranje na nezakonitom glasanju nije dozvoljeno.",
+        "score": -39000
+      }
+    ]
+  },
+  "provera_spiskova": {
+    "text": "Nema vas ni u spisku naknadnih promena. Na ovom biračkom mestu niste upisani.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Razumem, onda ne mogu ovde. Proveriću u evidenciji koje je moje biračko mesto.",
+        "explanation": "Ispravno. Birač poštuje pravila i ne insistira na nezakonitom upisu.",
+        "score": 131000
+      },
+      {
+        "text": "Nema veze što me nema, samo me upišite ručno ispod broja 500.",
+        "explanation": "Pogrešno. Dopisivanje u izvod iz biračkog spiska na biračkom mestu strogo je zabranjeno.",
+        "score": -66000
+      }
+    ]
+  }
+}

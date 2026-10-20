@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Kažiprst vam sija pod UV lampom. Imate trag spreja i ne možete da glasate, izađite.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Ja sam član biračkog odbora na ovom mestu, evo rešenja o imenovanju na uvid.",
+        "explanation": "Ispravno. Član 93 Zakona o izboru narodnih poslanika izričito propisuje izuzetak: birač sa tragovima UV mastila može da glasa ako podnese na uvid rešenje da je član biračkog odbora.",
+        "next": "controller_verifies",
+        "score": 131000
+      },
+      {
+        "text": "To je sigurno prljavština ili krema, obrišite to i pustite me da glasam.",
+        "explanation": "Pogrešno. Ako birač ima tragove UV mastila, a nije član biračkog odbora sa rešenjem, ne sme mu se dozvoliti glasanje niti se tragovi smeju ignorisati.",
+        "score": -66000
+      },
+      {
+        "text": "Nemam papir kod sebe, ali pitajte predsednika, jutros sam ovde sedeo u smeni.",
+        "explanation": "Pogrešno. Zakon izričito zahteva podnošenje rešenja o imenovanju na uvid kako bi se primenio zakonski izuzetak.",
+        "next": "controller_demands_proof",
+        "score": -39000
+      }
+    ]
+  },
+  "controller_verifies": {
+    "text": "Rešenje potvrđuje da ste član odbora. Izvinite, nastavite ka proveri lične karte.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala. Pravila moraju da se poštuju, izvolite moju ličnu kartu.",
+        "explanation": "Ispravno. Nakon uspešnog dokazivanja statusa člana odbora rešenjem, birač uredno nastavlja izbornu proceduru identifikacije.",
+        "score": 131000
+      },
+      {
+        "text": "Trebalo je odmah da znate ko su vam kolege u odboru, a ne da me maltretirate.",
+        "explanation": "Procedura jeste ispravljena, ali neopravdano narušavanje atmosfere na biračkom mestu ometa rad organa za sprovođenje izbora.",
+        "score": 39000
+      }
+    ]
+  },
+  "controller_demands_proof": {
+    "text": "Bez uvida u rešenje o imenovanju zakon mi ne dozvoljava da vas pustim dalje.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U pravu ste, zakon traži rešenje na uvid. Doneću ga iz torbe.",
+        "explanation": "Ispravno. Birač prihvata zakonsku obavezu davanja rešenja na uvid pre nego što mu se omogući pristup glasanju.",
+        "score": 105000
+      },
+      {
+        "text": "Baš me briga za rešenje, ja odavde ne idem dok ne dobijem listić!",
+        "explanation": "Pogrešno. Odbijanje poštovanja zakonske procedure i ometanje rada biračkog mesta predstavlja ozbiljan prekršaj.",
+        "score": -39000
+      }
+    ]
+  }
+}

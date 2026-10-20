@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Entry point main menu screen
 #maintainer      : Zeljko, Nemanja
@@ -28,12 +28,12 @@ const _ROW_TICK_SPACING: float = 0.64
 const _SEARCH_MOMENT_ITERATIONS: int = 16
 #rows on the card, ticked one after another as the ballot goes down the slot
 const _ROW_COUNT: int = 5
-#px the I, T and B team letters sink, and their shadow shrinks, while held
+#px the IT and B team letters sink, and their shadow shrinks, while held
 const _TEAM_LETTER_PRESS_DEPTH: int = 2
-#seconds of silence between the B team letter sound and the alert sound once I, T and B are pressed in that order
+#seconds of silence between the B team letter sound and the alert sound once IT and B are pressed in that order
 const _TEAM_SEQUENCE_ALERT_GAP: float = 0.3
-#team member name each of the I, T and B team letters glitches
-const _TEAM_LETTER_NAMES: Dictionary[StringName, String] = {&"LetterI": "Марија М.", &"LetterT": "Марко М.", &"LetterB": "Жељко В."}
+#team member name each of the IT and B team letters glitches
+const _TEAM_LETTER_NAMES: Dictionary[StringName, String] = {&"LetterIT": "Марко М.", &"LetterB": "Жељко В."}
 #matrix rain characters the glitched name letters turn into
 const _MATRIX_GLYPHS: String = "0123456789Z:.\"=*+-<>¦|"
 #seconds between two scrambles of the glitched name
@@ -82,11 +82,11 @@ var _menu_choice: Globals.MainMenu = Globals.MainMenu.Starting
 #ClickCounterLabel text and font size from the scene, shown before the first click
 var _rest_click_caption: String
 var _rest_click_fontsize: int
-#shadow offset of the I, T and B team letters from the scene, px
+#shadow offset of the IT and B team letters from the scene, px
 var _rest_letter_shadow: int
 #team list text from the scene, the glitched name is restored from it
 var _rest_team_text: String
-#team letters pressed so far in the I, T, B order
+#team letters pressed so far in the IT, B order
 var _team_sequence_count: int = 0
 #scrambles a team member name for a moment, then restores it
 var _name_glitch_animation: Tween
@@ -133,7 +133,7 @@ var _jump_sound_fading_animation: Tween
 @onready var web_version_box: VBoxContainer = %WebVersionBox
 @onready var music_controller: TextureButton = %MusicController
 @onready var zoom_controller: TextureButton = %ZoomController
-@onready var team_letters: Array[Label] = [$TeamLabel/ITglouriousBasterds/LetterI, $TeamLabel/ITglouriousBasterds/LetterT, $TeamLabel/ITglouriousBasterds/LetterB]
+@onready var team_letters: Array[Label] = [$TeamLabel/ITglouriousBasterds/LetterIT, $TeamLabel/ITglouriousBasterds/LetterB]
 @onready var team_alert_sound: AudioStreamPlayer = $TeamLabel/ITglouriousBasterds/AlertSound
 @onready var thrones: Thrones = %Thrones
 
@@ -315,7 +315,7 @@ func _on_id_label_input(event: InputEvent) -> void:
 	_switch_player_id()
 	accept_event()
 
-#signal LetterI/LetterT/LetterB.gui_input => plays the letter sound, glitches its team member name, counts it towards the I, T, B order and sinks the letter, shrinking its shadow, while the finger holds it, lifts it back on release; touch only, mouse clicks arrive as emulated touch
+#signal LetterIT/LetterB.gui_input => plays the letter sound, glitches its team member name, counts it towards the IT, B order and sinks the letter, shrinking its shadow, while the finger holds it, lifts it back on release; touch only, mouse clicks arrive as emulated touch
 func _on_team_letter_input(event: InputEvent, team_letter: Label) -> void:
 	var touch_event: InputEventScreenTouch = event as InputEventScreenTouch
 	if not touch_event: return
@@ -333,7 +333,7 @@ func _on_team_letter_input(event: InputEvent, team_letter: Label) -> void:
 		(team_letter.get_parent() as Container).queue_sort()
 	accept_event()
 
-#counts the team letter towards the I, T, B order, crumbles the team letters into the throne after the B sound and a short gap once the order is complete
+#counts the team letter towards the IT, B order, crumbles the team letters into the throne after the B sound and a short gap once the order is complete
 func _advance_team_sequence(team_letter: Label) -> void:
 	if team_letter == team_letters[_team_sequence_count]:
 		_team_sequence_count += 1
@@ -364,7 +364,7 @@ func _glitch_team_name(team_name: String) -> void:
 		_name_glitch_animation.tween_interval(_NAME_GLITCH_STEP)
 	_name_glitch_animation.tween_callback(team_label.set_text.bind(_rest_team_text))
 
-#swaps 1 or 2 random letters of the team member name for matrix rain characters in the team list, coloured like the I, T and B team letters
+#swaps 1 or 2 random letters of the team member name for matrix rain characters in the team list, coloured like the IT and B team letters
 func _scramble_team_name(team_name: String) -> void:
 	var glitched_name: String = team_name
 	for swapped_letter: int in randi_range(1, 2):
@@ -434,7 +434,7 @@ func _on_menu_option_button_input(event: InputEvent) -> void:
 		else:
 			_stop_hold_fill()
 
-#signal Signals.throne_dismissed => brings back the team, slogan and web version letters the throne replaced, so the I, T, B order can crumble them again
+#signal Signals.throne_dismissed => brings back the team, slogan and web version letters the throne replaced, so the IT, B order can crumble them again
 func _on_throne_dismissed() -> void:
 	team_label.show()
 	slogan_label.show()

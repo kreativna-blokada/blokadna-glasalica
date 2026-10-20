@@ -1,0 +1,40 @@
+{
+  "root": {
+    "text": "Birač vadi mobilni telefon iza paravana i fotografiše popunjeni glasački listić.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Gospodine, fotografisanje listića je zabranjeno, odmah odložite telefon.",
+        "explanation": "Ispravno, član biračkog odbora mora da opomene birača i spreči narušavanje tajnosti glasanja.",
+        "next": "voter_photo_response",
+        "score": 131000
+      },
+      {
+        "text": "Slikajte brzo dok niko ne gleda, samo pazite na blic.",
+        "explanation": "Pogrešno, član biračkog odbora ne sme odobravati niti podsticati kršenje tajnosti glasanja.",
+        "score": -52000
+      },
+      {
+        "text": "Neka slika čovek za uspomenu, to je njegovo pravo.",
+        "explanation": "Pogrešno, upotreba mobilnih telefona i fotografisanje listića na biračkom mestu su nedozvoljeni.",
+        "score": -52000
+      }
+    ]
+  },
+  "voter_photo_response": {
+    "text": "Zašto pravite problem? Moram nekome da pošaljem dokaz da sam glasao!",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Glasanje je tajno, niko ne sme tražiti dokaz, a slikanje listića ide u zapisnik.",
+        "explanation": "Ispravno, član biračkog odbora jasno ukazuje na zakonska pravila i suzbija pritisak na birača.",
+        "score": 131000
+      },
+      {
+        "text": "Ako je tako, pošaljite poruku, ali nemojte da vas ostali vide.",
+        "explanation": "Pogrešno, član biračkog odbora time omogućava potencijalnu kontrolu glasa i kupovinu glasova.",
+        "score": -66000
+      }
+    ]
+  }
+}

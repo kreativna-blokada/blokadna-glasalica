@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Našao sam vas u spisku, ali prezime u ličnoj karti je drugačije. Ne možete da se potpišete.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Promenio sam prezime, ali ime i JMBG su isti kao u spisku, imam pravo da glasam.",
+        "explanation": "Ispravno. Promena prezimena ne uskraćuje biračko pravo ukoliko se identitet nesumnjivo utvrđuje na osnovu istog JMBG-a i imena u važećem ličnom dokumentu.",
+        "next": "id_verified",
+        "score": 131000
+      },
+      {
+        "text": "U redu, pošto se prezimena ne poklapaju tačno, odustaću od glasanja.",
+        "explanation": "Pogrešno. Birač neopravdano odustaje od svog biračkog prava iako zakon omogućava glasanje ako se JMBG i ime poklapaju.",
+        "score": -39000
+      },
+      {
+        "text": "Možete li onda hemijskom prepraviti prezime u spisku, pa da se potpišem?",
+        "explanation": "Pogrešno. Član biračkog odbora ne sme samovoljno vršiti prepravke podataka u zvaničnom izvodu iz biračkog spiska.",
+        "next": "no_manual_alteration",
+        "score": -26000
+      }
+    ]
+  },
+  "id_verified": {
+    "text": "U pravu ste, JMBG i ime se poklapaju sa ličnom kartom. Potpišite se pored svog imena.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala vam na razumevanju, potpisujem se na svoje mesto.",
+        "explanation": "Ispravno. Postupak je usklađen sa pravilima i birač uredno ostvaruje svoje pravo.",
+        "score": 131000
+      },
+      {
+        "text": "Samo da znate da ću vas prijaviti zbog ovog zadržavanja i provere.",
+        "explanation": "Neopravdano oštar stav, član biračkog odbora je dužan da proveri identitet pre omogućavanja potpisivanja.",
+        "score": 39000
+      }
+    ]
+  },
+  "no_manual_alteration": {
+    "text": "Odbor ne sme da prepravlja spisak, ali ako se ime i JMBG poklapaju, potpišite se bez prepravki.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Razumem, uporedite moj JMBG i ime sa spiskom pa nastavljamo po proceduri.",
+        "explanation": "Ispravno. Birač prihvata pravila o zabrani prepravljanja spiska i insistira na proveri identiteta putem JMBG-a.",
+        "score": 131000
+      },
+      {
+        "text": "Onda nema veze, ne želim da glasam ako su podaci neusklađeni.",
+        "explanation": "Pogrešno. Birač odustaje iako ima zakonsko pravo da glasa.",
+        "score": -39000
+      }
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "root": {
+    "text": "Dobar dan. Izvolite, stavite ruku pod UV lampu da proverimo da li ste već glasali.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Neću ruku pod tu lampu, to zračenje je štetno. Odmah mi dajte listić.",
+        "explanation": "Pogrešno. Provera UV lampom je obavezna zakonska procedura i birač koji odbije proveru ne može pristupiti glasanju.",
+        "next": "controller_warns",
+        "score": -39000
+      },
+      {
+        "text": "Izvolite desnu ruku pod lampu.",
+        "explanation": "Ispravno. Birač pristupa obaveznoj proveri u skladu sa propisanim procedurama.",
+        "next": "controller_proceeds",
+        "score": 131000
+      },
+      {
+        "text": "Evo vam lična karta pa prvo nađite moje ime u spisku, lako ćemo posle za lampu.",
+        "explanation": "Pogrešno. Redosled radnji na biračkom mestu je strogo utvrđen i provera UV lampom mora prethoditi identifikaciji i nalaženju u biračkom spisku.",
+        "next": "controller_insists_order",
+        "score": -26000
+      }
+    ]
+  },
+  "controller_warns": {
+    "text": "UV lampa je bezbedna, a provera je zakonska obaveza. Bez nje ne možete da glasate.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U redu, ako je to zakonski uslov za glasanje, izvolite ruku pod lampu.",
+        "explanation": "Ispravno. Birač prihvata obaveznu proceduru i omogućava nastavak zakonitog procesa glasanja.",
+        "score": 105000
+      },
+      {
+        "text": "Baš me briga za vaše uslove, nemate pravo da me uslovljavate, dajte mi listić!",
+        "explanation": "Pogrešno. Odbijanje zakonom propisane provere sprečava birački odbor da biraču omogući glasanje.",
+        "score": -39000
+      }
+    ]
+  },
+  "controller_insists_order": {
+    "text": "Procedura nalaže prvo proveru UV lampom, pa tek onda identitet. Pružite desnu ruku.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Razumem, izvolite desnu ruku na proveru.",
+        "explanation": "Ispravno. Birač poštuje propisani redosled izbornih radnji na biračkom mestu.",
+        "score": 105000
+      },
+      {
+        "text": "Kakve veze ima redosled, vi ste tu da radite kako vama birači kažu!",
+        "explanation": "Pogrešno. Birački odbor je dužan da striktno poštuje propisani redosled sprovođenja izbornih radnji.",
+        "score": -26000
+      }
+    ]
+  },
+  "controller_proceeds": {
+    "text": "Hvala, na prstima nema tragova spreja. Produžite na utvrđivanje identiteta.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala, izvolite moju ličnu kartu.",
+        "explanation": "Ispravno. Birač uredno nastavlja ka sledećoj tački izbornog procesa uz važeći identifikacioni dokument.",
+        "score": 131000
+      }
+    ]
+  }
+}
