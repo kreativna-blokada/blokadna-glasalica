@@ -1,8 +1,8 @@
 #!/bin/zsh
 # Headless export for Play Store (AAB), App Store (Xcode project) and web (HTML5).
 #
-#   ./export.sh            # release: Android AAB + iOS Xcode project + web
-#   ./export.sh android    # release Android AAB only
+#   ./export.sh            # release: Android AAB + debug APK + iOS Xcode project + web
+#   ./export.sh android    # release Android AAB + debug APK only
 #   ./export.sh ios        # release iOS Xcode project only
 #   ./export.sh web        # release web build only (serve release/build/web over HTTP)
 #   ./export.sh debug      # debug Android AAB (no release keystore needed)
@@ -11,6 +11,8 @@ set -e
 cd "$(dirname "$0")/.."
 GODOT=/Applications/Godot.app/Contents/MacOS/Godot
 OUT=../../release/build
+# store version from project.godot, appended to the Android file names
+VERSION=$(grep '^config/version=' project.godot | cut -d'"' -f2)
 
 # Release keystore secrets live in export_credentials.cfg (gitignored);
 # Godot's headless mode reads them reliably only via these env vars.
@@ -35,6 +37,9 @@ run() {  # run <mode> <preset> <output>
   ls -lhd "$3"
 }
 
+# the Android preset exports AAB (1); the sideload APK needs APK (0) for one export
+preset_format() { sed -i '' "s/^gradle_build\/export_format=.*/gradle_build\/export_format=$1/" export_presets.cfg; }
+
 TARGET="${1:-all}"
 # the game reads [database] debug_release from the packed runtime_credentials.cfg; this only reports it
 if [[ $TARGET != debug && "$(grep '^debug_release=' runtime_credentials.cfg | cut -d= -f2)" == false ]]; then
@@ -44,8 +49,10 @@ else
   echo "== database: development"
 fi
 case $TARGET in
-  debug)       echo "== Android debug AAB";   run debug   "Android" $OUT/android/blokadna-glasalica-debug.aab ;;
-  android|all) echo "== Android release AAB"; run release "Android" $OUT/android/blokadna-glasalica.aab ;;
+  debug)       echo "== Android debug AAB";   run debug   "Android" $OUT/android/blokadna-glasalica-$VERSION-debug.aab ;;
+  android|all) echo "== Android release AAB"; run release "Android" $OUT/android/blokadna-glasalica-$VERSION.aab
+               echo "== Android debug APK";   trap 'preset_format 1' EXIT; preset_format 0
+               run debug "Android" $OUT/android/blokadna-glasalica-$VERSION-debug.apk; preset_format 1 ;;
 esac
 case $TARGET in
   ios|all)     echo "== iOS Xcode project";   run release "iOS"     $OUT/ios/blokadna-glasalica.xcodeproj ;;
