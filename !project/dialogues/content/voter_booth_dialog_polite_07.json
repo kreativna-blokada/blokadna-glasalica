@@ -1,0 +1,40 @@
+{
+  "root": {
+    "text": "Pogrešio sam pri zaokruživanju iza paravana, da li mogu da dobijem novi glasački listić?",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Nažalost ne, zakon ne dozvoljava drugi listić biraču koji je već preuzeo svoj.",
+        "explanation": "Ispravno. Svaki birač dobija isključivo jedan glasački listić i birački odbor ne sme izdati novi u slučaju greške.",
+        "next": "voter_instructions",
+        "score": 131000
+      },
+      {
+        "text": "Nema problema, dajte mi taj pogrešni i uzeću vam novi sa stola.",
+        "explanation": "Pogrešno. Birački odbor ne sme zameniti listić niti izdati duplikat jer to stvara višak listića i narušava izbornu proceduru.",
+        "score": -66000
+      },
+      {
+        "text": "Samo ga pocepajte i ubacite u kutiju, pa ćemo vam dati drugi.",
+        "explanation": "Pogrešno. Uništavanje izbornog materijala je prekršaj, a izdavanje novog listića je strogo zabranjeno.",
+        "score": -79000
+      }
+    ]
+  },
+  "voter_instructions": {
+    "text": "Kako onda da postupim ako sam precrtao jednu opciju i zaokružio drugu?",
+    "speaker": "RIGHT",
+    "choices": [
+      {
+        "text": "Možete, listić važi ako se sa sigurnošću vidi za koga ste glasali.",
+        "explanation": "Ispravno. Listić na kome je jedna opcija precrtana, a druga jasno zaokružena smatra se važećim jer je izborna volja nedvosmislena.",
+        "score": 131000
+      },
+      {
+        "text": "Čim ste nešto precrtali, listić je nevažeći i nema svrhe da ga ubacujete.",
+        "explanation": "Pogrešno. Prekrižene opcije ne čine listić automatski nevažećim sve dok je jasno utvrđena volja birača.",
+        "score": -39000
+      }
+    ]
+  }
+}

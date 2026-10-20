@@ -1,0 +1,69 @@
+{
+  "root": {
+    "text": "Iza paravana ste stavili listić u džep i izvadili drugi papir. Listić ne smete iznositi.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Zašto pravite problem? Birački listić je moj i mogu da ga nosim kući ako hoću!",
+        "explanation": "Pogrešno. Iznošenje glasačkog listića sa biračkog mesta je strogo zabranjeno jer ukazuje na manipulaciju, poput takozvanog „bugarskog voza“.",
+        "next": "controller_insists",
+        "score": -79000
+      },
+      {
+        "text": "Izvinite, pogrešio sam pri popunjavanju. Mogu li dobiti novi listić?",
+        "explanation": "Birač uviđa grešku, ali zakon ne predviđa izdavanje novog listića biraču koji je pogrešio pri popunjavanju, niti dozvoljava iznošenje prvobitnog listića.",
+        "next": "controller_explains_rules",
+        "score": 66000
+      },
+      {
+        "text": "U pravu ste, nisam znao. Izvadiću listić, popuniti ga i ubaciti u kutiju.",
+        "explanation": "Ispravno. Birač prihvata upozorenje člana biračkog odbora i vraća originalni listić u proceduru glasanja.",
+        "next": "resolution_correct",
+        "score": 105000
+      }
+    ]
+  },
+  "controller_insists": {
+    "text": "Iznošenje listića je prekršaj i povlači prekid glasanja i policiju. Vratite listić.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U redu, evo listića, popuniću ga iza paravana i ubaciti u kutiju.",
+        "explanation": "Ispravno. Birač odustaje od prekršaja i postupa u skladu sa zakonom i pravilima glasanja.",
+        "score": 105000
+      },
+      {
+        "text": "Zovite koga hoćete, ja odlazim sa svojim listićem!",
+        "explanation": "Pogrešno. Napuštanje biračkog mesta sa listićem predstavlja direktno kršenje izbornih pravila, a birački odbor je dužan da reaguje i unese primedbu u zapisnik.",
+        "score": -79000
+      }
+    ]
+  },
+  "controller_explains_rules": {
+    "text": "Zakon ne dozvoljava zamenu pogrešno popunjenog listića, a svaki mora završiti u kutiji.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Razumem, presaviću ovaj listić i ubaciti ga u kutiju iako sam pogrešio.",
+        "explanation": "Ispravno. Listić se mora presaviti i ubaciti u glasačku kutiju kako bi se očuvao integritet procesa i evidencija materijala.",
+        "score": 131000
+      },
+      {
+        "text": "Ako ne mogu da dobijem novi, onda ću ga pocepati i baciti ovde na pod.",
+        "explanation": "Pogrešno. Uništavanje izbornog materijala na biračkom mestu predstavlja grubo narušavanje reda i pravila glasanja.",
+        "score": -26000
+      }
+    ]
+  },
+  "resolution_correct": {
+    "text": "Hvala na saradnji. Popunite listić iza paravana i presavijen ga ubacite u kutiju.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Tako ću i uraditi. Hvala vam na objašnjenju.",
+        "explanation": "Ispravno. Postupak glasanja se regularno privodi kraju uz puno poštovanje tajnosti i pravila.",
+        "score": 131000
+      }
+    ]
+  }
+}

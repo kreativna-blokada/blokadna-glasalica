@@ -1,0 +1,52 @@
+{
+  "root": {
+    "text": "Nema potrebe za sprejem, već ste obeleženi od glasanja na lokalnim izborima malopre.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Tek sam ušao i još nigde nisam glasao, proverite ponovo UV lampom.",
+        "explanation": "Ispravno, birač ukazuje na to da još nije obavio glasanje i traži ponovnu proveru pre nego što se donese pogrešan zaključak.",
+        "next": "check_uv",
+        "score": 131000
+      },
+      {
+        "text": "Član sam odbora na drugom mestu, imam rešenje, ali ovde glasam kao birač.",
+        "explanation": "Ispravno, član biračkog odbora može imati tragove UV mastila od rukovanja materijalom i ima pravo da glasa uz rešenje o imenovanju.",
+        "next": "board_member_resolution",
+        "score": 105000
+      },
+      {
+        "text": "U redu, ako vi tako kažete, dajte mi samo listić da završim što pre.",
+        "explanation": "Pogrešno, birač ne sme preuzeti glasački listić bez prethodnog pravilnog obeležavanja sprejem ukoliko nije obeležen u zakonitoj proceduri.",
+        "score": -66000
+      }
+    ]
+  },
+  "check_uv": {
+    "text": "Pod UV lampom zaista nema traga. Izvinite na zabuni, pružite kažiprst za sprej.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U redu je, izvolite desni kažiprst, pa preuzimam glasački listić.",
+        "explanation": "Ispravno, postupak se nastavlja po propisanoj proceduri nanošenja spreja pre preuzimanja listića.",
+        "score": 131000
+      },
+      {
+        "text": "Kad ste već pogrešili, sada ne morate uopšte da me prskate.",
+        "explanation": "Pogrešno, nanošenje spreja je zakonska obaveza i ne može se izostaviti zbog prethodne greške člana odbora.",
+        "score": -39000
+      }
+    ]
+  },
+  "board_member_resolution": {
+    "text": "Uvidom u rešenje utvrdio sam vaše svojstvo. Sada ću vam naneti sprej na drugi prst i uručiti listić.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala, izvolite ruku za obeležavanje pre nego što preuzmem listić.",
+        "explanation": "Ispravno, birač omogućava nanošenje oznake i nastavlja glasanje u skladu sa propisima.",
+        "score": 131000
+      }
+    ]
+  }
+}

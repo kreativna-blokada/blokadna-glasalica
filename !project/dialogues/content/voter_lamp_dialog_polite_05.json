@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Lampa pokazuje trag spreja na prstu. Morate napustiti biračko mesto, ne možete glasati.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U pravu ste, ako se vidi trag onda verovatno ne mogu da glasam.",
+        "explanation": "Pogrešno. Birač koji je član biračkog odbora ima pravo da glasa i uz prisustvo mastila, uz rešenje o imenovanju.",
+        "score": -39000
+      },
+      {
+        "text": "Ja sam član biračkog odbora ovde. Evo rešenja o imenovanju, smem da glasam.",
+        "explanation": "Ispravno. Član biračkog odbora koji ima tragove UV mastila može da glasa ako stavi na uvid rešenje o imenovanju.",
+        "next": "board_member_check",
+        "score": 131000
+      },
+      {
+        "text": "Nemate pravo da me izbacite, pozovite predsednika da pogleda moje rešenje.",
+        "explanation": "Ispravno je tražiti učešće predsednika odbora radi utvrđivanja statusa i primene zakonskog izuzetka.",
+        "next": "chair_consult",
+        "score": 39000
+      }
+    ]
+  },
+  "board_member_check": {
+    "text": "Rešenje potvrđuje da ste u biračkom odboru. Izvinite, nastavite na proveru identiteta.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Hvala na razumevanju, važno je da poštujemo izbornu proceduru.",
+        "explanation": "Birač na primeren način prihvata ispravku greške i nastavlja postupak glasanja.",
+        "score": 131000
+      },
+      {
+        "text": "U redu je, samo ukažite i ostalim kolegama na taj izuzetak.",
+        "explanation": "Konstruktivan podsetnik na pravila iz Zakona o izboru narodnih poslanika.",
+        "score": 131000
+      }
+    ]
+  },
+  "chair_consult": {
+    "text": "Predsednik je potvrdio da kao član odbora sa rešenjem smete da glasate uprkos tragu.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "U redu, nastavljam ka kolegi koji vrši proveru lične karte.",
+        "explanation": "Birač se vraća u redovan tok izborne procedure nakon otklonjenog nesporazuma.",
+        "score": 131000
+      },
+      {
+        "text": "Molim vas da se ovo ne ponavlja, da birači ne budu neosnovano udaljeni.",
+        "explanation": "Birač opravdano skreće pažnju na poštovanje propisa i sprečavanje nezakonitog uskraćivanja biračkog prava.",
+        "score": 105000
+      }
+    ]
+  }
+}

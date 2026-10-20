@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Desna šaka vam je u zavoju. Pošto ne mogu da proverim kažiprst, ne možete da glasate.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Zakon nalaže da proverite sledeći dostupan prst ili levu ruku.",
+        "explanation": "Ispravno. Ako birač nema kažiprst desne ruke ili je nedostupan, proverava se sledeći prst desne šake, a ako desna šaka nije dostupna, proverava se leva ruka.",
+        "next": "controller_accepts",
+        "score": 131000
+      },
+      {
+        "text": "Onda ništa, vratiću se kući pošto ne mogu da glasam sa povređenom rukom.",
+        "explanation": "Pogrešno. Birač ne treba da se odrekne svog biračkog prava zbog neopravdane prepreke biračkog odbora.",
+        "score": 66000
+      },
+      {
+        "text": "Samo upišite da ste proverili i dajte mi listić, ne pravite problem.",
+        "explanation": "Pogrešno. Zahtevanje da se UV provera fingira ili preskoči predstavlja kršenje izborne procedure.",
+        "next": "controller_insists",
+        "score": -39000
+      }
+    ]
+  },
+  "controller_accepts": {
+    "text": "U pravu ste, izvinite. Molim vas pružite levu ruku pod UV lampu da izvršimo proveru.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Izvolite levu ruku. Važno je da se poštuju zvanična pravila.",
+        "explanation": "Ispravno. Birač omogućava sprovođenje zakonske provere na ispravan način.",
+        "score": 131000
+      },
+      {
+        "text": "Sramota je da neko ko sedi u odboru ne zna osnovna pravila rada.",
+        "explanation": "Procedura je ispravljena, ali uvredljiv ton narušava red na biračkom mestu.",
+        "score": -26000
+      }
+    ]
+  },
+  "controller_insists": {
+    "text": "Ne smemo ništa unositi bez provere. Moramo utvrditi proceduru za proveru dostupne ruke.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Tako je, proverite dostupne prste na levoj ruci kako propisi nalažu.",
+        "explanation": "Ispravno. Birač ukazuje na tačno pravilo i vraća postupak u zakonske okvire.",
+        "score": 105000
+      },
+      {
+        "text": "Nije me briga za vaše propise, dužni ste odmah da me pustite dalje.",
+        "explanation": "Pogrešno. Odbijanje UV provere onemogućava zakonito ostvarivanje biračkog prava.",
+        "score": -39000
+      }
+    ]
+  }
+}

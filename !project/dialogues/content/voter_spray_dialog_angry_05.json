@@ -1,0 +1,40 @@
+{
+  "root": {
+    "text": "Povređen vam je desni kažiprst i imate zavoj. Ne mogu da vas obeležim, pa ne možete ni da glasate.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Nije tačno, pravilo je da se tada obeleži sledeći prst udesno.",
+        "explanation": "Ispravno. Pravila nalažu da se u slučaju nemogućnosti obeležavanja desnog kažiprsta obeležava sledeći dostupan prst desne šake, a tek potom leva šaka.",
+        "next": "next_finger",
+        "score": 131000
+      },
+      {
+        "text": "U redu onda, vratiću se kada mi zaraste prst.",
+        "explanation": "Pogrešno. Birač neopravdano odustaje od glasanja i prihvata netačno tumačenje člana biračkog odbora.",
+        "score": -39000
+      },
+      {
+        "text": "Skinuću zavoj odmah ovde samo da me poprskate po rani.",
+        "explanation": "Pogrešno i nepotrebno ugrožavanje zdravlja, jer izborna pravila jasno predviđaju alternativne prste za obeležavanje.",
+        "score": -26000
+      }
+    ]
+  },
+  "next_finger": {
+    "text": "U pravu ste, propisano je da pređemo na sledeći dostupan prst. Pružite srednji prst desne šake.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Izvolite ruku, drago mi je da smo poštovali proceduru.",
+        "explanation": "Ispravno postupanje kojim se omogućava zakonito sprovođenje glasanja.",
+        "score": 131000
+      },
+      {
+        "text": "Ne dam taj prst, obeležite mi ruku gde ja kažem ili neću glasati.",
+        "explanation": "Pogrešno. Redosled obeležavanja prstiju je striktno propisan procedurom i birač ne može proizvoljno birati mesto nanošenja spreja.",
+        "score": -39000
+      }
+    ]
+  }
+}
