@@ -19,11 +19,15 @@ signal choice_clicked(sender: DialogChoice);
 const TOUCH_DEBOUNCE_TIME: float = 0.1
 var _touch_debounce_timer: float = 0
 
-#padlock and colour fill drawn over the answer while it is locked
+#padlock and dim wash drawn over the answer while it is locked
 var _lock_overlay: Control
 var _lock_tween: Tween
-#share of the answer width the colour has filled, left to right
+#sweeps the colour over a pending pick until it unlocks
+var _fill_tween: Tween
+#share of the pending pick width the colour has filled, left to right
 var _lock_fill: float = 0.0
+#the answer waits for its lock to end
+var _is_locked: bool = false
 #how far the padlock shackle has sprung open, 0 closed and 1 open
 var _shackle_lift: float = 0.0
 #picked during the lock, goes in the moment the lock ends
@@ -65,21 +69,21 @@ func _ready() -> void:
 	_lock_overlay.hide()
 	add_child(_lock_overlay)
 
-#shows the padlock while the colour fills the answer over the lock time, then pops the answer open
+#dims the answer under a closed padlock for the lock time, then pops the answer open
 func lock(lock_time: float) -> void:
 	if _lock_tween: _lock_tween.kill()
 	scale = Vector2.ONE
 	modulate = Color.WHITE
 	_lock_overlay.modulate = Color.WHITE
 	_lock_overlay.show()
+	_is_locked = true
 	set_pending(false)
 	_set_shackle_lift(0.0)
-	_set_lock_fill(0.0)
 	_play_lock(lock_time)
 
-#finishes the colour fill from where it is within the given seconds, if the answer is still locked
+#moves the end of the lock to the given seconds from now, if the answer is still locked
 func shorten_lock(remaining_lock_time: float) -> void:
-	if _lock_fill >= 1.0 or not _lock_overlay.visible: return
+	if not _is_locked: return
 
 	_play_lock(remaining_lock_time)
 
@@ -88,13 +92,22 @@ func set_pending(is_pending: bool) -> void:
 	_is_pending = is_pending
 	_show_background()
 
-#fills the rest of the colour over the given seconds, then pops the answer open
-func _play_lock(fill_time: float) -> void:
+#keeps the answer dimmed for the given seconds, a pending pick sweeping its colour meanwhile, then pops the answer open
+func _play_lock(lock_time: float) -> void:
 	if _lock_tween: _lock_tween.kill()
+	if _fill_tween: _fill_tween.kill()
+
+	if _is_pending:
+		_fill_tween = create_tween()
+		_fill_tween.tween_method(_set_lock_fill, _lock_fill, 1.0, lock_time)
+	else:
+		_set_lock_fill(0.0)
 
 	_lock_tween = create_tween()
-	_lock_tween.tween_method(_set_lock_fill, _lock_fill, 1.0, fill_time)
-	_lock_tween.tween_callback(func() -> void: pivot_offset = size * 0.5)
+	_lock_tween.tween_interval(lock_time)
+	_lock_tween.tween_callback(func() -> void:
+		_is_locked = false
+		pivot_offset = size * 0.5)
 
 	var pop_time: float = Configs.AnswerLock["unlock_pop_time"]
 	var flash_color: Color = Color.WHITE * Configs.AnswerLock["unlock_flash_brightness"]
@@ -117,7 +130,7 @@ func _set_shackle_lift(lift: float) -> void:
 	_shackle_lift = lift
 	_lock_overlay.queue_redraw()
 
-#washes the unfilled right part of the answer and draws the padlock at its right end, solid on a pending pick
+#washes the part of the answer the colour has not filled and draws the padlock at its right end, solid on a pending pick
 func _draw_answer_lock() -> void:
 	var overlay_size: Vector2 = _lock_overlay.size
 	var fill_edge: float = overlay_size.x * _lock_fill

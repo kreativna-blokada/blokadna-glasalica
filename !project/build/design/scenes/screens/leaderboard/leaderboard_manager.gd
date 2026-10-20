@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Online leaderboard manager over Firebase Realtime Database
 #maintainer      : Zeljko

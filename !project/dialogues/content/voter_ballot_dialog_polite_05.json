@@ -1,0 +1,57 @@
+{
+  "root": {
+    "text": "Evo vašeg glasačkog listića, izvolite.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Čekajte, potpisao sam se, ali mi još niste naneli sprej na prst.",
+        "explanation": "Ispravno. Član biračkog odbora mora obeležiti prst birača sprejom pre nego što mu uruči glasački listić.",
+        "next": "spray_missing",
+        "score": 131000
+      },
+      {
+        "text": "Hvala, odoh odmah iza paravana da glasam.",
+        "explanation": "Pogrešno. Birač ne sme primiti listić i nastaviti proceduru pre nego što mu prst bude propisno obeležen sprejom.",
+        "next": "ignored_spray",
+        "score": -39000
+      },
+      {
+        "text": "Nema veze za sprej, žuri mi se, samo dajte listić.",
+        "explanation": "Pogrešno. Nanošenje spreja je zakonska obaveza i uslov za uručivanje glasačkog listića koji se ne sme preskočiti.",
+        "score": -39000
+      }
+    ]
+  },
+  "spray_missing": {
+    "text": "U pravu ste, izvinjavam se, bila je gužva. Pružite desnu ruku da vam nanesemo sprej na kažiprst.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Evo prsta, pa tek onda uzimam glasački listić.",
+        "explanation": "Ispravno. Procedura je vraćena u zakonski redosled pre uručivanja izbornog materijala.",
+        "score": 131000
+      },
+      {
+        "text": "Možete li onda samo malo da poprskate listić umesto mog prsta?",
+        "explanation": "Pogrešno. Sprej se nanosi isključivo na prst birača radi sprečavanja višestrukog glasanja.",
+        "score": -39000
+      }
+    ]
+  },
+  "ignored_spray": {
+    "text": "Stanite, vratite se! Zaboravili smo da vam nanesemo sprej na kažiprst pre nego što uzmete listić.",
+    "speaker": "LEFT",
+    "choices": [
+      {
+        "text": "Izvinite, vraćam se odmah da obeležite prst pre nego što nastavim ka paravanu.",
+        "explanation": "Ispravno. Birač prihvata ispravku propusta i poštuje redosled izbornih radnji.",
+        "score": 105000
+      },
+      {
+        "text": "Već ste mi dali listić, sad je kasno za sprej.",
+        "explanation": "Pogrešno. Birač ne sme da glasa ukoliko prethodno nije obeležen sprejom.",
+        "score": -39000
+      }
+    ]
+  }
+}

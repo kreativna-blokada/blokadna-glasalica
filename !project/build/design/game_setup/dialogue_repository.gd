@@ -7,7 +7,7 @@ signal remote_update_finished(succeeded: bool, applied: bool, content_version: i
 const TEST_FILE_URL: String = "https://zeljko-vulovic.github.io/glasalica/style.css"
 const REMOTE_ARCHIVE_URL_SETTING: String = "dialogues/remote_archive_url"
 
-const EMBEDDED_DIRECTORY: String = "res://!project/build/design/dialogues"
+const EMBEDDED_DIRECTORY: String = "res://!project/dialogues"
 const EMBEDDED_ARCHIVE_PATH: String = EMBEDDED_DIRECTORY + "/dialogues.zip"
 const EMBEDDED_MANIFEST_PATH: String = EMBEDDED_DIRECTORY + "/manifest.json"
 

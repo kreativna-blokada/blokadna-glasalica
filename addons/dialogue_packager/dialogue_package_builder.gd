@@ -1,7 +1,7 @@
 @tool
 extends RefCounted
 
-const DIALOGUE_DIRECTORY: String = "res://!project/build/design/dialogues"
+const DIALOGUE_DIRECTORY: String = "res://!project/dialogues"
 const CONTENT_DIRECTORY: String = DIALOGUE_DIRECTORY + "/content"
 const MANIFEST_PATH: String = DIALOGUE_DIRECTORY + "/manifest.json"
 const ARCHIVE_PATH: String = DIALOGUE_DIRECTORY + "/dialogues.zip"

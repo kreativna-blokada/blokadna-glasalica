@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Name step after a run: shows the run score, claims the leaderboard username, submits the score, then opens the leaderboard
 #maintainer      : Zeljko

@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Rewards screen in the leaderboard design with a badge box per top list, bordered and in stronger colours when its tab is selected
 #maintainer      : Zeljko

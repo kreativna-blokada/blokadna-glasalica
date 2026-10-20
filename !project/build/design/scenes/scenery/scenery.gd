@@ -1,5 +1,5 @@
 ##
-# Copyright (C) 2026 Blokadna Igra (blokadna.igra@gmail.com)
+# Copyright (C) 2026 Blokadna Igra (kreativna.blokada@proton.me)
 ##
 #description     : Scenery elements controller
 #maintainer      : Zeljko
@@ -22,6 +22,8 @@ func _init_sound() -> void:
 	if loop_sound:
 		#initialises the audio stream
 		sound_player.stream = loop_sound
+		#the web plays samples by default, copying the whole decoded loop again on every loop
+		sound_player.playback_type = AudioServer.PLAYBACK_TYPE_STREAM
 		#sets audio to loop based on format
 		if loop_sound is AudioStreamMP3:
 			loop_sound.loop = true
