@@ -12,6 +12,8 @@ extends Control
 const KEYBOARD_MARGIN: float = 24.0
 #how quickly the panel follows the virtual keyboard, as the share of the remaining distance covered per s
 const LIFT_SPEED: float = 12.0
+#share of the browser window below the visual viewport, which is what the virtual keyboard covers on web
+const WEB_KEYBOARD_SHARE_JS: String = "(function(){var v=window.visualViewport;if(!v||!window.innerHeight)return 0;return Math.max(0,1-(v.height+v.offsetTop)/window.innerHeight);})()"
 
 #private vars
 var _run_points: int = LeaderboardManager.NO_RUN_POINTS_PENDING
@@ -146,12 +148,22 @@ func _clear_error() -> void:
 
 #the top of the virtual keyboard in this screen's coordinates, INF while it is closed
 func _get_keyboard_top() -> float:
-	var keyboard_height: int = DisplayServer.virtual_keyboard_get_height()
-	if keyboard_height <= 0:
+	var keyboard_height: float = _get_keyboard_height()
+	if keyboard_height < 1.0:
 		return INF
 	var window_keyboard_top: Vector2 = Vector2(0.0, DisplayServer.window_get_size().y - keyboard_height)
 	var canvas_keyboard_top: Vector2 = get_viewport().get_final_transform().affine_inverse() * window_keyboard_top
 	return canvas_keyboard_top.y - global_position.y
+
+#window px the virtual keyboard covers, 0 while it is closed; browsers report no keyboard height,
+#only the visual viewport shrinking above it
+func _get_keyboard_height() -> float:
+	if not OS.has_feature("web"):
+		return DisplayServer.virtual_keyboard_get_height()
+	var covered_share: Variant = JavaScriptBridge.eval(WEB_KEYBOARD_SHARE_JS)
+	if typeof(covered_share) != TYPE_FLOAT and typeof(covered_share) != TYPE_INT:
+		return 0.0
+	return float(covered_share) * DisplayServer.window_get_size().y
 
 #signal Signals.user_saved => the claimed name is the player's, so the run score goes out under it
 func _on_user_saved(saved_username: String) -> void:
