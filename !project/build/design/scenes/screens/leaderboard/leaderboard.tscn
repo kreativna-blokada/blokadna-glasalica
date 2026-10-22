@@ -7,7 +7,7 @@
 [ext_resource type="FontFile" uid="uid://w8p5mlgowyma" path="res://!project/art/UI/DejaVuLGCSansMono.ttf" id="mono"]
 [ext_resource type="FontFile" uid="uid://b7wgk25vccvfr" path="res://!project/art/UI/DejaVuLGCSansMono-Bold.ttf" id="mono_bold"]
 [ext_resource type="Script" uid="uid://ccfewk3ofj2cy" path="res://!project/build/design/scenes/overlays/popups/pixel_style_box.gd" id="pixel"]
-[ext_resource type="PackedScene" path="res://!project/build/design/scenes/screens/leaderboard/rewards.tscn" id="rewards_screen"]
+[ext_resource type="PackedScene" uid="uid://dpmxum5qnxcdv" path="res://!project/build/design/scenes/screens/leaderboard/rewards.tscn" id="rewards_screen"]
 [ext_resource type="FontFile" uid="uid://bdaf012h5ofyp" path="res://!project/assets/fonts/LiberationSans-Bold.ttf" id="sans"]
 [ext_resource type="Texture2D" uid="uid://cfn206uc61esi" path="res://!project/art/UI/leaderboard/trophy.svg" id="trophy"]
 
@@ -72,6 +72,19 @@ shadow_color = Color(0.117647, 0.121569, 0.137255, 1)
 shadow_offset = Vector2(10, 10)
 inset_color = Color(0.847059, 0.803922, 0.690196, 1)
 inset_width = 8
+
+[sub_resource type="StyleBox" id="StyleBox_note_dashed"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 30.0
+content_margin_top = 14.0
+content_margin_right = 30.0
+content_margin_bottom = 14.0
+script = ExtResource("pixel")
+bg_color = Color(0.92549, 0.898039, 0.823529, 1)
+border_color = Color(0.733333, 0.698039, 0.627451, 1)
+border_width = 3
+dashed = true
 
 [sub_resource type="StyleBox" id="StyleBox_rank_chip"]
 resource_local_to_scene = false
@@ -310,6 +323,19 @@ theme_override_font_sizes/font_size = 44
 text = "RANG LISTA"
 vertical_alignment = 1
 
+[node name="HeaderNoteLabel" type="Label" parent="Panel/Layout/Header" unique_id=1938274651]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_fonts/font = ExtResource("mono_bold")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBox_note_dashed")
+text = "Moramo vam smanjiti poene za jedno milku.. poeni su namunjeni da bi loš i prosječan igrač imali dvije milke a teorijski maks bio nekih 6.5 milki (razmislite zašto?) ali ste ga mnogo napumpali."
+vertical_alignment = 1
+autowrap_mode = 3
+
 [node name="RankChip" type="PanelContainer" parent="Panel/Layout/Header" unique_id=1404568305]
 unique_name_in_owner = true
 visible = false
@@ -393,7 +419,7 @@ theme_override_colors/font_pressed_color = Color(0.0862745, 0.0862745, 0.0862745
 theme_override_colors/font_hover_color = Color(0.290196, 0.258824, 0.219608, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
 theme_override_fonts/font = SubResource("FontVariation_sans")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBox_tab")
 theme_override_styles/pressed = SubResource("StyleBox_tab_selected")
 theme_override_styles/hover = SubResource("StyleBox_tab")
@@ -415,7 +441,7 @@ theme_override_colors/font_pressed_color = Color(0.0862745, 0.0862745, 0.0862745
 theme_override_colors/font_hover_color = Color(0.290196, 0.258824, 0.219608, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
 theme_override_fonts/font = SubResource("FontVariation_sans")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBox_tab")
 theme_override_styles/pressed = SubResource("StyleBox_tab_selected")
 theme_override_styles/hover = SubResource("StyleBox_tab")
@@ -437,7 +463,7 @@ theme_override_colors/font_pressed_color = Color(0.0862745, 0.0862745, 0.0862745
 theme_override_colors/font_hover_color = Color(0.290196, 0.258824, 0.219608, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
 theme_override_fonts/font = SubResource("FontVariation_sans")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBox_tab")
 theme_override_styles/pressed = SubResource("StyleBox_tab_selected")
 theme_override_styles/hover = SubResource("StyleBox_tab")
