@@ -75,6 +75,12 @@ var _snackbar_tween: Tween = null
 #the rank chip's purple look from the scene, put back after a podium rank
 var _own_chip_style: StyleBox = null
 var _own_chip_text_color: Color = Color.BLACK
+#most players above the player each tab downloads to count the rank below the best scores
+var _rank_count_caps: Dictionary[Globals.ScoreBoard, int] = {
+	Globals.ScoreBoard.Daily: Configs.Leaderboard.daily_rank_count_cap,
+	Globals.ScoreBoard.Weekly: Configs.Leaderboard.weekly_rank_count_cap,
+	Globals.ScoreBoard.Total: Configs.Leaderboard.total_rank_count_cap,
+}
 
 #onready vars
 @onready var _title_label: Label = %TitleLabel
@@ -279,7 +285,7 @@ func _show_selected_period() -> void:
 		_show_board_status(Literals.BOARD_LOADING_MESSAGE)
 		if not _fetching_standings.has(period_key):
 			_fetching_standings[period_key] = true
-			LeaderboardManager.fetch_player_standing(fetch_key, selected_period.run_days)
+			LeaderboardManager.fetch_player_standing(fetch_key, _rank_count_caps[_selected_board], selected_period.run_days)
 		return
 
 	_populate_leaderboard(rank_entries, _period_standings.get(period_key, {}))
@@ -329,10 +335,12 @@ func _populate_leaderboard(rank_entries: Array, own_standing: Dictionary) -> voi
 			own_rank = entry_index + 1
 			_own_row = score_row
 
-	#below the best scores the exact rank is not counted, as that would download every player above
-	var below_top_caption: String = Literals.BOARD_BELOW_TOP_CAPTION % Configs.Leaderboard.top_count
+	#below the best scores the rank counts the players above, shown as "> count" once the tab's cap stopped the count
 	var is_below_top: bool = own_rank == 0 and not own_standing.is_empty()
+	var below_top_caption: String = ""
 	if is_below_top:
+		var rank_caption: String = Literals.BOARD_BELOW_TOP_CAPTION if own_standing.is_rank_capped else Literals.BOARD_RANK_CAPTION
+		below_top_caption = rank_caption % own_standing.rank
 		_rest_rows.add_child(_create_gap_label())
 		_own_row = RANK_ROW_SCENE.instantiate() as ScoreRow
 		_rest_rows.add_child(_own_row)
