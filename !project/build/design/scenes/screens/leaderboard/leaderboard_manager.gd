@@ -9,6 +9,8 @@ extends Node
 
 const ID_BYTE_COUNT: int = 16
 const PLAYER_IDENTITY: String = "user://player_identity.cfg"
+#answers of finished days kept on this device, {request endpoint: {run_day, server_body}}
+const STORED_ANSWERS: String = "user://leaderboard_answers.json"
 
 #letters, digits, space, _ and -;
 #must match the pattern in database.rules.json
@@ -17,6 +19,14 @@ const NAME_PATTERN: String = "^[A-Za-z0-9 _-]+$"
 const SCORE_ORDER: String = "\"score\""
 #lists only the day keys of the leaderboards, each answered as true, without their scores
 const RUN_DAY_KEYS_QUERY: String = "shallow=true"
+#part of the query that asks for the players above a score
+const PLAYERS_ABOVE_QUERY: String = "startAt="
+#the run day of a daily leaderboard endpoint, e.g. /leaderboards/20380.json or /leaderboards/20380/<player id>.json
+const RUN_DAY_ENDPOINT_PATTERN: String = "/leaderboards/(\\d+)[/.]"
+#days a run day must be before today to count as finished; one more than needed, as the device clock may be a day off
+const FINISHED_DAY_MARGIN: int = 2
+const DAYS_PER_WEEK: int = 7
+const NO_RUN_DAY: int = -1
 
 const NO_RUN_POINTS_PENDING: int = -1
 
@@ -32,6 +42,13 @@ var _username_regex: RegEx = RegEx.create_from_string(NAME_PATTERN)
 var _run_points: int = NO_RUN_POINTS_PENDING
 #a run score the database turned down for the player's higher best, until the leaderboard has told the player
 var _declined_points: int = NO_RUN_POINTS_PENDING
+#successful GET answers by request endpoint, {msec, fetch_result, response_code, server_headers, server_body}
+var _cached_answers: Dictionary[String, Dictionary] = {}
+#answers of finished days, which can no longer change, loaded from STORED_ANSWERS on the first request
+var _stored_answers: Dictionary = {}
+var _is_stored_answers_loaded: bool = false
+var _is_stored_answers_save_pending: bool = false
+var _run_day_endpoint_regex: RegEx = RegEx.create_from_string(RUN_DAY_ENDPOINT_PATTERN)
 
 #CALLBACKS
 # ██████╗ █████╗ ██╗     ██╗     ██████╗  █████╗  ██████╗██╗  ██╗███████╗
@@ -148,15 +165,17 @@ func fetch_rankings(fetch_key: String, run_days: Array[int] = []) -> void:
 	for score_endpoint in _get_score_endpoints(run_days):
 		_send_request("%s?%s" % [score_endpoint, top_query], HTTPClient.METHOD_GET, "", _on_rankings_request_completed.bind(rankings_fetch))
 
-#finds this player's best score of the given run days, or all-time without run days, without counting the players above;
-#the result arrives through Signals.player_standing_fetched tagged with fetch_key
-func fetch_player_standing(fetch_key: String, run_days: Array[int] = []) -> void:
+#finds this player's best score of the given run days, or all-time without run days, then counts the players above it
+#up to rank_count_cap on each leaderboard; the result arrives through Signals.player_standing_fetched tagged with fetch_key
+func fetch_player_standing(fetch_key: String, rank_count_cap: int, run_days: Array[int] = []) -> void:
 	if not is_enabled():
 		Signals.player_standing_fetched.emit(fetch_key, false, {})
 		return
 
-	var standing_fetch: Dictionary = {"fetch_key": fetch_key, "pending_count": maxi(run_days.size(), 1), "is_failed": false, "best_entries": {}}
-	for score_endpoint in _get_score_endpoints(run_days):
+	var score_endpoints: PackedStringArray = _get_score_endpoints(run_days)
+	var standing_fetch: Dictionary = {"fetch_key": fetch_key, "pending_count": score_endpoints.size(), "is_failed": false, "best_entries": {},
+		"score_endpoints": score_endpoints, "rank_count_cap": rank_count_cap}
+	for score_endpoint in score_endpoints:
 		var own_endpoint: String = score_endpoint.trim_suffix(".json") + "/%s.json" % _player_id
 		_send_request(own_endpoint, HTTPClient.METHOD_GET, "", _on_own_score_request_completed.bind(standing_fetch))
 
@@ -220,6 +239,17 @@ func _send_daily_score(run_points: int, run_day: int, submit_result: Globals.Sco
 	var daily_score_body: String = JSON.stringify({"username": _username, "score": run_points})
 	_send_request(daily_score_endpoint, HTTPClient.METHOD_PATCH, daily_score_body, _on_daily_request_completed.bind(submit_result))
 
+#asks each leaderboard for the players scoring above the own standing, at most rank_count_cap per leaderboard
+func _count_players_above(standing_fetch: Dictionary, own_standing: Dictionary) -> void:
+	standing_fetch.pending_count = standing_fetch.score_endpoints.size()
+	standing_fetch.own_standing = own_standing
+	standing_fetch.players_above = {}
+	standing_fetch.is_rank_capped = false
+
+	var above_query: String = "orderBy=%s&startAt=%d&limitToFirst=%d" % [SCORE_ORDER.uri_encode(), own_standing.score + 1, standing_fetch.rank_count_cap]
+	for score_endpoint in standing_fetch.score_endpoints:
+		_send_request("%s?%s" % [score_endpoint, above_query], HTTPClient.METHOD_GET, "", _on_players_above_request_completed.bind(standing_fetch))
+
 #returns the run day from the server Date header, in whole days since 1970-01-01 shifted by Configs.Leaderboard.day_utc_offset;
 #the device clock is used when the header is missing (web builds never see it) or unreadable
 func _day_from_headers(server_headers: PackedStringArray) -> int:
@@ -252,18 +282,111 @@ func _day_from_headers(server_headers: PackedStringArray) -> int:
 func _to_username_identifier(player_username: String) -> String:
 	return player_username.to_lower()
 
-#sends one request on its own HTTPRequest node, so requests never block each other
+#sends one request on its own HTTPRequest node, so requests never block each other;
+#a GET of a finished day stored on this device, or answered within Configs.Leaderboard.answer_cache_seconds,
+#is answered again from there on the next frame
 func _send_request(request_endpoint: String, request_method: HTTPClient.Method, request_body: String, completed_callback: Callable) -> void:
 	var server_request: HTTPRequest = HTTPRequest.new()
 	server_request.timeout = Configs.Leaderboard.request_timeout
 	add_child(server_request)
 	var request_callback: Callable = completed_callback.bind(server_request)
+
+	var is_cacheable: bool = request_method == HTTPClient.METHOD_GET
+	if is_cacheable:
+		_load_stored_answers()
+	var stored_answer: Dictionary = _stored_answers.get(request_endpoint, {}) if is_cacheable else {}
+	if not stored_answer.is_empty():
+		var stored_body: PackedByteArray = str(stored_answer.server_body).to_utf8_buffer()
+		request_callback.call_deferred(HTTPRequest.RESULT_SUCCESS, HTTPClient.RESPONSE_OK, PackedStringArray(), stored_body)
+		return
+
+	var cached_answer: Dictionary = _cached_answers.get(request_endpoint, {})
+	if is_cacheable and not cached_answer.is_empty():
+		if Time.get_ticks_msec() - cached_answer.msec < float(Configs.Leaderboard.answer_cache_seconds) * 1000.0:
+			request_callback.call_deferred(cached_answer.fetch_result, cached_answer.response_code, cached_answer.server_headers, cached_answer.server_body)
+			return
+		_cached_answers.erase(request_endpoint)
+
+	if is_cacheable:
+		server_request.request_completed.connect(_on_cacheable_request_completed.bind(request_endpoint))
 	server_request.request_completed.connect(request_callback)
 
 	var request_error: Error = server_request.request(request_endpoint, PackedStringArray(), request_method, request_body)
 	if request_error != OK:
 		push_warning("LeaderboardManager._send_request: request failed to start (%s)" % error_string(request_error))
 		request_callback.call(HTTPRequest.RESULT_CANT_CONNECT, 0, PackedStringArray(), PackedByteArray())
+
+#returns the run day of a daily leaderboard endpoint that is finished, so its answer can no longer change, or NO_RUN_DAY
+func _get_finished_run_day(request_endpoint: String) -> int:
+	var run_day_match: RegExMatch = _run_day_endpoint_regex.search(request_endpoint)
+	if run_day_match == null:
+		return NO_RUN_DAY
+	var run_day: int = run_day_match.get_string(1).to_int()
+	return run_day if get_today_day() - run_day >= FINISHED_DAY_MARGIN else NO_RUN_DAY
+
+#returns the oldest run day a tab still shows; stored answers of older days are dropped
+func _get_oldest_shown_run_day() -> int:
+	var shown_days: int = maxi(int(Configs.Leaderboard.daily_history_days), int(Configs.Leaderboard.weekly_history_weeks) * DAYS_PER_WEEK)
+	return get_today_day() - shown_days
+
+#loads the stored answers of finished days once, dropping the days no tab shows anymore
+func _load_stored_answers() -> void:
+	if _is_stored_answers_loaded:
+		return
+	_is_stored_answers_loaded = true
+	if not FileAccess.file_exists(STORED_ANSWERS):
+		return
+
+	var stored_answers: Variant = JSON.parse_string(FileAccess.get_file_as_string(STORED_ANSWERS))
+	if not stored_answers is Dictionary:
+		push_warning("LeaderboardManager._load_stored_answers: unreadable %s, starting empty" % STORED_ANSWERS)
+		return
+	var oldest_run_day: int = _get_oldest_shown_run_day()
+	for request_endpoint in stored_answers:
+		var stored_answer: Variant = stored_answers[request_endpoint]
+		if stored_answer is Dictionary and stored_answer.get("server_body") is String and int(stored_answer.get("run_day", NO_RUN_DAY)) >= oldest_run_day:
+			_stored_answers[request_endpoint] = stored_answer
+	if _stored_answers.size() < stored_answers.size():
+		_save_stored_answers()
+
+#keeps the answer of a finished day on this device; a players-above answer keeps only the player ids,
+#as counting the rank needs no names or scores
+func _store_answer(request_endpoint: String, run_day: int, server_body: PackedByteArray) -> void:
+	var answer_text: String = server_body.get_string_from_utf8()
+	if request_endpoint.contains(PLAYERS_ABOVE_QUERY):
+		var players_above: Variant = JSON.parse_string(answer_text)
+		if players_above is Dictionary:
+			var player_ids: Dictionary = {}
+			for player_id in players_above:
+				player_ids[player_id] = true
+			answer_text = JSON.stringify(player_ids)
+	_stored_answers[request_endpoint] = {"run_day": run_day, "server_body": answer_text}
+
+	#answers arrive in bursts, one per day, so the file is written once after the burst
+	if not _is_stored_answers_save_pending:
+		_is_stored_answers_save_pending = true
+		_save_stored_answers.call_deferred()
+
+#writes the stored answers of finished days to this device
+func _save_stored_answers() -> void:
+	_is_stored_answers_save_pending = false
+	var stored_answers_file: FileAccess = FileAccess.open(STORED_ANSWERS, FileAccess.WRITE)
+	if stored_answers_file == null:
+		push_warning("LeaderboardManager._save_stored_answers: cannot write %s (%s)" % [STORED_ANSWERS, error_string(FileAccess.get_open_error())])
+		return
+	stored_answers_file.store_string(JSON.stringify(_stored_answers))
+
+#signal HTTPRequest.request_completed => keeps a successful GET answer for _send_request to reuse,
+#and stores it on this device when it belongs to a finished day
+func _on_cacheable_request_completed(fetch_result: int, response_code: int, server_headers: PackedStringArray, server_body: PackedByteArray, request_endpoint: String) -> void:
+	if fetch_result != HTTPRequest.RESULT_SUCCESS or response_code != HTTPClient.RESPONSE_OK:
+		return
+	_cached_answers[request_endpoint] = {"msec": Time.get_ticks_msec(), "fetch_result": fetch_result, "response_code": response_code,
+		"server_headers": server_headers, "server_body": server_body}
+
+	var finished_run_day: int = _get_finished_run_day(request_endpoint)
+	if finished_run_day != NO_RUN_DAY:
+		_store_answer(request_endpoint, finished_run_day, server_body)
 
 #signal HTTPRequest.request_completed => adopts the name the database holds for this player, then sends the claim
 func _on_server_username_request_completed(fetch_result: int, response_code: int, _server_headers: PackedStringArray, server_body: PackedByteArray, server_request: HTTPRequest, claimed_username: String) -> void:
@@ -289,6 +412,7 @@ func _on_claim_request_completed(fetch_result: int, response_code: int, _server_
 	if fetch_result == HTTPRequest.RESULT_SUCCESS and response_code == HTTPClient.RESPONSE_OK:
 		_username = claimed_username
 		_save_player_identity()
+		_cached_answers.clear()
 		Signals.user_saved.emit(claimed_username)
 	elif fetch_result == HTTPRequest.RESULT_SUCCESS and response_code == HTTPClient.RESPONSE_UNAUTHORIZED:
 		Signals.user_refused.emit(Globals.NameRefuse.Taken)
@@ -313,9 +437,11 @@ func _on_score_request_completed(fetch_result: int, response_code: int, server_h
 	_send_daily_score(run_points, _day_from_headers(server_headers), submit_result)
 
 #signal HTTPRequest.request_completed => 200 means stored; 401 means a higher score of today is stored or the day is not today;
-#emits the all-time result, or Failed when the daily answer never came so the run stays pending for a resubmit
+#emits the all-time result, or Failed when the daily answer never came so the run stays pending for a resubmit;
+#the cached answers are dropped first, so the boards fetched next hold the run
 func _on_daily_request_completed(fetch_result: int, response_code: int, _server_headers: PackedStringArray, _server_body: PackedByteArray, server_request: HTTPRequest, submit_result: Globals.ScoreSubmit) -> void:
 	server_request.queue_free()
+	_cached_answers.clear()
 
 	var daily_submit_handled: bool = fetch_result == HTTPRequest.RESULT_SUCCESS and response_code in [HTTPClient.RESPONSE_OK, HTTPClient.RESPONSE_UNAUTHORIZED]
 	if not daily_submit_handled:
@@ -351,7 +477,7 @@ func _on_run_days_request_completed(fetch_result: int, response_code: int, _serv
 	Signals.run_days_fetched.emit(fetch_key, true, run_days)
 
 #signal HTTPRequest.request_completed => keeps this player's best score of the asked days; once every day answered,
-#emits the standing {username, score}, or an empty one when the player has no score there
+#counts the players above it, or emits an empty standing when the player has no score there
 func _on_own_score_request_completed(fetch_result: int, response_code: int, _server_headers: PackedStringArray, server_body: PackedByteArray, server_request: HTTPRequest, standing_fetch: Dictionary) -> void:
 	server_request.queue_free()
 
@@ -368,7 +494,36 @@ func _on_own_score_request_completed(fetch_result: int, response_code: int, _ser
 		Signals.player_standing_fetched.emit(standing_fetch.fetch_key, false, {})
 		return
 	var own_entry: Dictionary = standing_fetch.best_entries.get(_player_id, {})
-	var own_standing: Dictionary = {} if own_entry.is_empty() else {"username": own_entry.username, "score": own_entry.score}
+	if own_entry.is_empty():
+		Signals.player_standing_fetched.emit(standing_fetch.fetch_key, true, {})
+		return
+	_count_players_above(standing_fetch, {"username": own_entry.username, "score": own_entry.score})
+
+#signal HTTPRequest.request_completed => gathers the players above the own standing, each once over all leaderboards;
+#once every leaderboard answered, emits the standing with rank = players above + 1, or the count itself when a cap was reached
+func _on_players_above_request_completed(fetch_result: int, response_code: int, _server_headers: PackedStringArray, server_body: PackedByteArray, server_request: HTTPRequest, standing_fetch: Dictionary) -> void:
+	server_request.queue_free()
+
+	if fetch_result != HTTPRequest.RESULT_SUCCESS or response_code != HTTPClient.RESPONSE_OK:
+		push_warning("LeaderboardManager._on_players_above_request_completed: fetch failed (result %d, HTTP %d)" % [fetch_result, response_code])
+		standing_fetch.is_failed = true
+	else:
+		var players_above: Variant = JSON.parse_string(server_body.get_string_from_utf8())
+		if players_above is Dictionary:
+			standing_fetch.players_above.merge(players_above)
+			if players_above.size() >= standing_fetch.rank_count_cap:
+				standing_fetch.is_rank_capped = true
+
+	standing_fetch.pending_count -= 1
+	if standing_fetch.pending_count > 0:
+		return
+	if standing_fetch.is_failed:
+		Signals.player_standing_fetched.emit(standing_fetch.fetch_key, false, {})
+		return
+	var own_standing: Dictionary = standing_fetch.own_standing
+	var players_above_count: int = standing_fetch.players_above.size()
+	own_standing.is_rank_capped = standing_fetch.is_rank_capped
+	own_standing.rank = players_above_count if own_standing.is_rank_capped else players_above_count + 1
 	Signals.player_standing_fetched.emit(standing_fetch.fetch_key, true, own_standing)
 
 #keeps each fetched player's best score, so a player on several daily leaderboards is counted once

@@ -19,7 +19,8 @@ signal help_requested
 @warning_ignore("unused_signal")
 signal run_days_fetched(fetch_key: String, fetch_succeeded: bool, run_days: Array[int])
 
-#emitted when the player's own best score for fetch_key is known; standing is {username, score}, or empty without a score there
+#emitted when the player's own best score and rank for fetch_key are known; standing is {username, score, rank, is_rank_capped},
+#or empty without a score there; a capped rank is the count of players above that the cap stopped at
 @warning_ignore("unused_signal")
 signal player_standing_fetched(fetch_key: String, fetch_succeeded: bool, standing: Dictionary)
 

@@ -20,6 +20,8 @@ const DIALOGUES_CACHE: String = "user://dialogues_content.bin"
 
 #dialogue ids are the source file names: voter_{topic}_dialog_{personality}_{variant}
 const DIALOGUE_ID_FORMAT: String = "^voter_(?<topic>.+?)_dialog_(?<personality>.+)_(?<variant>\\d+)$"
+#dialogue node field; from this app version on, and on web, the node is skipped, e.g. an update notice
+const SKIP_FROM_VERSION: String = "skip_from_version"
 
 
 #private vars
@@ -53,9 +55,20 @@ func _ready() -> void:
 func has_dialogue(id: String) -> bool:
 	return _active_dialogues.has(id)
 
-#returns the dialogue tree data for the given id, or an empty dictionary if missing
+#returns the dialogue tree data for the given id without the nodes skipped for this app version (a skipped root stays when nothing visible follows), or an empty dictionary if missing
 func get_dialogue(id: String) -> Dictionary:
-	return _active_dialogues.get(id, {})
+	var dialogue_nodes: Dictionary = _active_dialogues.get(id, {}).duplicate(true)
+	for dialogue_node: Dictionary in dialogue_nodes.values():
+		if dialogue_node.has("next"):
+			dialogue_node.next = _skip_hidden_nodes(dialogue_nodes, dialogue_node.next)
+		for choice: Dictionary in dialogue_node.get("choices", []):
+			if choice.has("next"):
+				choice.next = _skip_hidden_nodes(dialogue_nodes, choice.next)
+
+	var visible_root_id: String = _skip_hidden_nodes(dialogue_nodes, "root")
+	if visible_root_id != "root" and visible_root_id != "":
+		dialogue_nodes.root = dialogue_nodes[visible_root_id]
+	return dialogue_nodes
 
 #picks a random personality and a random dialogue variant per topic for a new voter
 func create_voter_descriptor() -> VoterDescriptor:
@@ -68,6 +81,39 @@ func create_voter_descriptor() -> VoterDescriptor:
 	for topic in topic_variants:
 		voter_dialogues[topic] = topic_variants[topic].pick_random()
 	return VoterDescriptor.new(voter_personality, voter_dialogues)
+
+#follows the links past nodes skipped for this app version; returns the first visible node id, or "" at the dialogue end
+func _skip_hidden_nodes(dialogue_nodes: Dictionary, next_node_id: String) -> String:
+	#bounded by the node count so a loop of skipped nodes cannot hang the game
+	for _skipped_node_count in dialogue_nodes.size():
+		if not dialogue_nodes.has(next_node_id) or not _is_node_skipped(dialogue_nodes[next_node_id]):
+			break
+		next_node_id = _get_skipped_node_next(dialogue_nodes[next_node_id])
+	return next_node_id
+
+#checks whether the node has skip_from_version and the game runs on web or on that app version or newer
+func _is_node_skipped(dialogue_node: Dictionary) -> bool:
+	if not dialogue_node.has(SKIP_FROM_VERSION):
+		return false
+	return OS.has_feature("web") or _is_app_version_at_least(str(dialogue_node[SKIP_FROM_VERSION]))
+
+#returns where a skipped node leads: its next, or the next its choices share
+func _get_skipped_node_next(dialogue_node: Dictionary) -> String:
+	if dialogue_node.has("choices"):
+		return dialogue_node.choices[0].get("next", "")
+	return dialogue_node.get("next", "")
+
+#checks whether this app version (application/config/version) is at least the given one, e.g. "1.3.0"
+func _is_app_version_at_least(required_version: String) -> bool:
+	var app_version_parts: PackedStringArray = str(ProjectSettings.get_setting("application/config/version")).split(".")
+	var required_version_parts: PackedStringArray = required_version.split(".")
+
+	for part_index in maxi(app_version_parts.size(), required_version_parts.size()):
+		var app_version_part: int = int(app_version_parts[part_index]) if part_index < app_version_parts.size() else 0
+		var required_version_part: int = int(required_version_parts[part_index]) if part_index < required_version_parts.size() else 0
+		if app_version_part != required_version_part:
+			return app_version_part > required_version_part
+	return true
 
 #groups the active dialogue ids as {personality: {topic: [ids]}}; ids not matching the pattern are skipped
 func _index_dialogue_variants() -> void:
