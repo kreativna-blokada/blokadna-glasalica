@@ -1,5 +1,24 @@
 {
   "root": {
+    "text": "Ako živite u (srpskom?) matriksu... pa Vas autori igre ljubazno zamole da izađete iz simulacije i odete na Google Play Store / Apple App Store da ažurirate aplikaciju jer su u poslednjoj verziji dodali tri lepih stvari, da li biste to učinili nama za ljubav jer što ne može niko može tri ?",
+    "speaker": "LEFT",
+    "skip_from_version": "1.2.0",
+    "choices": [
+      {
+        "text": "Nema veze da li živimo u simulaciji ili ne... ispoštovaću vas i ažurirati aplikaciju kada završim igru. :)",
+        "explanation": "Igrač prihvata da ažurira aplikaciju i dobija ocenu odličan tri !",
+        "score": 3,
+        "next": "voter_asks"
+      },
+      {
+        "text": "イヤ ！ Ne zanima me što mi hinjski pokušavate provući da ažuriram ovo čudo... jedan app nikad sreće nemao !",
+        "explanation": "Igrač odbija da ažurira aplikaciju.. jedan app nikad sreće nemao :(",
+        "score": -1,
+        "next": "voter_asks"
+      }
+    ]
+  },
+  "voter_asks": {
     "text": "Lampa pokazuje trag spreja na prstu. Morate napustiti biračko mesto, ne možete glasati.",
     "speaker": "LEFT",
     "choices": [

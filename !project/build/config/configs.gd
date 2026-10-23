@@ -262,6 +262,12 @@ var Leaderboard: Dictionary[String, Variant] = {
 	"daily_history_days": 30,
 	#number of calendar weeks, this week included, the weekly tab looks back for weeks holding scores
 	"weekly_history_weeks": 12,
+	#most players above a player outside the best scores each tab downloads to count the rank; past it the rank shows as "> count"
+	"daily_rank_count_cap": 250,
+	"weekly_rank_count_cap": 500,
+	"total_rank_count_cap": 1000,
+	#s a fetched leaderboard answer is reused before it is fetched again; a submitted score or claimed name drops them all
+	"answer_cache_seconds": 60.0,
 	#h added to UTC to pick the day a run's daily leaderboard is stored under; fixed, so in summer time the day
 	#turns at 01:00 local; must match the 3600000 ms in the database rules
 	"day_utc_offset": 1,

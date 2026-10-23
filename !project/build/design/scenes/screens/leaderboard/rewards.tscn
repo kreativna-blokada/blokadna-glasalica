@@ -5,7 +5,7 @@
 [ext_resource type="FontFile" uid="uid://b7wgk25vccvfr" path="res://!project/art/UI/DejaVuLGCSansMono-Bold.ttf" id="help_bold"]
 [ext_resource type="Shader" uid="uid://boii51q6tykpk" path="res://!project/art/shaders/outline.gdshader" id="outline_shader"]
 [ext_resource type="Script" uid="uid://ccfewk3ofj2cy" path="res://!project/build/design/scenes/overlays/popups/pixel_style_box.gd" id="pixel"]
-[ext_resource type="Script" path="res://!project/build/design/scenes/screens/leaderboard/rewards.gd" id="rewards"]
+[ext_resource type="Script" uid="uid://d0vqkf7eeacmw" path="res://!project/build/design/scenes/screens/leaderboard/rewards.gd" id="rewards"]
 [ext_resource type="FontFile" uid="uid://bdaf012h5ofyp" path="res://!project/assets/fonts/LiberationSans-Bold.ttf" id="sans"]
 
 [sub_resource type="StyleBox" id="StyleBox_badge_box"]
