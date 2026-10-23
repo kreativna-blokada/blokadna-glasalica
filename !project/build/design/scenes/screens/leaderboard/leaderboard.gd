@@ -84,6 +84,7 @@ var _rank_count_caps: Dictionary[Globals.ScoreBoard, int] = {
 
 #onready vars
 @onready var _title_label: Label = %TitleLabel
+@onready var _note_button: Button = %NoteButton
 @onready var _rank_chip: PanelContainer = %RankChip
 @onready var _chip_rank_label: Label = %ChipRankLabel
 @onready var _no_result_chip: PanelContainer = %NoResultChip
@@ -101,6 +102,8 @@ var _rank_count_caps: Dictionary[Globals.ScoreBoard, int] = {
 @onready var _period_dates_label: Label = %PeriodDatesLabel
 @onready var _list_layout: VBoxContainer = %ListLayout
 @onready var _podium_rows: VBoxContainer = %PodiumRows
+@onready var _note_popup: Control = %NotePopup
+@onready var _note_popup_panel: PanelContainer = %NotePopupPanel
 @onready var _rest_scroll: ScrollContainer = %RestScroll
 @onready var _rest_margin: MarginContainer = %RestMargin
 @onready var _rest_rows: VBoxContainer = %RestRows
@@ -132,6 +135,8 @@ func _ready() -> void:
 	_older_button.pressed.connect(_on_period_arrow_pressed.bind(1))
 	_newer_button.pressed.connect(_on_period_arrow_pressed.bind(-1))
 	_rank_chip.gui_input.connect(_on_rank_chip_input)
+	_note_button.pressed.connect(_on_note_pressed)
+	_note_popup_panel.gui_input.connect(_on_note_popup_input)
 	_rewards_button.pressed.connect(_on_rewards_pressed)
 	_back_button.pressed.connect(_on_back_pressed)
 
@@ -270,6 +275,7 @@ func _show_selected_period() -> void:
 	_newer_button.disabled = period_index <= 0
 	_older_button.modulate.a = DISABLED_ARROW_ALPHA if _older_button.disabled else 1.0
 	_newer_button.modulate.a = DISABLED_ARROW_ALPHA if _newer_button.disabled else 1.0
+	_fit_rank_chips()
 
 	var period_key: String = selected_period.key
 	var fetch_key: String = FETCH_KEY % [period_key, _fetch_generation]
@@ -355,6 +361,13 @@ func _populate_leaderboard(rank_entries: Array, own_standing: Dictionary) -> voi
 	#the rows lay out during this frame, so the list scrolls on the next one
 	if not get_tree().process_frame.is_connected(_center_own_row_at_once):
 		get_tree().process_frame.connect(_center_own_row_at_once, CONNECT_ONE_SHOT)
+
+#widens the rank chips so they and the rewards button span the period stepper's width, both rows' left edges in line
+func _fit_rank_chips() -> void:
+	var header_separation: int = _rank_chip.get_parent().get_theme_constant("separation")
+	var chip_width: float = _period_stepper.get_combined_minimum_size().x - _rewards_button.get_combined_minimum_size().x - header_separation
+	for header_chip: PanelContainer in [_rank_chip, _no_result_chip]:
+		header_chip.custom_minimum_size.x = chip_width
 
 #colors the rank chip gold, silver or bronze for a podium rank, purple for any lower one
 func _paint_rank_chip(own_rank: int) -> void:
@@ -486,20 +499,23 @@ func _on_score_submitted(submit_result: Globals.ScoreSubmit) -> void:
 	_fetching_standings.clear()
 	LeaderboardManager.fetch_run_days(FETCH_KEY % [RUN_DAYS_FETCH_KEY, _fetch_generation])
 
-#signal Button.pressed => a tap on a tab selects it
+#signal Button.pressed => a tap on a tab selects it and closes the note popup
 func _on_board_tab_pressed(score_board: Globals.ScoreBoard) -> void:
 	if score_board == _selected_board:
 		return
 	SoundManager.play_stinger(Globals.Sound.MenuSelect)
+	_note_popup.visible = false
 	_select_board(score_board)
 
-#signal Button.pressed => an arrow steps to the next period; 1 towards older periods, -1 towards the latest
+#signal Button.pressed => an arrow steps to the next period; 1 towards older periods, -1 towards the latest;
+#a step closes the note popup
 func _on_period_arrow_pressed(period_step: int) -> void:
 	var periods: Array = _board_periods.get(_selected_board, [])
 	var period_index: int = clampi(_period_indexes[_selected_board] + period_step, 0, maxi(periods.size() - 1, 0))
 	if period_index == _period_indexes[_selected_board]:
 		return
 	SoundManager.play_stinger(Globals.Sound.MenuSelect)
+	_note_popup.visible = false
 	_period_indexes[_selected_board] = period_index
 	_show_selected_period()
 
@@ -508,6 +524,17 @@ func _on_period_arrow_pressed(period_step: int) -> void:
 func _on_rank_chip_input(input_event: InputEvent) -> void:
 	if input_event is InputEventScreenTouch and input_event.pressed:
 		_center_own_row(true)
+
+#signal Button.pressed => shows or hides the note popup over the podium
+func _on_note_pressed() -> void:
+	SoundManager.play_stinger(Globals.Sound.MenuSelect)
+	_note_popup.visible = not _note_popup.visible
+
+#signal Control.gui_input => a tap on the note popup closes it;
+#touch only, since a mouse click also arrives as an emulated touch
+func _on_note_popup_input(input_event: InputEvent) -> void:
+	if input_event is InputEventScreenTouch and input_event.pressed:
+		_note_popup.visible = false
 
 #signal Button.pressed => opens the rewards screen
 func _on_rewards_pressed() -> void:

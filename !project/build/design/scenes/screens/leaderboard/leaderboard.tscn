@@ -76,15 +76,17 @@ inset_width = 8
 [sub_resource type="StyleBox" id="StyleBox_note_dashed"]
 resource_local_to_scene = false
 resource_name = ""
-content_margin_left = 30.0
+content_margin_left = 24.0
 content_margin_top = 14.0
-content_margin_right = 30.0
+content_margin_right = 24.0
 content_margin_bottom = 14.0
 script = ExtResource("pixel")
-bg_color = Color(0.92549, 0.898039, 0.823529, 1)
-border_color = Color(0.733333, 0.698039, 0.627451, 1)
+bg_color = Color(0.941176, 0.87451, 0.811765, 1)
+border_color = Color(0.639216, 0.32549, 0.258824, 1)
 border_width = 3
 dashed = true
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
 [sub_resource type="StyleBox" id="StyleBox_rank_chip"]
 resource_local_to_scene = false
@@ -138,8 +140,6 @@ bg_color = Color(0.839216, 0.74902, 0.486275, 1)
 border_color = Color(0.745098, 0.584314, 0.172549, 1)
 border_width = 5
 dashed = true
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
 [sub_resource type="StyleBox" id="StyleBox_tab"]
 resource_local_to_scene = false
@@ -315,26 +315,36 @@ theme_override_constants/separation = 20
 
 [node name="TitleLabel" type="Label" parent="Panel/Layout/Header" unique_id=517511660]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(748, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
 theme_override_fonts/font = SubResource("FontVariation_sans")
 theme_override_font_sizes/font_size = 44
 text = "RANG LISTA"
 vertical_alignment = 1
 
-[node name="HeaderNoteLabel" type="Label" parent="Panel/Layout/Header" unique_id=1938274651]
+[node name="NoteButton" type="Button" parent="Panel/Layout/Header" unique_id=1938274651]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 3.0
-theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
-theme_override_fonts/font = ExtResource("mono_bold")
-theme_override_font_sizes/font_size = 24
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(0.478431, 0.121569, 0.0705882, 1)
+theme_override_colors/font_focus_color = Color(0.478431, 0.121569, 0.0705882, 1)
+theme_override_colors/font_pressed_color = Color(0.478431, 0.121569, 0.0705882, 1)
+theme_override_colors/font_hover_color = Color(0.478431, 0.121569, 0.0705882, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.478431, 0.121569, 0.0705882, 1)
+theme_override_colors/font_disabled_color = Color(0.478431, 0.121569, 0.0705882, 1)
+theme_override_fonts/font = ExtResource("sans")
+theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBox_note_dashed")
-text = "Moramo vam smanjiti poene za jedno milku.. poeni su namunjeni da bi loš i prosječan igrač imali dvije milke a teorijski maks bio nekih 6.5 milki (razmislite zašto?) ali ste ga mnogo napumpali."
-vertical_alignment = 1
-autowrap_mode = 3
+theme_override_styles/pressed = SubResource("StyleBox_note_dashed")
+theme_override_styles/hover = SubResource("StyleBox_note_dashed")
+theme_override_styles/hover_pressed = SubResource("StyleBox_note_dashed")
+theme_override_styles/disabled = SubResource("StyleBox_note_dashed")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+text = "NAPOMENA"
 
 [node name="RankChip" type="PanelContainer" parent="Panel/Layout/Header" unique_id=1404568305]
 unique_name_in_owner = true
@@ -346,6 +356,7 @@ theme_override_styles/panel = SubResource("StyleBox_rank_chip")
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 16
+alignment = 1
 
 [node name="ChipRankLabel" type="Label" parent="Panel/Layout/Header/RankChip/RankChipContent" unique_id=1282897167]
 unique_name_in_owner = true
@@ -375,6 +386,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.419608, 0.372549, 0.333333, 1)
 theme_override_fonts/font = ExtResource("sans")
 theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="RewardsButton" type="Button" parent="Panel/Layout/Header" unique_id=1825007219]
@@ -588,6 +600,35 @@ theme_override_colors/font_color = Color(0.419608, 0.372549, 0.333333, 1)
 theme_override_fonts/font = SubResource("FontVariation_sans")
 theme_override_font_sizes/font_size = 34
 horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="NotePopup" type="Control" parent="Panel/Layout/List" unique_id=1941173722]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="NotePopupPanel" type="PanelContainer" parent="Panel/Layout/List/NotePopup" unique_id=371962457]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 242)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = -7.0
+offset_bottom = 243.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBox_note_dashed")
+
+[node name="NotePopupLabel" type="Label" parent="Panel/Layout/List/NotePopup/NotePopupPanel" unique_id=167085404]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+theme_override_fonts/font = ExtResource("mono_bold")
+theme_override_font_sizes/font_size = 24
+text = "Društvo, moramo vam smanjiti poene za jednu milku jer je fora sa poenima, kao i sa mnogim drugim detaljima igre, da budu lafo skriveni, a u stvari veoma providno insinuirajući... poeni su validni u smislu da ih zaista osvajate u zavisnosti od pitanja i odgovora (pogledajte i u kodu) ali su generalno malo namunjeni da bi se relativno lako moglo osvojiti 2 milke a teorijski maks bio nekih 6.5 milki (razmislite zašto?), međutim ljudi pravo pumpate.
+P.S. Takođe, za ove saborce koji možda gaze rang-liste nekom automatizacijom... popustite braćo, igramo se, neka i raja osvoji nešto."
 vertical_alignment = 1
 autowrap_mode = 3
 
