@@ -273,7 +273,7 @@ func get_stopped_voter_at_stop(stop_index: int) -> Voter:
 	var target_stop: VotingStop = voting_course[stop_index]
 	for child in voters_factory.get_children():
 		var voter: Voter = child as Voter
-		if voter == null or not voter.is_stopping:
+		if voter == null or not voter.is_awaiting_dialogue():
 			continue
 		if voter.voting_course_pointer < 0 or voter.voting_course_pointer >= voter.voting_course.size():
 			continue
@@ -373,7 +373,7 @@ func _select_front_queue_voter() -> void:
 func _get_selectable_voters() -> Array:
 	var selectable_voters: Array = voters_factory.get_children().filter(
 		#on the learning difficulty queued voters stay unselectable until the room opens
-		func(voter): return voter is Voter and (voter.is_stopping or (voter.is_queueing and (not _is_learning or _is_room_open())))
+		func(voter): return voter is Voter and (voter.is_awaiting_dialogue() or (voter.is_queueing and (not _is_learning or _is_room_open())))
 	)
 
 	selectable_voters.sort_custom(func(primary, secondary):

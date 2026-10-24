@@ -628,7 +628,7 @@ theme_override_colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
 theme_override_fonts/font = ExtResource("mono_bold")
 theme_override_font_sizes/font_size = 24
 text = "Društvo, moramo vam smanjiti poene za jednu milku jer je fora sa poenima, kao i sa mnogim drugim detaljima igre, da budu lafo skriveni, a u stvari veoma providno insinuirajući... poeni su validni u smislu da ih zaista osvajate u zavisnosti od pitanja i odgovora (pogledajte i u kodu) ali su generalno malo namunjeni da bi se relativno lako moglo osvojiti 2 milke a teorijski maks bio nekih 6.5 milki (razmislite zašto?), međutim ljudi pravo pumpate.
-P.S. Takođe, za ove saborce koji možda gaze rang-liste nekom automatizacijom... popustite braćo, igramo se, neka i raja osvoji nešto."
+P.S. Posebna zahvalnost saborcu: Dusan G zato što je prijavio bug koji mu je omogućio da bude top.. tako se to radi kad nisi ćaci, bravo!"
 vertical_alignment = 1
 autowrap_mode = 3
 

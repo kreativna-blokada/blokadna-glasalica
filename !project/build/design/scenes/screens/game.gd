@@ -266,12 +266,12 @@ func _on_stop_button_pressed(stop_name: String, stop_index: int) -> void:
 
 #opens the voter's dialog for the stop it stands at, or lets it walk on when it has none there
 func _open_dialogue(voter: Voter, stop_name: String) -> void:
-	if _dialog_controller != null:
+	if _dialog_controller != null or not voter.is_awaiting_dialogue():
 		return
 
 	var dialog_id: String = voter.get_dialog_id(stop_name)
 	if not DialoguesManager.has_dialogue(dialog_id):
-		voter.can_continue_voting_course()
+		voter.leave_answered_stop()
 		return
 
 	_dialog_voter = voter
@@ -321,7 +321,7 @@ func _on_dialog_finished() -> void:
 	if controller and is_instance_valid(controller):
 		controller.queue_free()
 	if voter and is_instance_valid(voter) and voter.is_stopping:
-		voter.can_continue_voting_course()
+		voter.leave_answered_stop()
 
 func _on_dialog_choice_made(dialog_descriptor: DialogDescriptor, choice_descriptor: DialogDescriptor.ChoiceDescriptor, answer_time: float, is_best_choice: bool) -> void:
 	if not is_best_choice:
