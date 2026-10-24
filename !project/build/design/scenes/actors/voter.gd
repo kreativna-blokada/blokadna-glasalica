@@ -21,6 +21,8 @@ var voting_course_pointer: int = 0
 var voting_course: Array = []
 var is_queueing: bool = false
 var is_stopping: bool = false
+#true once the dialogue at the current stop is answered, until the voter leaves that stop
+var is_stop_answered: bool = false
 
 #private vars
 var _cached_texture: Texture2D = null
@@ -322,12 +324,35 @@ func can_continue_voting_course() -> bool:
 	#continue course
 	var is_last_stop: bool = _find_next_wait_stop_index() == -1
 	is_stopping = false
+	is_stop_answered = false
 	_free_current_stop()
 	_next_stop()
 	if is_last_stop:
 		last_stop_left.emit()
 
 	return true
+
+#reports whether the voter stands at a stop with its dialogue still unanswered
+func is_awaiting_dialogue() -> bool:
+	return is_stopping and not is_stop_answered
+
+#marks the stop dialogue answered and walks on, or waits for the next stop to free up
+func leave_answered_stop() -> void:
+	if not is_stopping: return
+
+	if not is_stop_answered:
+		is_stop_answered = true
+		#refreshes stop buttons, the answered voter no longer offers its dialogue
+		var current_stop: VotingStop = _get_vote_stop(voting_course_pointer)
+		if current_stop:
+			current_stop.occupancy_updated.emit()
+
+	if can_continue_voting_course(): return
+
+	#retries once the next stop's occupancy changes
+	var next_stop: VotingStop = _get_vote_stop(_find_next_wait_stop_index())
+	if next_stop and not next_stop.occupancy_updated.is_connected(leave_answered_stop):
+		next_stop.occupancy_updated.connect(leave_answered_stop, CONNECT_ONE_SHOT)
 
 #checks if next wait stop is free
 func _is_next_stop_free() -> bool:
